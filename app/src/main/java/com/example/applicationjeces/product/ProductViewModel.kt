@@ -8,6 +8,7 @@ import androidx.lifecycle.*
 import com.example.applicationjeces.MainActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -15,6 +16,7 @@ import kotlinx.coroutines.launch
 class ProductViewModel(application: Application): AndroidViewModel(application) {
 
     val getAll: LiveData<List<Product>>
+    val liveTodoData = MutableLiveData<List<Product>>()
     private val repository : ProductRepository
     var jecesfirestore : FirebaseFirestore? = null
     var thisUser : String? = null
@@ -35,6 +37,17 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
 //
 //            }
 //        }
+
+        //실시간으로 데이터가져오기
+        //데이터를 실시간으로 가져오기 때문에
+        //데이터 삭제, 수정, 추가 한 후 데이터를 다시 받아오지 않아도 됨
+//        jecesfirestore!!.collection("mepion1234@naver.com").get().addOnSuccessListener { result ->
+//            Log.d("가져온데이터", result.documents.toString())
+//            for(snapshot in result) {
+//                Log.d("가져온데이터", snapshot["productName"].toString())
+//            }
+//        }
+
 
         val productDao = ProductDatabase.getInstance(application).productDao()
         /* 이니셜라이즈(초기화) 해줌 */
