@@ -1,8 +1,12 @@
 package com.example.applicationjeces.product
 
 import android.app.Application
+import android.app.blob.BlobStoreManager
+import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.*
+import com.example.applicationjeces.MainActivity
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -13,10 +17,17 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     val getAll: LiveData<List<Product>>
     private val repository : ProductRepository
     var jecesfirestore : FirebaseFirestore? = null
+    var thisUser : String? = null
 
     init {
         /* firebase 연동 */
         jecesfirestore = FirebaseFirestore.getInstance()
+        /* firebase Auth */
+        var authStateListener: FirebaseAuth.AuthStateListener? = null
+
+        /* 현재 로그인 아이디 */
+        thisUser = FirebaseAuth.getInstance().currentUser?.email.toString()
+        Log.d("로그인", thisUser.toString())
 
 //        /* firestore 모든 데이터 가져오기 */
 //        jecesfirestore.collection("Product").get().addOnSuccessListener { result ->
@@ -51,7 +62,12 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         )
 
         Log.d("프로덕트", product.toString())
-        jecesfirestore?.collection("User")?.document("id:1")?.collection("Product")?.document(product.product_name)?.set(products)
+        thisUser?.let {
+            jecesfirestore?.collection("User")
+                ?.document(it)
+                ?.collection("Product")
+                ?.document(product.product_name)?.set(products)
+        }
     }
 
     /* 검색 */
