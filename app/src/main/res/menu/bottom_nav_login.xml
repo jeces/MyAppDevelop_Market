@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Sign_in"
+        android:id="@+id/sign_in"
+        android:icon="@drawable/ic_baseline_login_24"/>
+    <item android:title="Sign_up"
+        android:id="@+id/sign_up"
+        android:icon="@drawable/ic_baseline_person_add_24"/>
+    <item android:title="Cancel"
+        android:id="@+id/cancel"
+        android:icon="@drawable/ic_baseline_cancel_24"
+        android:visible="false"/>
+
+</menu>
