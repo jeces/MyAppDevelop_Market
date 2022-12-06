@@ -33,6 +33,10 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         thisUser = FirebaseAuth.getInstance().currentUser?.email.toString()
         Log.d("로그인", thisUser.toString())
 
+        /* firebase product 전체 가져오기 */
+        /* https://velog.io/@nagosooo/%EC%95%88%EB%93%9C%EB%A1%9C%EC%9D%B4%EB%93%9C-TodoList%EC%95%B1-%EB%A7%8C%EB%93%A4%EA%B8%B0 */
+        allProduct()
+
         /* 유저정보들 가져오기 */
         jecesfirestore!!.collection("UserInfo").get()
             .addOnSuccessListener {
@@ -51,35 +55,20 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
 //                        Log.w("가져온데이터2", "Error getting documents: $exception")
 //                    }
 
-                jecesfirestore!!.collection("User").document(document.id).collection("Product")
-                    .addSnapshotListener { products, e ->
-                        if(e != null) {
-                            return@addSnapshotListener
-                        }
-                        Log.d("라이브데이터", products?.documents.toString())
-                        liveTodoData.value = products?.documents
-                    }
-                Log.d("라이브데이터", liveTodoData.value.toString())
+                /* */
+
+
+//                jecesfirestore!!.collection("User").document(document.id).collection("Product")
+//                    .addSnapshotListener { products, e ->
+//                        if(e != null) {
+//                            return@addSnapshotListener
+//                        }
+//                        Log.d("라이브데이터", products?.documents.toString())
+//                        liveTodoData.value = products?.documents
+//                    }
+//                Log.d("라이브데이터", liveTodoData.value.toString())
             }
         }
-
-
-
-//        jecesfirestore!!.collection("User").get()
-//            .addOnSuccessListener {
-//                Log.d("가져온데이터33", jecesfirestore!!.collection("User").document().toString())
-//                for (document in it) {  // 가져온 문서들은 result에 들어감
-//                    Log.d("가져온데이터33", document.id.toString())
-//                }
-//            }
-//        jecesfirestore!!.collection("User").whereEqualTo("Product", true).get().addOnSuccessListener { result ->
-//            Log.d("가져온데이터", result.toString())
-//            Log.d("가져온데이터", result.documents.toString())
-//            for(snapshot in result) {
-//                Log.d("가져온데이터", snapshot.toString())
-//                Log.d("가져온데이터", "a")
-//            }
-//        }
 
 
         val productDao = ProductDatabase.getInstance(application).productDao()
@@ -89,6 +78,9 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         getAll = repository.readAllproducts.asLiveData()
         Log.d("검색뷰모델어뎁터init", getAll.toString())
     }
+
+
+
 
     /* 파라미터에 만든 데이터클래스가 들어감 */
     fun addProduct(product: Product) {
@@ -100,7 +92,19 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         }
     }
 
-    /* firebase 데이터 */
+    /* firebase Product 전체 가져오기 */
+    fun allProduct() {
+        jecesfirestore!!.collection("Product").addSnapshotListener { products, e ->
+            if(e != null) {
+                return@addSnapshotListener
+            }
+            Log.d("라이브데이터", products?.documents.toString())
+            liveTodoData.value = products?.documents
+        }
+        Log.d("라이브데이터", liveTodoData.value.toString())
+    }
+
+    /* firebase Product 입력 */
     fun addProducts(product : Product) {
         val products = hashMapOf(
             "productName" to product.product_name,
