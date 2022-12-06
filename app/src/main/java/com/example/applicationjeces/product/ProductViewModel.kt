@@ -7,7 +7,9 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.example.applicationjeces.MainActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,7 +18,7 @@ import kotlinx.coroutines.launch
 class ProductViewModel(application: Application): AndroidViewModel(application) {
 
     val getAll: LiveData<List<Product>>
-    val liveTodoData = MutableLiveData<List<Product>>()
+    val liveTodoData = MutableLiveData<List<DocumentSnapshot>>()
     private val repository : ProductRepository
     var jecesfirestore : FirebaseFirestore? = null
     var thisUser : String? = null
@@ -31,20 +33,51 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         thisUser = FirebaseAuth.getInstance().currentUser?.email.toString()
         Log.d("로그인", thisUser.toString())
 
-//        /* firestore 모든 데이터 가져오기 */
-//        jecesfirestore.collection("Product").get().addOnSuccessListener { result ->
-//            for(document in result) {
-//
-//            }
-//        }
+        /* 유저정보들 가져오기 */
+        jecesfirestore!!.collection("UserInfo").get()
+            .addOnSuccessListener {
+            for(document in it) {
+                /* 각 유저들의 Product 가져오기 */
+//                jecesfirestore!!.collection("User").document(document.id).collection("Product").get()
+//                    .addOnSuccessListener {
+//                        for (products in it) {
+//                            Log.d("가져온데이터22", products.id.toString())
+//                            /* 가져온 결과 라이브데이터 안에 넣기 */
+//                            liveTodoData.value = products?.data
+//                        }
+//                    }
+//                    .addOnFailureListener { exception ->
+//                        /* 실패 */
+//                        Log.w("가져온데이터2", "Error getting documents: $exception")
+//                    }
 
-        //실시간으로 데이터가져오기
-        //데이터를 실시간으로 가져오기 때문에
-        //데이터 삭제, 수정, 추가 한 후 데이터를 다시 받아오지 않아도 됨
-//        jecesfirestore!!.collection("mepion1234@naver.com").get().addOnSuccessListener { result ->
+                jecesfirestore!!.collection("User").document(document.id).collection("Product")
+                    .addSnapshotListener { products, e ->
+                        if(e != null) {
+                            return@addSnapshotListener
+                        }
+                        Log.d("라이브데이터", products?.documents.toString())
+                        liveTodoData.value = products?.documents
+                    }
+                Log.d("라이브데이터", liveTodoData.value.toString())
+            }
+        }
+
+
+
+//        jecesfirestore!!.collection("User").get()
+//            .addOnSuccessListener {
+//                Log.d("가져온데이터33", jecesfirestore!!.collection("User").document().toString())
+//                for (document in it) {  // 가져온 문서들은 result에 들어감
+//                    Log.d("가져온데이터33", document.id.toString())
+//                }
+//            }
+//        jecesfirestore!!.collection("User").whereEqualTo("Product", true).get().addOnSuccessListener { result ->
+//            Log.d("가져온데이터", result.toString())
 //            Log.d("가져온데이터", result.documents.toString())
 //            for(snapshot in result) {
-//                Log.d("가져온데이터", snapshot["productName"].toString())
+//                Log.d("가져온데이터", snapshot.toString())
+//                Log.d("가져온데이터", "a")
 //            }
 //        }
 
