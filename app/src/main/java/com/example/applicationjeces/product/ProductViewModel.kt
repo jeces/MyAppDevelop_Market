@@ -77,4 +77,6 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         Log.d("검색3ㄴ", getAll.toString())
         return repository.search(searchName).asLiveData()
     }
+
+    /* firebase 검색 */
 }
