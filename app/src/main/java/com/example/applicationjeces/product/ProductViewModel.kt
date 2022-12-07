@@ -14,6 +14,7 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
 
     val getAll: LiveData<List<Product>>
     var liveTodoData = MutableLiveData<List<DocumentSnapshot>>()
+    var searchLiveTodoData = MutableLiveData<List<DocumentSnapshot>>()
     private val repository: ProductRepository
     var jecesfirestore: FirebaseFirestore? = null
     var thisUser: String? = null
@@ -104,21 +105,19 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         return liveTodoData
     }
 
-    fun test(searchName: String) : MutableLiveData<List<DocumentSnapshot>> {
-        jecesfirestore!!.collection("Product").get().addOnSuccessListener { products ->
-            liveTodoData = MutableLiveData<List<DocumentSnapshot>>()
-            for (snapshot in products!!.documents) {
+    fun test(searchName: String) {
+        searchLiveTodoData.value?.isEmpty()
+        jecesfirestore!!.collection("Product").addSnapshotListener { products, e->
+            searchLiveTodoData = MutableLiveData<List<DocumentSnapshot>>()
+            for (snapshot in products!!) {
                 if (snapshot.getString("productName")!!.contains(searchName)) {
                     Log.d("라이브데이터11", snapshot.toString())
-                    liveTodoData += snapshot
-                    Log.d("라이브데이터1", liveTodoData.value.toString())
+                    searchLiveTodoData += snapshot
+                    Log.d("라이브데이터1", searchLiveTodoData.value.toString())
                 }
             }
-            Log.d("라이브데이터2", liveTodoData.value.toString())
+            Log.d("라이브데이터2", searchLiveTodoData.value.toString())
         }
-
-        Log.d("라이브데이터2.2", liveTodoData.value.toString())
-        return liveTodoData
     }
 
     /* 비동기 내부 콜백 */
