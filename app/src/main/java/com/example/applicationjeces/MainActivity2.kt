@@ -54,7 +54,7 @@ class MainActivity2 : AppCompatActivity() {
             adapter.setData(product)
         }
     }
-    var searchViewTextListener: SearchView.OnQueryTextListener =
+    private  var searchViewTextListener: SearchView.OnQueryTextListener =
         object : SearchView.OnQueryTextListener {
             /* 검색버튼 입력시 호출, 검색버튼이 없으므로 사용하지 않음 */
             override fun onQueryTextSubmit(s: String): Boolean {
@@ -71,13 +71,21 @@ class MainActivity2 : AppCompatActivity() {
 
 
     /* 검색 */
-    private fun searchDatabase(query: String) {
-        val searchQuery = "%$query%"
+    private fun searchDatabase1(query: String) {
+//        val searchQuery = "%$query%"
 //        productViewModel.searchProduct(searchQuery).observe(this) {
 //            Log.d("검색2", "SearchVies Text is changed : $query")
 //            adapter.setData(it)
 //            Log.d("검색2.1", productViewModel.getAll.toString())
 //        }
+    }
+
+    /* firebase 검색 */
+    private fun searchDatabase(searchName: String) {
+        Log.d("검색2", "ㅁ")
+        productViewModel.searchProducts(searchName).observe(this) {
+            adapter.setData(it)
+        }
     }
 
     /* 뒤로가기s */

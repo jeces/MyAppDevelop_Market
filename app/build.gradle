@@ -123,4 +123,8 @@ dependencies {
 
     /* firestore */
     implementation 'com.google.firebase:firebase-firestore:24.4.1'
+
+    /* firestore 코루틴 */
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1"
 }

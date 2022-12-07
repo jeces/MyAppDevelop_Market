@@ -2,22 +2,22 @@ package com.example.applicationjeces.product
 
 import android.app.Application
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.tasks.await
 
 /* 뷰모델은 DB에 직접 접근하지 않아야함. Repository 에서 데이터 통신 */
 class ProductViewModel(application: Application): AndroidViewModel(application) {
 
     val getAll: LiveData<List<Product>>
-    val liveTodoData = MutableLiveData<List<DocumentSnapshot>>()
-    private val repository : ProductRepository
-    var jecesfirestore : FirebaseFirestore? = null
-    var thisUser : String? = null
+    var liveTodoData = MutableLiveData<List<DocumentSnapshot>>()
+    private val repository: ProductRepository
+    var jecesfirestore: FirebaseFirestore? = null
+    var thisUser: String? = null
+    lateinit var ProductRecyclerViewAdapter: ProductRecyclerViewAdapter
 
     init {
         /* firebase 연동 */
@@ -43,8 +43,9 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
 
     /* firebase Product 전체 가져오기 */
     fun allProduct() {
+        liveTodoData.value?.isEmpty()
         jecesfirestore!!.collection("Product").addSnapshotListener { products, e ->
-            if(e != null) {
+            if (e != null) {
                 return@addSnapshotListener
             }
             Log.d("라이브데이터", products?.documents.toString())
@@ -54,7 +55,7 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     }
 
     /* firebase Product 입력 */
-    fun addProducts(product : Product) {
+    fun addProducts(product: Product) {
         val products = hashMapOf(
             "ID" to thisUser,
             "productName" to product.product_name,
@@ -79,4 +80,65 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     }
 
     /* firebase 검색 */
+    /* firestore에서는 like를 사용못함 */
+    /* 비동기 앱의 문제점 */
+    fun searchProductsCall(searchName: String) : MutableLiveData<List<DocumentSnapshot>> {
+        jecesfirestore!!.collection("Product").addSnapshotListener { products, e ->
+            liveTodoData = MutableLiveData<List<DocumentSnapshot>>()
+            if (e != null) {
+                return@addSnapshotListener
+            }
+            if(searchName == "") {
+                return@addSnapshotListener
+            }
+            for (snapshot in products!!.documents) {
+                if (snapshot.getString("productName")!!.contains(searchName)) {
+                    Log.d("라이브데이터11", snapshot.toString())
+                    liveTodoData += snapshot
+                    Log.d("라이브데이터1", liveTodoData.value.toString())
+                }
+            }
+            Log.d("라이브데이터2", liveTodoData.value.toString())
+        }
+        Log.d("라이브데이터2.2", liveTodoData.value.toString())
+        return liveTodoData
+    }
+
+    fun test(searchName: String) : MutableLiveData<List<DocumentSnapshot>> {
+        jecesfirestore!!.collection("Product").get().addOnSuccessListener { products ->
+            liveTodoData = MutableLiveData<List<DocumentSnapshot>>()
+            for (snapshot in products!!.documents) {
+                if (snapshot.getString("productName")!!.contains(searchName)) {
+                    Log.d("라이브데이터11", snapshot.toString())
+                    liveTodoData += snapshot
+                    Log.d("라이브데이터1", liveTodoData.value.toString())
+                }
+            }
+            Log.d("라이브데이터2", liveTodoData.value.toString())
+        }
+
+        Log.d("라이브데이터2.2", liveTodoData.value.toString())
+        return liveTodoData
+    }
+
+    /* 비동기 내부 콜백 */
+    interface MyCallback {
+        fun onCallback(value: MutableLiveData<List<DocumentSnapshot>>)
+    }
+
+    fun searchProducts(searchName: String): MutableLiveData<List<DocumentSnapshot>> {
+//        searchProductsCall(searchName) {
+//            /* 콜백함수 실행 */
+//            it ->
+//        }
+        test(searchName)
+        Log.d("라이브데이터2.3", liveTodoData.value.toString())
+        return liveTodoData
+    }
+
+    /* LiveData 추가 만들기 */
+    operator fun <T> MutableLiveData<List<T>>.plusAssign(item: T) {
+        val value = this.value ?: emptyList()
+        this.value = value + listOf(item)
+    }
 }

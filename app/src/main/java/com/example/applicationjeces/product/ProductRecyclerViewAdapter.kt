@@ -55,6 +55,7 @@ class ProductRecyclerViewAdapter(var producFiretList: List<DocumentSnapshot>): R
 
     @SuppressLint("NotifyDataSetChanged")
     fun setData(product: List<DocumentSnapshot>) {
+        producFiretList.isEmpty()
         /* 리스트가 변경되었을 떄, 업데이트 해줌 */
 //        this.producFiretList.isEmpty()
         //        this.productList.isEmpty()
@@ -64,7 +65,7 @@ class ProductRecyclerViewAdapter(var producFiretList: List<DocumentSnapshot>): R
         //        Log.d("검색어댑터2",this.productList.toString())
         //        notifyDataSetChanged()
         //        Log.d("검색어댑터3",this.productList.toString())
-        Log.d("파이어베이스1", product.toString())
+        Log.d("파이어베이스2", product.toString())
         producFiretList = product
         /* */
         notifyDataSetChanged()
