@@ -6,12 +6,15 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applicationjeces.databinding.ActivityMain2Binding
 import com.example.applicationjeces.product.ProductRecyclerViewAdapter
 import com.example.applicationjeces.product.ProductViewModel
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity2 : AppCompatActivity() {
@@ -21,12 +24,17 @@ class MainActivity2 : AppCompatActivity() {
     private lateinit var productRecyclerViewAdapter: ProductRecyclerViewAdapter
     private lateinit var searchViewProduct: SearchView
     val adapter = ProductRecyclerViewAdapter(emptyList())
+    var jecesfirestore: FirebaseFirestore? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main2)
         /* apater initialize 초기화 해야함 */
         productRecyclerViewAdapter = ProductRecyclerViewAdapter(emptyList())
+
+        /* firestore 가져옴 */
+        jecesfirestore = FirebaseFirestore.getInstance()
 
         /* 서치뷰 가져오기 */
         searchViewProduct = findViewById(R.id.search_view)
@@ -80,7 +88,7 @@ class MainActivity2 : AppCompatActivity() {
         Log.d("라이브데이터1.1", productViewModel.searchLiveTodoData.value.toString())
         productViewModel.searchProductsCall(searchName).observe(this) {
             Log.d("테스트6", "ㅇ")
-            adapter.setData(it)
+            //adapter.setData(it)
         }
         Log.d("라이브데이터1.2", productViewModel.searchLiveTodoData.value.toString())
     }

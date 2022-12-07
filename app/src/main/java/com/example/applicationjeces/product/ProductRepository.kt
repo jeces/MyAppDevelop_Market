@@ -2,6 +2,7 @@ package com.example.applicationjeces.product
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import kotlinx.coroutines.flow.Flow
 
@@ -19,6 +20,7 @@ class ProductRepository(private val productDao: ProductDao) {
     }
 
     /* suspend - coroutine을 사용하기 위해 */
+    /* Flow는 suspend 를 적을 필요가 없으며 코루틴에서만 실행 */
     fun insert(product: Product) {
         Log.d("뷰모델4", readAllproducts.toString())
         /* Dao에서 만들었던 insert 실행 */
