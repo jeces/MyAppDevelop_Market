@@ -6,16 +6,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.applicationjeces.R
-import com.example.applicationjeces.product.Product
 import com.example.applicationjeces.product.ProductRecyclerViewAdapter
 import com.example.applicationjeces.product.ProductViewModel
-import kotlinx.android.synthetic.main.fragment_search1.*
 import kotlinx.android.synthetic.main.fragment_search1.view.*
-import kotlinx.android.synthetic.main.fragment_search2.view.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

@@ -42,18 +42,12 @@ class MainActivity2 : AppCompatActivity() {
         /* 서치뷰 생성 */
         searchViewProduct.setOnQueryTextListener(searchViewTextListener)
 
-        /* 리사이클뷰 여기가 못불러옴  */
-//        productViewModel.getAll.observe(this, ) { product ->
-//            Log.d("검색observe", product.toString())
-//            adapter.setData(product)
-//
-//        }
-
-        productViewModel.liveTodoData.observe(this, ) { product ->
+        productViewModel.liveTodoData.observe(this) { product ->
             Log.d("검색observe", product.toString())
             adapter.setData(product)
         }
     }
+    /* 서치뷰 */
     private var searchViewTextListener: SearchView.OnQueryTextListener =
         object : SearchView.OnQueryTextListener {
             /* 검색버튼 입력시 호출, 검색버튼이 없으므로 사용하지 않음 */
@@ -68,7 +62,6 @@ class MainActivity2 : AppCompatActivity() {
                 return false
             }
         }
-
 
     /* 검색 */
     private fun searchDatabase1(query: String) {
@@ -85,14 +78,14 @@ class MainActivity2 : AppCompatActivity() {
         Log.d("검색2", "ㅁ")
         productViewModel.test(searchName)
         Log.d("라이브데이터1.1", productViewModel.searchLiveTodoData.value.toString())
-        productViewModel.searchLiveTodoData.observe(this) {
-            Log.d("라이브데이터1.2", "ㅇ")
+        productViewModel.searchProductsCall(searchName).observe(this) {
+            Log.d("테스트6", "ㅇ")
             adapter.setData(it)
         }
         Log.d("라이브데이터1.2", productViewModel.searchLiveTodoData.value.toString())
     }
 
-    /* 뒤로가기s */
+    /* 뒤로가기 */
     override fun onBackPressed() {
         /* Navigation Bar Selected 넘겨야 됨[여기서부터해야함] */
         val mActivity: MainActivity? = null
