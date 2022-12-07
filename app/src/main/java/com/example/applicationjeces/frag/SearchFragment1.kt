@@ -33,7 +33,7 @@ class SearchFragment1 : Fragment() {
     private var param2: String? = null
 
     private lateinit var productViewModel: ProductViewModel
-    val adapter = ProductRecyclerViewAdapter()
+    val adapter = ProductRecyclerViewAdapter(emptyList())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,13 +62,13 @@ class SearchFragment1 : Fragment() {
         Log.d("뷰모델어뎁터검색Frag1", productName)
         val searchProduct = "%$productName%"
 
-        /* 뷰모델 연결, 뷰모델을 불러옴 검색으로 불러와야 함 */
-        productViewModel.searchProduct(searchProduct).observe(viewLifecycleOwner, Observer {
-            /* ViewModel에 Observe를 활용하여 productViewModel에 ReadAllData 라이브 데이터가 바뀌었을때 캐치하여, adapter에서 만들어준 setData함수를 통해 바뀐데이터를 UI에 업데이트 해줌 */
-            Log.d("뷰모델ㅁ", searchProduct)
-            adapter.setData(it)
-            Log.d("뷰모델ㅇ2", it.toString())
-        })
+//        /* 뷰모델 연결, 뷰모델을 불러옴 검색으로 불러와야 함 */
+//        productViewModel.searchProduct(searchProduct).observe(viewLifecycleOwner, Observer {
+//            /* ViewModel에 Observe를 활용하여 productViewModel에 ReadAllData 라이브 데이터가 바뀌었을때 캐치하여, adapter에서 만들어준 setData함수를 통해 바뀐데이터를 UI에 업데이트 해줌 */
+//            Log.d("뷰모델ㅁ", searchProduct)
+//            adapter.setData(it)
+//            Log.d("뷰모델ㅇ2", it.toString())
+//        })
     }
 
     companion object {

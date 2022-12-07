@@ -20,13 +20,13 @@ class MainActivity2 : AppCompatActivity() {
     private lateinit var productViewModel: ProductViewModel
     private lateinit var productRecyclerViewAdapter: ProductRecyclerViewAdapter
     private lateinit var searchViewProduct: SearchView
-    val adapter = ProductRecyclerViewAdapter()
+    val adapter = ProductRecyclerViewAdapter(emptyList())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main2)
         /* apater initialize 초기화 해야함 */
-        productRecyclerViewAdapter = ProductRecyclerViewAdapter()
+        productRecyclerViewAdapter = ProductRecyclerViewAdapter(emptyList())
 
         /* 서치뷰 가져오기 */
         searchViewProduct = findViewById(R.id.search_view)
@@ -43,10 +43,15 @@ class MainActivity2 : AppCompatActivity() {
         searchViewProduct.setOnQueryTextListener(searchViewTextListener)
 
         /* 리사이클뷰 여기가 못불러옴  */
-        productViewModel.getAll.observe(this, ) { product ->
+//        productViewModel.getAll.observe(this, ) { product ->
+//            Log.d("검색observe", product.toString())
+//            adapter.setData(product)
+//
+//        }
+
+        productViewModel.liveTodoData.observe(this, ) { product ->
             Log.d("검색observe", product.toString())
             adapter.setData(product)
-
         }
     }
     var searchViewTextListener: SearchView.OnQueryTextListener =
@@ -68,11 +73,11 @@ class MainActivity2 : AppCompatActivity() {
     /* 검색 */
     private fun searchDatabase(query: String) {
         val searchQuery = "%$query%"
-        productViewModel.searchProduct(searchQuery).observe(this) {
-            Log.d("검색2", "SearchVies Text is changed : $query")
-            adapter.setData(it)
-            Log.d("검색2.1", productViewModel.getAll.toString())
-        }
+//        productViewModel.searchProduct(searchQuery).observe(this) {
+//            Log.d("검색2", "SearchVies Text is changed : $query")
+//            adapter.setData(it)
+//            Log.d("검색2.1", productViewModel.getAll.toString())
+//        }
     }
 
     /* 뒤로가기s */

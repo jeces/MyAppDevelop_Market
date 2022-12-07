@@ -80,7 +80,7 @@ class AddFragment : Fragment() {
             /* pk값이 자동이라도 넣어줌, Product에 저장 */
             val product = Product(0, productName, productPrice)
             /* ViewModel에 addProduct를 해줌으로써 데이터베이스에 product값을 넣어줌 */
-            productViewModel.addProduct(product)
+//            productViewModel.addProduct(product)
             productViewModel.addProducts(product)
 
             Log.d("뷰모델2", product.toString())

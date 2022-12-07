@@ -47,19 +47,27 @@ class SearchFragment2 : Fragment() {
         val view = inflater.inflate(R.layout.fragment_search2, container, false)
 
         /* 리사이클러뷰 */
-        val adapter = ProductRecyclerViewAdapter()
+        val adapter = ProductRecyclerViewAdapter(emptyList())
         val recyclerView = view.rv_search2
         recyclerView.adapter = adapter
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         /* 뷰모델 연결, 뷰모델을 불러옴 */
-        productViewModel = ViewModelProvider(this)[ProductViewModel::class.java]
-        productViewModel.getAll.observe(viewLifecycleOwner, Observer { product ->
+//        productViewModel = ViewModelProvider(this)[ProductViewModel::class.java]
+//        productViewModel.getAll.observe(viewLifecycleOwner, Observer { product ->
+//            /* ViewModel에 Observe를 활용하여 productViewModel에 ReadAllData 라이브 데이터가 바뀌었을때 캐치하여, adapter에서 만들어준 setData함수를 통해 바뀐데이터를 UI에 업데이트 해줌 */
+//            Log.d("뷰모델어뎁터검색Frag2", product.toString())
+//            adapter.setData(product)
+//        })
+
+        productViewModel.liveTodoData.observe(viewLifecycleOwner, Observer { product ->
             /* ViewModel에 Observe를 활용하여 productViewModel에 ReadAllData 라이브 데이터가 바뀌었을때 캐치하여, adapter에서 만들어준 setData함수를 통해 바뀐데이터를 UI에 업데이트 해줌 */
             Log.d("뷰모델어뎁터검색Frag2", product.toString())
             adapter.setData(product)
         })
+
+
         // Inflate the layout for this fragment
         return view
     }
