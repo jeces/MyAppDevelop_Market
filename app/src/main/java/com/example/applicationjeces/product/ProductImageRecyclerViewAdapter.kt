@@ -22,7 +22,7 @@ class ProductImageRecyclerViewAdapter(var productImageList: ArrayList<Uri>, val 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val item = productImageList[position]
         Glide.with(context).load(item)
-            .override(200, 200)
+            .override(180, 180)
             .into(holder.image)
     }
 
@@ -46,6 +46,6 @@ class ProductImageRecyclerViewAdapter(var productImageList: ArrayList<Uri>, val 
     /* inner class로 viewHolder 정의. 레이아웃 내 view 연결 */
     inner class Holder(ItemView: View): RecyclerView.ViewHolder(ItemView) {
         private var view: View = ItemView
-        var image = ItemView.findViewById<ImageView>(R.id.product_img)
+        var image = ItemView.findViewById<ImageView>(R.id.addimges)
     }
 }

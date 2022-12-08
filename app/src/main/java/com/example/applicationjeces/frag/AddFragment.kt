@@ -58,8 +58,12 @@ class AddFragment : Fragment() {
     var firebaseStorage : FirebaseStorage? = null
     var uriPhoto : Uri? = null
 
+
     /* 이미지 리스트 */
     var imagelist = ArrayList<Uri>()
+
+    /* 이미지 어뎁터 */
+    val adapter = ProductImageRecyclerViewAdapter(imagelist, this@AddFragment)
 
     /* ViewModel 이니셜라이즈 */
     private lateinit var productViewModel: ProductViewModel
@@ -81,7 +85,7 @@ class AddFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         /* ADD Fragment 불러옴 */
-        viewProfile = inflater.inflate(R.layout.fragment_add, container, false).rootView
+        viewProfile = inflater.inflate(R.layout.fragment_add, container, false)
 
         /* ViewModel provider를 실행 */
         productViewModel = ViewModelProvider(this)[ProductViewModel::class.java]
@@ -114,7 +118,6 @@ class AddFragment : Fragment() {
         }
         
         /* 이미지 리사이클러뷰 어뎁터 장착 */
-        val adapter = ProductImageRecyclerViewAdapter(imagelist, this@AddFragment)
         val recyclerView = viewProfile!!.img_profile
         recyclerView.adapter = adapter
         recyclerView.setHasFixedSize(true)
@@ -126,11 +129,11 @@ class AddFragment : Fragment() {
     /* 다중이미지 업로드 참고 https://stickode.tistory.com/116 */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        Log.d("이미지오나", "ㅇ")
         if(requestCode == pickImageFromAlbum) {
-            Log.d("업로드", "업로드")
-            if(resultCode == Activity.RESULT_OK && requestCode == 200) {
+            if(resultCode == Activity.RESULT_OK) {
                 imagelist.clear()
-
+                Log.d("이미지오나1", "ㅇ")
                 /* 사진을 여러개 선택한 경우 */
                 if(data?.clipData != null) {
                     val count = data.clipData!!.itemCount
@@ -141,6 +144,7 @@ class AddFragment : Fragment() {
                     for(i in 0 until count) {
                         val imageUri = data.clipData!!.getItemAt(i).uri
                         imagelist.add(imageUri)
+                        Log.d("이미지오나", imagelist.toString())
                     }
                 }
                 /* 단일 선택인 경우 */
@@ -155,6 +159,8 @@ class AddFragment : Fragment() {
 //                uriPhoto = data?.data
 ////                imageView.setImageURI(uriPhoto)
                 }
+
+                adapter.notifyDataSetChanged()
             }
         }
     }
