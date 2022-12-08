@@ -58,12 +58,11 @@ class AddFragment : Fragment() {
     var firebaseStorage : FirebaseStorage? = null
     var uriPhoto : Uri? = null
 
-
     /* 이미지 리스트 */
     var imagelist = ArrayList<Uri>()
 
     /* 이미지 어뎁터 */
-    val adapter = ProductImageRecyclerViewAdapter(imagelist, this@AddFragment)
+    private val adapter = ProductImageRecyclerViewAdapter(imagelist, this@AddFragment)
 
     /* ViewModel 이니셜라이즈 */
     private lateinit var productViewModel: ProductViewModel
@@ -84,6 +83,8 @@ class AddFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+
         /* ADD Fragment 불러옴 */
         viewProfile = inflater.inflate(R.layout.fragment_add, container, false)
 
@@ -101,19 +102,14 @@ class AddFragment : Fragment() {
             photoPickerIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
             photoPickerIntent.action = Intent.ACTION_GET_CONTENT
             photoPickerIntent.type = "image/*"
-
             startActivityForResult(photoPickerIntent, pickImageFromAlbum)
         }
 
-        /* 추가 누르면 실행 */
+        /* 업로드 및 추가 실행 */
         viewProfile!!.addBtn.setOnClickListener {
             insertProduct()
             if(ContextCompat.checkSelfPermission(viewProfile!!.context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 funImageUpload(viewProfile!!)
-                Log.d("업로드3", "업로드3")
-            }
-            else {
-                Log.d("업로드3", "업로드33")
             }
         }
         
@@ -158,13 +154,15 @@ class AddFragment : Fragment() {
         }
     }
 
+    /* 이미지 업로드 */
     private fun funImageUpload(view : View) {
+        val productName = productName.text.toString()
         /* 다중이미지 저장 */
         var count = 0
         for (i in imagelist) {
             Log.d("업로드2", "업로드2")
             var timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-            var imgFileName = "IMAGE_" + timeStamp + "_" + count + "_.png"
+            var imgFileName = productViewModel.thisUser + "_" + productName + "_" + count + "_IMAGE_" + timeStamp + "_.png"
             var storageRef = firebaseStorage?.reference?.child("productimg")?.child(imgFileName)
             storageRef?.putFile(i)?.addOnSuccessListener {
                 Toast.makeText(view.context, "ImageUploiaded", Toast.LENGTH_SHORT).show()
