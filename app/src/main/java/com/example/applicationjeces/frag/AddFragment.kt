@@ -57,6 +57,7 @@ class AddFragment : Fragment() {
     var pickImageFromAlbum = 0
     var firebaseStorage : FirebaseStorage? = null
     var uriPhoto : Uri? = null
+    var imgFileName : String = ""
 
     /* 이미지 리스트 */
     var imagelist = ArrayList<Uri>()
@@ -83,8 +84,6 @@ class AddFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-
         /* ADD Fragment 불러옴 */
         viewProfile = inflater.inflate(R.layout.fragment_add, container, false)
 
@@ -107,10 +106,10 @@ class AddFragment : Fragment() {
 
         /* 업로드 및 추가 실행 */
         viewProfile!!.addBtn.setOnClickListener {
-            insertProduct()
             if(ContextCompat.checkSelfPermission(viewProfile!!.context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 funImageUpload(viewProfile!!)
             }
+            insertProduct()
         }
         
         /* 이미지 리사이클러뷰 어뎁터 장착 */
@@ -160,9 +159,8 @@ class AddFragment : Fragment() {
         /* 다중이미지 저장 */
         var count = 0
         for (i in imagelist) {
-            Log.d("업로드2", "업로드2")
             var timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-            var imgFileName = productViewModel.thisUser + "_" + productName + "_" + count + "_IMAGE_" + timeStamp + "_.png"
+            imgFileName = productViewModel.thisUser + "_" + productName + "_" + count + "_IMAGE_" + timeStamp + "_.png"
             var storageRef = firebaseStorage?.reference?.child("productimg")?.child(imgFileName)
             storageRef?.putFile(i)?.addOnSuccessListener {
                 Toast.makeText(view.context, "ImageUploiaded", Toast.LENGTH_SHORT).show()
@@ -178,9 +176,8 @@ class AddFragment : Fragment() {
         /* 두 텍스트에 입력이 되었는지 */
         if(inputCheck(productName, productPrice)) {
             /* pk값이 자동이라도 넣어줌, Product에 저장 */
-            val product = Product(0, productName, productPrice, "1", uriPhoto.toString())
+            val product = Product(0, productName, productPrice, "1", imgFileName)
             /* ViewModel에 addProduct를 해줌으로써 데이터베이스에 product값을 넣어줌 */
-//            productViewModel.addProduct(product)
             productViewModel.addProducts(product)
 
             Log.d("뷰모델2", product.toString())
