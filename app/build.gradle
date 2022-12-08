@@ -121,10 +121,18 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-database-ktx'
 
+    /* 이미지 업로드를 위한 fires*/
+    implementation 'com.google.firebase:firebase-storage:20.1.0'
+
     /* firestore */
     implementation 'com.google.firebase:firebase-firestore:24.4.1'
 
     /* firestore 코루틴 */
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1"
+
+//    /* Glide Glide는 일종의 이미지 라이브러리로, 서버에 저장되어 있는 이미지 데이터를 앱에 출력할 수 있도록 도와주는 라이브러리 */
+//    implementation 'com.github.bumptech.glide:glide:4.12.0'
+//    implementation 'com.github.bumptech.glide:glide:compiler:4.12.0'
+
 }

@@ -15,7 +15,14 @@ data class Product(
     var product_name: String,
 
     @ColumnInfo(name = "product_price")
-    var product_price: String
+    var product_price: String,
+
+    @ColumnInfo(name = "product_description")
+    var product_description: String,
+
+    @ColumnInfo(name = "product_imgurl")
+    var product_imgurl: String
+
 ) {
 
 }

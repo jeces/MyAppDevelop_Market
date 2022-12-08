@@ -1,5 +1,6 @@
 package com.example.applicationjeces
 
+import android.Manifest
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,6 +8,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
+import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
@@ -32,7 +34,11 @@ class MainActivity : AppCompatActivity() {
             lifecycleOwner = this@MainActivity
 
         }
-        Log.d("메인", "메인")
+
+        /* 앨범에 접근하는것을 허용하는 메세지 */
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1)
+
+
         /* fab 메세지 */
         binding.fab.setOnClickListener { view ->
             changeFragment(PageData.MESSAGE)

@@ -52,7 +52,9 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         val products = hashMapOf(
             "ID" to thisUser,
             "productName" to product.product_name,
-            "productPrice" to product.product_price
+            "productPrice" to product.product_price,
+            "productDescription" to product.product_description,
+            "productImageUrl" to product.product_imgurl
         )
         jecesfirestore!!.collection("Product").add(products)
             .addOnSuccessListener {
