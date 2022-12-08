@@ -1,7 +1,6 @@
 package com.example.applicationjeces.product
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,9 +10,6 @@ import com.google.firebase.firestore.DocumentSnapshot
 import kotlinx.android.synthetic.main.product_item_list.view.*
 
 class ProductRecyclerViewAdapter(var producFiretList: List<DocumentSnapshot>): RecyclerView.Adapter<ProductRecyclerViewAdapter.Holder>() {
-
-    private var productList = emptyList<Product>()
-
 
     /* ViewHolder에게 item을 보여줄 View로 쓰일 item_data_list.xml를 넘기면서 ViewHolder 생성. 아이템 레이아웃과 결합 */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
@@ -26,7 +22,6 @@ class ProductRecyclerViewAdapter(var producFiretList: List<DocumentSnapshot>): R
         val currentItem = producFiretList[position].get("productName")
         val currentItem2 = producFiretList[position].get("productPrice")
         /* HomeFragment */
-        Log.d("파이어베이스", currentItem.toString())
         holder.itemView.product_name.text = currentItem.toString()
         holder.itemView.product_price.text = currentItem2.toString()
 
@@ -49,25 +44,29 @@ class ProductRecyclerViewAdapter(var producFiretList: List<DocumentSnapshot>): R
     /* 리스트 아이템 개수 */
     override fun getItemCount(): Int {
         /* productList 사이즈를 리턴합니다. */
-        Log.d("파이어베이스1", "리턴값")
         return producFiretList.size
     }
 
+    /* 홈 전체 데이터 */
     @SuppressLint("NotifyDataSetChanged")
     fun setData(product: List<DocumentSnapshot>) {
         producFiretList.isEmpty()
-        /* 리스트가 변경되었을 떄, 업데이트 해줌 */
-//        this.producFiretList.isEmpty()
-        //        this.productList.isEmpty()
-        ////        this.productList.
-        //        Log.d("검색어댑터1",this.productList.toString())
-        //        this.productList = product
-        //        Log.d("검색어댑터2",this.productList.toString())
-        //        notifyDataSetChanged()
-        //        Log.d("검색어댑터3",this.productList.toString())
-        Log.d("파이어베이스2", product.toString())
         producFiretList = product
-        /* */
+        /* 변경 알림 */
+        notifyDataSetChanged()
+    }
+
+    /* 검색 전체 데이터 */
+    @SuppressLint("NotifyDataSetChanged")
+    fun searchSetData(product: Response) {
+        if(product!!.products?.isEmpty() == null) {
+            /* 검색어가 없다면 리스트를 비워줌*/
+            producFiretList = emptyList()
+        } else {
+            /* 있다면 리스트에 넣음 */
+            producFiretList = product.products!!
+        }
+        /* 변경 알림 */
         notifyDataSetChanged()
     }
 

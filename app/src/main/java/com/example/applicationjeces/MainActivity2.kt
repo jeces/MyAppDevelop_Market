@@ -6,14 +6,12 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applicationjeces.databinding.ActivityMain2Binding
 import com.example.applicationjeces.product.ProductRecyclerViewAdapter
 import com.example.applicationjeces.product.ProductViewModel
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -25,7 +23,6 @@ class MainActivity2 : AppCompatActivity() {
     private lateinit var searchViewProduct: SearchView
     val adapter = ProductRecyclerViewAdapter(emptyList())
     var jecesfirestore: FirebaseFirestore? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,9 +47,9 @@ class MainActivity2 : AppCompatActivity() {
         /* 서치뷰 생성 */
         searchViewProduct.setOnQueryTextListener(searchViewTextListener)
 
-        productViewModel.liveTodoData.observe(this) { product ->
+        productViewModel.searchProductsCall("").observe(this) { product ->
             Log.d("검색observe", product.toString())
-            adapter.setData(product)
+            adapter.searchSetData(product)
         }
     }
     /* 서치뷰 */
@@ -71,26 +68,11 @@ class MainActivity2 : AppCompatActivity() {
             }
         }
 
-    /* 검색 */
-    private fun searchDatabase1(query: String) {
-//        val searchQuery = "%$query%"
-//        productViewModel.searchProduct(searchQuery).observe(this) {
-//            Log.d("검색2", "SearchVies Text is changed : $query")
-//            adapter.setData(it)
-//            Log.d("검색2.1", productViewModel.getAll.toString())
-//        }
-    }
-
     /* firebase 검색 */
     private fun searchDatabase(searchName: String) {
-        Log.d("검색2", "ㅁ")
-        productViewModel.test(searchName)
-        Log.d("라이브데이터1.1", productViewModel.searchLiveTodoData.value.toString())
         productViewModel.searchProductsCall(searchName).observe(this) {
-            Log.d("테스트6", "ㅇ")
-            //adapter.setData(it)
+            adapter.searchSetData(it)
         }
-        Log.d("라이브데이터1.2", productViewModel.searchLiveTodoData.value.toString())
     }
 
     /* 뒤로가기 */
