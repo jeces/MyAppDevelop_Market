@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -18,11 +19,13 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.applicationjeces.MainActivity
 import com.example.applicationjeces.R
 import com.example.applicationjeces.page.DataViewModel
 import com.example.applicationjeces.page.PageData
 import com.example.applicationjeces.product.Product
+import com.example.applicationjeces.product.ProductImageRecyclerViewAdapter
 import com.example.applicationjeces.product.ProductViewModel
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_main.*
@@ -30,6 +33,7 @@ import kotlinx.android.synthetic.main.fragment_add.*
 import kotlinx.android.synthetic.main.fragment_add.view.*
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -53,6 +57,9 @@ class AddFragment : Fragment() {
     var pickImageFromAlbum = 0
     var firebaseStorage : FirebaseStorage? = null
     var uriPhoto : Uri? = null
+
+    /* 이미지 리스트 */
+    var imagelist = ArrayList<Uri>()
 
     /* ViewModel 이니셜라이즈 */
     private lateinit var productViewModel: ProductViewModel
@@ -86,11 +93,15 @@ class AddFragment : Fragment() {
         viewProfile!!.imgBtn.setOnClickListener {
             /* 앨범 오픈 */
             var photoPickerIntent = Intent(Intent.ACTION_PICK)
+            photoPickerIntent.data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+            photoPickerIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+            photoPickerIntent.action = Intent.ACTION_GET_CONTENT
             photoPickerIntent.type = "image/*"
+
             startActivityForResult(photoPickerIntent, pickImageFromAlbum)
         }
 
-        /* 버튼 누르면 실행 */
+        /* 추가 누르면 실행 */
         viewProfile!!.addBtn.setOnClickListener {
             insertProduct()
             if(ContextCompat.checkSelfPermission(viewProfile!!.context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
@@ -101,18 +112,49 @@ class AddFragment : Fragment() {
 
             }
         }
+        
+        /* 이미지 리사이클러뷰 어뎁터 장착 */
+        val adapter = ProductImageRecyclerViewAdapter(imagelist, this@AddFragment)
+        val recyclerView = viewProfile!!.img_profile
+        recyclerView.adapter = adapter
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        
         return viewProfile
     }
 
+    /* 다중이미지 업로드 참고 https://stickode.tistory.com/116 */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         if(requestCode == pickImageFromAlbum) {
             Log.d("업로드", "업로드")
-            if(resultCode == Activity.RESULT_OK) {
+            if(resultCode == Activity.RESULT_OK && requestCode == 200) {
+                imagelist.clear()
+
+                /* 사진을 여러개 선택한 경우 */
+                if(data?.clipData != null) {
+                    val count = data.clipData!!.itemCount
+                    if(count > 10) {
+                        Toast.makeText(requireContext(),"사진을 10장까지 선택 가능합니다.", Toast.LENGTH_LONG).show()
+                        return
+                    }
+                    for(i in 0 until count) {
+                        val imageUri = data.clipData!!.getItemAt(i).uri
+                        imagelist.add(imageUri)
+                    }
+                }
+                /* 단일 선택인 경우 */
+                else {
+                    data?.data?.let { uri ->
+                        val imageUri : Uri? = data?.data
+                        if(imageUri != null) {
+                            imagelist.add(imageUri)
+                        }
+                    }
                 /* 선택된 이미지 경로 */
-                uriPhoto = data?.data
-                imageView.setImageURI(uriPhoto)
+//                uriPhoto = data?.data
+////                imageView.setImageURI(uriPhoto)
+                }
             }
         }
     }
