@@ -113,7 +113,7 @@ class AddFragment : Fragment() {
                 Log.d("업로드3", "업로드3")
             }
             else {
-
+                Log.d("업로드3", "업로드33")
             }
         }
         
@@ -129,11 +129,9 @@ class AddFragment : Fragment() {
     /* 다중이미지 업로드 참고 https://stickode.tistory.com/116 */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Log.d("이미지오나", "ㅇ")
         if(requestCode == pickImageFromAlbum) {
             if(resultCode == Activity.RESULT_OK) {
                 imagelist.clear()
-                Log.d("이미지오나1", "ㅇ")
                 /* 사진을 여러개 선택한 경우 */
                 if(data?.clipData != null) {
                     val count = data.clipData!!.itemCount
@@ -144,7 +142,6 @@ class AddFragment : Fragment() {
                     for(i in 0 until count) {
                         val imageUri = data.clipData!!.getItemAt(i).uri
                         imagelist.add(imageUri)
-                        Log.d("이미지오나", imagelist.toString())
                     }
                 }
                 /* 단일 선택인 경우 */
@@ -155,31 +152,30 @@ class AddFragment : Fragment() {
                             imagelist.add(imageUri)
                         }
                     }
-                /* 선택된 이미지 경로 */
-//                uriPhoto = data?.data
-////                imageView.setImageURI(uriPhoto)
                 }
-
                 adapter.notifyDataSetChanged()
             }
         }
     }
 
     private fun funImageUpload(view : View) {
-        Log.d("업로드2", "업로드2")
-        var timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        var imgFileName = "IMAGE_" + timeStamp + "_.png"
-        var storageRef = firebaseStorage?.reference?.child("productimg")?.child(imgFileName)
-
-        storageRef?.putFile(uriPhoto!!)?.addOnSuccessListener {
-            Toast.makeText(view.context, "ImageUploiaded", Toast.LENGTH_SHORT).show()
+        /* 다중이미지 저장 */
+        var count = 0
+        for (i in imagelist) {
+            Log.d("업로드2", "업로드2")
+            var timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+            var imgFileName = "IMAGE_" + timeStamp + "_" + count + "_.png"
+            var storageRef = firebaseStorage?.reference?.child("productimg")?.child(imgFileName)
+            storageRef?.putFile(i)?.addOnSuccessListener {
+                Toast.makeText(view.context, "ImageUploiaded", Toast.LENGTH_SHORT).show()
+            }
+            count++
         }
     }
 
     private fun insertProduct() {
         val productName = productName.text.toString()
         val productPrice = productPrice.text.toString()
-
 
         /* 두 텍스트에 입력이 되었는지 */
         if(inputCheck(productName, productPrice)) {

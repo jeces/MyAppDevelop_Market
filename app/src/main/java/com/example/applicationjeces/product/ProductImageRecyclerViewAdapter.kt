@@ -14,7 +14,7 @@ class ProductImageRecyclerViewAdapter(var productImageList: ArrayList<Uri>, val 
 
     /* ViewHolder에게 item을 보여줄 View로 쓰일 item_data_list.xml를 넘기면서 ViewHolder 생성. 아이템 레이아웃과 결합 */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        return Holder(LayoutInflater.from(parent.context).inflate(R.layout.product_item_list, parent, false))
+        return Holder(LayoutInflater.from(parent.context).inflate(R.layout.img_item_list, parent, false))
     }
 
     /* Holder의 bind 메소드를 호출한다. 내용 입력 */
