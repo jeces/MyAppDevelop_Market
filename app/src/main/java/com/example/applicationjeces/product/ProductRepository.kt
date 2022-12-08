@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import kotlinx.coroutines.flow.Flow
 
+/* Room 사용할 때 사용 지금 안함 */
 /* Repository는 깔끔한 코드 구성과  MVVM아키텍처를 위해서 사용, 데이터들을 접근하는 코드들을 모아 둘 때 사용함 */
 class ProductRepository(private val productDao: ProductDao) {
 

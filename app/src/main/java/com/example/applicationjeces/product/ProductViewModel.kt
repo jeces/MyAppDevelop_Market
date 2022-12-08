@@ -12,7 +12,6 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
 
     val getAll: LiveData<List<Product>>
     var liveTodoData = MutableLiveData<List<DocumentSnapshot>>()
-
     private val repository: ProductRepository
     var jecesfirestore: FirebaseFirestore? = null
     var thisUser: String? = null
@@ -73,7 +72,7 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     /* firesotre가 제일 늦게 반응해 그다음 검색 때 바뀜 */
     /* 서치뷰에 suspend를 쓸수가없음 override 고정되어있어서 await 못씀 */
     /* 아래 서치뷰 검색을 씀 */
-    /* 서치뷰 검색 */
+    /* 서치뷰 검색어로 검색 */
     fun searchProductsCall(searchName: String)  : MutableLiveData<Response> {
         val searchLiveTodoData = MutableLiveData<Response>()
         jecesfirestore!!.collection("Product").get().addOnCompleteListener  { products ->
