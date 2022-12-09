@@ -1,5 +1,6 @@
 package com.example.applicationjeces.frag
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import com.example.applicationjeces.R
 import com.example.applicationjeces.product.ProductViewModel
 import kotlinx.android.synthetic.main.fragment_add.view.*
 import kotlinx.android.synthetic.main.fragment_info.*
+import kotlinx.android.synthetic.main.fragment_info.view.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -38,6 +40,7 @@ class InfoFragment : Fragment() {
         }
     }
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -46,8 +49,8 @@ class InfoFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_info, container, false)
 
         val productModel: ProductViewModel by activityViewModels()
-        productDetailName.text = productModel.productArrayList[0].product_name
-        productDetailPrice.text = productModel.productArrayList[0].product_price
+        view.productDetailName.text = productModel.productArrayList[0].product_name
+        view.productDetailPrice.text = productModel.productArrayList[0].product_price
 
         // Inflate the layout for this fragment
         return view
