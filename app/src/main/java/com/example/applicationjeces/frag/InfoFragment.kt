@@ -27,6 +27,7 @@ private const val ARG_PARAM2 = "param2"
 
 /* https://greensky0026.tistory.com/224 */
 /* viewpager2 이미지 슬라이더 사용하기 */
+/* 디테일 */
 class InfoFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
