@@ -93,7 +93,7 @@ class MainActivity : AppCompatActivity() {
     // startActivity(Intent(this@MainActivity, MainActivity2::class.java))
     /* 실행시 Fragment값 GET 함수 */
     private fun getFragment(pageData: PageData): Fragment {
-        Log.d("ㅇㅇ2.2", pageData.title)
+        Log.d("dddddd", pageData.title)
         if(pageData.title == "home") {
             return HomeFragment.newInstance(pageData.title, pageData.tag)
         } else if(pageData.title == "add") {

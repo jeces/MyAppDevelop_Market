@@ -38,10 +38,8 @@ class DataViewModel() : ViewModel() {
     /* 현재 FragnentType과 비교하여 같으면 return, 다르면 변경 */
     fun changePageNum(pageNum: PageData) {
         if(currentPages.value == pageNum) {
-            Log.d("체크5", pageNum.toString() + " / " + currentPage.value)
             return
         } else {
-            Log.d("체크7", pageNum.toString() + " / " + currentPage.value)
             currentPage.value = pageNum
         }
     }

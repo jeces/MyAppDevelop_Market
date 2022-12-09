@@ -10,13 +10,15 @@ import com.google.firebase.firestore.FirebaseFirestore
 /* 뷰모델은 DB에 직접 접근하지 않아야함. Repository 에서 데이터 통신 */
 class ProductViewModel(application: Application): AndroidViewModel(application) {
 
-    val getAll: LiveData<List<Product>>
     var liveTodoData = MutableLiveData<List<DocumentSnapshot>>()
     private val repository: ProductRepository
     var jecesfirestore: FirebaseFirestore? = null
     var thisUser: String? = null
+    var position: Int = 0
+    var productArrayList: MutableList<Product> = ArrayList()
 
     init {
+
         /* firebase 연동 */
         jecesfirestore = FirebaseFirestore.getInstance()
 
@@ -31,9 +33,6 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         val productDao = ProductDatabase.getInstance(application).productDao()
         /* 이니셜라이즈(초기화) 해줌 */
         repository = ProductRepository(productDao)
-        /* getall은 repository에서 만들어줬던 livedata */
-        getAll = repository.readAllproducts.asLiveData()
-        Log.d("검색뷰모델어뎁터init", getAll.toString())
     }
 
     /* firebase Product 전체 가져오기 */
@@ -77,9 +76,9 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     /* 서치뷰 검색어로 검색 */
     fun searchProductsCall(searchName: String)  : MutableLiveData<Response> {
         val searchLiveTodoData = MutableLiveData<Response>()
-        jecesfirestore!!.collection("Product").get().addOnCompleteListener  { products ->
+        jecesfirestore!!.collection("Product").get().addOnCompleteListener  { productSearch ->
             val response = Response()
-            for (snapshot in products!!.result) {
+            for (snapshot in productSearch.result) {
                 /* 검색했을 때 있다면 리스트 넣기 */
                 if (snapshot.getString("productName")!!.contains(searchName)) {
                     snapshot?.let {
@@ -94,6 +93,14 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
             searchLiveTodoData.value = response
         }
         return searchLiveTodoData
+    }
+
+    /* 디테일 데이터를 가지고 있는 데이터 */
+    fun setProductDetail(productName: String, producntPrice: String, producntDescription: String, getPosition: Int) {
+        productArrayList.clear()
+        val productDetail = Product(0, productName, producntPrice, producntDescription, "0")
+        position = getPosition
+        productArrayList.add(productDetail)
     }
 
     //    fun test(searchName: String) : MutableLiveData<List<DocumentSnapshot>> {

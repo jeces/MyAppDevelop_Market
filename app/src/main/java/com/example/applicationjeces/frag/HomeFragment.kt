@@ -7,12 +7,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.applicationjeces.MainActivity
 import com.example.applicationjeces.R
+import com.example.applicationjeces.page.DataViewModel
+import com.example.applicationjeces.page.PageData
 import com.example.applicationjeces.product.ProductRecyclerViewAdapter
 import com.example.applicationjeces.product.ProductViewModel
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
 
 // TODO: Rename parameter arguments, choose names that match
@@ -65,6 +70,29 @@ class HomeFragment : Fragment() {
             /* ViewModel에 Observe를 활용하여 productViewModel에 ReadAllData 라이브 데이터가 바뀌었을때 캐치하여, adapter에서 만들어준 setData함수를 통해 바뀐데이터를 UI에 업데이트 해줌 */
             adapter.setData(product)
         })
+
+        /* 항목 클릭시 */
+        adapter.setItemClickListener(object: ProductRecyclerViewAdapter.OnItemClickListener {
+            override fun onClick(v: View, position: Int) {
+                /* 화면 띄움*/
+                /* 프라그먼트에서 프라그먼트로 제어가 불가능하기 때문에 상위 액티비티에서 제어 해주어야 한다. */
+                /* ViewModel 가지고와서 PageLiveData 넘기기[업데이트 됨] */
+                val model: DataViewModel by activityViewModels()
+                model.changePageNum(PageData.DETAIL)
+
+                val productModel: ProductViewModel by activityViewModels()
+                productModel.liveTodoData.value?.get(position).toString()
+                productModel.setProductDetail(adapter.producFiretList[position].get("productName").toString(), adapter.producFiretList[position].get("productPrice").toString()
+                    , adapter.producFiretList[position].get("productDescription").toString(), position)
+                Log.d("데이터뭐냐", adapter.producFiretList[position].get("productName").toString())
+                Log.d("데이터뭐냐", adapter.producFiretList[position].get("productPrice").toString())
+                Log.d("데이터뭐냐", adapter.producFiretList[position].get("productDescription").toString())
+                /* Navigation Bar Selected 넘겨야 됨[여기서부터해야함] */
+                val mActivity = activity as MainActivity
+                mActivity.bottomNavigationView.menu.findItem(R.id.detail).isChecked = true
+            }
+        })
+
         // Inflate the layout for this fragment
         return view
     }

@@ -26,7 +26,8 @@ class ProductRecyclerViewAdapter(var producFiretList: List<DocumentSnapshot>): R
         holder.itemView.product_price.text = currentItem2.toString()
 
         holder.itemView.setOnClickListener {
-            /* 리스트 클릭시 Detail 화면 전환ss */
+            /* 리스트 클릭시 Detail 화면 전환 */
+            itemClickListener.onClick(it, position)
         }
     }
 
