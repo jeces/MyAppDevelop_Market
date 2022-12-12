@@ -11,6 +11,7 @@ import android.widget.Toast
 import com.example.applicationjeces.MainActivity
 import com.example.applicationjeces.databinding.FragmentJoinBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_join.*
 
 
@@ -103,7 +104,17 @@ class JoinFragment : Fragment() {
                             ?.sendEmailVerification()
                             ?.addOnCompleteListener { emailTast ->
                                 if(emailTast.isSuccessful) {
-                                    Toast.makeText(context, "회원가입 성공", Toast.LENGTH_LONG).show()
+                                    val users = hashMapOf(
+                                        "id" to textInputEditText.text.toString(),
+                                        "name" to "임시이름"
+                                    )
+                                    FirebaseFirestore.getInstance()!!.collection("UserInfo").add(users)
+                                        .addOnSuccessListener {
+                                            Toast.makeText(context, "회원가입 성공", Toast.LENGTH_LONG).show()
+                                        }
+                                        .addOnFailureListener {
+                                            Toast.makeText(context, "회원가입 실패", Toast.LENGTH_LONG).show()
+                                        }
                                 } else {
                                     Toast.makeText(context, task.exception.toString(), Toast.LENGTH_LONG).show()
                                 }

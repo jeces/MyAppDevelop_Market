@@ -54,8 +54,6 @@ class ChatRecyclerViewAdapter: RecyclerView.Adapter<ChatRecyclerViewAdapter.Hold
         return destinationUsers.size
     }
 
-
-
     /* inner class로 viewHolder 정의. 레이아웃 내 view 연결 */
     inner class Holder(ItemView: View): RecyclerView.ViewHolder(ItemView) {
 
