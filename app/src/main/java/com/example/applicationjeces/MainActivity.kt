@@ -106,7 +106,7 @@ class MainActivity : AppCompatActivity() {
         } else if(pageData.title == "detail") {
             return InfoFragment.newInstance(pageData.title, pageData.tag)
         } else if(pageData.title == "message") {
-            return MessageFragment.newInstance(pageData.title, pageData.tag)
+            return ChatFragment.newInstance(pageData.title, pageData.tag)
         } else {
             return HomeFragment.newInstance(pageData.title, pageData.tag)
         }
