@@ -29,8 +29,6 @@ class ChatRecyclerViewAdapter: RecyclerView.Adapter<ChatRecyclerViewAdapter.Hold
     /* getItemCount() 리턴값이 0일 경우 호출 안함 */
     override fun onBindViewHolder(holder: Holder, position: Int) {
 
-
-
         holder.itemView.setOnClickListener {
             /* 리스트 클릭시 Detail 화면 전환 */
             itemClickListener.onClick(it, position)
