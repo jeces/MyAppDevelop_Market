@@ -20,6 +20,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.applicationjeces.MainActivity
 import com.example.applicationjeces.R
 import com.example.applicationjeces.page.DataViewModel
@@ -116,7 +117,7 @@ class AddFragment : Fragment() {
         val recyclerView = viewProfile!!.img_profile
         recyclerView.adapter = adapter
         recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
         
         return viewProfile
     }
