@@ -19,6 +19,7 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     var thisUser: String? = null
     var position: Int = 0
     var productArrayList: MutableList<Product> = ArrayList()
+    var imgList: MutableList<String> = ArrayList()
 
     init {
 
@@ -41,12 +42,13 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     /* firebase storage에서 이미지 가져오기 */
     fun getImage(idx: String) {
         /* List이미지를 리턴 */
-        var imageRef: StorageReference = FirebaseStorage.getInstance().reference.child("productimg")
+        jecesfirestore!!.collection("Product").get().addOnSuccessListener {
+            imgList = arrayListOf()
+            for(document in it) {
+                Log.d("ㅇㅇ", "ㅇㅇ")
+            }
+        }
 
-
-//        Glide.with(this)
-//            .load(imageRef)
-//            .into(binding)
     }
 
     /* firebase Product 전체 가져오기 */

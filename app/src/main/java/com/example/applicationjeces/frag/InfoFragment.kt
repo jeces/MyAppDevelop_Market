@@ -11,7 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applicationjeces.R
-import com.example.applicationjeces.product.ProductImageRecyclerViewAdapter
+import com.example.applicationjeces.product.ProductImageInfoRecyclerViewAdapter
 import com.example.applicationjeces.product.ProductViewModel
 import kotlinx.android.synthetic.main.fragment_add.view.*
 import kotlinx.android.synthetic.main.fragment_info.*
@@ -41,7 +41,7 @@ class InfoFragment : Fragment() {
     var imagelist = ArrayList<Uri>()
 
     /* 이미지 어뎁터 */
-    private val adapter = ProductImageRecyclerViewAdapter(imagelist, this@InfoFragment)
+    private val adapter = ProductImageInfoRecyclerViewAdapter(imagelist, this@InfoFragment)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

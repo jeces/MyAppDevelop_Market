@@ -54,6 +54,7 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Log.d("홈연결", "ㅇㅇ")
         /* 레이아웃 연결 */
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 

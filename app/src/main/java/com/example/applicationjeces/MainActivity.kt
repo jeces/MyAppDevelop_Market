@@ -38,7 +38,6 @@ class MainActivity : AppCompatActivity() {
         /* 앨범에 접근하는것을 허용하는 메세지 */
         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1)
 
-
         /* fab 메세지 */
         binding.fab.setOnClickListener { view ->
             changeFragment(PageData.MESSAGE)
@@ -92,6 +91,7 @@ class MainActivity : AppCompatActivity() {
     }
     // startActivity(Intent(this@MainActivity, MainActivity2::class.java))
     /* 실행시 Fragment값 GET 함수 */
+    /* 처음은 띄워주기 위해 사용됨. 후에 Hide로 숨겨져서 사용 안함. 한번쓰고 버림 */
     private fun getFragment(pageData: PageData): Fragment {
         Log.d("dddddd", pageData.title)
         if(pageData.title == "home") {
