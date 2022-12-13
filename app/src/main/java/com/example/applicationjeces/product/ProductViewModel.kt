@@ -6,6 +6,7 @@ import androidx.lifecycle.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 
 /* 뷰모델은 DB에 직접 접근하지 않아야함. Repository 에서 데이터 통신 */
 class ProductViewModel(application: Application): AndroidViewModel(application) {
@@ -37,7 +38,8 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
 
     /* firebase storage에서 이미지 가져오기 */
     fun getImage(idx: String) {
-
+        /* List이미지를 리턴 */
+        FirebaseStorage.getInstance()?.reference?.child("productimg")
     }
 
     /* firebase Product 전체 가져오기 */
