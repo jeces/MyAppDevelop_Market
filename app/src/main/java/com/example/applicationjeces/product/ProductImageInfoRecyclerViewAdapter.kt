@@ -24,10 +24,10 @@ class ProductImageInfoRecyclerViewAdapter(var productImageList: ArrayList<Uri>, 
     /* getItemCount() 리턴값이 0일 경우 호출 안함 */
     override fun onBindViewHolder(holder: Holder, position: Int) {
 //        val item = productImageList[position]
-        var imageRef: StorageReference = FirebaseStorage.getInstance().reference.child("productimg/IMAGE_20221208_140338_.png")
-        Glide.with(context).load(imageRef)
-            .override(180, 180)
-            .into(holder.image)
+//        var imageRef: StorageReference = FirebaseStorage.getInstance().reference.child("productimg/IMAGE_20221208_140338_.png")
+//        Glide.with(context).load(imageRef)
+//            .override(180, 180)
+//            .into(holder.image)
 
     }
 

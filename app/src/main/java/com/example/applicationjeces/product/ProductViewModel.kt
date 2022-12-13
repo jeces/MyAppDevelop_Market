@@ -37,17 +37,33 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         val productDao = ProductDatabase.getInstance(application).productDao()
         /* 이니셜라이즈(초기화) 해줌 */
         repository = ProductRepository(productDao)
+
+        /* 임시 */
+        getImage()
+
     }
 
     /* firebase storage에서 이미지 가져오기 */
-    fun getImage(idx: String) {
+    fun getImage() {
         /* List이미지를 리턴 */
-        jecesfirestore!!.collection("Product").get().addOnSuccessListener {
-            imgList = arrayListOf()
-            for(document in it) {
-                Log.d("ㅇㅇ", "ㅇㅇ")
-            }
+//        jecesfirestore!!.collection("Product").get().addOnSuccessListener {
+//            imgList = arrayListOf()
+//            for(document in it) {
+//                // 이미지 url 즉 productimg/이름 을 가져와서 리스트에 넣고 뿌려줌
+//                Log.d("ㅇㅇ123", document["productImageUrl"].toString())
+//            }
+//        }
+        /* 글자 나누기 */
+
+
+        for(i: Int in 1..3) {
+            var word: String = thisUser + "_" + 12 + "_" + i + "_IMAGE"
         }
+
+        FirebaseStorage.getInstance().reference.child("productimg/IMAGE_20221208_140338_.png").downloadUrl.addOnCompleteListener {
+            Log.d("뭐니?", it.result.toString())
+        }
+
 
     }
 
