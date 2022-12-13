@@ -56,8 +56,11 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         /* 글자 나누기 */
 
 
+        /* 카운트는 가져와야함 product에 저장해놓고 */
         for(i: Int in 1..3) {
+            /* 워드를 가져와서 돌림*/
             var word: String = thisUser + "_" + 12 + "_" + i + "_IMAGE"
+
         }
 
         FirebaseStorage.getInstance().reference.child("productimg/IMAGE_20221208_140338_.png").downloadUrl.addOnCompleteListener {
@@ -164,8 +167,5 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
 //        val value = this.value ?: emptyList()
 //        this.value = value + listOf(item)
 //    }
-
-
-
 
 }
