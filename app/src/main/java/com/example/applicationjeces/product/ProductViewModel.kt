@@ -35,6 +35,11 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         repository = ProductRepository(productDao)
     }
 
+    /* firebase storage에서 이미지 가져오기 */
+    fun getImage(idx: String) {
+
+    }
+
     /* firebase Product 전체 가져오기 */
     fun allProduct() {
         liveTodoData.value?.isEmpty()
