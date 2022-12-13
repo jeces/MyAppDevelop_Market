@@ -1,13 +1,17 @@
 package com.example.applicationjeces.frag
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.applicationjeces.R
+import com.example.applicationjeces.product.ProductImageRecyclerViewAdapter
 import com.example.applicationjeces.product.ProductViewModel
 import kotlinx.android.synthetic.main.fragment_add.view.*
 import kotlinx.android.synthetic.main.fragment_info.*
@@ -33,6 +37,12 @@ class InfoFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    /* 이미지 리스트 */
+    var imagelist = ArrayList<Uri>()
+
+    /* 이미지 어뎁터 */
+    private val adapter = ProductImageRecyclerViewAdapter(imagelist, this@InfoFragment)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -52,6 +62,12 @@ class InfoFragment : Fragment() {
         val productModel: ProductViewModel by activityViewModels()
         view.productDetailName.text = productModel.productArrayList[0].product_name
         view.productDetailPrice.text = productModel.productArrayList[0].product_price
+
+        /* 이미지 리사이클러뷰 어뎁터 장착 */
+        val recyclerView =  view!!.imginfo_profile
+        recyclerView.adapter = adapter
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
 
         // Inflate the layout for this fragment
         return view
