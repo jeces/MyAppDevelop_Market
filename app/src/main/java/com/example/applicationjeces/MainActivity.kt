@@ -100,7 +100,7 @@ class MainActivity : AppCompatActivity() {
             return AddFragment.newInstance(pageData.title, pageData.tag)
         } else if(pageData.title == "search") {
             target = true
-            return SearchFragment.newInstance(pageData.title, pageData.tag)
+            return HomeFragment.newInstance(pageData.title, pageData.tag)
         } else if(pageData.title == "setting") {
             return SettingFragment.newInstance(pageData.title, pageData.tag)
         } else if(pageData.title == "detail") {

@@ -16,6 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -60,7 +61,11 @@ class AddFragment : Fragment() {
     var uriPhoto : Uri? = null
     var imgFileName : String = ""
 
+    /* 이미지 개수 */
     var imgCount: Int = 0
+
+    /* 이미지 없을 때 기본화면 띄어주려고 */
+    var targetImg: Boolean = false
 
     /* 이미지 리스트 */
     var imagelist = ArrayList<Uri>()
@@ -136,11 +141,15 @@ class AddFragment : Fragment() {
                     if(imgCount > 10) {
                         Toast.makeText(requireContext(),"사진을 10장까지 선택 가능합니다.", Toast.LENGTH_LONG).show()
                         return
+                    } else if(imgCount == 0) {
+                        /* 이미지가 없을 때 */
+                        targetImg = true
                     }
                     for(i in 0 until imgCount) {
                         val imageUri = data.clipData!!.getItemAt(i).uri
                         imagelist.add(imageUri)
                     }
+
                 }
                 /* 단일 선택인 경우 */
                 else {
@@ -185,7 +194,16 @@ class AddFragment : Fragment() {
         /* 두 텍스트에 입력이 되었는지 */
         if(inputCheck(productName, productPrice)) {
             /* pk값이 자동이라도 넣어줌, Product에 저장 */
-            val product = Product(0, productName, productPrice, productDescription, imgCount)
+            if(targetImg == true) {
+                /* 이미지가 없을 때 */
+                imgFileName = "basic_img.png"
+            } else {
+                /* 이미지가 있을 때 */
+                imgFileName = productViewModel.thisUser + "_" + productName + "_0_IMAGE_.png"
+            }
+
+
+            val product = Product(0, productName, productPrice, productDescription, imgCount, imgFileName)
             /* ViewModel에 addProduct를 해줌으로써 데이터베이스에 product값을 넣어줌 */
             productViewModel.addProducts(product)
 

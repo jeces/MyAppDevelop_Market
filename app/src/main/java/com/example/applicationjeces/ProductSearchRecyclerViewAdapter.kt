@@ -1,20 +1,19 @@
-package com.example.applicationjeces.product
+package com.example.applicationjeces
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.applicationjeces.R
-import com.example.applicationjeces.frag.HomeFragment
+import com.example.applicationjeces.product.Response
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.product_item_list.view.*
 
-class ProductRecyclerViewAdapter(var producFiretList: List<DocumentSnapshot>, var context: Fragment): RecyclerView.Adapter<ProductRecyclerViewAdapter.Holder>() {
+class ProductSearchRecyclerViewAdapter(var producFiretList: List<DocumentSnapshot>, val context: Context): RecyclerView.Adapter<ProductSearchRecyclerViewAdapter.Holder>() {
 
     /* ViewHolder에게 item을 보여줄 View로 쓰일 item_data_list.xml를 넘기면서 ViewHolder 생성. 아이템 레이아웃과 결합 */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
@@ -26,18 +25,10 @@ class ProductRecyclerViewAdapter(var producFiretList: List<DocumentSnapshot>, va
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val currentItem = producFiretList[position].get("productName")
         val currentItem2 = producFiretList[position].get("productPrice")
-        var currentItem3 = producFiretList[position].get("productImgUrl")
-        val currentItem4 = producFiretList[position].get("productCount")
+        val currentItem3 = producFiretList[position].get("productImgUrl")
         /* HomeFragment */
         holder.itemView.product_name.text = currentItem.toString()
         holder.itemView.product_price.text = currentItem2.toString()
-        Log.d("이미지뭐니", currentItem4.toString())
-        Log.d("이미지뭐니", currentItem3.toString())
-
-        if(currentItem4.toString().equals("0")) {
-            Log.d("여기들어오니?", "ㅇㅇ")
-            currentItem3 = "basic_img.png"
-        }
 
         FirebaseStorage.getInstance().reference.child("productimg/$currentItem3").downloadUrl.addOnCompleteListener {
             if(it.isSuccessful) {

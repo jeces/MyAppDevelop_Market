@@ -59,7 +59,7 @@ class HomeFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
         /* 리사이클러뷰 */
-        val adapter = ProductRecyclerViewAdapter(emptyList())
+        val adapter = ProductRecyclerViewAdapter(emptyList(), this@HomeFragment)
         val recyclerView = view.rv_profile
         recyclerView.adapter = adapter
         recyclerView.setHasFixedSize(true)
@@ -85,9 +85,7 @@ class HomeFragment : Fragment() {
                 productModel.liveTodoData.value?.get(position).toString()
                 productModel.setProductDetail(adapter.producFiretList[position].get("productName").toString(), adapter.producFiretList[position].get("productPrice").toString()
                     , adapter.producFiretList[position].get("productDescription").toString(), adapter.producFiretList[position].get("productCount").toString(), position)
-                Log.d("데이터뭐냐", adapter.producFiretList[position].get("productName").toString())
-                Log.d("데이터뭐냐", adapter.producFiretList[position].get("productPrice").toString())
-                Log.d("데이터뭐냐", adapter.producFiretList[position].get("productDescription").toString())
+
                 /* Navigation Bar Selected 넘겨야 됨[여기서부터해야함] */
                 val mActivity = activity as MainActivity
                 mActivity.bottomNavigationView.menu.findItem(R.id.detail).isChecked = true

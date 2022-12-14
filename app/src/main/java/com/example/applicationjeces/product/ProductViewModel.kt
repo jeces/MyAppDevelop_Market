@@ -79,7 +79,8 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
             "productName" to product.product_name,
             "productPrice" to product.product_price,
             "productDescription" to product.product_description,
-            "productCount" to product.product_count
+            "productCount" to product.product_count,
+            "productImgUrl" to product.product_img_url
         )
         jecesfirestore!!.collection("Product").add(products)
             .addOnSuccessListener {
@@ -122,9 +123,9 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     }
 
     /* 디테일 데이터를 가지고 있는 데이터 */
-    fun setProductDetail(productName: String, productPrice: String, productDescription: String, productCount: String, getPosition: Int) {
+    fun setProductDetail(productName: String, productPrice: String, productDescription: String, productCount: String,getPosition: Int) {
         productArrayList.clear()
-        val productDetail = Product(0, productName, productPrice, productDescription, productCount.toInt())
+        val productDetail = Product(0, productName, productPrice, productDescription, productCount.toInt(), thisUser + "_" + productName + "_0_IMAGE_.png")
         position = getPosition
         productArrayList.add(productDetail)
     }

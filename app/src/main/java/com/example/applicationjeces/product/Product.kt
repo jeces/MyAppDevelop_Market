@@ -25,7 +25,11 @@ data class Product(
 
     /* 이미지 개수 카운트 */
     @ColumnInfo(name = "product_count")
-    var product_count: Int
+    var product_count: Int,
+
+    /* 이미지 첫화면 URL */
+    @ColumnInfo(name = "product_img_url")
+    var product_img_url: String
 
 ) {
 
