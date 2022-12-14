@@ -53,21 +53,13 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
 //                Log.d("ㅇㅇ123", document["productImageUrl"].toString())
 //            }
 //        }
-        /* 글자 나누기 */
 
 
-        /* 카운트는 가져와야함 product에 저장해놓고 */
-        for(i: Int in 1..3) {
-            /* 워드를 가져와서 돌림*/
-            var word: String = thisUser + "_" + 12 + "_" + i + "_IMAGE"
 
-        }
 
         FirebaseStorage.getInstance().reference.child("productimg/IMAGE_20221208_140338_.png").downloadUrl.addOnCompleteListener {
             Log.d("뭐니?", it.result.toString())
         }
-
-
     }
 
     /* firebase Product 전체 가져오기 */
@@ -88,7 +80,7 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
             "productName" to product.product_name,
             "productPrice" to product.product_price,
             "productDescription" to product.product_description,
-            "productImageUrl" to product.product_imgurl
+            "productCount" to product.product_count
         )
         jecesfirestore!!.collection("Product").add(products)
             .addOnSuccessListener {
@@ -131,9 +123,9 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     }
 
     /* 디테일 데이터를 가지고 있는 데이터 */
-    fun setProductDetail(productName: String, producntPrice: String, producntDescription: String, getPosition: Int) {
+    fun setProductDetail(productName: String, productPrice: String, productDescription: String, getPosition: Int) {
         productArrayList.clear()
-        val productDetail = Product(0, productName, producntPrice, producntDescription, "0")
+        val productDetail = Product(0, productName, productPrice, productDescription, 0)
         position = getPosition
         productArrayList.add(productDetail)
     }
@@ -167,5 +159,4 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
 //        val value = this.value ?: emptyList()
 //        this.value = value + listOf(item)
 //    }
-
 }

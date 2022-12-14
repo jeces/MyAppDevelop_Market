@@ -3,6 +3,7 @@ package com.example.applicationjeces.frag
 import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -38,10 +39,9 @@ class InfoFragment : Fragment() {
     private var param2: String? = null
 
     /* 이미지 리스트 */
-    var imagelist = ArrayList<Uri>()
+    var imagelist = ArrayList<String>()
 
-    /* 이미지 어뎁터 */
-    private val adapter = ProductImageInfoRecyclerViewAdapter(imagelist, this@InfoFragment)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,6 +62,19 @@ class InfoFragment : Fragment() {
         val productModel: ProductViewModel by activityViewModels()
         view.productDetailName.text = productModel.productArrayList[0].product_name
         view.productDetailPrice.text = productModel.productArrayList[0].product_price
+
+        /* 글자 나누기 */
+        /* 카운트는 가져와야함 product에 저장해놓고 */
+        /* User이름, 상품이름, 사진갯수몇가지인지[product에 추가할것], 사진idx값 가져오기 */
+        for(i: Int in 0..3) {
+            /* 워드를 가져와서 돌림 */
+            var word: String = "mepion1234@naver.com" + "_" + 12 + "_" + i + "_IMAGE_20221213_100620_.png"
+            Log.d("워드", word)
+            imagelist.add(word)
+        }
+
+        /* 이미지 어뎁터 */
+        val adapter = ProductImageInfoRecyclerViewAdapter(imagelist, this@InfoFragment)
 
         /* 이미지 리사이클러뷰 어뎁터 장착 */
         val recyclerView =  view!!.imginfo_profile

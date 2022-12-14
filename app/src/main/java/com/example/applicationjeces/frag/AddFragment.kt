@@ -60,6 +60,8 @@ class AddFragment : Fragment() {
     var uriPhoto : Uri? = null
     var imgFileName : String = ""
 
+    var imgCount: Int = 0
+
     /* 이미지 리스트 */
     var imagelist = ArrayList<Uri>()
 
@@ -130,12 +132,12 @@ class AddFragment : Fragment() {
                 imagelist.clear()
                 /* 사진을 여러개 선택한 경우 */
                 if(data?.clipData != null) {
-                    val count = data.clipData!!.itemCount
-                    if(count > 10) {
+                    imgCount = data.clipData!!.itemCount
+                    if(imgCount > 10) {
                         Toast.makeText(requireContext(),"사진을 10장까지 선택 가능합니다.", Toast.LENGTH_LONG).show()
                         return
                     }
-                    for(i in 0 until count) {
+                    for(i in 0 until imgCount) {
                         val imageUri = data.clipData!!.getItemAt(i).uri
                         imagelist.add(imageUri)
                     }
@@ -173,11 +175,12 @@ class AddFragment : Fragment() {
     private fun insertProduct() {
         val productName = productName.text.toString()
         val productPrice = productPrice.text.toString()
+        val productDescription = productDescription.text.toString()
 
         /* 두 텍스트에 입력이 되었는지 */
         if(inputCheck(productName, productPrice)) {
             /* pk값이 자동이라도 넣어줌, Product에 저장 */
-            val product = Product(0, productName, productPrice, "1", imgFileName)
+            val product = Product(0, productName, productPrice, productDescription, imgCount)
             /* ViewModel에 addProduct를 해줌으로써 데이터베이스에 product값을 넣어줌 */
             productViewModel.addProducts(product)
 
