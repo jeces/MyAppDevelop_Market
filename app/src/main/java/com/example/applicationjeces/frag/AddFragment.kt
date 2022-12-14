@@ -107,7 +107,7 @@ class AddFragment : Fragment() {
             startActivityForResult(photoPickerIntent, pickImageFromAlbum)
         }
 
-        /* 업로드 및 추가 실행 */
+        /* 등록버튼 누르면 */
         viewProfile!!.addBtn.setOnClickListener {
             if(ContextCompat.checkSelfPermission(viewProfile!!.context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 funImageUpload(viewProfile!!)
@@ -161,9 +161,10 @@ class AddFragment : Fragment() {
         val productName = productName.text.toString()
         /* 다중이미지 저장 */
         var count = 0
+        Log.d("여기왔니?", "ㅇㅇ")
         for (i in imagelist) {
             var timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-            imgFileName = productViewModel.thisUser + "_" + productName + "_" + count + "_IMAGE_" + timeStamp + "_.png"
+            imgFileName = productViewModel.thisUser + "_" + productName + "_" + count + "_IMAGE_.png"
             var storageRef = firebaseStorage?.reference?.child("productimg")?.child(imgFileName)
             storageRef?.putFile(i)?.addOnSuccessListener {
                 Toast.makeText(view.context, "ImageUploiaded", Toast.LENGTH_SHORT).show()

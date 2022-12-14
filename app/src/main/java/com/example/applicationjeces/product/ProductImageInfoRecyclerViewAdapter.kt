@@ -36,6 +36,7 @@ class ProductImageInfoRecyclerViewAdapter(var productImageList: ArrayList<String
                     .into(holder.image)
             } else {
 //                Toast.makeText(context, it.exception.toString(), Toast.LENGTH_SHORT).show()
+                Log.d("들어왔니?", "123")
             }
         }
     }

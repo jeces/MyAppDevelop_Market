@@ -19,7 +19,7 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     var thisUser: String? = null
     var position: Int = 0
     var productArrayList: MutableList<Product> = ArrayList()
-    var imgList: MutableList<String> = ArrayList()
+    lateinit var imgList: ArrayList<String>
 
     init {
 
@@ -38,28 +38,21 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         /* 이니셜라이즈(초기화) 해줌 */
         repository = ProductRepository(productDao)
 
-        /* 임시 */
-        getImage()
-
     }
 
     /* firebase storage에서 이미지 가져오기 */
-    fun getImage() {
-        /* List이미지를 리턴 */
-//        jecesfirestore!!.collection("Product").get().addOnSuccessListener {
-//            imgList = arrayListOf()
-//            for(document in it) {
-//                // 이미지 url 즉 productimg/이름 을 가져와서 리스트에 넣고 뿌려줌
-//                Log.d("ㅇㅇ123", document["productImageUrl"].toString())
-//            }
-//        }
-
-
-
-
-        FirebaseStorage.getInstance().reference.child("productimg/IMAGE_20221208_140338_.png").downloadUrl.addOnCompleteListener {
-            Log.d("뭐니?", it.result.toString())
+    fun getImage(productName:String, productCount: Int): MutableList<String> {
+        imgList.clear()
+        /* 글자 나누기 */
+        /* 카운트는 가져와야함 product에 저장해놓고 */
+        /* User이름, 상품이름, 사진갯수몇가지인지[product에 추가할것], 사진idx값 가져오기 */
+        for(i: Int in 0 until productCount) {
+            /* 워드를 가져와서 돌림 */
+            var word: String = thisUser + "_" + productName + "_" + i + "_IMAGE_.png"
+            Log.d("워드", word)
+            imgList.add(word)
         }
+        return imgList
     }
 
     /* firebase Product 전체 가져오기 */
