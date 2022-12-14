@@ -25,10 +25,16 @@ class ProductSearchRecyclerViewAdapter(var producFiretList: List<DocumentSnapsho
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val currentItem = producFiretList[position].get("productName")
         val currentItem2 = producFiretList[position].get("productPrice")
-        val currentItem3 = producFiretList[position].get("productImgUrl")
+        var currentItem3 = producFiretList[position].get("productImgUrl")
+        val currentItem4 = producFiretList[position].get("productCount")
         /* HomeFragment */
         holder.itemView.product_name.text = currentItem.toString()
         holder.itemView.product_price.text = currentItem2.toString()
+
+        if(currentItem4.toString().equals("0")) {
+            Log.d("여기들어오니?", "ㅇㅇ")
+            currentItem3 = "basic_img.png"
+        }
 
         FirebaseStorage.getInstance().reference.child("productimg/$currentItem3").downloadUrl.addOnCompleteListener {
             if(it.isSuccessful) {
@@ -45,6 +51,7 @@ class ProductSearchRecyclerViewAdapter(var producFiretList: List<DocumentSnapsho
             /* 리스트 클릭시 Detail 화면 전환 */
             itemClickListener.onClick(it, position)
         }
+
     }
 
     /* (2) 리스너 인터페이스 */
