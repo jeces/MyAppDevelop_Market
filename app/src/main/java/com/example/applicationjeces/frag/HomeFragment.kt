@@ -1,5 +1,6 @@
 package com.example.applicationjeces.frag
 
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.applicationjeces.MainActivity
+import com.example.applicationjeces.ProductSearchRecyclerViewAdapter
 import com.example.applicationjeces.R
 import com.example.applicationjeces.page.DataViewModel
 import com.example.applicationjeces.page.PageData

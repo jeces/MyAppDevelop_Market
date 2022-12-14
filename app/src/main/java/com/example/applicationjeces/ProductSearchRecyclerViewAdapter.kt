@@ -27,12 +27,12 @@ class ProductSearchRecyclerViewAdapter(var producFiretList: List<DocumentSnapsho
         val currentItem2 = producFiretList[position].get("productPrice")
         var currentItem3 = producFiretList[position].get("productImgUrl")
         val currentItem4 = producFiretList[position].get("productCount")
-        /* HomeFragment */
+        /* MainActivity2 */
         holder.itemView.product_name.text = currentItem.toString()
         holder.itemView.product_price.text = currentItem2.toString()
 
+        /* 이미지가 없을 때 */
         if(currentItem4.toString().equals("0")) {
-            Log.d("여기들어오니?", "ㅇㅇ")
             currentItem3 = "basic_img.png"
         }
 
@@ -43,7 +43,7 @@ class ProductSearchRecyclerViewAdapter(var producFiretList: List<DocumentSnapsho
                     .override(20, 20)
                     .into(holder.itemView.product_img)
             } else {
-                Log.d("들어왔니?", "123")
+
             }
         }
 
@@ -52,6 +52,8 @@ class ProductSearchRecyclerViewAdapter(var producFiretList: List<DocumentSnapsho
             itemClickListener.onClick(it, position)
         }
 
+        /* 이미지 초기화 */
+        holder.itemView.product_img.setImageBitmap(null)
     }
 
     /* (2) 리스너 인터페이스 */

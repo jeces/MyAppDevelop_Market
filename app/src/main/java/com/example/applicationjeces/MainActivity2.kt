@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applicationjeces.databinding.ActivityMain2Binding
+import com.example.applicationjeces.product.ProductRecyclerViewAdapter
 import com.example.applicationjeces.product.ProductViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
@@ -18,7 +19,6 @@ class MainActivity2 : AppCompatActivity() {
 
     private lateinit var binding: ActivityMain2Binding
     private lateinit var productViewModel: ProductViewModel
-//    private lateinit var ProductSearchRecyclerViewAdapter: ProductSearchRecyclerViewAdapter
     private lateinit var searchViewProduct: SearchView
     val adapter = ProductSearchRecyclerViewAdapter(emptyList(), this@MainActivity2)
     var jecesfirestore: FirebaseFirestore? = null
@@ -26,8 +26,6 @@ class MainActivity2 : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main2)
-        /* apater initialize 초기화 해야함 *///
-//        ProductSearchRecyclerViewAdapter = ProductSearchRecyclerViewAdapter(emptyList(), this@MainActivity2)
 
         /* firestore 가져옴 */
         jecesfirestore = FirebaseFirestore.getInstance()

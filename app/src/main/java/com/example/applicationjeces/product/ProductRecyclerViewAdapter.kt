@@ -1,6 +1,7 @@
 package com.example.applicationjeces.product
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -31,11 +32,9 @@ class ProductRecyclerViewAdapter(var producFiretList: List<DocumentSnapshot>, va
         /* HomeFragment */
         holder.itemView.product_name.text = currentItem.toString()
         holder.itemView.product_price.text = currentItem2.toString()
-        Log.d("이미지뭐니", currentItem4.toString())
-        Log.d("이미지뭐니", currentItem3.toString())
 
+        /* 이미지가 없을 때 */
         if(currentItem4.toString().equals("0")) {
-            Log.d("여기들어오니?", "ㅇㅇ")
             currentItem3 = "basic_img.png"
         }
 
@@ -46,7 +45,6 @@ class ProductRecyclerViewAdapter(var producFiretList: List<DocumentSnapshot>, va
                     .override(20, 20)
                     .into(holder.itemView.product_img)
             } else {
-                Log.d("들어왔니?", "123")
             }
         }
 
@@ -54,6 +52,9 @@ class ProductRecyclerViewAdapter(var producFiretList: List<DocumentSnapshot>, va
             /* 리스트 클릭시 Detail 화면 전환 */
             itemClickListener.onClick(it, position)
         }
+
+        /* 이미지 초기화 */
+        holder.itemView.product_img.setImageBitmap(null)
     }
 
     /* (2) 리스너 인터페이스 */

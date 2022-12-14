@@ -149,7 +149,6 @@ class AddFragment : Fragment() {
                         val imageUri = data.clipData!!.getItemAt(i).uri
                         imagelist.add(imageUri)
                     }
-
                 }
                 /* 단일 선택인 경우 */
                 else {
