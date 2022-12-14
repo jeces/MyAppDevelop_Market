@@ -17,22 +17,85 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
-    <TextView
-        android:id="@+id/productDetailName"
-        android:layout_width="wrap_content"
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:id="@+id/ProductNameLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="232dp"
+        android:layout_marginTop="210dp"
         android:layout_marginEnd="32dp"
-        android:text="TextView" />
+        android:inputType="textEmailAddress"
+        android:hint="ProductName"
+        app:helperTextTextColor="@color/red"
+        app:helperText="Required*"
+        app:counterEnabled="true"
+        app:counterMaxLength="30"
+        app:endIconMode="clear_text"
+        app:startIconDrawable="@drawable/ic_baseline_production_quantity_limits_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/productDetailPrice"
-        android:layout_width="wrap_content"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/productDetailName"
+            android:maxLength="30"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:id="@+id/ProductPriceLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="260dp"
+        android:layout_marginTop="310dp"
         android:layout_marginEnd="32dp"
-        android:text="TextView" />
+        android:inputType="textEmailAddress"
+        android:hint="ProductPrice"
+        app:helperTextTextColor="@color/red"
+        app:helperText="Required*"
+        app:counterEnabled="true"
+        app:counterMaxLength="30"
+        app:endIconMode="clear_text"
+        app:startIconDrawable="@drawable/ic_baseline_attach_money_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/productDetailPrice"
+            android:maxLength="30"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:id="@+id/ProductDescriptionLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="410dp"
+        android:layout_marginEnd="32dp"
+        android:inputType="textEmailAddress"
+        android:hint="ProductDescription"
+        app:helperTextTextColor="@color/red"
+        app:helperText="Required*"
+        app:counterEnabled="true"
+        app:counterMaxLength="30"
+        app:endIconMode="clear_text"
+        app:startIconDrawable="@drawable/ic_baseline_attach_money_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/productDetailDescription"
+            android:maxLength="30"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
 </FrameLayout>

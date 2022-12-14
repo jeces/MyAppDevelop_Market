@@ -161,13 +161,17 @@ class AddFragment : Fragment() {
         val productName = productName.text.toString()
         /* 다중이미지 저장 */
         var count = 0
-        Log.d("여기왔니?", "ㅇㅇ")
+
         for (i in imagelist) {
             var timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
             imgFileName = productViewModel.thisUser + "_" + productName + "_" + count + "_IMAGE_.png"
-            var storageRef = firebaseStorage?.reference?.child("productimg")?.child(imgFileName)
-            storageRef?.putFile(i)?.addOnSuccessListener {
-                Toast.makeText(view.context, "ImageUploiaded", Toast.LENGTH_SHORT).show()
+            var storageRef = firebaseStorage!!.reference.child("productimg/").child(imgFileName)
+            storageRef.putFile(i).
+            addOnSuccessListener {
+                Toast.makeText(view.context, "ImageUploaded", Toast.LENGTH_SHORT).show()
+            }.
+            addOnFailureListener {
+
             }
             count++
         }
@@ -193,10 +197,10 @@ class AddFragment : Fragment() {
 
             /* ViewModel 가지고와서 LiveData 넘기기[업데이트 됨] */
             val model: DataViewModel by activityViewModels()
-            model.changePageNum(PageData.DETAIL)
+            model.changePageNum(PageData.HOME)
             /* Navigation Bar Selected 넘겨야 됨[여기서부터해야함] */
             val mActivity = activity as MainActivity
-            mActivity.bottomNavigationView.menu.findItem(R.id.detail).isChecked = true
+            mActivity.bottomNavigationView.menu.findItem(R.id.home).isChecked = true
         } else {
             /* 비어있다면 */
             Toast.makeText(requireContext(), "Please fill out all fields.", Toast.LENGTH_LONG).show()

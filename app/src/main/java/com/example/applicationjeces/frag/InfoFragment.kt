@@ -58,9 +58,11 @@ class InfoFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_info, container, false)
 
         val productModel: ProductViewModel by activityViewModels()
-        view.productDetailName.text = productModel.productArrayList[0].product_name
-        view.productDetailPrice.text = productModel.productArrayList[0].product_price
+        view.productDetailName.setText(productModel.productArrayList[0].product_name)
+        view.productDetailPrice.setText(productModel.productArrayList[0].product_price)
+        view.productDetailDescription.setText(productModel.productArrayList[0].product_description)
 
+        Log.d("infocount", productModel.productArrayList[0].product_count.toString())
 
         imagelist = productModel.getImage(productModel.productArrayList[0].product_name, productModel.productArrayList[0].product_count) as ArrayList<String>
 

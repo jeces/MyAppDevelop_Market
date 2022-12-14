@@ -19,7 +19,7 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     var thisUser: String? = null
     var position: Int = 0
     var productArrayList: MutableList<Product> = ArrayList()
-    lateinit var imgList: ArrayList<String>
+    var imgList: ArrayList<String> = arrayListOf()
 
     init {
 
@@ -41,18 +41,24 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     }
 
     /* firebase storage에서 이미지 가져오기 */
-    fun getImage(productName:String, productCount: Int): MutableList<String> {
+    fun getImage(productName:String, productCount: Int): MutableList<String>? {
         imgList.clear()
         /* 글자 나누기 */
         /* 카운트는 가져와야함 product에 저장해놓고 */
         /* User이름, 상품이름, 사진갯수몇가지인지[product에 추가할것], 사진idx값 가져오기 */
-        for(i: Int in 0 until productCount) {
-            /* 워드를 가져와서 돌림 */
-            var word: String = thisUser + "_" + productName + "_" + i + "_IMAGE_.png"
-            Log.d("워드", word)
+        if(productCount <= 0) {
+            var word: String = "basic_img.png"
             imgList.add(word)
+            return imgList
+        } else {
+            for(i: Int in 0 until productCount) {
+                /* 워드를 가져와서 돌림 */
+                var word: String = thisUser + "_" + productName + "_" + i + "_IMAGE_.png"
+                Log.d("워드", word)
+                imgList.add(word)
+            }
+            return imgList
         }
-        return imgList
     }
 
     /* firebase Product 전체 가져오기 */
@@ -116,9 +122,9 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     }
 
     /* 디테일 데이터를 가지고 있는 데이터 */
-    fun setProductDetail(productName: String, productPrice: String, productDescription: String, getPosition: Int) {
+    fun setProductDetail(productName: String, productPrice: String, productDescription: String, productCount: String, getPosition: Int) {
         productArrayList.clear()
-        val productDetail = Product(0, productName, productPrice, productDescription, 0)
+        val productDetail = Product(0, productName, productPrice, productDescription, productCount.toInt())
         position = getPosition
         productArrayList.add(productDetail)
     }

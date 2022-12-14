@@ -84,7 +84,7 @@ class HomeFragment : Fragment() {
                 val productModel: ProductViewModel by activityViewModels()
                 productModel.liveTodoData.value?.get(position).toString()
                 productModel.setProductDetail(adapter.producFiretList[position].get("productName").toString(), adapter.producFiretList[position].get("productPrice").toString()
-                    , adapter.producFiretList[position].get("productDescription").toString(), position)
+                    , adapter.producFiretList[position].get("productDescription").toString(), adapter.producFiretList[position].get("productCount").toString(), position)
                 Log.d("데이터뭐냐", adapter.producFiretList[position].get("productName").toString())
                 Log.d("데이터뭐냐", adapter.producFiretList[position].get("productPrice").toString())
                 Log.d("데이터뭐냐", adapter.producFiretList[position].get("productDescription").toString())
