@@ -16,7 +16,6 @@ class DataViewModel() : ViewModel() {
 
     /* PageNum에 따라 currentPages 변경 */
     fun setCurrentPage(item: MenuItem): Boolean {
-        Log.d("체크6", "셋")
         val menuItemId = item.itemId
         val pageNum = getPageNum(menuItemId)
         changePageNum(pageNum)
