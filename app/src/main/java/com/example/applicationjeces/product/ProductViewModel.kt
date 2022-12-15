@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.applicationjeces.chat.ChatData
+import com.example.applicationjeces.chat.ChatroomData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -13,7 +14,7 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
 
     var liveTodoData = MutableLiveData<List<DocumentSnapshot>>()
     var productArrayList: MutableList<Product> = ArrayList()
-    var chatArrayList: MutableList<ChatData> = ArrayList()
+    var chatArrayList: MutableList<ChatroomData> = ArrayList()
     var liveTodoChatroomData = MutableLiveData<List<DocumentSnapshot>>()
 
     var jecesfirestore: FirebaseFirestore? = null
@@ -77,6 +78,18 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         }
     }
 
+    /* Chat comment 생성 */
+    fun addChat(chat: ChatData) {
+        jecesfirestore!!.collection("Chat").add(chat)
+            .addOnSuccessListener {
+                // 성공할 경우
+                Log.w("CHAT 데이터 입력 성공", "Error getting documents")
+            }.addOnFailureListener { exception ->
+                // 실패할 경우
+                Log.w("CHAT 데이터 입력 실패", "Error getting documents")
+            }
+    }
+
     /* firebase Product 입력 */
     fun addProducts(product: Product) {
         val products = hashMapOf(
@@ -90,11 +103,11 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         jecesfirestore!!.collection("Product").add(products)
             .addOnSuccessListener {
                 // 성공할 경우
-                Log.w("데이터 입력 성공", "Error getting documents")
+                Log.w("PRODUCT 데이터 입력 성공", "Error getting documents")
             }
             .addOnFailureListener { exception ->
                 // 실패할 경우
-                Log.w("데이터 입력 실패", "Error getting documents")
+                Log.w("PRODUCT 데이터 입력 실패", "Error getting documents")
             }
     }
 
@@ -130,7 +143,7 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     /* 채팅 디테일 데이터를 가지고 있는 데이터 */
     fun setChatDetail(lastcomment: String, myid: String, yourid: String, getPosition: Int) {
         chatArrayList.clear()
-        val chatDetail = ChatData("0", lastcomment, myid, yourid)
+        val chatDetail = ChatroomData("0", lastcomment, myid, yourid)
         position = getPosition
         Log.d("눌렀닌?", yourid)
         chatArrayList.add(chatDetail)

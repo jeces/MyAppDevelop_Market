@@ -1,7 +1,6 @@
 package com.example.applicationjeces.chat
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -49,15 +48,18 @@ class ChatFragment : Fragment() {
         /* 지금 한번호출하기 때문에 바뀌지 않음. observ에서 바꿔줘야함 */
         view.messageActivity_textView_topName.text = productModel.chatArrayList[0].yourid
 
-        Log.d("눌렀어?", productModel.chatArrayList[0].yourid)
-
         /* 보낸 시간 */
         val time = System.currentTimeMillis()
         val dateFormat =SimpleDateFormat("MM월dd일 hh:mm")
-        val currentTime = dateFormat.format(Date(time)).toString()
+
 
         view.messageActivity_ImageView.setOnClickListener {
+            val currentTime = dateFormat.format(Date(time)).toString()
 
+            val chat = ChatData(productModel.chatArrayList[0].idx,view.messageActivity_editText.text.toString(), productModel.thisUser.toString(), currentTime.toString())
+            productModel.addChat(chat)
+
+//            view.messageActivity_editText.text
         }
 
         // Inflate the layout for this fragment
