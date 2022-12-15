@@ -1,14 +1,18 @@
 package com.example.applicationjeces.chat
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.applicationjeces.R
+import com.example.applicationjeces.page.DataViewModel
+import com.example.applicationjeces.page.PageData
 import com.example.applicationjeces.product.ProductViewModel
 import kotlinx.android.synthetic.main.fragment_chat.view.*
 
@@ -44,7 +48,7 @@ class ChatroomFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_chat, container, false)
         /* 어뎁터 가져옴 */
-        val adapter = ChatRecyclerViewAdapter(emptyList(), this@ChatroomFragment)
+        val adapter = ChatroomRecyclerViewAdapter(emptyList(), this@ChatroomFragment)
         val recyclerView = view.chat_profile
         recyclerView.adapter = adapter
         recyclerView.setHasFixedSize(true)
@@ -54,6 +58,22 @@ class ChatroomFragment : Fragment() {
         productViewModel = ViewModelProvider(this)[ProductViewModel::class.java]
         productViewModel.liveTodoChatroomData.observe(viewLifecycleOwner, Observer { chatroom ->
             adapter.setData(chatroom)
+        })
+
+        /* 항목 클릭시 */
+        adapter.setItemClickListener(object: ChatroomRecyclerViewAdapter.OnItemClickListener {
+            override fun onClick(v: View, position: Int) {
+                /* 화면 띄움*/
+                /* 프라그먼트에서 프라그먼트로 제어가 불가능하기 때문에 상위 액티비티에서 제어 해주어야 한다. */
+                /* ViewModel 가지고와서 PageLiveData 넘기기[업데이트 됨] */
+                val model: DataViewModel by activityViewModels()
+                model.changePageNum(PageData.CHAT)
+
+                val productModel: ProductViewModel by activityViewModels()
+                productModel.liveTodoChatroomData.value?.get(position).toString()
+                productModel.setChatDetail(adapter.chatRoomList[position].get("lastcomment").toString(), adapter.chatRoomList[position].get("myid").toString()
+                    , adapter.chatRoomList[position].get("yourid").toString(), position)
+            }
         })
 
 

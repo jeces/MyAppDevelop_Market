@@ -12,6 +12,7 @@ import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import com.example.applicationjeces.chat.ChatFragment
 import com.example.applicationjeces.chat.ChatroomFragment
 import com.example.applicationjeces.databinding.ActivityMainBinding
 import com.example.applicationjeces.frag.*
@@ -96,8 +97,10 @@ class MainActivity : AppCompatActivity() {
         } else if(pageData.title == "search") {
             target = true
             return HomeFragment.newInstance(pageData.title, pageData.tag)
-        } else if(pageData.title == "chat") {
+        } else if(pageData.title == "chatroom") {
             return ChatroomFragment.newInstance(pageData.title, pageData.tag)
+        } else if(pageData.title == "chat") {
+            return ChatFragment.newInstance(pageData.title, pageData.tag)
         } else if(pageData.title == "detail") {
             return InfoFragment.newInstance(pageData.title, pageData.tag)
         } else if(pageData.title == "message") {

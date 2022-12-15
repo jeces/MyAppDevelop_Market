@@ -1,11 +1,18 @@
 package com.example.applicationjeces.chat
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import com.example.applicationjeces.R
+import com.example.applicationjeces.product.ProductViewModel
+import kotlinx.android.synthetic.main.fragment_chat2.view.*
+import kotlinx.android.synthetic.main.fragment_info.view.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -34,8 +41,27 @@ class ChatFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        val view : View = inflater.inflate(R.layout.fragment_chat2, container, false)
+
+        val productModel: ProductViewModel by activityViewModels()
+
+        /* 지금 한번호출하기 때문에 바뀌지 않음. observ에서 바꿔줘야함 */
+        view.messageActivity_textView_topName.text = productModel.chatArrayList[0].yourid
+
+        Log.d("눌렀어?", productModel.chatArrayList[0].yourid)
+
+        /* 보낸 시간 */
+        val time = System.currentTimeMillis()
+        val dateFormat =SimpleDateFormat("MM월dd일 hh:mm")
+        val currentTime = dateFormat.format(Date(time)).toString()
+
+        view.messageActivity_ImageView.setOnClickListener {
+
+        }
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_chat2, container, false)
+        return view
     }
 
     companion object {

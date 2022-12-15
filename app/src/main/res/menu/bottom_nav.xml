@@ -11,7 +11,7 @@
         android:id="@+id/search"
         android:icon="@drawable/ic_baseline_manage_search_24"/>
     <item android:title="Chatting"
-        android:id="@+id/chat"
+        android:id="@+id/chatroom"
         android:icon="@drawable/ic_baseline_chat_24"/>
     <item android:title="Detail"
         android:id="@+id/detail"

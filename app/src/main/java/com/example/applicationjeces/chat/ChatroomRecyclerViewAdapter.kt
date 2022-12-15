@@ -12,7 +12,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import kotlinx.android.synthetic.main.chatroom_item_list.view.*
 import kotlinx.android.synthetic.main.product_item_list.view.*
 
-class ChatRecyclerViewAdapter(var chatRoomList: List<DocumentSnapshot>, var context: Fragment): RecyclerView.Adapter<ChatRecyclerViewAdapter.Holder>() {
+class ChatroomRecyclerViewAdapter(var chatRoomList: List<DocumentSnapshot>, var context: Fragment): RecyclerView.Adapter<ChatroomRecyclerViewAdapter.Holder>() {
 
     private val destinationUsers : ArrayList<String> = arrayListOf()
 
@@ -32,10 +32,11 @@ class ChatRecyclerViewAdapter(var chatRoomList: List<DocumentSnapshot>, var cont
         holder.itemView.chat_yourid.text = yourId.toString()
         holder.itemView.chat_lastchat.text = lastcomment.toString()
 
-//        holder.itemView.setOnClickListener {
-//            /* 리스트 클릭시 Detail 화면 전환 */
-//            itemClickListener.onClick(it, position)
-//        }
+        holder.itemView.setOnClickListener {
+            /* 리스트 클릭시 Detail 화면 전환 */
+            Log.d("yourid", yourId.toString())
+            itemClickListener.onClick(it, position)
+        }
 
         /* 이미지 초기화 */
         holder.itemView.chat_item_imageview.setImageBitmap(null)

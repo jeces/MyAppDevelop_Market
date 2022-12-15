@@ -3,6 +3,7 @@ package com.example.applicationjeces.product
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
+import com.example.applicationjeces.chat.ChatData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -12,6 +13,7 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
 
     var liveTodoData = MutableLiveData<List<DocumentSnapshot>>()
     var productArrayList: MutableList<Product> = ArrayList()
+    var chatArrayList: MutableList<ChatData> = ArrayList()
     var liveTodoChatroomData = MutableLiveData<List<DocumentSnapshot>>()
 
     var jecesfirestore: FirebaseFirestore? = null
@@ -125,41 +127,20 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         return searchLiveTodoData
     }
 
-    /* 디테일 데이터를 가지고 있는 데이터 */
-    fun setProductDetail(productName: String, productPrice: String, productDescription: String, productCount: String,getPosition: Int) {
+    /* 채팅 디테일 데이터를 가지고 있는 데이터 */
+    fun setChatDetail(lastcomment: String, myid: String, yourid: String, getPosition: Int) {
+        chatArrayList.clear()
+        val chatDetail = ChatData("0", lastcomment, myid, yourid)
+        position = getPosition
+        Log.d("눌렀닌?", yourid)
+        chatArrayList.add(chatDetail)
+    }
+
+    /* 제품 디테일 데이터를 가지고 있는 데이터 */
+    fun setProductDetail(productName: String, productPrice: String, productDescription: String, productCount: String, getPosition: Int) {
         productArrayList.clear()
         val productDetail = Product(0, productName, productPrice, productDescription, productCount.toInt(), thisUser + "_" + productName + "_0_IMAGE_.png")
         position = getPosition
         productArrayList.add(productDetail)
     }
-
-    //    fun test(searchName: String) : MutableLiveData<List<DocumentSnapshot>> {
-//        Log.d("테스트2", "1")
-//        jecesfirestore!!.collection("Product").addSnapshotListener { products, e ->
-//            liveTodoData = MutableLiveData<List<DocumentSnapshot>>()
-//            if (e != null) {
-//                return@addSnapshotListener
-//            }
-//            if(searchName == "") {
-//                return@addSnapshotListener
-//            }
-//            for (snapshot in products!!.documents) {
-//                if (snapshot.getString("productName")!!.contains(searchName)) {
-//                    Log.d("라이브데이터11", snapshot.toString())
-//                    liveTodoData += snapshot
-//                    Log.d("라이브데이터1", liveTodoData.value.toString())
-//                }
-//            }
-//            Log.d("라이브데이터2", liveTodoData.value.toString())
-//            Log.d("테스트3", "1")
-//        }
-//        Log.d("테스트4", "1")
-//        return liveTodoData
-//    }
-
-//    /* LiveData 추가 만들기 */
-//    operator fun <T> MutableLiveData<List<T>>.plusAssign(item: T) {
-//        val value = this.value ?: emptyList()
-//        this.value = value + listOf(item)
-//    }
 }
