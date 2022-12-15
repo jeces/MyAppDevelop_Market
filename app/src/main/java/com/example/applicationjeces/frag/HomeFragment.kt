@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.applicationjeces.MainActivity
 import com.example.applicationjeces.ProductSearchRecyclerViewAdapter
 import com.example.applicationjeces.R
+import com.example.applicationjeces.chat.ChatRecyclerViewAdapter
 import com.example.applicationjeces.page.DataViewModel
 import com.example.applicationjeces.page.PageData
 import com.example.applicationjeces.product.ProductRecyclerViewAdapter

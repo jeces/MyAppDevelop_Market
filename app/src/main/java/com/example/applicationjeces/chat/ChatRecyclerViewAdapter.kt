@@ -1,6 +1,7 @@
 package com.example.applicationjeces.chat
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.applicationjeces.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.product_item_list.view.*
 
@@ -15,19 +17,35 @@ class ChatRecyclerViewAdapter: RecyclerView.Adapter<ChatRecyclerViewAdapter.Hold
 
     private var uid : String? = null
     private val destinationUsers : ArrayList<String> = arrayListOf()
+    private val jecesFirebaseStore = FirebaseFirestore.getInstance()
+    private val chatModels = ArrayList<ChatModel>()
 
     init {
-        uid = FirebaseAuth.getInstance().currentUser?.toString()
+        uid = FirebaseAuth.getInstance().currentUser?.email.toString()
+        Log.d("데이터들0", uid.toString())
+        jecesFirebaseStore.collection("/Chatroom").whereEqualTo("myid", uid.toString()).get().addOnSuccessListener {
+            Log.d("데이터들1", it.toString())
+            chatModels.clear()
+            for(data in it) {
+                Log.d("데이터들2", data.toString())
+
+            }
+        }
     }
 
     /* ViewHolder에게 item을 보여줄 View로 쓰일 item_data_list.xml를 넘기면서 ViewHolder 생성. 아이템 레이아웃과 결합 */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        return Holder(LayoutInflater.from(parent.context).inflate(R.layout.chat_item_list, parent, false))
+        return Holder(LayoutInflater.from(parent.context).inflate(R.layout.chatroom_item_list, parent, false))
     }
 
     /* Holder의 bind 메소드를 호출한다. 내용 입력 */
     /* getItemCount() 리턴값이 0일 경우 호출 안함 */
     override fun onBindViewHolder(holder: Holder, position: Int) {
+
+
+
+
+
 
         holder.itemView.setOnClickListener {
             /* 리스트 클릭시 Detail 화면 전환 */

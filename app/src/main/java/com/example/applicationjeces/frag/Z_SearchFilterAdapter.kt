@@ -1,4 +1,4 @@
-package com.example.applicationjeces.product
+package com.example.applicationjeces.frag
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -10,8 +10,9 @@ import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applicationjeces.R
+import com.example.applicationjeces.product.Product
 
-class SearchFilterAdapter(val context: Context, val searchProductList: ArrayList<Product>): RecyclerView.Adapter<SearchFilterAdapter.Holder>(),
+class Z_SearchFilterAdapter(val context: Context, val searchProductList: ArrayList<Product>): RecyclerView.Adapter<Z_SearchFilterAdapter.Holder>(),
     Filterable {
 
     //필터링을 위해 필요한 변수

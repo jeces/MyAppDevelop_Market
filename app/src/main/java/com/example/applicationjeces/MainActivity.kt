@@ -32,7 +32,6 @@ class MainActivity : AppCompatActivity() {
         binding.apply {
             viewModel = jecesViewModel
             lifecycleOwner = this@MainActivity
-
         }
 
         /* 앨범에 접근하는것을 허용하는 메세지 */
@@ -64,18 +63,14 @@ class MainActivity : AppCompatActivity() {
             if(targetFragment == null) {
                 /* getFragment를 호출하여 Fragment 획득 */
                 targetFragment = getFragment(pageData)
-                Log.d("search", targetFragment.toString())
                 if(target == true) {
                     startActivity(Intent(this@MainActivity, MainActivity2::class.java))
-                    Log.d("search", targetFragment.toString())
                     target = false
                     return
                 }
                 /* 현재 Fragment tag에 등록
                 *  맨처음 3번 등록해야지 쓸 수 있음 */
                 add(R.id.frame_layout, targetFragment!!, pageData.tag)
-                Log.d("ㅇㅇ1", pageData.tag)
-                Log.d("ㅇㅇ2", targetFragment.toString())
             }
             /* 현재 Fragment show */
             show(targetFragment!!)

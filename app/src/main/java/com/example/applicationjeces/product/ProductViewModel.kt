@@ -22,7 +22,6 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     var imgList: ArrayList<String> = arrayListOf()
 
     init {
-
         /* firebase 연동 */
         jecesfirestore = FirebaseFirestore.getInstance()
 
@@ -37,7 +36,6 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         val productDao = ProductDatabase.getInstance(application).productDao()
         /* 이니셜라이즈(초기화) 해줌 */
         repository = ProductRepository(productDao)
-
     }
 
     /* firebase storage에서 이미지 가져오기 */
