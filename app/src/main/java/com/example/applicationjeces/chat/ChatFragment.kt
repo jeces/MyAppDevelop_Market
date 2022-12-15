@@ -52,15 +52,13 @@ class ChatFragment : Fragment() {
         val time = System.currentTimeMillis()
         val dateFormat =SimpleDateFormat("MM월dd일 hh:mm")
 
-
         view.messageActivity_ImageView.setOnClickListener {
             val currentTime = dateFormat.format(Date(time)).toString()
 
             val chat = ChatData(productModel.chatArrayList[0].idx,view.messageActivity_editText.text.toString(), productModel.thisUser.toString(), currentTime.toString())
             productModel.addChat(chat)
-
-//            view.messageActivity_editText.text
         }
+
 
         // Inflate the layout for this fragment
         return view
