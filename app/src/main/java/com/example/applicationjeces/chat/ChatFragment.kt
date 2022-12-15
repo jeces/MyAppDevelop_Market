@@ -1,4 +1,4 @@
-package com.example.applicationjeces.frag
+package com.example.applicationjeces.chat
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

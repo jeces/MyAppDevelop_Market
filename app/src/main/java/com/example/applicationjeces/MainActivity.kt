@@ -12,9 +12,9 @@ import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import com.example.applicationjeces.chat.ChatFragment
 import com.example.applicationjeces.databinding.ActivityMainBinding
 import com.example.applicationjeces.frag.*
-import com.example.applicationjeces.message.MessageFragment
 import com.example.applicationjeces.page.DataViewModel
 import com.example.applicationjeces.page.PageData
 import com.google.firebase.auth.FirebaseAuth
@@ -101,8 +101,8 @@ class MainActivity : AppCompatActivity() {
         } else if(pageData.title == "search") {
             target = true
             return HomeFragment.newInstance(pageData.title, pageData.tag)
-        } else if(pageData.title == "setting") {
-            return SettingFragment.newInstance(pageData.title, pageData.tag)
+        } else if(pageData.title == "chat") {
+            return ChatFragment.newInstance(pageData.title, pageData.tag)
         } else if(pageData.title == "detail") {
             return InfoFragment.newInstance(pageData.title, pageData.tag)
         } else if(pageData.title == "message") {

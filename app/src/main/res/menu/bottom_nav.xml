@@ -10,9 +10,9 @@
     <item android:title="Search"
         android:id="@+id/search"
         android:icon="@drawable/ic_baseline_manage_search_24"/>
-    <item android:title="MySetting"
-        android:id="@+id/setting"
-        android:icon="@drawable/ic_baseline_settings_24"/>
+    <item android:title="Chatting"
+        android:id="@+id/chat"
+        android:icon="@drawable/ic_baseline_chat_24"/>
     <item android:title="Detail"
         android:id="@+id/detail"
         android:visible="false" />

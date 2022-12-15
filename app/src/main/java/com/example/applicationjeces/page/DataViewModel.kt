@@ -30,7 +30,7 @@ class DataViewModel() : ViewModel() {
             R.id.home -> PageData.HOME
             R.id.add -> PageData.ADD
             R.id.search -> PageData.SEARCH
-            R.id.setting -> PageData.SETTING
+            R.id.chat -> PageData.CHATTING
             else -> throw java.lang.IllegalArgumentException("Not found pageNum")
         }
     }
