@@ -83,20 +83,6 @@ class ProductRecyclerViewAdapter(var producFiretList: List<DocumentSnapshot>, va
         notifyDataSetChanged()
     }
 
-    /* 검색 전체 데이터 */
-    @SuppressLint("NotifyDataSetChanged")
-    fun searchSetData(product: Response) {
-        if(product!!.products?.isEmpty() == null) {
-            /* 검색어가 없다면 리스트를 비워줌*/
-            producFiretList = emptyList()
-        } else {
-            /* 있다면 리스트에 넣음 */
-            producFiretList = product.products!!
-        }
-        /* 변경 알림 */
-        notifyDataSetChanged()
-    }
-
     /* inner class로 viewHolder 정의. 레이아웃 내 view 연결 */
     inner class Holder(ItemView: View): RecyclerView.ViewHolder(ItemView) {
 

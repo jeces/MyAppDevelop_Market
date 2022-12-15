@@ -3,22 +3,21 @@ package com.example.applicationjeces.product
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
-import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 
 /* 뷰모델은 DB에 직접 접근하지 않아야함. Repository 에서 데이터 통신 */
 class ProductViewModel(application: Application): AndroidViewModel(application) {
 
     var liveTodoData = MutableLiveData<List<DocumentSnapshot>>()
-    private val repository: ProductRepository
+    var productArrayList: MutableList<Product> = ArrayList()
+    var liveTodoChatroomData = MutableLiveData<List<DocumentSnapshot>>()
+
     var jecesfirestore: FirebaseFirestore? = null
     var thisUser: String? = null
     var position: Int = 0
-    var productArrayList: MutableList<Product> = ArrayList()
+
     var imgList: ArrayList<String> = arrayListOf()
 
     init {
@@ -27,15 +26,11 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
 
         /* 현재 로그인 아이디 */
         thisUser = FirebaseAuth.getInstance().currentUser?.email.toString()
-        Log.d("로그인", thisUser.toString())
 
         /* firebase product 전체 가져오기 */
         /* https://velog.io/@nagosooo/%EC%95%88%EB%93%9C%EB%A1%9C%EC%9D%B4%EB%93%9C-TodoList%EC%95%B1-%EB%A7%8C%EB%93%A4%EA%B8%B0 */
         allProduct()
-
-        val productDao = ProductDatabase.getInstance(application).productDao()
-        /* 이니셜라이즈(초기화) 해줌 */
-        repository = ProductRepository(productDao)
+        allChatroom()
     }
 
     /* firebase storage에서 이미지 가져오기 */
@@ -44,10 +39,10 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         /* 글자 나누기 */
         /* 카운트는 가져와야함 product에 저장해놓고 */
         /* User이름, 상품이름, 사진갯수몇가지인지[product에 추가할것], 사진idx값 가져오기 */
-        if(productCount <= 0) {
+        return if(productCount <= 0) {
             var word: String = "basic_img.png"
             imgList.add(word)
-            return imgList
+            imgList
         } else {
             for(i: Int in 0 until productCount) {
                 /* 워드를 가져와서 돌림 */
@@ -55,7 +50,17 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
                 Log.d("워드", word)
                 imgList.add(word)
             }
-            return imgList
+            imgList
+        }
+    }
+
+    /* 자신의 채팅목록 전체 가져오기 */
+    fun allChatroom() {
+        jecesfirestore!!.collection("/Chatroom").whereEqualTo("myid", thisUser.toString()).addSnapshotListener { chatrooms, e->
+            if(e != null) {
+                return@addSnapshotListener
+            }
+            liveTodoChatroomData.value = chatrooms?.documents
         }
     }
 

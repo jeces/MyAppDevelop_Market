@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applicationjeces.databinding.ActivityMain2Binding
-import com.example.applicationjeces.product.ProductRecyclerViewAdapter
 import com.example.applicationjeces.product.ProductViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*

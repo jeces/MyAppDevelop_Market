@@ -5,7 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.applicationjeces.R
+import com.example.applicationjeces.product.ProductViewModel
+import kotlinx.android.synthetic.main.fragment_chat.view.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -17,10 +22,12 @@ private const val ARG_PARAM2 = "param2"
  * Use the [ChatFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ChatFragment : Fragment() {
+class ChatroomFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
+    private  lateinit var productViewModel: ProductViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,8 +41,24 @@ class ChatFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        val view = inflater.inflate(R.layout.fragment_chat, container, false)
+        /* 어뎁터 가져옴 */
+        val adapter = ChatRecyclerViewAdapter(emptyList(), this@ChatroomFragment)
+        val recyclerView = view.chat_profile
+        recyclerView.adapter = adapter
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        /* 뷰모델 연결 후 뷰모델 옵저버를 통해 불러옴 */
+        productViewModel = ViewModelProvider(this)[ProductViewModel::class.java]
+        productViewModel.liveTodoChatroomData.observe(viewLifecycleOwner, Observer { chatroom ->
+            adapter.setData(chatroom)
+        })
+
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_chat2, container, false)
+        return view
     }
 
     companion object {
@@ -50,7 +73,7 @@ class ChatFragment : Fragment() {
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            ChatFragment().apply {
+            ChatroomFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)
