@@ -13,6 +13,8 @@ import com.google.firebase.firestore.Query
 /* 뷰모델은 DB에 직접 접근하지 않아야함. Repository 에서 데이터 통신 */
 class ProductViewModel(application: Application): AndroidViewModel(application) {
 
+
+    /* 각종 라이브데이터 DocumentSnapshot은 firestore와 연결되어있어서 firestore가 변경되면 변경됨 하지만 다른것들은 바꿔줘야함. Snapshot으로 최대한 뽑아보자 */
     var liveTodoData = MutableLiveData<List<DocumentSnapshot>>()
     var productArrayList: MutableList<Product> = ArrayList()
     var chatArrayList: MutableList<ChatroomData> = ArrayList()
@@ -63,23 +65,23 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
 
     /* 자신의 채팅목록 전체 가져오기 */
     fun allChatroom() {
-        val response = Response()
-        jecesfirestore!!.collection("/Chatroom").get().addOnCompleteListener() { chatrooms ->
-            for(snapshot in chatrooms.result) {
-                /* 포함된 id가 있으면 */
-                if(snapshot.getString("id")!!.contains(thisUser.toString())) {
-                    snapshot?.let {
-                        if(response.products == null) {
-                            response.products = listOf(it)
-                        } else {
-                            response.products = response.products?.plus(listOf(it))
-                        }
-                    }
-                }
-            }
-            liveTodoChatroomData.value = response
-            Log.d("라이브데이터1", liveTodoChatroomData.value.toString())
-        }
+//        val response = Response()
+//        jecesfirestore!!.collection("/Chatroom").get().addOnCompleteListener() { chatrooms ->
+//            for(snapshot in chatrooms.result) {
+//                /* 포함된 id가 있으면 */
+//                if(snapshot.getString("id")!!.contains(thisUser.toString())) {
+//                    snapshot?.let {
+//                        if(response.products == null) {
+//                            response.products = listOf(it)
+//                        } else {
+//                            response.products = response.products?.plus(listOf(it))
+//                        }
+//                    }
+//                }
+//            }
+//            liveTodoChatroomData.value = response
+//            Log.d("라이브데이터1", liveTodoChatroomData.value.toString())
+//        }
     }
 
     /* firebase Product 전체 가져오기 */

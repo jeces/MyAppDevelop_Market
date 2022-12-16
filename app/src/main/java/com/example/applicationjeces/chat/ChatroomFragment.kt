@@ -2,6 +2,7 @@ package com.example.applicationjeces.chat
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -55,6 +56,7 @@ class ChatroomFragment : Fragment() {
         /* 뷰모델 연결 후 뷰모델 옵저버를 통해 불러옴 */
         productViewModel = ViewModelProvider(this)[ProductViewModel::class.java]
         productViewModel.liveTodoChatroomData.observe(viewLifecycleOwner, Observer { chatroom ->
+            Log.d("방만들어짐?", "dd")
             adapter.setData(chatroom)
         })
 
