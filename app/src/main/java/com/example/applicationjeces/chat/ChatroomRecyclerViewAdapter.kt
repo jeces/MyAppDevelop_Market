@@ -62,9 +62,9 @@ class ChatroomRecyclerViewAdapter(var chatRoomList: List<DocumentSnapshot>, var 
     /* 홈 전체 데이터 */
     @SuppressLint("NotifyDataSetChanged")
     fun setData(chatroom: List<DocumentSnapshot>?) {
-        chatRoomList.isEmpty()
         if (chatroom != null) {
             chatRoomList = chatroom
+            Log.d("챗룸리스트", chatRoomList.toString())
         }
         /* 변경 알림 */
         notifyDataSetChanged()
