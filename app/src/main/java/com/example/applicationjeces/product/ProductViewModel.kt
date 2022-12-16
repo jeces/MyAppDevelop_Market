@@ -19,7 +19,7 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     var productArrayList: MutableList<Product> = ArrayList()
     var chatArrayList: MutableList<ChatroomData> = ArrayList()
     var liveTodoChatData = MutableLiveData<List<DocumentSnapshot>>()
-    var liveTodoChatroomData = MutableLiveData<Response>()
+    var liveTodoChatroomData = MutableLiveData<List<DocumentSnapshot>?>()
 
     var jecesfirestore: FirebaseFirestore? = null
     var thisUser: String? = null
@@ -66,6 +66,28 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     /* 자신의 채팅목록 전체 가져오기 */
     fun allChatroom() {
         /* 어떻게 가져올껀지 찾아야한다. */
+        val response = Response()
+        jecesfirestore!!.collection("/Chatroom").addSnapshotListener { chatrooms, e->
+            if (e != null) {
+                return@addSnapshotListener
+            }
+            for(snapshot in chatrooms!!.documents) {
+                Log.d("아이디", thisUser.toString())
+                if(snapshot.getString("id")!!.contains(thisUser.toString())) {
+                    snapshot?.let {
+                        if(response.products == null) {
+                            response.products = listOf(it)
+
+                        } else {
+                            response.products = response.products?.plus(listOf(it))
+                        }
+                    }
+                }
+            }
+            Log.d("뭐지", response.products.toString())
+            liveTodoChatroomData.value = response.products
+            Log.d("뭐지2", response.products.toString())
+        }
 
 //        val response = Response()
 //        jecesfirestore!!.collection("/Chatroom").get().addOnCompleteListener() { chatrooms ->
