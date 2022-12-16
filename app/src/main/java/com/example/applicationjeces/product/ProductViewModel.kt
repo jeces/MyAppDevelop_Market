@@ -36,6 +36,8 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         /* https://velog.io/@nagosooo/%EC%95%88%EB%93%9C%EB%A1%9C%EC%9D%B4%EB%93%9C-TodoList%EC%95%B1-%EB%A7%8C%EB%93%A4%EA%B8%B0 */
         allProduct()
         allChatroom()
+
+        Log.d("뷰모델초기화0", "ㅇㅇ")
     }
 
     /* firebase storage에서 이미지 가져오기 */
@@ -100,6 +102,7 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
                 return@addSnapshotListener
             }
             liveTodoChatData.value = chat?.documents
+            Log.d("ㅁㄴㅇㄻㄴㅇㄹ", liveTodoChatData.value.toString())
         }
     }
 

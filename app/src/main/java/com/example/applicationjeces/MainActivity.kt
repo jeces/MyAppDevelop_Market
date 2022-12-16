@@ -12,7 +12,6 @@ import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
-import com.example.applicationjeces.chat.ChatFragment
 import com.example.applicationjeces.chat.ChatroomFragment
 import com.example.applicationjeces.databinding.ActivityMainBinding
 import com.example.applicationjeces.frag.*
@@ -88,7 +87,7 @@ class MainActivity : AppCompatActivity() {
     // startActivity(Intent(this@MainActivity, MainActivity2::class.java))
     /* 실행시 Fragment값 GET 함수 */
     /* 처음은 띄워주기 위해 사용됨. 후에 Hide로 숨겨져서 사용 안함. 한번쓰고 버림 */
-    private fun getFragment(pageData: PageData): Fragment {
+    fun getFragment(pageData: PageData): Fragment {
         Log.d("dddddd", pageData.title)
         if(pageData.title == "home") {
             return HomeFragment.newInstance(pageData.title, pageData.tag)

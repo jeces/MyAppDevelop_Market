@@ -1,6 +1,7 @@
 package com.example.applicationjeces.chat
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +14,7 @@ import kotlinx.android.synthetic.main.chat_item_list.view.*
 import kotlinx.android.synthetic.main.chatroom_item_list.view.*
 import kotlinx.android.synthetic.main.product_item_list.view.*
 
-class ChatRecyclerViewAdapter(var chatList: List<DocumentSnapshot>, var context: Fragment): RecyclerView.Adapter<ChatRecyclerViewAdapter.Holder>() {
+class ChatRecyclerViewAdapter(var chatList: List<DocumentSnapshot>, var context: Context): RecyclerView.Adapter<ChatRecyclerViewAdapter.Holder>() {
 
     /* ViewHolder에게 item을 보여줄 View로 쓰일 item_data_list.xml를 넘기면서 ViewHolder 생성. 아이템 레이아웃과 결합 */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
@@ -34,6 +35,7 @@ class ChatRecyclerViewAdapter(var chatList: List<DocumentSnapshot>, var context:
         holder.itemView.messageItem_textview_name.text = myid.toString()
         holder.itemView.messageItem_textView_message.text = content.toString()
         holder.itemView.messageItem_textView_time.text = time.toString()
+
 
     }
 
