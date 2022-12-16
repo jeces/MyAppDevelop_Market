@@ -17,7 +17,7 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     var productArrayList: MutableList<Product> = ArrayList()
     var chatArrayList: MutableList<ChatroomData> = ArrayList()
     var liveTodoChatData = MutableLiveData<List<DocumentSnapshot>>()
-    var liveTodoChatroomData = MutableLiveData<List<DocumentSnapshot>>()
+    var liveTodoChatroomData = MutableLiveData<Response>()
 
     var jecesfirestore: FirebaseFirestore? = null
     var thisUser: String? = null
@@ -63,24 +63,23 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
 
     /* 자신의 채팅목록 전체 가져오기 */
     fun allChatroom() {
-        jecesfirestore!!.collection("/Chatroom").whereEqualTo("myid", thisUser.toString()).addSnapshotListener { chatrooms, e->
-            if(e != null) {
-                return@addSnapshotListener
-            }
-            liveTodoChatroomData.value = chatrooms?.documents
-            jecesfirestore!!.collection("/Chatroom").whereEqualTo("yourid", thisUser.toString()).addSnapshotListener { chatrooms, e->
-                if(e != null) {
-                    return@addSnapshotListener
+        val response = Response()
+        jecesfirestore!!.collection("/Chatroom").get().addOnCompleteListener() { chatrooms ->
+            for(snapshot in chatrooms.result) {
+                /* 포함된 id가 있으면 */
+                if(snapshot.getString("id")!!.contains(thisUser.toString())) {
+                    snapshot?.let {
+                        if(response.products == null) {
+                            response.products = listOf(it)
+                        } else {
+                            response.products = response.products?.plus(listOf(it))
+                        }
+                    }
                 }
-                liveTodoChatroomData.value as MutableList<DocumentSnapshot>? += chatrooms?.documents
             }
+            liveTodoChatroomData.value = response
+            Log.d("라이브데이터1", liveTodoChatroomData.value.toString())
         }
-    }
-
-
-    private operator fun <E> MutableList<E>?.plusAssign(documents: List<E>?) {
-
-
     }
 
     /* firebase Product 전체 가져오기 */
@@ -185,6 +184,7 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         productArrayList.add(productDetail)
     }
 }
+
 
 
 

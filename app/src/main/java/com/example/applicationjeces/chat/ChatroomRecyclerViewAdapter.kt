@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applicationjeces.R
+import com.example.applicationjeces.product.Response
 import com.google.firebase.firestore.DocumentSnapshot
 import kotlinx.android.synthetic.main.chatroom_item_list.view.*
 import kotlinx.android.synthetic.main.product_item_list.view.*
@@ -61,9 +62,9 @@ class ChatroomRecyclerViewAdapter(var chatRoomList: List<DocumentSnapshot>, var 
 
     /* 홈 전체 데이터 */
     @SuppressLint("NotifyDataSetChanged")
-    fun setData(chatroom: List<DocumentSnapshot>) {
+    fun setData(chatroom: Response) {
         chatRoomList.isEmpty()
-        chatRoomList = chatroom
+        chatRoomList = chatroom.products!!
         /* 변경 알림 */
         notifyDataSetChanged()
     }

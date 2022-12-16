@@ -63,7 +63,7 @@ class ChatroomFragment : Fragment() {
         adapter.setItemClickListener(object: ChatroomRecyclerViewAdapter.OnItemClickListener {
             override fun onClick(v: View, position: Int) {
                 val productModel: ProductViewModel by activityViewModels()
-                productModel.liveTodoChatroomData.value?.get(position).toString()
+//                productModel.liveTodoChatroomData.value?.get(position).toString()
                 productModel.setChatDetail(adapter.chatRoomList[position].get("chatidx").toString(), adapter.chatRoomList[position].get("lastcomment").toString(), adapter.chatRoomList[position].get("myid").toString()
                     , adapter.chatRoomList[position].get("yourid").toString(), position)
 
