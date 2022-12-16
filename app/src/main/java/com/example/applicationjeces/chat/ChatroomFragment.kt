@@ -1,7 +1,6 @@
 package com.example.applicationjeces.chat
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -31,7 +30,7 @@ class ChatroomFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    private  lateinit var productViewModel: ProductViewModel
+    private lateinit var productViewModel: ProductViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,19 +59,18 @@ class ChatroomFragment : Fragment() {
             adapter.setData(chatroom)
         })
 
+
         /* 항목 클릭시 */
         adapter.setItemClickListener(object: ChatroomRecyclerViewAdapter.OnItemClickListener {
             override fun onClick(v: View, position: Int) {
-                /* 화면 띄움*/
-                /* 프라그먼트에서 프라그먼트로 제어가 불가능하기 때문에 상위 액티비티에서 제어 해주어야 한다. */
-                /* ViewModel 가지고와서 PageLiveData 넘기기[업데이트 됨] */
-                val model: DataViewModel by activityViewModels()
-                model.changePageNum(PageData.CHAT)
-
                 val productModel: ProductViewModel by activityViewModels()
                 productModel.liveTodoChatroomData.value?.get(position).toString()
-                productModel.setChatDetail(adapter.chatRoomList[position].get("lastcomment").toString(), adapter.chatRoomList[position].get("myid").toString()
+                productModel.setChatDetail(adapter.chatRoomList[position].get("chatidx").toString(), adapter.chatRoomList[position].get("lastcomment").toString(), adapter.chatRoomList[position].get("myid").toString()
                     , adapter.chatRoomList[position].get("yourid").toString(), position)
+
+                /* 화면 띄움*/
+                /* 프라그먼트에서 프라그먼트로 제어가 불가능하기 때문에 상위 액티비티에서 제어 해주어야 한다. */
+                activity!!.supportFragmentManager.beginTransaction().replace(R.id.frame_layout, ChatFragment()).commit()
             }
         })
 

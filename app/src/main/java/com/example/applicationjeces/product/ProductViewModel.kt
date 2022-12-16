@@ -8,6 +8,7 @@ import com.example.applicationjeces.chat.ChatroomData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 
 /* 뷰모델은 DB에 직접 접근하지 않아야함. Repository 에서 데이터 통신 */
 class ProductViewModel(application: Application): AndroidViewModel(application) {
@@ -15,6 +16,7 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     var liveTodoData = MutableLiveData<List<DocumentSnapshot>>()
     var productArrayList: MutableList<Product> = ArrayList()
     var chatArrayList: MutableList<ChatroomData> = ArrayList()
+    var liveTodoChatData = MutableLiveData<List<DocumentSnapshot>>()
     var liveTodoChatroomData = MutableLiveData<List<DocumentSnapshot>>()
 
     var jecesfirestore: FirebaseFirestore? = null
@@ -90,6 +92,17 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
             }
     }
 
+    /* Chat 가져오기 */
+    fun getChat(idx: String) {
+        /* 데이터베이스 담기 */
+        jecesfirestore!!.collection("Chat").whereEqualTo("chatroomidx", idx).orderBy("time", Query.Direction.DESCENDING).addSnapshotListener { chat, e ->
+            if(e != null) {
+                return@addSnapshotListener
+            }
+            liveTodoChatData.value = chat?.documents
+        }
+    }
+
     /* firebase Product 입력 */
     fun addProducts(product: Product) {
         val products = hashMapOf(
@@ -141,11 +154,11 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     }
 
     /* 채팅 디테일 데이터를 가지고 있는 데이터 */
-    fun setChatDetail(lastcomment: String, myid: String, yourid: String, getPosition: Int) {
+    fun setChatDetail(chatidx: String, lastcomment: String, myid: String, yourid: String, getPosition: Int) {
         chatArrayList.clear()
-        val chatDetail = ChatroomData("0", lastcomment, myid, yourid)
+        val chatDetail = ChatroomData(chatidx, lastcomment, myid, yourid)
         position = getPosition
-        Log.d("눌렀닌?", yourid)
+        Log.d("눌렀닌?", chatidx)
         chatArrayList.add(chatDetail)
     }
 

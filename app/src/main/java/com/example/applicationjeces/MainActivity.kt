@@ -99,8 +99,6 @@ class MainActivity : AppCompatActivity() {
             return HomeFragment.newInstance(pageData.title, pageData.tag)
         } else if(pageData.title == "chatroom") {
             return ChatroomFragment.newInstance(pageData.title, pageData.tag)
-        } else if(pageData.title == "chat") {
-            return ChatFragment.newInstance(pageData.title, pageData.tag)
         } else if(pageData.title == "detail") {
             return InfoFragment.newInstance(pageData.title, pageData.tag)
         } else if(pageData.title == "message") {
