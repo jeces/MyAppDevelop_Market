@@ -68,7 +68,19 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
                 return@addSnapshotListener
             }
             liveTodoChatroomData.value = chatrooms?.documents
+            jecesfirestore!!.collection("/Chatroom").whereEqualTo("yourid", thisUser.toString()).addSnapshotListener { chatrooms, e->
+                if(e != null) {
+                    return@addSnapshotListener
+                }
+                liveTodoChatroomData.value as MutableList<DocumentSnapshot>? += chatrooms?.documents
+            }
         }
+    }
+
+
+    private operator fun <E> MutableList<E>?.plusAssign(documents: List<E>?) {
+
+
     }
 
     /* firebase Product 전체 가져오기 */
@@ -173,3 +185,6 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         productArrayList.add(productDetail)
     }
 }
+
+
+

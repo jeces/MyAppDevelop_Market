@@ -36,7 +36,6 @@ class ChatRecyclerViewAdapter(var chatList: List<DocumentSnapshot>, var context:
         holder.itemView.messageItem_textView_message.text = content.toString()
         holder.itemView.messageItem_textView_time.text = time.toString()
 
-
     }
 
     /* (2) 리스너 인터페이스 */
