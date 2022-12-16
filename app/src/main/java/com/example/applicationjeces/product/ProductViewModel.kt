@@ -65,6 +65,8 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
 
     /* 자신의 채팅목록 전체 가져오기 */
     fun allChatroom() {
+        /* 어떻게 가져올껀지 찾아야한다. */
+
 //        val response = Response()
 //        jecesfirestore!!.collection("/Chatroom").get().addOnCompleteListener() { chatrooms ->
 //            for(snapshot in chatrooms.result) {
