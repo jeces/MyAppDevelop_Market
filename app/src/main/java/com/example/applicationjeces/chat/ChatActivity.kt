@@ -3,6 +3,7 @@ package com.example.applicationjeces.chat
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -46,7 +47,7 @@ class ChatActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         /* 뷰모델 연결 */
-
+        Log.d("들어왔니", "ㅇㅇ")
         productModel.getChat(chatroomidx.toString())
         /* 뷰모델 연결 후 뷰모델 옵저버를 통해 불러옴 */
         productModel.liveTodoChatData.observe(this) { chat ->
@@ -58,6 +59,7 @@ class ChatActivity : AppCompatActivity() {
             /* 보낸 시간 */
             val chat = ChatData(chatroomidx.toString(), messageActivity_editText.text.toString(), productModel.thisUser.toString(), Timestamp.now())
             productModel.addChat(chat)
+            messageActivity_editText.text.clear()
         }
     }
 

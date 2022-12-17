@@ -75,9 +75,11 @@
         android:id="@+id/messageActivity_ImageView"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_marginStart="8dp"
         android:src="@drawable/ic_baseline_send_24"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="361dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/messageActivity_editText"
         tools:ignore="MissingConstraints" />
 
 
