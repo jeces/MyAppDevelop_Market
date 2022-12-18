@@ -114,13 +114,13 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     fun getChat(idx: String) {
         /* 데이터베이스 담기 */
         Log.d("ㅁㄴㅇㄻㄴㅇㄹ123", idx)
-        jecesfirestore!!.collection("Chat").whereEqualTo("chatroomidx", idx).orderBy("time", Query.Direction.DESCENDING).addSnapshotListener { chat, e ->
+        jecesfirestore!!.collection("Chat").whereEqualTo("chatroomidx", idx).orderBy("time", Query.Direction.ASCENDING).addSnapshotListener { chat, e ->
             if(e != null) {
                 Log.d("ㅁㄴㅇㄻㄴㅇㄹ0", e.toString())
                 return@addSnapshotListener
             }
             liveTodoChatData.value = chat?.documents
-            Log.d("ㅁㄴㅇㄻㄴㅇㄹ", liveTodoChatData.value.toString())
+            Log.d("ㅁㄴㅇㄻㄴㅇㄹ", liveTodoChatData.value?.size.toString())
         }
     }
 

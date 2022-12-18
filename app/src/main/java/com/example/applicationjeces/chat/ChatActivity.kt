@@ -45,14 +45,18 @@ class ChatActivity : AppCompatActivity() {
         /* 어뎁터 가져옴 */
         val recyclerView: RecyclerView = findViewById(R.id.messageActivity_recyclerview)
         recyclerView.adapter = adapter
-        recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.setHasFixedSize(true)
+
 
         /* 뷰모델 연결 */
         Log.d("들어왔니", "ㅇㅇ")
         productModel.getChat(chatroomidx.toString())
         /* 뷰모델 연결 후 뷰모델 옵저버를 통해 불러옴 */
+        Log.d("ㅁㄴㅇㄻㄴㅇㄹ0", productModel.liveTodoChatData.value?.size.toString())
+
         productModel.liveTodoChatData.observe(this) { chat ->
+            productModel.liveTodoChatData.value?.size?.let { recyclerView.smoothScrollToPosition(it.toInt()) }
             adapter.setData(chat)
         }
 

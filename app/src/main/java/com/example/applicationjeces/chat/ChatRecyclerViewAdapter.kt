@@ -58,16 +58,16 @@ class ChatRecyclerViewAdapter(var chatList: List<DocumentSnapshot>, var context:
             holder.itemView.messageItem_linearlayout_main.gravity = Gravity.RIGHT
             holder.itemView.messageItem_textView_time.gravity = Gravity.RIGHT
             holder.itemView.messageItem_textView_message.gravity = Gravity.RIGHT
-//            holder.itemView.messageItem_textView_message.setBackgroundResource(R.drawable.message)
+            holder.itemView.messageItem_textView_message.setBackgroundResource(R.drawable.rightbubble)
         } else {
             holder.itemView.messageItem_linearlayout_main.gravity = Gravity.LEFT
+            holder.itemView.messageItem_textView_message.setBackgroundResource(R.drawable.leftbubble)
         }
 
 
         holder.itemView.messageItem_textview_name.text = myid.toString()
         holder.itemView.messageItem_textView_message.text = content.toString()
         holder.itemView.messageItem_textView_time.text = date
-
     }
 
     /* (2) 리스너 인터페이스 */
@@ -90,7 +90,7 @@ class ChatRecyclerViewAdapter(var chatList: List<DocumentSnapshot>, var context:
     /* 홈 전체 데이터 */
     @SuppressLint("NotifyDataSetChanged")
     fun setData(chat: List<DocumentSnapshot>) {
-        chatList.isEmpty()
+        Log.d("알리니?", "ㅇㅇ")
         chatList = chat
         /* 변경 알림 */
         notifyDataSetChanged()
