@@ -53,11 +53,12 @@ class ChatRecyclerViewAdapter(var chatList: List<DocumentSnapshot>, var context:
         Log.d("쳇리스트", date)
 
         if(thisUser == myid) {
-            holder.itemView.messageItem_imageview_profile.visibility = View.INVISIBLE
+            holder.itemView.messageItem_layout_destination.visibility = View.INVISIBLE
             holder.itemView.messageItem_textview_name.visibility = View.INVISIBLE
             holder.itemView.messageItem_linearlayout_main.gravity = Gravity.RIGHT
             holder.itemView.messageItem_textView_time.gravity = Gravity.RIGHT
             holder.itemView.messageItem_textView_message.gravity = Gravity.RIGHT
+//            holder.itemView.messageItem_textView_message.setBackgroundResource(R.drawable.message)
         } else {
             holder.itemView.messageItem_linearlayout_main.gravity = Gravity.LEFT
         }
