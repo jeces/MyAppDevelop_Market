@@ -77,7 +77,6 @@ class ProductRecyclerViewAdapter(var producFiretList: List<DocumentSnapshot>, va
     /* 홈 전체 데이터 */
     @SuppressLint("NotifyDataSetChanged")
     fun setData(product: List<DocumentSnapshot>) {
-        producFiretList.isEmpty()
         producFiretList = product
         /* 변경 알림 */
         notifyDataSetChanged()

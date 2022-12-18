@@ -50,12 +50,12 @@ class ChatActivity : AppCompatActivity() {
 
 
         /* 뷰모델 연결 */
-        Log.d("들어왔니", "ㅇㅇ")
+        Log.d("ㅁㄴㅇㄻㄴㅇㄹchatact2", "123")
         productModel.getChat(chatroomidx.toString())
-        /* 뷰모델 연결 후 뷰모델 옵저버를 통해 불러옴 */
-        Log.d("ㅁㄴㅇㄻㄴㅇㄹ0", productModel.liveTodoChatData.value?.size.toString())
 
+        /* 뷰모델 연결 후 뷰모델 옵저버를 통해 불러옴 */
         productModel.liveTodoChatData.observe(this) { chat ->
+            Log.d("ㅁㄴㅇㄻㄴㅇㄹchatact", "123")
             productModel.liveTodoChatData.value?.size?.let { recyclerView.smoothScrollToPosition(it.toInt()) }
             adapter.setData(chat)
         }

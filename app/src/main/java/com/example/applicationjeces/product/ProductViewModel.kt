@@ -113,10 +113,11 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     /* Chat 가져오기 */
     fun getChat(idx: String) {
         /* 데이터베이스 담기 */
+        /* 이것도 response를 만들어서 해줘야하는 듯 */
         Log.d("ㅁㄴㅇㄻㄴㅇㄹ123", idx)
         jecesfirestore!!.collection("Chat").whereEqualTo("chatroomidx", idx).orderBy("time", Query.Direction.ASCENDING).addSnapshotListener { chat, e ->
             if(e != null) {
-                Log.d("ㅁㄴㅇㄻㄴㅇㄹ0", e.toString())
+                Log.d("ㅁㄴㅇㄻㄴㅇㄹ에러", e.toString())
                 return@addSnapshotListener
             }
             liveTodoChatData.value = chat?.documents
