@@ -23,7 +23,7 @@ class ChatActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityChatBinding
     private lateinit var productModel: ProductViewModel
-    val adapter = ChatRecyclerViewAdapter(emptyList(), this@ChatActivity)
+
     var jecesfirestore: FirebaseFirestore? = null
     var chatroomidx : String? = null
 
@@ -39,6 +39,8 @@ class ChatActivity : AppCompatActivity() {
 
         /* 뷰모델 초기화 */
         productModel = ViewModelProvider(this)[ProductViewModel::class.java]
+
+        val adapter = ChatRecyclerViewAdapter(emptyList(), this@ChatActivity, productModel.thisUser.toString())
 
         /* 어뎁터 가져옴 */
         val recyclerView: RecyclerView = findViewById(R.id.messageActivity_recyclerview)
