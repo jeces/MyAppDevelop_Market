@@ -2,6 +2,7 @@ package com.example.applicationjeces.chat
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.drm.DrmStore.RightsStatus
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -45,33 +46,35 @@ class ChatRecyclerViewAdapter(var chatList: List<DocumentSnapshot>, var context:
 
         /* 시간변환 */
         val mils = timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000
-        val sf = SimpleDateFormat("yyyy년 MM월 dd일 HH:mm:ss", Locale.KOREA)
+//        val sf = SimpleDateFormat("yyyy년 MM월 dd일 HH:mm:ss", Locale.KOREA)
+        val sf = SimpleDateFormat("HH:mm", Locale.KOREA)
         val nDate = Date(mils)
         val date = sf.format(nDate).toString()
-
-        /* Timestamp를 한글로 바꿈 */
-//        val sf = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.KOREA)
-//        sf.timeZone = TimeZone.getTimeZone("Asia/Seoul")
-////        val time = sf.format(timestamp.timestamp)
-
-        Log.d("쳇리스트", date)
-
-        if(thisUser == myid) {
-            holder.itemView.messageItem_layout_destination.visibility = View.INVISIBLE
-            holder.itemView.messageItem_textview_name.visibility = View.INVISIBLE
-            holder.itemView.messageItem_linearlayout_main.gravity = Gravity.RIGHT
-            holder.itemView.messageItem_textView_time.gravity = Gravity.RIGHT
-            holder.itemView.messageItem_textView_message.gravity = Gravity.RIGHT
-            holder.itemView.messageItem_textView_message.setBackgroundResource(R.drawable.rightbubble)
-        } else {
-            holder.itemView.messageItem_linearlayout_main.gravity = Gravity.LEFT
-            holder.itemView.messageItem_textView_message.setBackgroundResource(R.drawable.leftbubble)
-        }
-
 
         holder.itemView.messageItem_textview_name.text = myid.toString()
         holder.itemView.messageItem_textView_message.text = content.toString()
         holder.itemView.messageItem_textView_time.text = date
+
+        if(thisUser == myid) {
+            holder.itemView.messageItem_layout_destination.visibility = View.INVISIBLE
+            holder.itemView.messageItem_textview_name.visibility = View.INVISIBLE
+//            holder.itemView.messageItem_textView_time.visibility = View.VISIBLE
+            holder.itemView.messageItem_textView_time2.visibility = View.INVISIBLE
+
+            holder.itemView.messageItem_textView_message.setBackgroundResource(R.drawable.rightbubble)
+//            holder.itemView.leftMoveMyChat.gravity = Gravity.RIGHT
+            holder.itemView.messageItem_textView_message.gravity = Gravity.RIGHT
+            holder.itemView.messageItem_linearlayout_main.gravity = Gravity.RIGHT
+
+
+        } else {
+            holder.itemView.messageItem_layout_destination.visibility = View.VISIBLE
+            holder.itemView.messageItem_textview_name.visibility = View.VISIBLE
+  //          holder.itemView.messageItem_textView_time.visibility = View.INVISIBLE
+            holder.itemView.messageItem_textView_time2.visibility = View.VISIBLE
+            holder.itemView.messageItem_textView_message.setBackgroundResource(R.drawable.leftbubble)
+            holder.itemView.messageItem_linearlayout_main.gravity = Gravity.LEFT
+        }
     }
 
     /* (2) 리스너 인터페이스 */
