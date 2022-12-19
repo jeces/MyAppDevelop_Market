@@ -58,8 +58,8 @@ class ChatRecyclerViewAdapter(var chatList: List<DocumentSnapshot>, var context:
         if(thisUser == myid) {
             holder.itemView.messageItem_layout_destination.visibility = View.INVISIBLE
             holder.itemView.messageItem_textview_name.visibility = View.INVISIBLE
-//            holder.itemView.messageItem_textView_time.visibility = View.VISIBLE
-            holder.itemView.messageItem_textView_time2.visibility = View.INVISIBLE
+            holder.itemView.messageItem_textView_time.visibility = View.VISIBLE
+//            holder.itemView.messageItem_textView_time2.visibility = View.INVISIBLE
 
             holder.itemView.messageItem_textView_message.setBackgroundResource(R.drawable.rightbubble)
 //            holder.itemView.leftMoveMyChat.gravity = Gravity.RIGHT
@@ -70,8 +70,8 @@ class ChatRecyclerViewAdapter(var chatList: List<DocumentSnapshot>, var context:
         } else {
             holder.itemView.messageItem_layout_destination.visibility = View.VISIBLE
             holder.itemView.messageItem_textview_name.visibility = View.VISIBLE
-  //          holder.itemView.messageItem_textView_time.visibility = View.INVISIBLE
-            holder.itemView.messageItem_textView_time2.visibility = View.VISIBLE
+            holder.itemView.messageItem_textView_time.visibility = View.INVISIBLE
+//            holder.itemView.messageItem_textView_time2.visibility = View.VISIBLE
             holder.itemView.messageItem_textView_message.setBackgroundResource(R.drawable.leftbubble)
             holder.itemView.messageItem_linearlayout_main.gravity = Gravity.LEFT
         }
