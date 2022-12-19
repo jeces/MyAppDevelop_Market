@@ -3,14 +3,15 @@ package com.example.applicationjeces.chat
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.ContactsContract.Data
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applicationjeces.MainActivity
 import com.example.applicationjeces.R
-import com.example.applicationjeces.databinding.ActivityChatBinding
 import com.example.applicationjeces.page.DataViewModel
 import com.example.applicationjeces.page.PageData
 import com.example.applicationjeces.product.ProductViewModel
@@ -24,12 +25,12 @@ import java.util.*
 
 class ChatActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityChatBinding
     private lateinit var productModel: ProductViewModel
     private lateinit var pageViewModel: DataViewModel
 
     var jecesfirestore: FirebaseFirestore? = null
     var chatroomidx : String? = null
+    var messageCheck : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,12 +72,29 @@ class ChatActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-//        /* 메시지 보냄 */
-//        messageActivity_ImageView.setOnClickListener {
-//            /* 보낸 시간 */
-//            val chat = ChatData(chatroomidx.toString(), messageActivity_editText.text.toString(), productModel.thisUser.toString(), Timestamp.now())
-//            productModel.addChat(chat)
-//            messageActivity_editText.text.clear()
-//        }
+        /* editText 변화 감지, 입력값있을 때 활성화 */
+        chat_text.addTextChangedListener (object: TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+            /* editText 변경 시 실행 */
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                messageCheck = chat_text.text.toString()
+                Log.d("값변경", messageCheck!!.isNotEmpty().toString())
+                edit_send.isVisible = messageCheck!!.isNotEmpty()
+                edit_sharp.isVisible = messageCheck!!.isEmpty()
+            }
+            override fun afterTextChanged(p0: Editable?) {
+
+            }
+        })
+
+        /* 메시지 보냄 */
+        edit_send.setOnClickListener {
+            /* 보낸 시간 */
+            val chat = ChatData(chatroomidx.toString(), chat_text.text.toString(), productModel.thisUser.toString(), Timestamp.now())
+            productModel.addChat(chat)
+            chat_text.text.clear()
+        }
     }
 }
