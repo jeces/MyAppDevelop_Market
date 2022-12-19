@@ -3,16 +3,23 @@ package com.example.applicationjeces
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applicationjeces.databinding.ActivityMain2Binding
+import com.example.applicationjeces.page.DataViewModel
+import com.example.applicationjeces.page.PageData
+import com.example.applicationjeces.product.ProductRecyclerViewAdapter
 import com.example.applicationjeces.product.ProductViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main2.*
 
 class MainActivity2 : AppCompatActivity() {
 
@@ -43,11 +50,60 @@ class MainActivity2 : AppCompatActivity() {
         /* 서치뷰 생성 */
         searchViewProduct.setOnQueryTextListener(searchViewTextListener)
 
+        /* 검색 시 */
         productViewModel.searchProductsCall("").observe(this) { product ->
             Log.d("검색observe", product.toString())
             adapter.searchSetData(product)
         }
+
+        /* 뒤로가기버튼 누를시 */
+        search_back.setOnClickListener {
+            val intent: Intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
+
+        /* 항목 클릭시 */
+        adapter.setItemClickListener(object : ProductSearchRecyclerViewAdapter.OnItemClickListener {
+            override fun onClick(v: View, position: Int) {
+
+            }
+        })
+
+//        /* 항목 클릭시 */
+//        adapter.setItemClickListener(object: ProductRecyclerViewAdapter.OnItemClickListener {
+//            override fun onClick(v: View, position: Int) {
+//                /* 화면 띄움*/
+//                /* 프라그먼트에서 프라그먼트로 제어가 불가능하기 때문에 상위 액티비티에서 제어 해주어야 한다. */
+//                /* ViewModel 가지고와서 PageLiveData 넘기기[업데이트 됨] */
+//                val model: DataViewModel by activityViewModels()
+//                model.changePageNum(PageData.DETAIL)
+//
+//                val productModel: ProductViewModel by activityViewModels()
+//                productModel.liveTodoData.value?.get(position).toString()
+//                productModel.setProductDetail(adapter.producFiretList[position].get("productName").toString(), adapter.producFiretList[position].get("productPrice").toString()
+//                    , adapter.producFiretList[position].get("productDescription").toString(), adapter.producFiretList[position].get("productCount").toString(), position)
+//
+//                /* Navigation Bar Selected 넘겨야 됨[여기서부터해야함] */
+//                val mActivity = activity as MainActivity
+//                mActivity.bottomNavigationView.menu.findItem(R.id.detail).isChecked = true
+//            }
+//        })
+
+
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item?.itemId) {
+            android.R.id.home -> {
+                finish()
+                return true
+            }
+            else -> {
+                return super.onOptionsItemSelected(item)
+            }
+        }
+    }
+
     /* 서치뷰 */
     private var searchViewTextListener: SearchView.OnQueryTextListener =
         object : SearchView.OnQueryTextListener {

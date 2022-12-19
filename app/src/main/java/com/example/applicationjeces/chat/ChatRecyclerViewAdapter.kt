@@ -7,6 +7,9 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.appcompat.view.menu.MenuView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -16,6 +19,7 @@ import com.example.applicationjeces.product.ProductViewModel
 import com.google.firebase.firestore.DocumentSnapshot
 import kotlinx.android.synthetic.main.chat_item_list.view.*
 import kotlinx.android.synthetic.main.chatroom_item_list.view.*
+import kotlinx.android.synthetic.main.fragment_chat2.view.*
 import kotlinx.android.synthetic.main.product_item_list.view.*
 import java.security.Timestamp
 import java.text.SimpleDateFormat

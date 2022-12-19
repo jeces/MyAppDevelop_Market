@@ -14,7 +14,11 @@ class DataViewModel() : ViewModel() {
     val currentPages: LiveData<PageData>
         get() = currentPage
 
-    /* PageNum에 따라 currentPages 변경 */
+    init {
+        Log.d("여기 들어오니?", "몇번")
+    }
+
+    /* BottomMunu를 눌렀을 때 xml에서 불러짐. PageNum에 따라 currentPages 변경 */
     fun setCurrentPage(item: MenuItem): Boolean {
         val menuItemId = item.itemId
         val pageNum = getPageNum(menuItemId)
@@ -42,4 +46,6 @@ class DataViewModel() : ViewModel() {
             currentPage.value = pageNum
         }
     }
+
+    /* */
 }
