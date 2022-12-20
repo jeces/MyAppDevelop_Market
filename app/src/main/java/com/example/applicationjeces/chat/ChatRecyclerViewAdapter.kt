@@ -86,15 +86,14 @@ class ChatRecyclerViewAdapter(var chatList: List<DocumentSnapshot>, var context:
     /* 홈 전체 데이터 */
     @SuppressLint("NotifyDataSetChanged")
     fun setData(chat: List<DocumentSnapshot>) {
-        Log.d("알리니?", "ㅇㅇ")
         chatList = chat
         /* 변경 알림 */
         notifyDataSetChanged()
     }
 
-    /* inner class로 viewHolder 정의. 레이아웃 내 view 연결 */
+    /* inner class로 viewHolder 정의. 레이아웃 내 view 연결
+    * 상대방 말풍선 */
     inner class leftHolder(ItemView: View): RecyclerView.ViewHolder(ItemView) {
-
         private val myid: TextView = ItemView.findViewById(R.id.messageItem_textview_name)
         private val messageText: TextView = ItemView.findViewById(R.id.messageItem_textView_message)
         private val date: TextView = ItemView.findViewById(R.id.messageItem_textView_time)
@@ -106,7 +105,8 @@ class ChatRecyclerViewAdapter(var chatList: List<DocumentSnapshot>, var context:
         }
     }
 
-    /* inner class로 viewHolder 정의. 레이아웃 내 view 연결 */
+    /* inner class로 viewHolder 정의. 레이아웃 내 view 연결
+    * 나 자신 말풍선 */
     inner class rightHolder(ItemView: View): RecyclerView.ViewHolder(ItemView) {
         private val messageText: TextView = ItemView.findViewById(R.id.messageItem_textView_message2)
         private val date: TextView = ItemView.findViewById(R.id.messageItem_textView_time2)
@@ -121,7 +121,7 @@ class ChatRecyclerViewAdapter(var chatList: List<DocumentSnapshot>, var context:
     fun changeTime(timestamp: Timestamp): String {
         val mils = timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000
 //        val sf = SimpleDateFormat("yyyy년 MM월 dd일 HH:mm:ss", Locale.KOREA)
-        val sf = SimpleDateFormat("HH:mm", Locale.KOREA)
+        val sf = SimpleDateFormat("aa hh:mm", Locale.KOREA)
         val nDate = Date(mils)
         val date = sf.format(nDate).toString()
         return date

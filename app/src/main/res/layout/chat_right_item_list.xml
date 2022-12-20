@@ -24,6 +24,7 @@
                 android:id="@+id/messageItem_textView_time2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
                 android:text="시간"
                 android:textSize="12sp" />
             <TextView
