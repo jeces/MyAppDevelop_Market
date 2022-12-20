@@ -112,7 +112,7 @@ class ChatroomRecyclerViewAdapter(var chatRoomList: List<DocumentSnapshot>, var 
             if(it.isSuccessful) {
                 Glide.with(context)
                     .load(it.result)
-                    .override(600, 600)
+                    .override(70, 70)
                     .fitCenter()
                     .into(chatroomUserImg)
             } else {
@@ -120,7 +120,7 @@ class ChatroomRecyclerViewAdapter(var chatRoomList: List<DocumentSnapshot>, var 
                 db.reference.child("basic_user.png").downloadUrl.addOnCompleteListener { its->
                     Glide.with(context)
                         .load(its.result)
-                        .override(600, 600)
+                        .override(70, 70)
                         .fitCenter()
                         .into(chatroomUserImg)
                 }

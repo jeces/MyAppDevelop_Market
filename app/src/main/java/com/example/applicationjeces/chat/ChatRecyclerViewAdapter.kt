@@ -134,14 +134,16 @@ class ChatRecyclerViewAdapter(var chatList: List<DocumentSnapshot>, var context:
             if(it.isSuccessful) {
                 Glide.with(context)
                     .load(it.result)
-                    .override(150, 150)
+                    .override(70, 70)
+                    .fitCenter()
                     .into(chatroomUserImg)
             } else {
                 /* 없으면 기본 이미지 들고와라 */
                 db.reference.child("basic_user.png").downloadUrl.addOnCompleteListener { its->
                     Glide.with(context)
                         .load(its.result)
-                        .override(150, 150)
+                        .override(70, 70)
+                        .fitCenter()
                         .into(chatroomUserImg)
                 }
             }
