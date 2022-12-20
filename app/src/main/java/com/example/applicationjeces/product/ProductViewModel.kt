@@ -9,6 +9,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.SetOptions
 
 /* 뷰모델은 DB에 직접 접근하지 않아야함. Repository 에서 데이터 통신 */
 class ProductViewModel(application: Application): AndroidViewModel(application) {
@@ -62,7 +63,7 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     /* 자신의 채팅목록 전체 가져오기 */
     fun allChatroom() {
         /* 어떻게 가져올껀지 찾아야한다. */
-        jecesfirestore!!.collection("/Chatroom").addSnapshotListener { chatrooms, e->
+        jecesfirestore!!.collection("/Chatroom").orderBy("time", Query.Direction.DESCENDING).addSnapshotListener { chatrooms, e->
             if (e != null) {
                 return@addSnapshotListener
             }
@@ -105,6 +106,19 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
                 // 실패할 경우
                 Log.w("CHAT 데이터 입력 실패", "Error getting documents")
             }
+
+        /* 채팅방 수정 */
+        val dbRef = jecesfirestore!!.collection("Chatroom")
+        dbRef.whereEqualTo("chatidx", chat.chatroomidx).get().addOnCompleteListener {
+            if(it.isSuccessful) {
+                for(document in it.result) {
+                    val update: MutableMap<String, Any> = HashMap()
+                    update["lastcomment"] = chat.content
+                    update["time"] = chat.time
+                    dbRef.document(document.id).set(update, SetOptions.merge())
+                }
+            }
+        }
     }
 
     /* Chat 가져오기 */
@@ -117,6 +131,7 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
             }
             liveTodoChatData.value = chat?.documents
         }
+
     }
 
     /* firebase Product 입력 */

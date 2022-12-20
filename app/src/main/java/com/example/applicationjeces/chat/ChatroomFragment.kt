@@ -47,20 +47,22 @@ class ChatroomFragment : Fragment() {
     ): View? {
 
         val view = inflater.inflate(R.layout.fragment_chat, container, false)
+
+        /* 뷰모델 초기화 */
+        productViewModel = ViewModelProvider(this)[ProductViewModel::class.java]
+
         /* 어뎁터 가져옴 */
-        val adapter = ChatroomRecyclerViewAdapter(emptyList(), this@ChatroomFragment)
+        val adapter = ChatroomRecyclerViewAdapter(emptyList(), this@ChatroomFragment, productViewModel.thisUser.toString())
         val recyclerView = view.chat_profile
         recyclerView.adapter = adapter
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         /* 뷰모델 연결 후 뷰모델 옵저버를 통해 불러옴 */
-        productViewModel = ViewModelProvider(this)[ProductViewModel::class.java]
         productViewModel.liveTodoChatroomData.observe(viewLifecycleOwner, Observer { chatroom ->
             Log.d("방만들어짐?", "dd")
             adapter.setData(chatroom)
         })
-
 
         /* 항목 클릭시 */
         adapter.setItemClickListener(object: ChatroomRecyclerViewAdapter.OnItemClickListener {
