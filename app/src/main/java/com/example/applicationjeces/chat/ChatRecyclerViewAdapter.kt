@@ -2,8 +2,6 @@ package com.example.applicationjeces.chat
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,7 +39,6 @@ class ChatRecyclerViewAdapter(var chatList: List<DocumentSnapshot>, var context:
     /* Holder의 bind 메소드를 호출한다. 내용 입력 */
     /* getItemCount() 리턴값이 0일 경우 호출 안함 */
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-
         /* holder의 종류에 따라 bind */
         when(holder) {
             is leftHolder -> {
@@ -56,7 +53,6 @@ class ChatRecyclerViewAdapter(var chatList: List<DocumentSnapshot>, var context:
             }
         }
     }
-
     /* (2) 리스너 인터페이스 */
     interface OnItemClickListener {
         fun onClick(v: View, position: Int)
@@ -67,7 +63,6 @@ class ChatRecyclerViewAdapter(var chatList: List<DocumentSnapshot>, var context:
     }
     /* (4) setItemClickListener로 설정한 함수 실행 */
     private lateinit var itemClickListener : OnItemClickListener
-
     /* 리스트 아이템 개수 */
     override fun getItemCount(): Int {
         /* productList 사이즈를 리턴합니다. */

@@ -27,7 +27,7 @@
             tools:ignore="MissingConstraints" />
 
         <TextView
-            android:id="@+id/messageActivity_textView_topName"
+            android:id="@+id/chat_topic_name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fontFamily="sans-serif"

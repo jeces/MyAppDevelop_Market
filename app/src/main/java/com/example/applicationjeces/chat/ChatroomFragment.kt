@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.applicationjeces.R
 import com.example.applicationjeces.product.ProductViewModel
 import kotlinx.android.synthetic.main.fragment_chat.view.*
+import java.io.PipedOutputStream
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -74,6 +75,7 @@ class ChatroomFragment : Fragment() {
                 val intent = Intent(getActivity(), ChatActivity::class.java)
                 intent.apply {
                     this.putExtra("chatidx", adapter.chatRoomList[position].get("chatidx").toString())
+                    this.putExtra("chatYourId", adapter.chatRoomList[position].get("id").toString())
                 }
                 startActivity(intent)
             }

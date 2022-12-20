@@ -37,8 +37,6 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         /* https://velog.io/@nagosooo/%EC%95%88%EB%93%9C%EB%A1%9C%EC%9D%B4%EB%93%9C-TodoList%EC%95%B1-%EB%A7%8C%EB%93%A4%EA%B8%B0 */
         allProduct()
         allChatroom()
-
-        Log.d("뷰모델초기화0", "ㅇㅇ")
     }
 
     /* firebase storage에서 이미지 가져오기 */
@@ -48,14 +46,13 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         /* 카운트는 가져와야함 product에 저장해놓고 */
         /* User이름, 상품이름, 사진갯수몇가지인지[product에 추가할것], 사진idx값 가져오기 */
         return if(productCount <= 0) {
-            var word: String = "basic_img.png"
+            var word = "basic_img.png"
             imgList.add(word)
             imgList
         } else {
             for(i: Int in 0 until productCount) {
                 /* 워드를 가져와서 돌림 */
                 var word: String = thisUser + "_" + productName + "_" + i + "_IMAGE_.png"
-                Log.d("워드", word)
                 imgList.add(word)
             }
             imgList
@@ -114,14 +111,11 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     fun getChat(idx: String) {
         /* 데이터베이스 담기 */
         /* 이것도 response를 만들어서 해줘야하는 듯 */
-        Log.d("ㅁㄴㅇㄻㄴㅇㄹ123", idx)
         jecesfirestore!!.collection("Chat").whereEqualTo("chatroomidx", idx).orderBy("time", Query.Direction.ASCENDING).addSnapshotListener { chat, e ->
             if(e != null) {
-                Log.d("ㅁㄴㅇㄻㄴㅇㄹ에러", e.toString())
                 return@addSnapshotListener
             }
             liveTodoChatData.value = chat?.documents
-            Log.d("ㅁㄴㅇㄻㄴㅇㄹ", liveTodoChatData.value?.size.toString())
         }
     }
 
@@ -180,7 +174,6 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         chatArrayList.clear()
         val chatDetail = ChatroomData(chatidx, lastcomment, myid, yourid)
         position = getPosition
-        Log.d("눌렀닌?", chatidx)
         chatArrayList.add(chatDetail)
     }
 
@@ -190,6 +183,18 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         val productDetail = Product(0, productName, productPrice, productDescription, productCount.toInt(), thisUser + "_" + productName + "_0_IMAGE_.png")
         position = getPosition
         productArrayList.add(productDetail)
+    }
+
+    /* 상대방 이름 가져오기 */
+    fun getYourId(idx: String) {
+        /* 데이터베이스 담기 */
+        /* 이것도 response를 만들어서 해줘야하는 듯 */
+        jecesfirestore!!.collection("Chatroom").whereEqualTo("chatroomidx", idx).addSnapshotListener { chat, e ->
+            if(e != null) {
+                return@addSnapshotListener
+            }
+            liveTodoChatroomData.value = chat?.documents
+        }
     }
 }
 
