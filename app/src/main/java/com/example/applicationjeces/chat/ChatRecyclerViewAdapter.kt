@@ -2,17 +2,21 @@ package com.example.applicationjeces.chat
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.applicationjeces.R
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.android.synthetic.main.chat_left_item_list.view.*
 import kotlinx.android.synthetic.main.chatroom_item_list.view.*
 import kotlinx.android.synthetic.main.fragment_chat2.view.*
 import kotlinx.android.synthetic.main.product_item_list.view.*
@@ -58,6 +62,23 @@ class ChatRecyclerViewAdapter(var chatList: List<DocumentSnapshot>, var context:
             }
         }
     }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, payloads: MutableList<Any>) {
+        if(payloads.isEmpty()) {
+            Log.d("페이로드3", "asdf")
+            super.onBindViewHolder(holder, position, payloads)
+        } else {
+            Log.d("페이로드2", "asdf")
+            for(payload in payloads) {
+                var type: String = payload.toString()
+                Log.d("페이로드", type.toString())
+                if(type == "before") {
+                }
+            }
+        }
+    }
+
+
     /* (2) 리스너 인터페이스 */
     interface OnItemClickListener {
         fun onClick(v: View, position: Int)

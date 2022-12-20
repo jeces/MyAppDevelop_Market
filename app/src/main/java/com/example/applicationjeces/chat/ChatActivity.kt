@@ -69,6 +69,12 @@ class ChatActivity : AppCompatActivity() {
         productModel.liveTodoChatData.observe(this) { chat ->
             productModel.liveTodoChatData.value?.size?.let { recyclerView.smoothScrollToPosition(it.toInt()) }
             adapter.setData(chat)
+
+            /* 말풍선 겹치기 */
+            /* onBindview payload 전달 */
+            /* https://rkdxowhd98.tistory.com/98 */
+            adapter.notifyItemRangeChanged(0, adapter.itemCount - 1, "before")
+            Log.d("페이로드2", "ㅇ")
         }
 
         /* 뒤로가기버튼 누를시 */
