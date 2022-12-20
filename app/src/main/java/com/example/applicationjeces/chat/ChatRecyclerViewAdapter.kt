@@ -55,56 +55,6 @@ class ChatRecyclerViewAdapter(var chatList: List<DocumentSnapshot>, var context:
                 (holder as rightHolder).bind(chatList[position])
             }
         }
-
-
-
-
-//
-//        val chatroomidx = chatList[position].get("chatroomidx")
-//        val contents = chatList[position].get("content")
-//        val myids = chatList[position].get("myid")
-//        val timestamp = chatList[position].get("time") as com.google.firebase.Timestamp
-//
-//        /* 시간변환 */
-//        val mils = timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000
-////        val sf = SimpleDateFormat("yyyy년 MM월 dd일 HH:mm:ss", Locale.KOREA)
-//        val sf = SimpleDateFormat("HH:mm", Locale.KOREA)
-//        val nDate = Date(mils)
-//        val date = sf.format(nDate).toString()
-//
-//        if(thisUser == myids) {
-//            (holder as leftHolder).bind(chatList[position])
-//            holder.setIsRecyclable(false)
-//        }
-
-//        holder.itemView.messageItem_textview_name.text = myid.toString()
-//        holder.itemView.messageItem_textView_message.text = content.toString()
-//        holder.itemView.messageItem_textView_time.text = date
-//
-//        if(thisUser == myid) {
-//            holder.itemView.messageItem_layout_destination.visibility = View.INVISIBLE
-//            holder.itemView.messageItem_textview_name.visibility = View.INVISIBLE
-//            holder.itemView.messageItem_textView_time.visibility = View.VISIBLE
-////            holder.itemView.messageItem_textView_time2.visibility = View.INVISIBLE
-//
-//            holder.itemView.messageItem_textView_message.setBackgroundResource(R.drawable.rightbubble)
-////            holder.itemView.leftMoveMyChat.gravity = Gravity.RIGHT
-//            holder.itemView.messageItem_textView_message.gravity = Gravity.RIGHT
-//            holder.itemView.messageItem_linearlayout_main.gravity = Gravity.RIGHT
-//
-//
-//
-//
-//            /* UI 2개 만들어서 적용하기 */
-//
-//        } else {
-//            holder.itemView.messageItem_layout_destination.visibility = View.VISIBLE
-//            holder.itemView.messageItem_textview_name.visibility = View.VISIBLE
-//            holder.itemView.messageItem_textView_time.visibility = View.INVISIBLE
-////            holder.itemView.messageItem_textView_time2.visibility = View.VISIBLE
-//            holder.itemView.messageItem_textView_message.setBackgroundResource(R.drawable.leftbubble)
-//            holder.itemView.messageItem_linearlayout_main.gravity = Gravity.LEFT
-//        }
     }
 
     /* (2) 리스너 인터페이스 */
