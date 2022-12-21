@@ -144,12 +144,11 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     fun getChat(idx: String) {
         /* 데이터베이스 담기 */
         /* 이것도 response를 만들어서 해줘야하는 듯 */
+        val listChat : MutableList<ChatData> = mutableListOf()
         jecesfirestore!!.collection("Chat").whereEqualTo("chatroomidx", idx).orderBy("time", Query.Direction.ASCENDING).get().addOnCompleteListener { chat ->
-            val listChat : MutableList<ChatData>? = null
             if(chat.isSuccessful) {
                 for(document in chat.result) {
-
-                    val chatDatas: ChatData = ChatData(
+                    val chatDatas = ChatData(
                         document.getString("chatroomidx").toString(),
                         document.getString("content").toString(),
                         document.getString("myid").toString(),

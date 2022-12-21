@@ -93,14 +93,13 @@ class ChatActivity : AppCompatActivity() {
 //            Log.d("페이로드activity", "ㅇ")
 //        }
 
-        /* 채팅 가져오기 */
-        productModel.getChat(chatroomidx.toString())
-
         productModel.liveTodoChatDataList.observe(this) { chat ->
             chat?.let {
                 adapter.submitList(chat)
             }
         }
+        /* 채팅 가져오기 */
+        productModel.getChat(chatroomidx.toString())
 
         /* 뒤로가기버튼 누를시 */
         chat_back.setOnClickListener {

@@ -114,9 +114,9 @@ class ChatRecyclerViewAdapter(var chatList: List<DocumentSnapshot>, var context:
     @SuppressLint("NotifyDataSetChanged")
     fun setData(chat: List<DocumentSnapshot>) {
         chatList = chat
-        Log.d("페이로드니??", itemCount.toString())
+//        Log.d("페이로드니??", itemCount.toString())
         /* 맨처음 안뿌려주고 화면이 변경 될때 뿌려줌(전체) */
-        notifyItemRangeChanged(0, itemCount)
+//        notifyItemRangeChanged(0, itemCount)
 //        adapter.notifyItemChanged(adapter.itemCount - 2, "onRefresh")
         /* 사용하기 편하지만 성능, 효율이 안좋음. */
 //        notifyDataSetChanged()
@@ -184,10 +184,12 @@ class ChatRecyclerViewAdapter(var chatList: List<DocumentSnapshot>, var context:
     companion object{
         val diffUtil = object : DiffUtil.ItemCallback<ChatData>(){
             override fun areItemsTheSame(oldItem: ChatData, newItem: ChatData): Boolean {
+                Log.d("listadapter임123", "123")
                 return oldItem == newItem
             }
 
             override fun areContentsTheSame(oldItem: ChatData, newItem: ChatData): Boolean {
+                Log.d("listadapter임123", "1234")
                 return oldItem == newItem
             }
         }
