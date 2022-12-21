@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.example.applicationjeces.chat.ChatData
 import com.example.applicationjeces.chat.ChatroomData
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -20,6 +21,12 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     var chatArrayList: MutableList<ChatroomData> = ArrayList()
     var liveTodoChatData = MutableLiveData<List<DocumentSnapshot>>()
     var liveTodoChatroomData = MutableLiveData<List<DocumentSnapshot>?>()
+
+//    private val _liveTodoChatDataList = MutableLiveData<MutableList<ChatData?>?>()
+//    var liveTodoChatDataList: LiveData<MutableList<ChatData?>?> = TODO()
+//        get() = _liveTodoChatDataList
+
+    val liveTodoChatDataList = MutableLiveData<List<ChatData>?>()
 
     var jecesfirestore: FirebaseFirestore? = null
     var thisUser: String? = null
@@ -122,7 +129,7 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     }
 
     /* Chat 가져오기 */
-    fun getChat(idx: String) {
+    fun getChat2(idx: String) {
         /* 데이터베이스 담기 */
         /* 이것도 response를 만들어서 해줘야하는 듯 */
         jecesfirestore!!.collection("Chat").whereEqualTo("chatroomidx", idx).orderBy("time", Query.Direction.ASCENDING).addSnapshotListener { chat, e ->
@@ -131,7 +138,29 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
             }
             liveTodoChatData.value = chat?.documents
         }
+    }
 
+    /* Chat 가져오기 */
+    fun getChat(idx: String) {
+        /* 데이터베이스 담기 */
+        /* 이것도 response를 만들어서 해줘야하는 듯 */
+        jecesfirestore!!.collection("Chat").whereEqualTo("chatroomidx", idx).orderBy("time", Query.Direction.ASCENDING).get().addOnCompleteListener { chat ->
+            val listChat : MutableList<ChatData>? = null
+            if(chat.isSuccessful) {
+                for(document in chat.result) {
+
+                    val chatDatas: ChatData = ChatData(
+                        document.getString("chatroomidx").toString(),
+                        document.getString("content").toString(),
+                        document.getString("myid").toString(),
+//                        document.getString("time").toString() as Timestamp
+                        Timestamp.now()
+                    )
+                    listChat?.add(chatDatas)
+                }
+            }
+            liveTodoChatDataList.value = listChat
+        }
     }
 
     /* firebase Product 입력 */

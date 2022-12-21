@@ -8,8 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.applicationjeces.R
@@ -23,9 +21,7 @@ import kotlinx.android.synthetic.main.product_item_list.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-
-/* 참고하기 */
-class ChatRecyclerViewAdapter(var chatList: List<DocumentSnapshot>, var context: Context, var thisUser: String): ListAdapter<ChatData, RecyclerView.ViewHolder>(diffUtil) {
+class Z_ChatRecyclerViewAdapter(var chatList: List<DocumentSnapshot>, var context: Context, var thisUser: String): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val db = FirebaseStorage.getInstance()
 
@@ -177,18 +173,6 @@ class ChatRecyclerViewAdapter(var chatList: List<DocumentSnapshot>, var context:
                         .fitCenter()
                         .into(chatroomUserImg)
                 }
-            }
-        }
-    }
-
-    companion object{
-        val diffUtil = object : DiffUtil.ItemCallback<ChatData>(){
-            override fun areItemsTheSame(oldItem: ChatData, newItem: ChatData): Boolean {
-                return oldItem == newItem
-            }
-
-            override fun areContentsTheSame(oldItem: ChatData, newItem: ChatData): Boolean {
-                return oldItem == newItem
             }
         }
     }

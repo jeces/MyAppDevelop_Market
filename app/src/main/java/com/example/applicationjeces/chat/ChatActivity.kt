@@ -12,16 +12,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applicationjeces.MainActivity
 import com.example.applicationjeces.R
-import com.example.applicationjeces.page.DataViewModel
 import com.example.applicationjeces.page.PageData
 import com.example.applicationjeces.product.ProductViewModel
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_chat.*
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main2.*
-import java.text.SimpleDateFormat
-import java.util.*
 
 class ChatActivity : AppCompatActivity() {
 
@@ -78,25 +73,33 @@ class ChatActivity : AppCompatActivity() {
             }
         })
 
+
+
+//        /* 뷰모델 연결 후 뷰모델 옵저버를 통해 불러옴 */
+//        productModel.liveTodoChatData.observe(this) { chat ->
+//
+//            /* 스크롤 제일 아래로 */
+//            productModel.liveTodoChatData.value?.size?.let { recyclerView.smoothScrollToPosition(it.toInt()) }
+//
+//            adapter.setData(chat)
+//
+//            /* 변경 알림 */
+//            /* 말풍선 겹치기
+//                *  말풍선 다르게 표시됨. 뒤에 말풍선은 그냥 꼬리표 없는 말풍선 다시 그리는거 payload됬을 때 말풍선도 변경, time 없애고, 이름없애고 */
+//            /* onBindview payload 전달 */
+//            /* https://rkdxowhd98.tistory.com/98
+//            * https://taehyungk.github.io/posts/android-RecyclerView-DiffUtil/ */
+////            adapter.notifyItemChanged(adapter.itemCount - 2, "onRefresh")
+//            Log.d("페이로드activity", "ㅇ")
+//        }
+
         /* 채팅 가져오기 */
         productModel.getChat(chatroomidx.toString())
 
-        /* 뷰모델 연결 후 뷰모델 옵저버를 통해 불러옴 */
-        productModel.liveTodoChatData.observe(this) { chat ->
-
-            adapter.setData(chat)
-
-            /* 변경 알림 */
-            /* 말풍선 겹치기
-                *  말풍선 다르게 표시됨. 뒤에 말풍선은 그냥 꼬리표 없는 말풍선 다시 그리는거 payload됬을 때 말풍선도 변경, time 없애고, 이름없애고 */
-            /* onBindview payload 전달 */
-            /* https://rkdxowhd98.tistory.com/98
-            * https://taehyungk.github.io/posts/android-RecyclerView-DiffUtil/ */
-//            adapter.notifyItemChanged(adapter.itemCount - 2, "onRefresh")
-            Log.d("페이로드activity", "ㅇ")
-
-            /* 스크롤 제일 아래로 */
-            productModel.liveTodoChatData.value?.size?.let { recyclerView.smoothScrollToPosition(it.toInt()) }
+        productModel.liveTodoChatDataList.observe(this) { chat ->
+            chat?.let {
+                adapter.submitList(chat)
+            }
         }
 
         /* 뒤로가기버튼 누를시 */
