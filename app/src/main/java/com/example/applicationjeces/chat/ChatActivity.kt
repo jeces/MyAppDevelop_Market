@@ -67,15 +67,22 @@ class ChatActivity : AppCompatActivity() {
 
         /* 뷰모델 연결 후 뷰모델 옵저버를 통해 불러옴 */
         productModel.liveTodoChatData.observe(this) { chat ->
-            productModel.liveTodoChatData.value?.size?.let { recyclerView.smoothScrollToPosition(it.toInt()) }
+
             adapter.setData(chat)
 
+            /* 변경 알림 */
             /* 말풍선 겹치기
-            *  말풍선 다르게 표시됨. 뒤에 말풍선은 그냥 꼬리표 없는 말풍선 다시 그리는거 payload됬을 때 말풍선도 변경, time 없애고, 이름없애고 */
+                *  말풍선 다르게 표시됨. 뒤에 말풍선은 그냥 꼬리표 없는 말풍선 다시 그리는거 payload됬을 때 말풍선도 변경, time 없애고, 이름없애고 */
             /* onBindview payload 전달 */
-            /* https://rkdxowhd98.tistory.com/98 */
-            adapter.notifyItemRangeChanged(0, adapter.itemCount - 1, "before")
-            Log.d("페이로드2", "ㅇ")
+            /* https://rkdxowhd98.tistory.com/98
+            * https://taehyungk.github.io/posts/android-RecyclerView-DiffUtil/ */
+
+            Log.d("페이로드activity", "ㅇ")
+
+            /* 스크롤 제일 아래로 */
+            productModel.liveTodoChatData.value?.size?.let { recyclerView.smoothScrollToPosition(it.toInt()) }
+
+
         }
 
         /* 뒤로가기버튼 누를시 */

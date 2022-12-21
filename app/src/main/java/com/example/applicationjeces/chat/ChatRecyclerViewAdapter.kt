@@ -2,14 +2,12 @@ package com.example.applicationjeces.chat
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.applicationjeces.R
@@ -29,7 +27,6 @@ class ChatRecyclerViewAdapter(var chatList: List<DocumentSnapshot>, var context:
 
     /* ViewHolder에게 item을 보여줄 View로 쓰일 item_data_list.xml를 넘기면서 ViewHolder 생성. 아이템 레이아웃과 결합 */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-
         return when(viewType) {
             viewtypeChat.LEFT -> {
                 val view = LayoutInflater.from(parent.context)
@@ -48,6 +45,7 @@ class ChatRecyclerViewAdapter(var chatList: List<DocumentSnapshot>, var context:
     /* Holder의 bind 메소드를 호출한다. 내용 입력 */
     /* getItemCount() 리턴값이 0일 경우 호출 안함 */
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        Log.d("페리로드니?", "ㅇㅇ")
         /* holder의 종류에 따라 bind */
         when(holder) {
             is leftHolder -> {
@@ -65,19 +63,20 @@ class ChatRecyclerViewAdapter(var chatList: List<DocumentSnapshot>, var context:
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, payloads: MutableList<Any>) {
         if(payloads.isEmpty()) {
-            Log.d("페이로드3", "asdf")
+            Log.d("페리로드니?", payloads.toString())
             super.onBindViewHolder(holder, position, payloads)
         } else {
             Log.d("페이로드2", "asdf")
             for(payload in payloads) {
                 var type: String = payload.toString()
-                Log.d("페이로드", type.toString())
-                if(type == "before") {
+                Log.d("페이로드before0", type)
+                if(type == "onRefresh") {
+                    holder.itemView.chat_time.visibility = View.INVISIBLE
+                    Log.d("페이로드before", type)
                 }
             }
         }
     }
-
 
     /* (2) 리스너 인터페이스 */
     interface OnItemClickListener {
@@ -108,7 +107,7 @@ class ChatRecyclerViewAdapter(var chatList: List<DocumentSnapshot>, var context:
     @SuppressLint("NotifyDataSetChanged")
     fun setData(chat: List<DocumentSnapshot>) {
         chatList = chat
-        /* 변경 알림 */
+
         notifyDataSetChanged()
     }
 
