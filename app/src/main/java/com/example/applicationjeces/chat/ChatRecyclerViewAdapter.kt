@@ -45,7 +45,9 @@ class ChatRecyclerViewAdapter(var chatList: List<DocumentSnapshot>, var context:
     /* Holder의 bind 메소드를 호출한다. 내용 입력 */
     /* getItemCount() 리턴값이 0일 경우 호출 안함 */
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        Log.d("페리로드니?", "ㅇㅇ")
+        /* 페이로드 사용 시 초기화 처리 */
+
+        Log.d("페이로드니?x", "ㅇㅇ")
         /* holder의 종류에 따라 bind */
         when(holder) {
             is leftHolder -> {
@@ -63,15 +65,15 @@ class ChatRecyclerViewAdapter(var chatList: List<DocumentSnapshot>, var context:
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, payloads: MutableList<Any>) {
         if(payloads.isEmpty()) {
-            Log.d("페리로드니?", payloads.toString())
+            Log.d("페이로드니?payload", payloads.toString())
             super.onBindViewHolder(holder, position, payloads)
         } else {
             Log.d("페이로드2", "asdf")
             for(payload in payloads) {
                 var type: String = payload.toString()
                 Log.d("페이로드before0", type)
-                if(type == "onRefresh") {
-                    holder.itemView.chat_time.visibility = View.INVISIBLE
+                if(type == "all") {
+//                    holder.itemView.chat_time.visibility = View.INVISIBLE
                     Log.d("페이로드before", type)
                 }
             }
@@ -91,6 +93,7 @@ class ChatRecyclerViewAdapter(var chatList: List<DocumentSnapshot>, var context:
     /* 리스트 아이템 개수 */
     override fun getItemCount(): Int {
         /* productList 사이즈를 리턴합니다. */
+        Log.d("페이로드니??SIZE", chatList.size.toString())
         return chatList.size
     }
 
@@ -107,8 +110,11 @@ class ChatRecyclerViewAdapter(var chatList: List<DocumentSnapshot>, var context:
     @SuppressLint("NotifyDataSetChanged")
     fun setData(chat: List<DocumentSnapshot>) {
         chatList = chat
-
-        notifyDataSetChanged()
+        Log.d("페이로드니??", itemCount.toString())
+        notifyItemRangeChanged(0, itemCount, "all")
+//        adapter.notifyItemChanged(adapter.itemCount - 2, "onRefresh")
+        /* 사용하기 편하지만 성능, 효율이 안좋음. */
+//        notifyDataSetChanged()
     }
 
     /* inner class로 viewHolder 정의. 레이아웃 내 view 연결

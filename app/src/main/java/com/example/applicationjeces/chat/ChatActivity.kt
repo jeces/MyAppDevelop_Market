@@ -62,36 +62,6 @@ class ChatActivity : AppCompatActivity() {
             chat_topic_name.text = yourId?.get(0).toString()
         }
 
-        /* 채팅 가져오기 */
-        productModel.getChat(chatroomidx.toString())
-
-        /* 뷰모델 연결 후 뷰모델 옵저버를 통해 불러옴 */
-        productModel.liveTodoChatData.observe(this) { chat ->
-
-            adapter.setData(chat)
-
-            /* 변경 알림 */
-            /* 말풍선 겹치기
-                *  말풍선 다르게 표시됨. 뒤에 말풍선은 그냥 꼬리표 없는 말풍선 다시 그리는거 payload됬을 때 말풍선도 변경, time 없애고, 이름없애고 */
-            /* onBindview payload 전달 */
-            /* https://rkdxowhd98.tistory.com/98
-            * https://taehyungk.github.io/posts/android-RecyclerView-DiffUtil/ */
-
-            Log.d("페이로드activity", "ㅇ")
-
-            /* 스크롤 제일 아래로 */
-            productModel.liveTodoChatData.value?.size?.let { recyclerView.smoothScrollToPosition(it.toInt()) }
-
-
-        }
-
-        /* 뒤로가기버튼 누를시 */
-        chat_back.setOnClickListener {
-            val intent: Intent = Intent(this, MainActivity::class.java)
-            MainActivity().getFragment(PageData.CHATROOM)
-            startActivity(intent)
-        }
-
         /* editText 변화 감지, 입력값있을 때 활성화 */
         chat_text.addTextChangedListener (object: TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -107,6 +77,34 @@ class ChatActivity : AppCompatActivity() {
 
             }
         })
+
+        /* 채팅 가져오기 */
+        productModel.getChat(chatroomidx.toString())
+
+        /* 뷰모델 연결 후 뷰모델 옵저버를 통해 불러옴 */
+        productModel.liveTodoChatData.observe(this) { chat ->
+
+            adapter.setData(chat)
+
+            /* 변경 알림 */
+            /* 말풍선 겹치기
+                *  말풍선 다르게 표시됨. 뒤에 말풍선은 그냥 꼬리표 없는 말풍선 다시 그리는거 payload됬을 때 말풍선도 변경, time 없애고, 이름없애고 */
+            /* onBindview payload 전달 */
+            /* https://rkdxowhd98.tistory.com/98
+            * https://taehyungk.github.io/posts/android-RecyclerView-DiffUtil/ */
+//            adapter.notifyItemChanged(adapter.itemCount - 2, "onRefresh")
+            Log.d("페이로드activity", "ㅇ")
+
+            /* 스크롤 제일 아래로 */
+            productModel.liveTodoChatData.value?.size?.let { recyclerView.smoothScrollToPosition(it.toInt()) }
+        }
+
+        /* 뒤로가기버튼 누를시 */
+        chat_back.setOnClickListener {
+            val intent: Intent = Intent(this, MainActivity::class.java)
+            MainActivity().getFragment(PageData.CHATROOM)
+            startActivity(intent)
+        }
 
         /* 메시지 보냄 */
         edit_send.setOnClickListener {
