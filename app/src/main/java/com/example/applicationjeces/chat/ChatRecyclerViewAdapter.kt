@@ -110,11 +110,11 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
         private val date: TextView = ItemView.findViewById(R.id.chat_time2)
         fun bind(item: ChatData, overLap: String) {
             if(overLap == "OverLap") {
-                Log.d("타임이같음", "dd")
+                Log.d("타임이같음0", "dd")
                 messageText.text = item.content
                 date.text = "시간같음"
             } else if(overLap == "NoOverLap") {
-                date.visibility = View.VISIBLE
+                Log.d("타임이같음1", "dd")
                 messageText.text = item.content
                 date.text = changeTime(item.time as com.google.firebase.Timestamp)
             }
