@@ -14,12 +14,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.applicationjeces.R
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.chat_left_item_list.view.*
-import kotlinx.android.synthetic.main.chatroom_item_list.view.*
-import kotlinx.android.synthetic.main.fragment_chat2.view.*
-import kotlinx.android.synthetic.main.product_item_list.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -56,11 +52,19 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
                 holder.bind(currentList[position])
             }
             is rightHolder -> {
-                holder.bind(currentList[position])
+                /* position은 0이상이 되어야 비교가 됨 */
+                if(position > 0) {
+                    if(changeTime(currentList[position].time).toString() == changeTime(currentList[position - 1].time).toString()) {
+                        Log.d("타임이같음", "${changeTime(currentList[position].time)} / ${changeTime(currentList[position - 1].time)}")
+                        holder.bind(currentList[position - 1], "OverLap")
+                    }
+                }
+                holder.bind(currentList[position], "NoOverLap")
             }
+
             /* 무슨 viewHolder인지 제대로 안정해줬으니까, as로 정해주기 */
             else -> {
-                (holder as rightHolder).bind(currentList[position])
+                (holder as rightHolder).bind(currentList[position], "OverLap")
             }
         }
     }
@@ -106,10 +110,15 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
     inner class rightHolder(ItemView: View): RecyclerView.ViewHolder(ItemView) {
         private val messageText: TextView = ItemView.findViewById(R.id.chat_message2)
         private val date: TextView = ItemView.findViewById(R.id.chat_time2)
-
-        fun bind(item: ChatData) {
-            messageText.text = item.content
-            date.text = changeTime(item.time as com.google.firebase.Timestamp)
+        fun bind(item: ChatData, overLap: String) {
+            if(overLap == "OverLap") {
+                Log.d("타임이같음", "dd")
+                messageText.text = item.content
+                date.text = ""
+            } else {
+                messageText.text = item.content
+                date.text = changeTime(item.time as com.google.firebase.Timestamp)
+            }
         }
     }
 
@@ -148,9 +157,6 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
         val diffUtil = object : DiffUtil.ItemCallback<ChatData>(){
             override fun areItemsTheSame(oldItem: ChatData, newItem: ChatData): Boolean {
                 Log.d("diffUtil123", (oldItem == newItem).toString())
-                if(oldItem == newItem) {
-
-                }
                 return oldItem == newItem
             }
 

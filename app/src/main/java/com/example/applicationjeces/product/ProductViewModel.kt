@@ -153,8 +153,7 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
                         document.getString("chatroomidx").toString(),
                         document.getString("content").toString(),
                         document.getString("myid").toString(),
-//                        document.getString("time").toString() as Timestamp
-                        Timestamp.now()
+                        document.getTimestamp("time") as Timestamp
                     )
                     listChat?.add(chatDatas)
                 }
