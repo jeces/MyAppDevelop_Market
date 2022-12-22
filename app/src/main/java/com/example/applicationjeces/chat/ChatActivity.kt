@@ -62,9 +62,13 @@ class ChatActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.setHasFixedSize(true)
 
+        /* 채팅 가져오기 */
+        productModel.getChat(chatroomidx.toString())
+
         /* editText 변화 감지, 입력값있을 때 활성화 */
         chat_text.addTextChangedListener (object: TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                Log.d("텍스트", "ㅇ")
 
             }
             /* editText 변경 시 실행 */
@@ -78,8 +82,7 @@ class ChatActivity : AppCompatActivity() {
             }
         })
 
-        /* 채팅 가져오기 */
-        productModel.getChat(chatroomidx.toString())
+
 
         /* ListAdapter 리사이클러뷰 채팅 */
         productModel.liveTodoChatDataList.observe(this) { chat ->
