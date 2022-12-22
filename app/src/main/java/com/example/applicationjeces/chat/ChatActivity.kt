@@ -78,14 +78,20 @@ class ChatActivity : AppCompatActivity() {
             }
         })
 
+        /* 채팅 가져오기 */
+        productModel.getChat(chatroomidx.toString())
+
+        /* ListAdapter 리사이클러뷰 채팅 */
         productModel.liveTodoChatDataList.observe(this) { chat ->
             chat?.let {
-                Log.d("listadapter임123", "activity")
+                /* 스크롤 제일 아래로 */
+                productModel.liveTodoChatDataList.value?.size?.let { recyclerView.smoothScrollToPosition(it.toInt()) }
+                /* 리스트 전달 */
                 adapter.submitList(chat.toMutableList())
             }
         }
-        /* 채팅 가져오기 */
-        productModel.getChat(chatroomidx.toString())
+
+
 
         /* 뒤로가기버튼 누를시 */
         chat_back.setOnClickListener {

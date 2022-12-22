@@ -22,10 +22,9 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     var liveTodoChatData = MutableLiveData<List<DocumentSnapshot>>()
     var liveTodoChatroomData = MutableLiveData<List<DocumentSnapshot>?>()
 
-//    private val _liveTodoChatDataList = MutableLiveData<MutableList<ChatData?>?>()
-//    var liveTodoChatDataList: LiveData<MutableList<ChatData?>?> = TODO()
-//        get() = _liveTodoChatDataList
-
+    /* 채팅 담을 리스트 */
+    val listChat : MutableList<ChatData> = mutableListOf()
+    /* 채팅 실시간 라이브 데이터 */
     val liveTodoChatDataList = MutableLiveData<List<ChatData>?>()
 
     var jecesfirestore: FirebaseFirestore? = null
@@ -109,6 +108,8 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
             .addOnSuccessListener {
                 // 성공할 경우
                 Log.w("CHAT 데이터 입력 성공", "Error getting documents")
+                listChat.add(chat)
+                liveTodoChatDataList.value = listChat
             }.addOnFailureListener { exception ->
                 // 실패할 경우
                 Log.w("CHAT 데이터 입력 실패", "Error getting documents")
@@ -144,7 +145,7 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     fun getChat(idx: String) {
         /* 데이터베이스 담기 */
         /* 이것도 response를 만들어서 해줘야하는 듯 */
-        val listChat : MutableList<ChatData> = mutableListOf()
+        listChat.clear()
         jecesfirestore!!.collection("Chat").whereEqualTo("chatroomidx", idx).orderBy("time", Query.Direction.ASCENDING).get().addOnCompleteListener { chat ->
             if(chat.isSuccessful) {
                 for(document in chat.result) {
