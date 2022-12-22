@@ -24,8 +24,9 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-/* 참고하기 */
-class ChatRecyclerViewAdapter(var chatList: List<DocumentSnapshot>, var context: Context, var thisUser: String): ListAdapter<ChatData, RecyclerView.ViewHolder>(diffUtil) {
+/* 참고하기
+* https://minoflower.tistory.com/36 */
+class ChatRecyclerViewAdapter(private var myId: String, var context: Context): ListAdapter<ChatData, RecyclerView.ViewHolder>(diffUtil) {
 
     private val db = FirebaseStorage.getInstance()
 
@@ -49,37 +50,17 @@ class ChatRecyclerViewAdapter(var chatList: List<DocumentSnapshot>, var context:
     /* Holder의 bind 메소드를 호출한다. 내용 입력 */
     /* getItemCount() 리턴값이 0일 경우 호출 안함 */
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        /* 페이로드 사용 시 초기화 처리 */
-
-        Log.d("페이로드니?x", "ㅇㅇ")
         /* holder의 종류에 따라 bind */
         when(holder) {
             is leftHolder -> {
-                holder.bind(chatList[position])
+                holder.bind(currentList[position])
             }
             is rightHolder -> {
-                holder.bind(chatList[position])
+                holder.bind(currentList[position])
             }
             /* 무슨 viewHolder인지 제대로 안정해줬으니까, as로 정해주기 */
             else -> {
-                (holder as rightHolder).bind(chatList[position])
-            }
-        }
-    }
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, payloads: MutableList<Any>) {
-        if(payloads.isEmpty()) {
-            Log.d("페이로드니?payload", payloads.toString())
-            super.onBindViewHolder(holder, position, payloads)
-        } else {
-            Log.d("페이로드2", "asdf")
-            for(payload in payloads) {
-                var type: String = payload.toString()
-                Log.d("페이로드before0", type)
-                if(type == "all") {
-//                    holder.itemView.chat_time.visibility = View.INVISIBLE
-                    Log.d("페이로드before", type)
-                }
+                (holder as rightHolder).bind(currentList[position])
             }
         }
     }
@@ -94,33 +75,34 @@ class ChatRecyclerViewAdapter(var chatList: List<DocumentSnapshot>, var context:
     }
     /* (4) setItemClickListener로 설정한 함수 실행 */
     private lateinit var itemClickListener : OnItemClickListener
+
     /* 리스트 아이템 개수 */
-    override fun getItemCount(): Int {
-        /* productList 사이즈를 리턴합니다. */
-        Log.d("페이로드니??SIZE", chatList.size.toString())
-        return chatList.size
-    }
+//    override fun getItemCount(): Int {
+//        /* productList 사이즈를 리턴합니다. */
+//        Log.d("페이로드니??SIZE", chatList.size.toString())
+//        return chatList.size
+//    }
 
     /* viewType을 return해서 이걸로 구분한다. */
     override fun getItemViewType(position: Int): Int {
         /* 각 자신과 상대방에 따라 viewType에 따라서 레이아웃을 다르게 해줌 */
-        return when(chatList[position].get("myid")) {
-            thisUser -> 2
+        return when(currentList[position].myid) {
+            myId -> 2
             else -> 1
         }
     }
 
-    /* 홈 전체 데이터 */
-    @SuppressLint("NotifyDataSetChanged")
-    fun setData(chat: List<DocumentSnapshot>) {
-        chatList = chat
-//        Log.d("페이로드니??", itemCount.toString())
-        /* 맨처음 안뿌려주고 화면이 변경 될때 뿌려줌(전체) */
-//        notifyItemRangeChanged(0, itemCount)
-//        adapter.notifyItemChanged(adapter.itemCount - 2, "onRefresh")
-        /* 사용하기 편하지만 성능, 효율이 안좋음. */
-//        notifyDataSetChanged()
-    }
+//    /* 홈 전체 데이터 */
+//    @SuppressLint("NotifyDataSetChanged")
+//    fun setData(chat: List<DocumentSnapshot>) {
+//        chatList = chat
+////        Log.d("페이로드니??", itemCount.toString())
+//        /* 맨처음 안뿌려주고 화면이 변경 될때 뿌려줌(전체) */
+////        notifyItemRangeChanged(0, itemCount)
+////        adapter.notifyItemChanged(adapter.itemCount - 2, "onRefresh")
+//        /* 사용하기 편하지만 성능, 효율이 안좋음. */
+////        notifyDataSetChanged()
+//    }
 
     /* inner class로 viewHolder 정의. 레이아웃 내 view 연결
     * 상대방 말풍선 */
@@ -130,11 +112,11 @@ class ChatRecyclerViewAdapter(var chatList: List<DocumentSnapshot>, var context:
         private val date: TextView = ItemView.findViewById(R.id.chat_time)
         private val img: ImageView = ItemView.findViewById(R.id.your_profile)
 
-        fun bind(item: DocumentSnapshot) {
-            myid.text = item.get("myid").toString()
-            messageText.text = item.get("content").toString()
-            date.text = changeTime(item.get("time") as com.google.firebase.Timestamp)
-            yourProfilImg(item.get("myid").toString(), img)
+        fun bind(item: ChatData) {
+            myid.text = item.myid
+            messageText.text = item.content
+            date.text = changeTime(item.time as com.google.firebase.Timestamp)
+            yourProfilImg(item.myid, img)
         }
     }
 
@@ -144,9 +126,9 @@ class ChatRecyclerViewAdapter(var chatList: List<DocumentSnapshot>, var context:
         private val messageText: TextView = ItemView.findViewById(R.id.chat_message2)
         private val date: TextView = ItemView.findViewById(R.id.chat_time2)
 
-        fun bind(item: DocumentSnapshot) {
-            messageText.text = item.get("content").toString()
-            date.text = changeTime(item.get("time") as com.google.firebase.Timestamp)
+        fun bind(item: ChatData) {
+            messageText.text = item.content
+            date.text = changeTime(item.time as com.google.firebase.Timestamp)
         }
     }
 

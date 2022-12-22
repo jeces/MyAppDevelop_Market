@@ -26,6 +26,7 @@ class ChatActivity : AppCompatActivity() {
     var chatroomidx : String? = null
     var chatroomYourId : String? = null
     var messageCheck : String? = null
+    var myId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,21 +42,25 @@ class ChatActivity : AppCompatActivity() {
         /* 뷰모델 초기화 */
         productModel = ViewModelProvider(this)[ProductViewModel::class.java]
 
-        val adapter = ChatRecyclerViewAdapter(emptyList(), this@ChatActivity, productModel.thisUser.toString())
+        /* 상대방 이름 가져와서 토픽 이름에 넣기 */
+        var yourId = chatroomYourId?.split(",")
+
+        if(yourId?.get(0).toString() == productModel.thisUser) {
+            chat_topic_name.text = yourId?.get(1).toString()
+            myId = yourId?.get(0)
+        } else {
+            chat_topic_name.text = yourId?.get(0).toString()
+            myId = yourId?.get(1)
+        }
+
+
+        val adapter = ChatRecyclerViewAdapter(myId.toString(), this@ChatActivity, )
 
         /* 어뎁터 가져옴 */
         val recyclerView: RecyclerView = findViewById(R.id.messageActivity_recyclerview)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.setHasFixedSize(true)
-
-        /* 상대방 이름 가져와서 토픽 이름에 넣기 */
-        var yourId = chatroomYourId?.split(",")
-        if(yourId?.get(0).toString() == productModel.thisUser) {
-            chat_topic_name.text = yourId?.get(1).toString()
-        } else {
-            chat_topic_name.text = yourId?.get(0).toString()
-        }
 
         /* editText 변화 감지, 입력값있을 때 활성화 */
         chat_text.addTextChangedListener (object: TextWatcher {
@@ -73,29 +78,10 @@ class ChatActivity : AppCompatActivity() {
             }
         })
 
-
-
-//        /* 뷰모델 연결 후 뷰모델 옵저버를 통해 불러옴 */
-//        productModel.liveTodoChatData.observe(this) { chat ->
-//
-//            /* 스크롤 제일 아래로 */
-//            productModel.liveTodoChatData.value?.size?.let { recyclerView.smoothScrollToPosition(it.toInt()) }
-//
-//            adapter.setData(chat)
-//
-//            /* 변경 알림 */
-//            /* 말풍선 겹치기
-//                *  말풍선 다르게 표시됨. 뒤에 말풍선은 그냥 꼬리표 없는 말풍선 다시 그리는거 payload됬을 때 말풍선도 변경, time 없애고, 이름없애고 */
-//            /* onBindview payload 전달 */
-//            /* https://rkdxowhd98.tistory.com/98
-//            * https://taehyungk.github.io/posts/android-RecyclerView-DiffUtil/ */
-////            adapter.notifyItemChanged(adapter.itemCount - 2, "onRefresh")
-//            Log.d("페이로드activity", "ㅇ")
-//        }
-
         productModel.liveTodoChatDataList.observe(this) { chat ->
             chat?.let {
-                adapter.submitList(chat)
+                Log.d("listadapter임123", "activity")
+                adapter.submitList(chat.toMutableList())
             }
         }
         /* 채팅 가져오기 */
