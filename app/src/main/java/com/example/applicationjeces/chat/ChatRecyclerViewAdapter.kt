@@ -1,6 +1,5 @@
 package com.example.applicationjeces.chat
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,7 +14,6 @@ import com.bumptech.glide.Glide
 import com.example.applicationjeces.R
 import com.google.firebase.Timestamp
 import com.google.firebase.storage.FirebaseStorage
-import kotlinx.android.synthetic.main.chat_left_item_list.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -53,6 +51,7 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
             }
             is rightHolder -> {
                 /* position은 0이상이 되어야 비교가 됨 */
+                Log.d("타임이같음포지션", position.toString())
                 if(position > 0) {
                     if(changeTime(currentList[position].time).toString() == changeTime(currentList[position - 1].time).toString()) {
                         Log.d("타임이같음", "${changeTime(currentList[position].time)} / ${changeTime(currentList[position - 1].time)}")
@@ -61,7 +60,6 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
                 }
                 holder.bind(currentList[position], "NoOverLap")
             }
-
             /* 무슨 viewHolder인지 제대로 안정해줬으니까, as로 정해주기 */
             else -> {
                 (holder as rightHolder).bind(currentList[position], "OverLap")
@@ -114,8 +112,9 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
             if(overLap == "OverLap") {
                 Log.d("타임이같음", "dd")
                 messageText.text = item.content
-                date.text = ""
-            } else {
+                date.text = "시간같음"
+            } else if(overLap == "NoOverLap") {
+                date.visibility = View.VISIBLE
                 messageText.text = item.content
                 date.text = changeTime(item.time as com.google.firebase.Timestamp)
             }
