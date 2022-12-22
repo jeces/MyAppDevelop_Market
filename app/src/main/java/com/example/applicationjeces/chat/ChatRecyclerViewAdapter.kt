@@ -76,13 +76,6 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
     /* (4) setItemClickListener로 설정한 함수 실행 */
     private lateinit var itemClickListener : OnItemClickListener
 
-    /* 리스트 아이템 개수 */
-//    override fun getItemCount(): Int {
-//        /* productList 사이즈를 리턴합니다. */
-//        Log.d("페이로드니??SIZE", chatList.size.toString())
-//        return chatList.size
-//    }
-
     /* viewType을 return해서 이걸로 구분한다. */
     override fun getItemViewType(position: Int): Int {
         /* 각 자신과 상대방에 따라 viewType에 따라서 레이아웃을 다르게 해줌 */
@@ -91,18 +84,6 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
             else -> 1
         }
     }
-
-//    /* 홈 전체 데이터 */
-//    @SuppressLint("NotifyDataSetChanged")
-//    fun setData(chat: List<DocumentSnapshot>) {
-//        chatList = chat
-////        Log.d("페이로드니??", itemCount.toString())
-//        /* 맨처음 안뿌려주고 화면이 변경 될때 뿌려줌(전체) */
-////        notifyItemRangeChanged(0, itemCount)
-////        adapter.notifyItemChanged(adapter.itemCount - 2, "onRefresh")
-//        /* 사용하기 편하지만 성능, 효율이 안좋음. */
-////        notifyDataSetChanged()
-//    }
 
     /* inner class로 viewHolder 정의. 레이아웃 내 view 연결
     * 상대방 말풍선 */
@@ -166,12 +147,15 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
     companion object{
         val diffUtil = object : DiffUtil.ItemCallback<ChatData>(){
             override fun areItemsTheSame(oldItem: ChatData, newItem: ChatData): Boolean {
-                Log.d("listadapter임123", "123")
+                Log.d("diffUtil123", (oldItem == newItem).toString())
+                if(oldItem == newItem) {
+
+                }
                 return oldItem == newItem
             }
 
             override fun areContentsTheSame(oldItem: ChatData, newItem: ChatData): Boolean {
-                Log.d("listadapter임123", "1234")
+                Log.d("diffUtil1234", (oldItem == newItem).toString())
                 return oldItem == newItem
             }
         }

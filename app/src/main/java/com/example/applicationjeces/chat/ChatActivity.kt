@@ -91,8 +91,6 @@ class ChatActivity : AppCompatActivity() {
             }
         }
 
-
-
         /* 뒤로가기버튼 누를시 */
         chat_back.setOnClickListener {
             val intent: Intent = Intent(this, MainActivity::class.java)
