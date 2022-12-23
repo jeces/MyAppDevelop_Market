@@ -8,5 +8,5 @@ data class ChatData(
     val content: String,
     val myid: String,
     val time: Timestamp,
-    val fronttimesame: Boolean
+    val fronttimesame: String
     )

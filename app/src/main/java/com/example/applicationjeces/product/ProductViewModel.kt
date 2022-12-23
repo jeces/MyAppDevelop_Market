@@ -160,7 +160,8 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
                         document.getString("chatroomidx").toString(),
                         document.getString("content").toString(),
                         document.getString("myid").toString(),
-                        document.getTimestamp("time") as Timestamp
+                        document.getTimestamp("time") as Timestamp,
+                        document.getBoolean("fronttimesame").toString()
                     )
                     listChat?.add(chatDatas)
                 }
@@ -246,10 +247,6 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
             liveTodoChatroomData.value = chat?.documents
         }
     }
-
-
-
-
 }
 
 

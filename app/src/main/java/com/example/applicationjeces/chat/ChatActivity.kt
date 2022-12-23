@@ -107,8 +107,8 @@ class ChatActivity : AppCompatActivity() {
         edit_send.setOnClickListener {
             /* 보낸 시간 */
             /* 여기서 시간비교해야함 바로 이전 데이터 가져와서 비교(id랑 시간이 같으면 처리 하지만 그사이에 상대방이 채팅을 칠 경우는 제외 해야함-바로이전데이터를 비교함)*/
-            productModel.lastChat(chatroomidx.toString(), productModel.thisUser.toString(), Timestamp.now())
-            val chat = ChatData(chatroomidx.toString(), chat_text.text.toString(), productModel.thisUser.toString(), Timestamp.now())
+            var frontTimeSame : String = productModel.lastChat(chatroomidx.toString(), productModel.thisUser.toString(), Timestamp.now()).toString()
+            val chat = ChatData(chatroomidx.toString(), chat_text.text.toString(), productModel.thisUser.toString(), Timestamp.now(), frontTimeSame)
             productModel.addChat(chat)
             chat_text.text.clear()
         }
