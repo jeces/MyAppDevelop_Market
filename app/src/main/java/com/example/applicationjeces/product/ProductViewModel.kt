@@ -128,6 +128,13 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
             }
         }
     }
+    /* 제일 마지막 데이터 가져오기 */
+    fun lastChat(chatroomidx: String, myid: String, time: Timestamp) : Boolean {
+        Log.d("라스트데이터", listChat.last().toString())
+        return listChat.last().time == time && listChat.last().myid == myid && listChat.last().chatroomidx == chatroomidx
+    }
+
+
 
     /* Chat 가져오기 */
     fun getChat2(idx: String) {
@@ -239,6 +246,10 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
             liveTodoChatroomData.value = chat?.documents
         }
     }
+
+
+
+
 }
 
 
