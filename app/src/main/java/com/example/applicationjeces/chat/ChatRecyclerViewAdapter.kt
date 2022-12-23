@@ -161,7 +161,6 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
             override fun areItemsTheSame(oldItem: ChatData, newItem: ChatData): Boolean {
                 return oldItem == newItem
             }
-
             override fun areContentsTheSame(oldItem: ChatData, newItem: ChatData): Boolean {
                 // User의 내용을 비교해서 같으면 true -> UI 변경 없음
                 // User의 내용을 비교해서 다르면 false -> UI 변경

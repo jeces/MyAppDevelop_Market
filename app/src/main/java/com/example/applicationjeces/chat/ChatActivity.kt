@@ -89,6 +89,10 @@ class ChatActivity : AppCompatActivity() {
             chat?.let {
                 /* 스크롤 제일 아래로 */
                 productModel.liveTodoChatDataList.value?.size?.let { recyclerView.smoothScrollToPosition(it.toInt()) }
+                /* 데이터 타임이 같으면 처리해줘야함 */
+                /* 데이터 안에 앞뒤 시간이 같으면 false라는 데이터를 넣어버려서 리사이클러뷰에 넣어주면 될듯?
+                *  데이터 insert 시 앞의 시간과 비교해서 같으면 false라고 데이터셋에 적어두고 bind할 때 하면 될듯?*/
+
                 /* 리스트 전달 */
                 adapter.submitList(chat.toMutableList())
             }
