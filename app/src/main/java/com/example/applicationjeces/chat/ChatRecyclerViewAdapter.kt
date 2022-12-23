@@ -51,16 +51,17 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
             }
             is rightHolder -> {
                 /* position은 0이상이 되어야 비교가 됨 */
-                Log.d("타임이같음포지션", position.toString())
+                Log.d("타임이같음포지션", "${position.toString()} / ${currentList[position]}")
                 if(position > 0) {
                     if(changeTime(currentList[position].time) == changeTime(currentList[position - 1].time)) {
                         Log.d("타임이같음", "${changeTime(currentList[position].time)} / ${changeTime(currentList[position - 1].time)}")
+                        /* 전에 포지션에 뿌려주는게 아님, 데이터를 들고있는거를 다시 맨마지막에 뿌려주는거임, 그래서 다시 찾아야함 전에 뷰를 다시 생성 해줘야함 */
                         holder.bind(currentList[position - 1], "OverLap")
                     } else {
-
+                        holder.bind(currentList[position], "NoOverLap")
                     }
                 }
-                holder.bind(currentList[position], "NoOverLap")
+
             }
             /* 무슨 viewHolder인지 제대로 안정해줬으니까, as로 정해주기 */
             else -> {
@@ -112,14 +113,10 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
         private val date: TextView = ItemView.findViewById(R.id.chat_time2)
         fun bind(item: ChatData, overLap: String) {
             if(overLap == "OverLap") {
-                messageText.text = null
-                date.text = null
                 Log.d("타임이같음0", "dd")
                 messageText.text = item.content
                 date.text = " "
             } else if(overLap == "NoOverLap") {
-                messageText.text = null
-                date.text = null
                 Log.d("타임이같음1", "dd")
                 messageText.text = item.content
                 date.text = changeTime(item.time as com.google.firebase.Timestamp)
@@ -160,13 +157,14 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
 
     companion object{
         val diffUtil = object : DiffUtil.ItemCallback<ChatData>(){
+            // User의 id를 비교해서 같으면 areContentsTheSame으로 이동(id 대신 data 클래스에 식별할 수 있는 변수 사용)
             override fun areItemsTheSame(oldItem: ChatData, newItem: ChatData): Boolean {
-                Log.d("diffUtil123", (oldItem == newItem).toString())
                 return oldItem == newItem
             }
 
             override fun areContentsTheSame(oldItem: ChatData, newItem: ChatData): Boolean {
-                Log.d("diffUtil1234", (oldItem == newItem).toString())
+                // User의 내용을 비교해서 같으면 true -> UI 변경 없음
+                // User의 내용을 비교해서 다르면 false -> UI 변경
                 return oldItem == newItem
             }
         }
