@@ -53,9 +53,11 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
                 /* position은 0이상이 되어야 비교가 됨 */
                 Log.d("타임이같음포지션", position.toString())
                 if(position > 0) {
-                    if(changeTime(currentList[position].time).toString() == changeTime(currentList[position - 1].time).toString()) {
+                    if(changeTime(currentList[position].time) == changeTime(currentList[position - 1].time)) {
                         Log.d("타임이같음", "${changeTime(currentList[position].time)} / ${changeTime(currentList[position - 1].time)}")
                         holder.bind(currentList[position - 1], "OverLap")
+                    } else {
+
                     }
                 }
                 holder.bind(currentList[position], "NoOverLap")
@@ -110,10 +112,14 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
         private val date: TextView = ItemView.findViewById(R.id.chat_time2)
         fun bind(item: ChatData, overLap: String) {
             if(overLap == "OverLap") {
+                messageText.text = null
+                date.text = null
                 Log.d("타임이같음0", "dd")
                 messageText.text = item.content
-                date.text = "시간같음"
+                date.text = " "
             } else if(overLap == "NoOverLap") {
+                messageText.text = null
+                date.text = null
                 Log.d("타임이같음1", "dd")
                 messageText.text = item.content
                 date.text = changeTime(item.time as com.google.firebase.Timestamp)
