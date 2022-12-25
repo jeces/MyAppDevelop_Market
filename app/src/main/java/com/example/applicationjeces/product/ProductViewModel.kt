@@ -11,6 +11,10 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 /* 뷰모델은 DB에 직접 접근하지 않아야함. Repository 에서 데이터 통신 */
 class ProductViewModel(application: Application): AndroidViewModel(application) {
@@ -107,6 +111,7 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         jecesfirestore!!.collection("Chat").add(chat)
             .addOnSuccessListener {
                 // 성공할 경우
+                Log.d("데이터순서", "인서트")
                 Log.w("CHAT 데이터 입력 성공", "Error getting documents")
                 listChat.add(chat)
                 liveTodoChatDataList.value = listChat
@@ -129,9 +134,38 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         }
     }
     /* 제일 마지막 데이터 가져오기 */
-    fun lastChat(chatroomidx: String, myid: String, time: Timestamp) : Boolean {
-        Log.d("라스트데이터", listChat.last().toString())
-        return listChat.last().time == time && listChat.last().myid == myid && listChat.last().chatroomidx == chatroomidx
+    fun lastChat(chatroomidx: String, myid: String, time: Timestamp) {
+        val dbRef = jecesfirestore!!.collection("Chat")
+        Log.d("라스트데이터", "123")
+        if(changeTime(listChat.last().time) == changeTime(time) && listChat.last().myid == myid && listChat.last().chatroomidx == chatroomidx && listChat.isNotEmpty()) {
+            Log.d("라스트데이터", "1234")
+            dbRef.whereEqualTo("chatroomidx", chatroomidx).orderBy("time", Query.Direction.DESCENDING).limit(2).get().addOnCompleteListener {
+                if(it.isSuccessful) {
+                    for(document in it.result) {
+                        Log.d("데이터순서", "라스트")
+                        Log.d("데이터순서", "${listChat.last().time} / ${document.getTimestamp("time").toString()}")
+                        if(document.getString("myid").toString() == myid && listChat.last().time != time) {
+                            Log.d("라스트데이터", document.toString())
+                            val update: MutableMap<String, Any> = HashMap()
+                            update["fronttimesame"] = "true"
+                            dbRef.document(document.id).set(update, SetOptions.merge())
+                        }
+                    }
+                }
+            }
+        } else {
+
+        }
+    }
+
+    /* 시간변환 */
+    fun changeTime(timestamp: Timestamp): String {
+        val mils = timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000
+//        val sf = SimpleDateFormat("yyyy년 MM월 dd일 HH:mm:ss", Locale.KOREA)
+        val sf = SimpleDateFormat("aa hh:mm", Locale.KOREA)
+        val nDate = Date(mils)
+        val date = sf.format(nDate).toString()
+        return date
     }
 
 
@@ -161,7 +195,7 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
                         document.getString("content").toString(),
                         document.getString("myid").toString(),
                         document.getTimestamp("time") as Timestamp,
-                        document.getBoolean("fronttimesame").toString()
+                        document.getString("fronttimesame").toString()
                     )
                     listChat?.add(chatDatas)
                 }
