@@ -35,6 +35,8 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     var thisUser: String? = null
     var position: Int = 0
 
+    var documentId : String? = null
+
     var imgList: ArrayList<String> = arrayListOf()
 
     init {
@@ -108,6 +110,7 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
 
     /* Chat comment 생성 */
     fun addChat(chat: ChatData) {
+
         jecesfirestore!!.collection("Chat").add(chat)
             .addOnSuccessListener {
                 // 성공할 경우
@@ -115,6 +118,7 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
                 Log.w("CHAT 데이터 입력 성공", "Error getting documents")
                 listChat.add(chat)
                 liveTodoChatDataList.value = listChat
+                documentId = it.id
             }.addOnFailureListener { exception ->
                 // 실패할 경우
                 Log.w("CHAT 데이터 입력 실패", "Error getting documents")
@@ -134,17 +138,17 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         }
     }
     /* 제일 마지막 데이터 가져오기 */
-    fun lastChat(chatroomidx: String, myid: String, time: Timestamp) {
+    fun lastChat(chat : ChatData) {
         val dbRef = jecesfirestore!!.collection("Chat")
         Log.d("라스트데이터", "123")
-        if(changeTime(listChat.last().time) == changeTime(time) && listChat.last().myid == myid && listChat.last().chatroomidx == chatroomidx && listChat.isNotEmpty()) {
+        if(changeTime(listChat.last().time) == changeTime(chat.time) && listChat.last().myid == chat.myid && listChat.last().chatroomidx == chat.chatroomidx && listChat.isNotEmpty()) {
             Log.d("라스트데이터", "1234")
-            dbRef.whereEqualTo("chatroomidx", chatroomidx).orderBy("time", Query.Direction.DESCENDING).limit(2).get().addOnCompleteListener {
+            dbRef.whereEqualTo("chatroomidx", chat.chatroomidx).orderBy("time", Query.Direction.DESCENDING).limit(2).get().addOnCompleteListener {
                 if(it.isSuccessful) {
                     for(document in it.result) {
-                        Log.d("데이터순서", "라스트")
+                        Log.d("데이터순서", "${document.id.equals(documentId)}")
                         Log.d("데이터순서", "${listChat.last().time} / ${document.getTimestamp("time").toString()}")
-                        if(document.getString("myid").toString() == myid && listChat.last().time != time) {
+                        if((document.getString("myid").toString() == chat.myid) && (document.id == documentId)) {
                             Log.d("라스트데이터", document.toString())
                             val update: MutableMap<String, Any> = HashMap()
                             update["fronttimesame"] = "true"
@@ -152,6 +156,10 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
                         }
                     }
                 }
+                /* 여기서 데이터 넣어서 업데이트 해주자
+                *  위쪽 리스트 다시보고 수정할 것 테스트 필요함
+                * */
+                addChat(chat)
             }
         } else {
 

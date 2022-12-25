@@ -108,10 +108,11 @@ class ChatActivity : AppCompatActivity() {
             /* 보낸 시간 */
             /* 여기서 시간비교해야함 바로 이전 데이터 가져와서 비교(id랑 시간이 같으면 처리 하지만 그사이에 상대방이 채팅을 칠 경우는 제외 해야함-바로이전데이터를 비교함)*/
             /* 여기서 리스트 널포인트 처리 */
-            productModel.lastChat(chatroomidx.toString(), productModel.thisUser.toString(), Timestamp.now()).toString()
-            /* 이전데이터를 바꿔야 함. 현재데이터는 false로 두고*/
             val chat = ChatData(chatroomidx.toString(), chat_text.text.toString(), productModel.thisUser.toString(), Timestamp.now(), "false")
-            productModel.addChat(chat)
+            productModel.lastChat(chat).toString()
+            /* 이전데이터를 바꿔야 함. 현재데이터는 false로 두고*/
+//
+//            productModel.addChat(chat)
             chat_text.text.clear()
         }
     }
