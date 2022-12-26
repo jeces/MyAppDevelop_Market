@@ -8,6 +8,7 @@ import com.example.applicationjeces.chat.ChatroomData
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
@@ -172,6 +173,7 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         val dbRef = jecesfirestore!!.collection("Chat")
         dbRef.whereEqualTo("chatroomidx", chat.chatroomidx).orderBy("time", Query.Direction.DESCENDING).limit(2).get().addOnCompleteListener {
             if(it.isSuccessful) {
+                Log.d("타임스템프", FieldValue.serverTimestamp().toString())
                 if(changeTime(listChat.last().time) == changeTime(chat.time) && listChat.last().myid == chat.myid && listChat.last().chatroomidx == chat.chatroomidx && listChat.isNotEmpty()) {
                     for(document in it.result) {
                         Log.d("데이터순서", "${document.id.equals(documentId)}")

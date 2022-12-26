@@ -110,6 +110,7 @@ class ChatActivity : AppCompatActivity() {
             /* 여기서 리스트 널포인트 처리 */
             val chat = ChatData(chatroomidx.toString(), chat_text.text.toString(), productModel.thisUser.toString(), Timestamp.now(), "false")
             productModel.lastChat(chat).toString()
+
             /* 이전데이터를 바꿔야 함. 현재데이터는 false로 두고*/
 //
 //            productModel.addChat(chat)
