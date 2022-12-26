@@ -169,6 +169,13 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
 
     /* 제일 마지막 데이터 가져오기 */
     fun lastChat(chat : ChatData) {
+        /* 비어있다면 비교할 필요 X */
+        Log.d("listChatsss", listChat.toString())
+        if(listChat.isEmpty()) {
+            addChat(chat)
+            return
+        }
+        /* 데이터가 하나라도 있다면 */
         val dbRef = jecesfirestore!!.collection("Chat")
         dbRef.whereEqualTo("chatroomidx", chat.chatroomidx).orderBy("time", Query.Direction.DESCENDING).limit(2).get().addOnCompleteListener {
             if(it.isSuccessful) {
