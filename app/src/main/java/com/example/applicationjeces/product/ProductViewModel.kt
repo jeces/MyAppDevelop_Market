@@ -186,8 +186,9 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
                         }
                     }
                 }
-                addChat(chat)
             }
+            Log.d("왜안들어가", "왜안들어가")
+            addChat(chat)
         }
     }
 
