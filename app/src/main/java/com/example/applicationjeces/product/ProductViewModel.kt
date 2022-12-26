@@ -8,7 +8,6 @@ import com.example.applicationjeces.chat.ChatroomData
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
@@ -139,7 +138,6 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     /* 제일 마지막 데이터 가져오기 */
     fun lastChat(chat : ChatData) {
         /* 비어있다면 비교할 필요 X */
-        Log.d("listChatsss", listChat.toString())
         if(listChat.isEmpty()) {
             addChat(chat)
             return
@@ -177,22 +175,21 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     /* Chat 가져오기 */
     fun getChat(idx: String) {
         /* 데이터베이스 담기 */
-        /* 이것도 response를 만들어서 해줘야하는 듯 */
-        Log.d("데이터머니?1", idx.toString())
         jecesfirestore!!.collection("Chat").document(idx).collection(idx).orderBy("time", Query.Direction.ASCENDING).addSnapshotListener { it, e ->
             if(e != null) {
                 return@addSnapshotListener
             }
             listChat.clear()
             for(document in it!!.documents) {
-                Log.d("데이터머니?1", document.toString())
                 val chatDatas = ChatData(
                     document.getString("chatroomidx").toString(),
                     document.getString("content").toString(),
                     document.getString("myid").toString(),
                     document.getTimestamp("time") as Timestamp,
-                    document.getString("fronttimesame").toString()
+                    document.getString("fronttimesame").toString(),
+                    document.getString("isread").toString()
                 )
+
                 listChat.add(chatDatas)
             }
             Log.d("데이터머니?1", listChat.toString())
@@ -245,8 +242,10 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
                     }
                 }
             }
+            Log.d("서치1", searchLiveTodoData.value.toString())
             searchLiveTodoData.value = response
         }
+        Log.d("서치2", searchLiveTodoData.value.toString())
         return searchLiveTodoData
     }
 
@@ -266,19 +265,63 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         productArrayList.add(productDetail)
     }
 
-    /* 상대방 이름 가져오기 */
-    fun getYourId(idx: String) {
-        /* 데이터베이스 담기 */
-        /* 이것도 response를 만들어서 해줘야하는 듯 */
-        jecesfirestore!!.collection("Chatroom").whereEqualTo("chatroomidx", idx).addSnapshotListener { chat, e ->
+//    /* 상대방 이름 가져오기 */
+//    fun getYourId(idx: String) {
+//        /* 데이터베이스 담기 */
+//        /* 이것도 response를 만들어서 해줘야하는 듯 */
+//        jecesfirestore!!.collection("Chatroom").whereEqualTo("chatroomidx", idx).addSnapshotListener { chat, e ->
+//            if(e != null) {
+//                return@addSnapshotListener
+//            }
+//            liveTodoChatroomData.value = chat?.documents
+//        }
+//    }
+
+//    /* 상대방 이름 가져오기 */
+//    fun getYourId(idx: String) : MutableLiveData<String> {
+//        /* 데이터베이스 담기 */
+//        /* 이것도 response를 만들어서 해줘야하는 듯 */
+//        val getYourIdLiveData = MutableLiveData<String>()
+//        jecesfirestore!!.collection("Chatroom").whereEqualTo("chatroomidx", idx).get().addOnCompleteListener { chat ->
+//            for (snapshot in chat.result) {
+//                /* 아이디 찾기 */
+//                var yourId : String = snapshot.getString("id")!!.split(",").toString()
+//                /* 상대방 아이디 검색 */
+//                if (yourId[0].toString() != thisUser) getYourIdLiveData.value = yourId[0].toString()
+//                else getYourIdLiveData.value = yourId[1].toString()
+//            }
+//            Log.d("데이터뭘까요?1", getYourIdLiveData.value.toString())
+//        }
+//        return getYourIdLiveData
+//    }
+
+    /* 보냈을 때 상대방이 채팅창에 있을 때 나타냄 */
+    fun isRead(yourId: String, idx: String) {
+        jecesfirestore!!.collection("UserInfo").whereEqualTo("id", yourId).addSnapshotListener { chat, e ->
             if(e != null) {
                 return@addSnapshotListener
             }
-            liveTodoChatroomData.value = chat?.documents
+            for(document in chat!!.documents) {
+                var checkRead: String = document.getString("whereUser").toString()
+                if(checkRead == "chat") {
+                    updateIsRead(idx)
+                }
+            }
+        }
+    }
+
+    /* 읽었다고 업데이트 해줌 */
+    private fun updateIsRead(idx: String) {
+        val dbRef = jecesfirestore!!.collection("Chat").document(idx).collection(idx)
+        dbRef.get().addOnCompleteListener() { chat ->
+            for(document in chat.result) {
+                Log.d("안들어오냐고", "ㅇㅇ")
+                val update: MutableMap<String, Any> = HashMap()
+                update["isread"] = "true"
+                dbRef.document(document.id).set(update, SetOptions.merge())
+            }
         }
     }
 }
-
-
 
 

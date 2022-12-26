@@ -27,6 +27,7 @@ class ChatActivity : AppCompatActivity() {
     var chatroomYourId : String? = null
     var messageCheck : String? = null
     var myId: String? = null
+    var yourId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,13 +44,16 @@ class ChatActivity : AppCompatActivity() {
         productModel = ViewModelProvider(this)[ProductViewModel::class.java]
 
         /* 상대방 이름 가져와서 토픽 이름에 넣기 */
-        var yourId = chatroomYourId?.split(",")
-        if(yourId?.get(0).toString() == productModel.thisUser) {
-            chat_topic_name.text = yourId?.get(1).toString()
-            myId = yourId?.get(0)
+        var Id = chatroomYourId?.split(",")
+        Log.d("아이디머냐", Id.toString())
+        if(Id?.get(0).toString() == productModel.thisUser) {
+            yourId = Id?.get(1).toString()
+            chat_topic_name.text = yourId
+            myId = Id?.get(0)
         } else {
-            chat_topic_name.text = yourId?.get(0).toString()
-            myId = yourId?.get(1)
+            yourId = Id?.get(0).toString()
+            chat_topic_name.text = yourId
+            myId = Id?.get(1)
         }
 
         /* 어뎁터 가져옴 */
@@ -83,7 +87,8 @@ class ChatActivity : AppCompatActivity() {
             chat?.let {
                 /* 스크롤 제일 아래로 */
                 productModel.liveTodoChatDataList.value?.size?.let { recyclerView.smoothScrollToPosition(it.toInt()) }
-
+                /* 읽었는지 체크 */
+                productModel.isRead(yourId!!, chatroomidx.toString())
                 /* 리스트 전달 */
                 adapter.submitList(chat.toMutableList())
             }
@@ -102,7 +107,10 @@ class ChatActivity : AppCompatActivity() {
             /* 여기서 시간비교해야함 바로 이전 데이터 가져와서 비교(id랑 시간이 같으면 처리 하지만 그사이에 상대방이 채팅을 칠 경우는 제외 해야함-바로이전데이터를 비교함) */
             /* 데이터 안에 앞뒤 시간이 같으면 false라는 데이터를 넣어버려서 리사이클러뷰에 넣어주면 될듯
                 *  데이터 insert 시 앞의 시간과 비교해서 같으면 true라고 데이터셋에 적어두고 bind */
-            val chat = ChatData(chatroomidx.toString(), chat_text.text.toString(), productModel.thisUser.toString(), Timestamp.now(), "false")
+
+            /* 상대방이 whereUser = "chat"이면 true 아니면 false를 isRead체크할 수 있는거 만들어줘야함 */
+
+            val chat = ChatData(chatroomidx.toString(), chat_text.text.toString(), productModel.thisUser.toString(), Timestamp.now(), "false", "false")
             productModel.lastChat(chat).toString()
             chat_text.text.clear()
         }
