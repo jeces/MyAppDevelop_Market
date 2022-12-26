@@ -81,15 +81,31 @@ class ChatroomRecyclerViewAdapter(var chatRoomList: List<DocumentSnapshot>, var 
         private val lastcomment: TextView = ItemView.findViewById(R.id.chat_lastchat)
         private val time: TextView = ItemView.findViewById(R.id.chatroom_time)
         private val chatroomUserImg: ImageView = ItemView.findViewById(R.id.chat_item_imageview)
+        private val chatroomCount: TextView = ItemView.findViewById(R.id.chatroom_read)
 
         fun bind(item: DocumentSnapshot) {
-            var yourId = item.get("id").toString().split(",")
-            if(myId == yourId[0]) {
-                chatroomYourId.text = yourId[1]
-                yourChatroomProfilImg(yourId[1], chatroomUserImg)
+            val Id = item.get("id").toString().split(",")
+            val readN0 = item.getString("n0").toString().split("/")
+            val readN1 = item.getString("n1").toString().split("/")
+            if(myId == Id[0]) {
+                if(readN0[0] == Id[0]) chatroomCount.text = readN0[1]
+                else if(readN1[0] == Id[0]) chatroomCount.text = readN1[1]
+
+                chatroomYourId.text = Id[1]
+                yourChatroomProfilImg(Id[1], chatroomUserImg)
             } else {
-                chatroomYourId.text = yourId[0]
-                yourChatroomProfilImg(yourId[0], chatroomUserImg)
+                if(readN0[0] == Id[0]) {
+                    Log.d("안들어오냐고12", "ㅇㅇ${readN0[1]}")
+                    chatroomCount.text = readN0[1]
+
+                }
+                else if(readN1[0] == Id[0]) {
+                    chatroomCount.text = readN1[1]
+                }
+
+                chatroomCount.text = item.get("readnot${Id[1]}").toString()
+                chatroomYourId.text = Id[0]
+                yourChatroomProfilImg(Id[0], chatroomUserImg)
             }
             lastcomment.text = item.get("lastcomment").toString()
             time.text = changeTime(item.get("time") as com.google.firebase.Timestamp)

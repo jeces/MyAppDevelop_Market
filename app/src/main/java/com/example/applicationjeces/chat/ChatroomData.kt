@@ -4,5 +4,5 @@ data class ChatroomData(
     val idx : String,
     val lastComment: String,
     val yourImg: String,
-    val yourid: String
+    val yourid: String,
     )
