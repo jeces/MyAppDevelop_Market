@@ -111,7 +111,6 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
 
     /* Chat comment 생성 */
     fun addChat(chat: ChatData) {
-
         jecesfirestore!!.collection("Chat").add(chat)
             .addOnSuccessListener {
                 // 성공할 경우
@@ -173,23 +172,16 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         val dbRef = jecesfirestore!!.collection("Chat")
         dbRef.whereEqualTo("chatroomidx", chat.chatroomidx).orderBy("time", Query.Direction.DESCENDING).limit(2).get().addOnCompleteListener {
             if(it.isSuccessful) {
-                Log.d("타임스템프", FieldValue.serverTimestamp().toString())
                 if(changeTime(listChat.last().time) == changeTime(chat.time) && listChat.last().myid == chat.myid && listChat.last().chatroomidx == chat.chatroomidx && listChat.isNotEmpty()) {
                     for(document in it.result) {
-                        Log.d("데이터순서", "${document.id.equals(documentId)}")
-                        Log.d("데이터순서", "${listChat.last().time} / ${document.getTimestamp("time").toString()}")
                         if((document.getString("myid").toString() == chat.myid) && (document.id == documentId)) {
-                            Log.d("라스트데이터", document.toString())
                             val update: MutableMap<String, Any> = HashMap()
                             update["fronttimesame"] = "true"
                             dbRef.document(document.id).set(update, SetOptions.merge())
-                            /* 업데이트는 됬는데
-                            *  listdata 업데이트가 안되었음 이걸 바꿔줘야함 */
                         }
                     }
                 }
             }
-            Log.d("왜안들어가", "왜안들어가")
             addChat(chat)
         }
     }
@@ -222,13 +214,14 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     fun getChat(idx: String) {
         /* 데이터베이스 담기 */
         /* 이것도 response를 만들어서 해줘야하는 듯 */
-        listChat.clear()
+
         jecesfirestore!!.collection("Chat").whereEqualTo("chatroomidx", idx).orderBy("time", Query.Direction.ASCENDING).addSnapshotListener { it, e ->
             if(e != null) {
                 return@addSnapshotListener
             }
+            listChat.clear()
             for(document in it!!.documents) {
-                Log.d("데이터머니?1", document.getString("content").toString())
+                Log.d("데이터머니?1", document.toString())
                 val chatDatas = ChatData(
                         document.getString("chatroomidx").toString(),
                         document.getString("content").toString(),
@@ -237,27 +230,9 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
                         document.getString("fronttimesame").toString()
                 )
                 listChat.add(chatDatas)
-                Log.d("데이터머니?2", listChat.toString())
             }
-            Log.d("데이터머니?3", listChat.toString())
             liveTodoChatDataList.value = listChat
         }
-//        liveTodoChatDataList.value = listChat
-//        jecesfirestore!!.collection("Chat").whereEqualTo("chatroomidx", idx).orderBy("time", Query.Direction.ASCENDING).get().addOnCompleteListener { chat ->
-//            if(chat.isSuccessful) {
-//                for(document in chat.result) {
-//                    val chatDatas = ChatData(
-//                        document.getString("chatroomidx").toString(),
-//                        document.getString("content").toString(),
-//                        document.getString("myid").toString(),
-//                        document.getTimestamp("time") as Timestamp,
-//                        document.getString("fronttimesame").toString()
-//                    )
-//                    listChat?.add(chatDatas)
-//                }
-//            }
-//            liveTodoChatDataList.value = listChat
-//        }
     }
 
     /* firebase Product 입력 */

@@ -44,7 +44,6 @@ class ChatActivity : AppCompatActivity() {
 
         /* 상대방 이름 가져와서 토픽 이름에 넣기 */
         var yourId = chatroomYourId?.split(",")
-
         if(yourId?.get(0).toString() == productModel.thisUser) {
             chat_topic_name.text = yourId?.get(1).toString()
             myId = yourId?.get(0)
@@ -53,10 +52,8 @@ class ChatActivity : AppCompatActivity() {
             myId = yourId?.get(1)
         }
 
-
-        val adapter = ChatRecyclerViewAdapter(myId.toString(), this@ChatActivity, )
-
         /* 어뎁터 가져옴 */
+        val adapter = ChatRecyclerViewAdapter(myId.toString(), this@ChatActivity)
         val recyclerView: RecyclerView = findViewById(R.id.messageActivity_recyclerview)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -68,7 +65,6 @@ class ChatActivity : AppCompatActivity() {
         /* editText 변화 감지, 입력값있을 때 활성화 */
         chat_text.addTextChangedListener (object: TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                Log.d("텍스트", "ㅇ")
 
             }
             /* editText 변경 시 실행 */
@@ -82,9 +78,7 @@ class ChatActivity : AppCompatActivity() {
             }
         })
 
-
-
-        /* ListAdapter 리사이클러뷰 채팅 */
+        /* ListAdapter 리사이클러뷰 채팅 보여주기 */
         productModel.liveTodoChatDataList.observe(this) { chat ->
             chat?.let {
                 /* 스크롤 제일 아래로 */
@@ -99,21 +93,17 @@ class ChatActivity : AppCompatActivity() {
         /* 뒤로가기버튼 누를시 */
         chat_back.setOnClickListener {
             val intent: Intent = Intent(this, MainActivity::class.java)
-            MainActivity().getFragment(PageData.CHATROOM)
+            MainActivity().changeFragment(PageData.CHATROOM)
             startActivity(intent)
         }
 
         /* 메시지 보냄 */
         edit_send.setOnClickListener {
             /* 보낸 시간 */
-            /* 여기서 시간비교해야함 바로 이전 데이터 가져와서 비교(id랑 시간이 같으면 처리 하지만 그사이에 상대방이 채팅을 칠 경우는 제외 해야함-바로이전데이터를 비교함)*/
+            /* 여기서 시간비교해야함 바로 이전 데이터 가져와서 비교(id랑 시간이 같으면 처리 하지만 그사이에 상대방이 채팅을 칠 경우는 제외 해야함-바로이전데이터를 비교함) */
             /* 여기서 리스트 널포인트 처리 */
             val chat = ChatData(chatroomidx.toString(), chat_text.text.toString(), productModel.thisUser.toString(), Timestamp.now(), "false")
             productModel.lastChat(chat).toString()
-
-            /* 이전데이터를 바꿔야 함. 현재데이터는 false로 두고*/
-//
-//            productModel.addChat(chat)
             chat_text.text.clear()
         }
     }
