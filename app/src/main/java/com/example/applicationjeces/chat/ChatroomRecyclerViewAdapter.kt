@@ -95,15 +95,11 @@ class ChatroomRecyclerViewAdapter(var chatRoomList: List<DocumentSnapshot>, var 
                 yourChatroomProfilImg(Id[1], chatroomUserImg)
             } else {
                 if(readN0[0] == Id[0]) {
-                    Log.d("안들어오냐고12", "ㅇㅇ${readN0[1]}")
                     chatroomCount.text = readN0[1]
-
                 }
                 else if(readN1[0] == Id[0]) {
                     chatroomCount.text = readN1[1]
                 }
-
-                chatroomCount.text = item.get("readnot${Id[1]}").toString()
                 chatroomYourId.text = Id[0]
                 yourChatroomProfilImg(Id[0], chatroomUserImg)
             }
