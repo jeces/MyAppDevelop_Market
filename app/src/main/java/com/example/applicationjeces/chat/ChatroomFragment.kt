@@ -58,6 +58,9 @@ class ChatroomFragment : Fragment() {
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
+        /* 채팅룸 가져오기 */
+        productViewModel.allChatroom()
+
         /* 뷰모델 연결 후 뷰모델 옵저버를 통해 불러옴 */
         productViewModel.liveTodoChatroomData.observe(viewLifecycleOwner, Observer { chatroom ->
             Log.d("방만들어짐?", "dd")
@@ -69,8 +72,13 @@ class ChatroomFragment : Fragment() {
             override fun onClick(v: View, position: Int) {
                 val productModel: ProductViewModel by activityViewModels()
 //                productModel.liveTodoChatroomData.value?.get(position).toString()
-                productModel.setChatDetail(adapter.chatRoomList[position].get("chatidx").toString(), adapter.chatRoomList[position].get("lastcomment").toString(), adapter.chatRoomList[position].get("myid").toString()
-                    , adapter.chatRoomList[position].get("yourid").toString(), position)
+//                productModel.setChatDetail(
+//                    adapter.chatRoomList[position].get("chatidx").toString(),
+//                    adapter.chatRoomList[position].get("lastcomment").toString(),
+//                    adapter.chatRoomList[position].get("myid").toString(),
+//                    adapter.chatRoomList[position].get("yourid").toString(),
+//                    position
+//                )
 
                 /* 화면 띄움*/
                 /* 프라그먼트에서 프라그먼트로 제어가 불가능하기 때문에 상위 액티비티에서 제어 해주어야 한다. */

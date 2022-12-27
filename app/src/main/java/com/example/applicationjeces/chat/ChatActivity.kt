@@ -94,6 +94,11 @@ class ChatActivity : AppCompatActivity() {
             }
         }
 
+        /* 채팅창에 들어온 순간 상대방 채팅을 다 읽어야 됨 */
+        productModel.readChatAll(chatroomidx.toString(), yourId.toString())
+        /* 나의 위치 변경 */
+        productModel.whereMyUser("chat")
+
         /* 뒤로가기버튼 누를시 */
         chat_back.setOnClickListener {
             val intent: Intent = Intent(this, MainActivity::class.java)
@@ -113,6 +118,9 @@ class ChatActivity : AppCompatActivity() {
             val chat = ChatData(chatroomidx.toString(), chat_text.text.toString(), productModel.thisUser.toString(), Timestamp.now(), "false", "false")
             productModel.lastChat(chat).toString()
             chat_text.text.clear()
+
+            /* 채팅 카운트를 업데이트 함 */
+            productModel.updateChatCount(chatroomidx.toString(), yourId.toString())
         }
     }
 }

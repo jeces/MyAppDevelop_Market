@@ -41,14 +41,12 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     init {
         /* firebase 연동 */
         jecesfirestore = FirebaseFirestore.getInstance()
-
         /* 현재 로그인 아이디 */
         thisUser = FirebaseAuth.getInstance().currentUser?.email.toString()
 
         /* firebase product 전체 가져오기 */
         /* https://velog.io/@nagosooo/%EC%95%88%EB%93%9C%EB%A1%9C%EC%9D%B4%EB%93%9C-TodoList%EC%95%B1-%EB%A7%8C%EB%93%A4%EA%B8%B0 */
         allProduct()
-        allChatroom()
     }
 
     /* firebase storage에서 이미지 가져오기 */
@@ -69,6 +67,41 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
             }
             imgList
         }
+    }
+    /* 전체 채팅 수 가져오기 n0, n1 가져와야함 */
+    /* 채팅창을 칠때마다 실행하는 함수
+    *  내채팅칠때 카운트도 해줘야함
+    *  1. [채팅을 보낼 때 상대방이 채팅창에 있으면 readcount를 0으로 바꿔주고 없으면 계속 보낼때마다 카운트를 수정해주면 됨]
+    *  2. 채팅창에 들어오는 순간 다 읽어짐 => 모두 isread true로 바꾸고 readcount 0으로 해주면 됨
+    *
+    *  아래 다시 수정할 것
+    * */
+    fun updateChatCount(idx: String, yourId: String) {
+        jecesfirestore!!.collection("UserInfo").whereEqualTo("id", yourId).addSnapshotListener { chat, e ->
+
+        }
+
+
+
+//        var count: Int = 0
+//        jecesfirestore!!.collection("Chat").document(idx).collection(idx).whereEqualTo("isread", false).whereEqualTo("myid", yourId).get().addOnCompleteListener { chat ->
+//            for(document in chat.result) {
+//                count++
+//            }
+//            val dbRef = jecesfirestore!!.collection("Chatroom")
+//            dbRef.whereEqualTo("chatidx", idx).get().addOnCompleteListener { chatroom ->
+//                if(chatroom.isSuccessful) {
+//                    for(document in chatroom.result) {
+//                        if(document.getString("n0") == thisUser) {
+//
+//                        }
+//                    }
+//                }
+//
+//            }
+//
+//        }
+
     }
 
     /* 자신의 채팅목록 전체 가져오기 */
@@ -250,10 +283,10 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
 
     /* 채팅 디테일 데이터를 가지고 있는 데이터 */
     fun setChatDetail(chatidx: String, lastcomment: String, myid: String, yourid: String, getPosition: Int) {
-        chatArrayList.clear()
-        val chatDetail = ChatroomData(chatidx, lastcomment, myid, yourid)
-        position = getPosition
-        chatArrayList.add(chatDetail)
+//        chatArrayList.clear()
+//        val chatDetail = ChatroomData(chatidx, lastcomment, myid, yourid)
+//        position = getPosition
+//        chatArrayList.add(chatDetail)
     }
 
     /* 제품 디테일 데이터를 가지고 있는 데이터 */
@@ -314,9 +347,32 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         val dbRef = jecesfirestore!!.collection("Chat").document(idx).collection(idx)
         dbRef.get().addOnCompleteListener() { chat ->
             for(document in chat.result) {
-                Log.d("안들어오냐고", "ㅇㅇ")
                 val update: MutableMap<String, Any> = HashMap()
                 update["isread"] = "true"
+                dbRef.document(document.id).set(update, SetOptions.merge())
+            }
+        }
+    }
+
+    /* 상대방 채팅 모두 읽음(내가 채팅방에 들어감) */
+    fun readChatAll(idx: String, yourId: String) {
+        val dbRef = jecesfirestore!!.collection("Chat")
+        dbRef.document(idx).collection(idx).whereEqualTo("myid", yourId).get().addOnCompleteListener { chat ->
+            for(document in chat.result) {
+                val update: MutableMap<String, Any> = HashMap()
+                update["isread"] = "true"
+                dbRef.document(document.id).set(update, SetOptions.merge())
+            }
+        }
+    }
+
+    /* 나의 위치 이동 */
+    fun whereMyUser(where : String) {
+        val dbRef = jecesfirestore!!.collection("UserInfo")
+        dbRef.whereEqualTo("id", thisUser).get().addOnCompleteListener { chat ->
+            for(document in chat.result) {
+                val update: MutableMap<String, Any> = HashMap()
+                update["whereUser"] = where
                 dbRef.document(document.id).set(update, SetOptions.merge())
             }
         }
