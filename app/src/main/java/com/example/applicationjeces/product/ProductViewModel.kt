@@ -38,6 +38,8 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
 
     var imgList: ArrayList<String> = arrayListOf()
 
+    var whereUser: String? = null
+
     init {
         /* firebase 연동 */
         jecesfirestore = FirebaseFirestore.getInstance()
@@ -76,9 +78,18 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     *
     *  아래 다시 수정할 것
     * */
+
     fun updateChatCount(idx: String, yourId: String) {
         jecesfirestore!!.collection("UserInfo").whereEqualTo("id", yourId).addSnapshotListener { chat, e ->
+            if (e != null) {
+                return@addSnapshotListener
+            }
+            for(document in chat!!.documents) {
+                whereUser = document.getString("whereUser").toString()
+            }
+            if(whereUser == "chat") {
 
+            }
         }
 
 
