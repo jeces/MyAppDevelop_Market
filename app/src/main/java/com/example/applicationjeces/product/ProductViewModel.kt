@@ -77,7 +77,7 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     *  2. 채팅창에 들어오는 순간 다 읽어짐 => 모두 isread true로 바꾸고 readcount 0으로 해주면 됨
     *
     *  아래 다시 수정할 것
-    * */
+    * * */
 
     fun updateChatCount(idx: String, yourId: String) {
         jecesfirestore!!.collection("UserInfo").whereEqualTo("id", yourId).addSnapshotListener { chat, e ->
