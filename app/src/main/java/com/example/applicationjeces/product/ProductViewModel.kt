@@ -223,7 +223,6 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
             }
             addChat(chat, idx, yourId)
         }
-        addChat(chat, idx, yourId)
     }
 
     /* 시간변환 */

@@ -88,10 +88,14 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
         private val img: ImageView = ItemView.findViewById(R.id.your_profile)
 
         fun bind(item: ChatData) {
-            myid.text = item.myid
+            if(item.fronttimesame == "true") {
+
+            } else {
+                myid.text = item.myid
+                yourProfilImg(item.myid, img)
+                date.text = changeTime(item.time as com.google.firebase.Timestamp)
+            }
             messageText.text = item.content
-            date.text = changeTime(item.time as com.google.firebase.Timestamp)
-            yourProfilImg(item.myid, img)
         }
     }
 
@@ -103,20 +107,17 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
         private val isRead: TextView = ItemView.findViewById(R.id.isRead)
         fun bind(item: ChatData) {
             if(item.fronttimesame == "true") {
-                Log.d("타임이같음0", "${item.isread}/${item.fronttimesame}")
-                messageText.text = item.content
-                date.text = " "
+//                date.text = " "
                 if(item.isread == "true")
-                    isRead.text = ""
+//                    isRead.text = ""
                 else isRead.text = "1"
             } else {
-                Log.d("타임이같음1", "${item.isread}/${item.fronttimesame}")
-                messageText.text = item.content
                 date.text = changeTime(item.time as com.google.firebase.Timestamp)
                 if(item.isread == "true")
-                    isRead.text = ""
+//                    isRead.text = ""
                 else isRead.text = "1"
             }
+            messageText.text = item.content
         }
     }
 

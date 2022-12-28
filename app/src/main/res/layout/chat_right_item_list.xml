@@ -37,14 +37,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
-                    android:text="1"
                     android:textSize="10sp" />
                 <TextView
                     android:id="@+id/chat_time2"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="bottom"
-                    android:text="시간"
                     android:textSize="10sp" />
 
 
@@ -56,7 +54,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
-                android:text="메세지"
                 android:background="@drawable/rightbubble"
                 android:textColor="#000000" />
         </LinearLayout>

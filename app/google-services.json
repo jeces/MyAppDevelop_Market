@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "344731144875",
-    "project_id": "myproject-82dd7",
-    "storage_bucket": "myproject-82dd7.appspot.com"
+    "project_number": "454462334736",
+    "project_id": "study-ec5a3",
+    "storage_bucket": "study-ec5a3.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:344731144875:android:cd0ebc915a1bb4689c1dee",
+        "mobilesdk_app_id": "1:454462334736:android:256f04610d7c6effe72795",
         "android_client_info": {
           "package_name": "com.example.applicationjeces"
         }
       },
       "oauth_client": [
         {
-          "client_id": "344731144875-68cj65264uaabd9m7sf21aq6nc62dkk5.apps.googleusercontent.com",
+          "client_id": "454462334736-7cba9kjb8cmt8tg5am283v4rg00jhn2g.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB6DuEP643hXv5Sz4PjcUPN3VmivV-eMM4"
+          "current_key": "AIzaSyCB2L5UT5pTh41q7PWqE7vE6AQVutvwAiI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "344731144875-68cj65264uaabd9m7sf21aq6nc62dkk5.apps.googleusercontent.com",
+              "client_id": "454462334736-7cba9kjb8cmt8tg5am283v4rg00jhn2g.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

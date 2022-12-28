@@ -32,7 +32,6 @@
                 android:id="@+id/chat_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="이름"
                 android:textColor="#000000"
                 android:textStyle="bold" />
             <LinearLayout
@@ -45,14 +44,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
                     android:background="@drawable/leftbubble"
-                    android:text="메세지"
                     android:textColor="#000000" />
                 <TextView
                     android:id="@+id/chat_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:text="시간"
                     android:textSize="10sp" />
             </LinearLayout>
         </LinearLayout>
