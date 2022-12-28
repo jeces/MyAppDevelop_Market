@@ -103,14 +103,14 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
         private val isRead: TextView = ItemView.findViewById(R.id.isRead)
         fun bind(item: ChatData) {
             if(item.fronttimesame == "true") {
-                Log.d("타임이같음0", item.isread)
+                Log.d("타임이같음0", "${item.isread}/${item.fronttimesame}")
                 messageText.text = item.content
                 date.text = " "
                 if(item.isread == "true")
                     isRead.text = ""
                 else isRead.text = "1"
             } else {
-                Log.d("타임이같음1", item.isread)
+                Log.d("타임이같음1", "${item.isread}/${item.fronttimesame}")
                 messageText.text = item.content
                 date.text = changeTime(item.time as com.google.firebase.Timestamp)
                 if(item.isread == "true")

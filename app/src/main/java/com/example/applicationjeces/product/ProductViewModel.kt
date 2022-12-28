@@ -22,13 +22,13 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     /* 각종 라이브데이터 DocumentSnapshot은 firestore와 연결되어있어서 firestore가 변경되면 변경됨 하지만 다른것들은 바꿔줘야함. Snapshot으로 최대한 뽑아보자 */
     var liveTodoData = MutableLiveData<List<DocumentSnapshot>>()
     var productArrayList: MutableList<Product> = ArrayList()
-    var chatArrayList: MutableList<ChatroomData> = ArrayList()
+//    var chatArrayList: MutableList<ChatroomData> = ArrayList()
     var liveTodoChatroomData = MutableLiveData<List<DocumentSnapshot>?>()
 
     /* 채팅 담을 리스트 */
     val listChat : MutableList<ChatData> = mutableListOf()
     /* 채팅 실시간 라이브 데이터 */
-    val liveTodoChatDataList = MutableLiveData<List<ChatData>?>()
+    var liveTodoChatDataList = MutableLiveData<List<ChatData>?>()
 
     var jecesfirestore: FirebaseFirestore? = null
     var thisUser: String? = null
@@ -104,9 +104,9 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
                                 var n1 = document.getString("n1").toString().split("/")
                                 val update: MutableMap<String, Any> = HashMap()
                                 if(n0[0] == thisUser) {
-                                    update["n0"] = "${n0[0]}/0"
-                                } else {
                                     update["n1"] = "${n1[0]}/0"
+                                } else {
+                                    update["n0"] = "${n0[0]}/0"
                                 }
                                 dbRef.document(document.id).set(update, SetOptions.merge())
                             }
@@ -117,14 +117,15 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
                 else {
                     dbRef.whereEqualTo("chatidx", idx).get().addOnCompleteListener { chat ->
                         if(chat.isSuccessful) {
+                            /* 아이디/0 아이디[나]가 상대방의 말을 안읽은 카운트임 */
                             for(document in chat.result) {
                                 var n0 = document.getString("n0").toString().split("/")
                                 var n1 = document.getString("n1").toString().split("/")
                                 val update: MutableMap<String, Any> = HashMap()
-                                if(n0[0] == thisUser) {
-                                    update["n0"] = "${n0[0]}/${n0[1] + 1}"
+                                if(n0[0] == thisUser.toString()) {
+                                    update["n1"] = "${n1[0]}/${n1[1].toInt().plus(1)}"
                                 } else {
-                                    update["n0"] = "${n1[0]}/${n1[1] + 1}"
+                                    update["n0"] = "${n0[0]}/${n0[1].toInt().plus(1)}"
                                 }
                                 dbRef.document(document.id).set(update, SetOptions.merge())
                             }
@@ -143,12 +144,10 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
             }
             val response = Response()
             for(snapshot in chatrooms!!.documents) {
-                Log.d("아이디", thisUser.toString())
                 if(snapshot.getString("id")!!.contains(thisUser.toString())) {
                     snapshot?.let {
                         if(response.products == null) {
                             response.products = listOf(it)
-
                         } else {
                             response.products = response.products?.plus(listOf(it))
                         }
@@ -156,7 +155,6 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
                 }
             }
             liveTodoChatroomData.value = response.products
-            Log.d("데이터뭐니?", liveTodoChatroomData.value.toString())
         }
     }
 
@@ -172,16 +170,17 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
 
     /* Chat comment 생성 */
     fun addChat(chat: ChatData, idx: String, yourId: String) {
-        jecesfirestore!!.collection("Chat").document(chat.chatroomidx).collection(chat.chatroomidx).add(chat)
+        Log.d("여기 안들어옴", "ㅇㅇ")
+        jecesfirestore!!.collection("Chat").document(idx).collection(idx).add(chat)
             .addOnSuccessListener {
                 /* 성공 */
-                documentId = it.id
+                Log.d("데이터 입력 성공", "ㅇㅇ")
                 updateChatCount(idx, yourId)
+                
             }.addOnFailureListener { exception ->
                 /* 실패 */
                 Log.w("CHAT 데이터 입력 실패", "Error getting documents")
             }
-
 
         /* 채팅방 리스트의 내용을 다시 보여주려면 수정 */
         val dbRef = jecesfirestore!!.collection("Chatroom")
@@ -206,21 +205,25 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         }
         /* 데이터가 하나라도 있다면 */
         val dbRef = jecesfirestore!!.collection("Chat")
-        dbRef.document(chat.chatroomidx).collection(chat.chatroomidx).orderBy("time", Query.Direction.DESCENDING).limit(2).get().addOnCompleteListener {
+        dbRef.document(chat.chatroomidx).collection(chat.chatroomidx).orderBy("time", Query.Direction.DESCENDING).limit(1).get().addOnCompleteListener {
             if(it.isSuccessful) {
-                if(changeTime(listChat.last().time) == changeTime(chat.time) && listChat.last().myid == chat.myid && listChat.last().chatroomidx == chat.chatroomidx && listChat.isNotEmpty()) {
-                    for(document in it.result) {
-                        Log.d("여기들어와", "ㅇㅇ")
-                        if((document.getString("myid").toString() == chat.myid) && (document.id == documentId)) {
+                Log.d("여기들어와", it.result.documents.toString())
+                for(document in it.result) {
+                    documentId = document.id
+                    if(changeTime(listChat.last().time) == changeTime(chat.time) && listChat.last().myid == thisUser && listChat.last().chatroomidx == chat.chatroomidx) {
+                        Log.d("여기들어와", "ㅇㅇ1/${chat.content}/${document.id}/${documentId}")
+                        if ((document.getString("myid").toString() == thisUser) && (document.id == documentId)){
+                            Log.d("여기들어와", "ㅇㅇ2/${chat.content}")
                             val update: MutableMap<String, Any> = HashMap()
                             update["fronttimesame"] = "true"
-                            dbRef.document(chat.chatroomidx).collection(chat.chatroomidx).document(document.id).set(update, SetOptions.merge())
+                            dbRef.document(idx).collection(idx).document(document.id).set(update, SetOptions.merge())
                         }
                     }
                 }
             }
             addChat(chat, idx, yourId)
         }
+        addChat(chat, idx, yourId)
     }
 
     /* 시간변환 */
@@ -242,6 +245,7 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
             }
             listChat.clear()
             for(document in it!!.documents) {
+                Log.d("다큐멘트뭐니", document.toString())
                 val chatDatas = ChatData(
                     document.getString("chatroomidx").toString(),
                     document.getString("content").toString(),
@@ -250,6 +254,9 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
                     document.getString("fronttimesame").toString(),
                     document.getString("isread").toString()
                 )
+
+                Log.d("데이터머니?1", "${document.getString("content").toString()}/${document.getString("myid").toString()}")
+
 
                 listChat.add(chatDatas)
             }
@@ -385,12 +392,18 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
 
     /* 상대방 채팅 모두 읽음(내가 채팅방에 들어감) */
     fun readChatAll(idx: String, yourId: String) {
-        val dbRef = jecesfirestore!!.collection("Chat")
-        dbRef.document(idx).collection(idx).whereEqualTo("myid", yourId).get().addOnCompleteListener { chat ->
-            for(document in chat.result) {
-                val update: MutableMap<String, Any> = HashMap()
-                update["isread"] = "true"
-                dbRef.document(document.id).set(update, SetOptions.merge())
+        val dbRef = jecesfirestore!!.collection("Chat").document(idx).collection(idx)
+        Log.d("비어있니?0", "ㅇㅇ")
+        dbRef.whereEqualTo("myid", yourId).get().addOnCompleteListener { chat ->
+            if(chat.result.isEmpty) {
+                Log.d("비어있니?1", "ㅇㅇ")
+            } else {
+                Log.d("비어있니?2", "ㅇㅇ")
+                for(document in chat.result) {
+                    val update: MutableMap<String, Any> = HashMap()
+                    update["isread"] = "true"
+                    dbRef.document(document.id).set(update, SetOptions.merge())
+                }
             }
         }
     }

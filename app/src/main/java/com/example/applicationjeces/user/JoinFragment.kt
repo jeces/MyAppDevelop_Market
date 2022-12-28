@@ -97,8 +97,8 @@ class JoinFragment : Fragment() {
         binding.joinBtn.setOnClickListener {
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(textInputEditText.text.toString().trim(), passwordEditText.text.toString().trim())
                 .addOnCompleteListener { task ->
-                    Log.d("가입", textInputEditText.text.toString().trim())
                     if(task.isSuccessful) {
+                        Log.d("가입성공", textInputEditText.text.toString().trim())
                         /* 메일 인증 넣기 */
                         FirebaseAuth.getInstance().currentUser
                             ?.sendEmailVerification()
@@ -120,6 +120,7 @@ class JoinFragment : Fragment() {
                                 }
                             }
                     } else {
+                        Log.d("가입실패", textInputEditText.text.toString().trim())
                         Toast.makeText(context, task.exception.toString(), Toast.LENGTH_LONG).show()
 
                     }
