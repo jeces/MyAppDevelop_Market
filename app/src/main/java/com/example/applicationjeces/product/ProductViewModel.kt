@@ -34,11 +34,17 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     var thisUser: String? = null
     var position: Int = 0
 
+    /* firestore 문서 id를 저장하는 곳 */
     var documentId : String? = null
 
+    /* 이미지를 담는 리스트 */
     var imgList: ArrayList<String> = arrayListOf()
 
+    /* 유저의 현재 위치 */
     var whereUser: String? = null
+
+    /* ishead 변경을 위한 flag*/
+    var isheadFlag: String? = null
 
     init {
         /* firebase 연동 */
@@ -169,8 +175,8 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     }
 
     /* Chat comment 생성 */
-    fun addChat(chat: ChatData, idx: String, yourId: String) {
-        Log.d("여기 안들어옴", "ㅇㅇ")
+    fun addChat(chat: ChatData, idx: String, yourId: String, isheadFlag: String) {
+        chat.ishead = isheadFlag
         jecesfirestore!!.collection("Chat").document(idx).collection(idx).add(chat)
             .addOnSuccessListener {
                 /* 성공 */
@@ -198,30 +204,52 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
 
     /* 제일 마지막 데이터 가져오기 */
     fun lastChat(chat : ChatData, idx: String, yourId: String) {
+        /* 헤더인지 보기, 헤더라면 */
+
         /* 비어있다면 비교할 필요 X */
         if(listChat.isEmpty()) {
-            addChat(chat, idx, yourId)
+            addChat(chat, idx, yourId, "true")
             return
         }
         /* 데이터가 하나라도 있다면 */
         val dbRef = jecesfirestore!!.collection("Chat")
         dbRef.document(chat.chatroomidx).collection(chat.chatroomidx).orderBy("time", Query.Direction.DESCENDING).limit(1).get().addOnCompleteListener {
+            isheadFlag = ""
             if(it.isSuccessful) {
-                Log.d("여기들어와", it.result.documents.toString())
                 for(document in it.result) {
                     documentId = document.id
                     if(changeTime(listChat.last().time) == changeTime(chat.time) && listChat.last().myid == thisUser && listChat.last().chatroomidx == chat.chatroomidx) {
-                        Log.d("여기들어와", "ㅇㅇ1/${chat.content}/${document.id}/${documentId}")
                         if ((document.getString("myid").toString() == thisUser) && (document.id == documentId)){
-                            Log.d("여기들어와", "ㅇㅇ2/${chat.content}")
                             val update: MutableMap<String, Any> = HashMap()
                             update["fronttimesame"] = "true"
                             dbRef.document(idx).collection(idx).document(document.id).set(update, SetOptions.merge())
                         }
+                        isheadFlag = "false"
+//                        /* 시간이 같고 바로 위 대화가 true 면 */
+//                        if(listChat.last().ishead == "true") {
+//                            val update: MutableMap<String, Any> = HashMap()
+//                            update["ishead"] = "false"
+//                        } else {
+//
+//                        }
+                    }
+                    else {
+                        isheadFlag = "true"
                     }
                 }
             }
-            addChat(chat, idx, yourId)
+            Log.d("asdfasd10", isheadFlag.toString())
+            addChat(chat, idx, yourId, isheadFlag!!)
+        }
+        
+        /* 헤더변경 */
+        val dbRefs = jecesfirestore!!.collection("Chat")
+        dbRefs.document(chat.chatroomidx).collection(chat.chatroomidx).orderBy("time", Query.Direction.DESCENDING).limit(1).get().addOnCompleteListener {
+            if(it.isSuccessful) {
+                for(document in it.result) {
+
+                }
+            }
         }
     }
 
@@ -251,7 +279,8 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
                     document.getString("myid").toString(),
                     document.getTimestamp("time") as Timestamp,
                     document.getString("fronttimesame").toString(),
-                    document.getString("isread").toString()
+                    document.getString("isread").toString(),
+                    document.getString("ishead").toString()
                 )
 
                 Log.d("데이터머니?1", "${document.getString("content").toString()}/${document.getString("myid").toString()}")

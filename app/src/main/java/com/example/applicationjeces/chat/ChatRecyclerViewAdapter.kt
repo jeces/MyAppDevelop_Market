@@ -1,6 +1,7 @@
 package com.example.applicationjeces.chat
 
 import android.content.Context
+import android.text.Layout
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -37,6 +38,11 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
                     .inflate(R.layout.chat_right_item_list, parent, false)
                 rightHolder(view)
             }
+            viewtypeChat.HEADLEFT -> {
+                val view = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.chat_left_head_item_list, parent, false)
+                leftHeadHolder(view)
+            }
             else -> throw IllegalArgumentException("viewtype 에러")
         }
     }
@@ -50,6 +56,9 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
                 holder.bind(currentList[position])
             }
             is rightHolder -> {
+                holder.bind(currentList[position])
+            }
+            is leftHeadHolder -> {
                 holder.bind(currentList[position])
             }
             /* 무슨 viewHolder인지 제대로 안정해줬으니까, as로 정해주기 */
@@ -74,27 +83,41 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
     override fun getItemViewType(position: Int): Int {
         /* 각 자신과 상대방에 따라 viewType에 따라서 레이아웃을 다르게 해줌 */
         return when(currentList[position].myid) {
-            myId -> 2
-            else -> 1
+            myId -> {
+                 3
+            }
+            else -> {
+                if(currentList[position].ishead == "true") 1
+                else 2
+            }
+        }
+    }
+
+    /* inner class로 viewHolder 정의. 레이아웃 내 view 연결
+    * 상대방 말풍선 헤드 */
+    inner class leftHeadHolder(ItemView: View): RecyclerView.ViewHolder(ItemView) {
+        private val myid: TextView = ItemView.findViewById(R.id.chat_name_head)
+        private val messageText: TextView = ItemView.findViewById(R.id.chat_message_head)
+        private val date: TextView = ItemView.findViewById(R.id.chat_time_head)
+        private val img: ImageView = ItemView.findViewById(R.id.your_profile_head)
+
+        fun bind(item: ChatData) {
+            if(item.fronttimesame == "true") date.text = " "
+            else date.text = changeTime(item.time as com.google.firebase.Timestamp)
+            myid.text = item.myid
+            yourProfilImg(item.myid, img)
+            messageText.text = item.content
         }
     }
 
     /* inner class로 viewHolder 정의. 레이아웃 내 view 연결
     * 상대방 말풍선 */
     inner class leftHolder(ItemView: View): RecyclerView.ViewHolder(ItemView) {
-        private val myid: TextView = ItemView.findViewById(R.id.chat_name)
         private val messageText: TextView = ItemView.findViewById(R.id.chat_message)
         private val date: TextView = ItemView.findViewById(R.id.chat_time)
-        private val img: ImageView = ItemView.findViewById(R.id.your_profile)
-
         fun bind(item: ChatData) {
-            if(item.fronttimesame == "true") {
-
-            } else {
-                myid.text = item.myid
-                yourProfilImg(item.myid, img)
-                date.text = changeTime(item.time as com.google.firebase.Timestamp)
-            }
+            if(item.fronttimesame == "true") date.text = " "
+            else date.text = changeTime(item.time as com.google.firebase.Timestamp)
             messageText.text = item.content
         }
     }
@@ -107,14 +130,15 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
         private val isRead: TextView = ItemView.findViewById(R.id.isRead)
         fun bind(item: ChatData) {
             if(item.fronttimesame == "true") {
-//                date.text = " "
+                date.text = " "
+
                 if(item.isread == "true")
-//                    isRead.text = ""
+                    isRead.text = " "
                 else isRead.text = "1"
             } else {
                 date.text = changeTime(item.time as com.google.firebase.Timestamp)
                 if(item.isread == "true")
-//                    isRead.text = ""
+                    isRead.text = " "
                 else isRead.text = "1"
             }
             messageText.text = item.content

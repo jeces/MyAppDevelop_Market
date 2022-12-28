@@ -16,42 +16,28 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center">
-            <ImageView
-                android:id="@+id/your_profile"
+            <View
+                android:id="@+id/your_view"
                 android:layout_gravity="center"
                 android:adjustViewBounds="true"
                 android:layout_width="50dp"
                 android:layout_height="50dp"/>
         </LinearLayout>
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/chat_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/chat_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#000000"
-                android:textStyle="bold" />
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
-                    android:id="@+id/chat_message"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
-                    android:background="@drawable/leftbubble"
-                    android:textColor="#000000" />
-                <TextView
-                    android:id="@+id/chat_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:textSize="10sp" />
-            </LinearLayout>
-        </LinearLayout>
+            android:layout_marginTop="3dp"
+            android:background="@drawable/leftbubble"
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/chat_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:textSize="10sp" />
+
     </LinearLayout>
 </LinearLayout>

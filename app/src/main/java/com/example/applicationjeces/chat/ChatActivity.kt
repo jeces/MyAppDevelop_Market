@@ -115,7 +115,7 @@ class ChatActivity : AppCompatActivity() {
 
             /* 상대방이 whereUser = "chat"이면 true 아니면 false를 isRead체크할 수 있는거 만들어줘야함 */
 
-            val chat = ChatData(chatroomidx.toString(), chat_text.text.toString(), productModel.thisUser.toString(), Timestamp.now(), "false", "false")
+            val chat = ChatData(chatroomidx.toString(), chat_text.text.toString(), productModel.thisUser.toString(), Timestamp.now(), "false", "false", "true")
             productModel.lastChat(chat, chatroomidx.toString(), yourId.toString()).toString()
             chat_text.text.clear()
         }

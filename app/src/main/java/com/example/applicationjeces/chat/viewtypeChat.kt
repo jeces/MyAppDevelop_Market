@@ -1,6 +1,7 @@
 package com.example.applicationjeces.chat
 
 object viewtypeChat {
-    const val LEFT = 1
-    const val RIGHT = 2
+    const val HEADLEFT = 1
+    const val LEFT = 2
+    const val RIGHT = 3
 }

@@ -121,16 +121,12 @@ class Z_ChatRecyclerViewAdapter(var chatList: List<DocumentSnapshot>, var contex
     /* inner class로 viewHolder 정의. 레이아웃 내 view 연결
     * 상대방 말풍선 */
     inner class leftHolder(ItemView: View): RecyclerView.ViewHolder(ItemView) {
-        private val myid: TextView = ItemView.findViewById(R.id.chat_name)
         private val messageText: TextView = ItemView.findViewById(R.id.chat_message)
         private val date: TextView = ItemView.findViewById(R.id.chat_time)
-        private val img: ImageView = ItemView.findViewById(R.id.your_profile)
 
         fun bind(item: DocumentSnapshot) {
-            myid.text = item.get("myid").toString()
             messageText.text = item.get("content").toString()
             date.text = changeTime(item.get("time") as com.google.firebase.Timestamp)
-            yourProfilImg(item.get("myid").toString(), img)
         }
     }
 

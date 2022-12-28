@@ -8,5 +8,6 @@ data class ChatData(
     val myid: String,
     val time: Timestamp,
     val fronttimesame: String,
-    val isread: String
+    val isread: String,
+    var ishead: String
     )
