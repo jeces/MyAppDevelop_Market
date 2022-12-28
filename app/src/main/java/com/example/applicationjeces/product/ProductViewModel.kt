@@ -77,42 +77,61 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     *  2. 채팅창에 들어오는 순간 다 읽어짐 => 모두 isread true로 바꾸고 readcount 0으로 해주면 됨
     *
     *  아래 다시 수정할 것
+    * 
+    *  1. 상대방이 들어오면서 처리 -> readCount와 isread를 전부 읽음처리
+    *  2. 상대방이 들어와있을 때 처리(내가 방에서 채팅을 칠 때) -> readCount는 isread는 전부 읽음처리 되어있으므로 다음 들어오는 데이터를 읽음처리
+    *
     * * */
-
     fun updateChatCount(idx: String, yourId: String) {
-        jecesfirestore!!.collection("UserInfo").whereEqualTo("id", yourId).addSnapshotListener { chat, e ->
-            if (e != null) {
-                return@addSnapshotListener
+        jecesfirestore!!.collection("UserInfo").whereEqualTo("id", yourId)
+            .addSnapshotListener { chat, e ->
+                var dbRef = jecesfirestore!!.collection("Chatroom")
+                if (e != null) {
+                    return@addSnapshotListener
+                }
+                for (document in chat!!.documents) {
+                    whereUser = document.getString("whereUser").toString()
+                }
+                /* 상대방이 채팅공간에 있으면 readcount = 0 으로 */
+                if (whereUser == "chat") {
+                    /* 맨마지막 데이터 수정 하기 */
+                    dbRef.whereEqualTo("chatidx", idx).get().addOnCompleteListener { chat ->
+                        /* 전체 읽음처리 하기[후에 마지막 하나로 바꿔야함] */
+                        if (chat.isSuccessful) {
+                            for (document in chat.result) {
+                                /* 아이디/0 아이디[나]가 상대방의 말을 안읽은 카운트임 */
+                                var n0 = document.getString("n0").toString().split("/")
+                                var n1 = document.getString("n1").toString().split("/")
+                                val update: MutableMap<String, Any> = HashMap()
+                                if(n0[0] == thisUser) {
+                                    update["n0"] = "${n0[0]}/0"
+                                } else {
+                                    update["n1"] = "${n1[0]}/0"
+                                }
+                                dbRef.document(document.id).set(update, SetOptions.merge())
+                            }
+                        }
+                    }
+                }
+                /* 채팅방에 없으면*/
+                else {
+                    dbRef.whereEqualTo("chatidx", idx).get().addOnCompleteListener { chat ->
+                        if(chat.isSuccessful) {
+                            for(document in chat.result) {
+                                var n0 = document.getString("n0").toString().split("/")
+                                var n1 = document.getString("n1").toString().split("/")
+                                val update: MutableMap<String, Any> = HashMap()
+                                if(n0[0] == thisUser) {
+                                    update["n0"] = "${n0[0]}/${n0[1] + 1}"
+                                } else {
+                                    update["n0"] = "${n1[0]}/${n1[1] + 1}"
+                                }
+                                dbRef.document(document.id).set(update, SetOptions.merge())
+                            }
+                        }
+                    }
+                }
             }
-            for(document in chat!!.documents) {
-                whereUser = document.getString("whereUser").toString()
-            }
-            if(whereUser == "chat") {
-
-            }
-        }
-
-
-
-//        var count: Int = 0
-//        jecesfirestore!!.collection("Chat").document(idx).collection(idx).whereEqualTo("isread", false).whereEqualTo("myid", yourId).get().addOnCompleteListener { chat ->
-//            for(document in chat.result) {
-//                count++
-//            }
-//            val dbRef = jecesfirestore!!.collection("Chatroom")
-//            dbRef.whereEqualTo("chatidx", idx).get().addOnCompleteListener { chatroom ->
-//                if(chatroom.isSuccessful) {
-//                    for(document in chatroom.result) {
-//                        if(document.getString("n0") == thisUser) {
-//
-//                        }
-//                    }
-//                }
-//
-//            }
-//
-//        }
-
     }
 
     /* 자신의 채팅목록 전체 가져오기 */
@@ -152,12 +171,12 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     }
 
     /* Chat comment 생성 */
-    fun addChat(chat: ChatData) {
-
+    fun addChat(chat: ChatData, idx: String, yourId: String) {
         jecesfirestore!!.collection("Chat").document(chat.chatroomidx).collection(chat.chatroomidx).add(chat)
             .addOnSuccessListener {
                 /* 성공 */
                 documentId = it.id
+                updateChatCount(idx, yourId)
             }.addOnFailureListener { exception ->
                 /* 실패 */
                 Log.w("CHAT 데이터 입력 실패", "Error getting documents")
@@ -179,13 +198,12 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     }
 
     /* 제일 마지막 데이터 가져오기 */
-    fun lastChat(chat : ChatData) {
+    fun lastChat(chat : ChatData, idx: String, yourId: String) {
         /* 비어있다면 비교할 필요 X */
         if(listChat.isEmpty()) {
-            addChat(chat)
+            addChat(chat, idx, yourId)
             return
         }
-
         /* 데이터가 하나라도 있다면 */
         val dbRef = jecesfirestore!!.collection("Chat")
         dbRef.document(chat.chatroomidx).collection(chat.chatroomidx).orderBy("time", Query.Direction.DESCENDING).limit(2).get().addOnCompleteListener {
@@ -201,7 +219,7 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
                     }
                 }
             }
-            addChat(chat)
+            addChat(chat, idx, yourId)
         }
     }
 
