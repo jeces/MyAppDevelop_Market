@@ -131,7 +131,6 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
         fun bind(item: ChatData) {
             if(item.fronttimesame == "true") {
                 date.text = " "
-
                 if(item.isread == "true")
                     isRead.text = " "
                 else isRead.text = "1"
@@ -148,7 +147,6 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
     /* 시간변환 */
     fun changeTime(timestamp: Timestamp): String {
         val mils = timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000
-//        val sf = SimpleDateFormat("yyyy년 MM월 dd일 HH:mm:ss", Locale.KOREA)
         val sf = SimpleDateFormat("aa hh:mm", Locale.KOREA)
         val nDate = Date(mils)
         val date = sf.format(nDate).toString()
