@@ -89,12 +89,10 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     *
     * * */
     fun updateChatCount(idx: String, yourId: String) {
-        jecesfirestore!!.collection("UserInfo").whereEqualTo("id", yourId)
-            .addSnapshotListener { chat, e ->
+        /* 스냅샷없애야 함 */
+        jecesfirestore!!.collection("UserInfo").whereEqualTo("id", yourId).get()
+            .addOnSuccessListener { chat ->
                 var dbRef = jecesfirestore!!.collection("Chatroom")
-                if (e != null) {
-                    return@addSnapshotListener
-                }
                 for (document in chat!!.documents) {
                     whereUser = document.getString("whereUser").toString()
                 }
