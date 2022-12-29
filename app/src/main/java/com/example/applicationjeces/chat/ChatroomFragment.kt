@@ -50,21 +50,25 @@ class ChatroomFragment : Fragment() {
         /* 뷰모델 초기화 */
         productViewModel = ViewModelProvider(this)[ProductViewModel::class.java]
 
+        /* 나의 아이디 */
+        val myId = productViewModel.thisUser.toString()
+
         /* 어뎁터 가져옴 */
-        val adapter = ChatroomRecyclerViewAdapter(emptyList(), this@ChatroomFragment, productViewModel.thisUser.toString())
+        val adapter = ChatroomRecyclerViewAdapter(emptyList(), this@ChatroomFragment, myId)
         val recyclerView: RecyclerView = view.chat_profile
         recyclerView.adapter = adapter
-        recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+//        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+//        recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         /* 채팅룸 가져오기 */
-        productViewModel.allChatroom()
+        productViewModel.getAllChatroom()
 
         /* 뷰모델 연결 후 뷰모델 옵저버를 통해 불러옴 */
         productViewModel.liveTodoChatroomData.observe(viewLifecycleOwner, Observer { chatroom ->
-            Log.d("챗룸ㅇㅇ3", "${chatroom.toString()}")
+            Log.d("챗룸ㅇㅇf3", "${chatroom!!.toMutableList()}")
             adapter.submitList(chatroom!!.toMutableList())
-            Log.d("챗룸ㅇㅇ4", "${chatroom.toString()}")
+            Log.d("챗룸ㅇㅇf4", "${chatroom!!.toMutableList()}")
         })
 
         /* 항목 클릭시 */
@@ -74,8 +78,10 @@ class ChatroomFragment : Fragment() {
                 /* 프라그먼트에서 프라그먼트로 제어가 불가능하기 때문에 상위 액티비티에서 제어 해주어야 한다. */
                 val intent = Intent(getActivity(), ChatActivity::class.java)
                 intent.apply {
-                    this.putExtra("chatidx", adapter.chatRoomList[position].get("chatidx").toString())
-                    this.putExtra("chatYourId", adapter.chatRoomList[position].get("id").toString())
+                    this.putExtra("chatidx", adapter.chatRoomList[position].idx)
+                    val Id = adapter.chatRoomList[position].id.split(",")
+                    if(Id[0] == myId) this.putExtra("chatYourId", Id[1])
+                    else this.putExtra("chatYourId", Id[0])
                 }
                 startActivity(intent)
             }

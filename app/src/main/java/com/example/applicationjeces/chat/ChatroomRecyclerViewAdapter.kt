@@ -19,14 +19,15 @@ import kotlinx.android.synthetic.main.chatroom_item_list.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ChatroomRecyclerViewAdapter(var chatRoomList: List<DocumentSnapshot>, var context: Fragment, var myId: String): ListAdapter<ChatroomData, RecyclerView.ViewHolder>(diffUtil) {
+class ChatroomRecyclerViewAdapter(var chatRoomList: List<ChatroomData>, var contexts: Fragment, var myId: String): ListAdapter<ChatroomData, RecyclerView.ViewHolder>(diffUtil) {
 
     private val db = FirebaseStorage.getInstance()
 
     /* ViewHolder에게 item을 보여줄 View로 쓰일 item_data_list.xml를 넘기면서 ViewHolder 생성. 아이템 레이아웃과 결합 */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         Log.d("챗룸ㅇㅇ1", "dd")
-        return Holder(LayoutInflater.from(parent.context).inflate(R.layout.chatroom_item_list, parent, false))
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.chatroom_item_list, parent, false)
+        return roomHolder(view)
     }
 
     /* Holder의 bind 메소드를 호출한다. 내용 입력 */
@@ -34,7 +35,7 @@ class ChatroomRecyclerViewAdapter(var chatRoomList: List<DocumentSnapshot>, var 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         Log.d("챗룸ㅇㅇ2", "dd")
         when(holder) {
-            is Holder -> {
+            is roomHolder -> {
                 holder.bind(currentList[position])
 
                 holder.itemView.setOnClickListener {
@@ -59,12 +60,12 @@ class ChatroomRecyclerViewAdapter(var chatRoomList: List<DocumentSnapshot>, var 
     private lateinit var itemClickListener : OnItemClickListener
 
     override fun getItemViewType(position: Int): Int {
-        Log.d("ㅇㅇㅇㄹ", "ㅇㅇ")
+        Log.d("챗룸ㅇㅇ3", "ㅇㅇ")
         return 1
     }
 
     /* inner class로 viewHolder 정의. 레이아웃 내 view 연결 */
-    inner class Holder(ItemView: View): RecyclerView.ViewHolder(ItemView) {
+    inner class roomHolder(ItemView: View): RecyclerView.ViewHolder(ItemView) {
         private val chatroomYourId: TextView = ItemView.findViewById(R.id.chat_yourid)
         private val lastcomment: TextView = ItemView.findViewById(R.id.chat_lastchat)
         private val time: TextView = ItemView.findViewById(R.id.chatroom_time)
@@ -72,10 +73,11 @@ class ChatroomRecyclerViewAdapter(var chatRoomList: List<DocumentSnapshot>, var 
         private val chatroomCount: TextView = ItemView.findViewById(R.id.chatroom_read)
 
         fun bind(item: ChatroomData) {
-            Log.d("챗룸ㅇㅇ", "ddd")
+            Log.d("챗룸ㅇㅇ4", "ddd")
             val Id = item.id.toString().split(",")
             val readN0 = item.n0.split("/")
             val readN1 = item.n1.split("/")
+            Log.d("챗룸ㅇㅇ4", "${readN0}/${readN1}/${Id}")
             if(myId == Id[0]) {
                 if(readN0[0] == Id[0]) {
                     Log.d("asdfasdf1", readN0[1])
@@ -122,7 +124,7 @@ class ChatroomRecyclerViewAdapter(var chatRoomList: List<DocumentSnapshot>, var 
     fun yourChatroomProfilImg(yourId: String, chatroomUserImg: ImageView) {
         db.reference.child("${yourId}/${yourId}_profil.png").downloadUrl.addOnCompleteListener {
             if(it.isSuccessful) {
-                Glide.with(context)
+                Glide.with(contexts)
                     .load(it.result)
                     .override(70, 70)
                     .fitCenter()
@@ -130,7 +132,7 @@ class ChatroomRecyclerViewAdapter(var chatRoomList: List<DocumentSnapshot>, var 
             } else {
                 /* 없으면 기본 이미지 들고와라 */
                 db.reference.child("basic_user.png").downloadUrl.addOnCompleteListener { its->
-                    Glide.with(context)
+                    Glide.with(contexts)
                         .load(its.result)
                         .override(70, 70)
                         .fitCenter()
