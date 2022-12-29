@@ -412,17 +412,37 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
 
     /* 상대방 채팅 모두 읽음(내가 채팅방에 들어감) */
     fun readChatAll(idx: String, yourId: String) {
+        /* 채팅읽음표시를 바꿔 줌 */
         val dbRef = jecesfirestore!!.collection("Chat").document(idx).collection(idx)
-        Log.d("비어있니?0", "ㅇㅇ")
+
         dbRef.whereEqualTo("myid", yourId).get().addOnCompleteListener { chat ->
             if(chat.result.isEmpty) {
-                Log.d("비어있니?1", "ㅇㅇ")
             } else {
-                Log.d("비어있니?2", "ㅇㅇ")
                 for(document in chat.result) {
                     val update: MutableMap<String, Any> = HashMap()
                     update["isread"] = "true"
                     dbRef.document(document.id).set(update, SetOptions.merge())
+                }
+
+            }
+        }
+        /* 채팅룸 카운트를 바꿔 줌 */
+        val dbRefs = jecesfirestore!!.collection("Chatroom")
+        dbRefs.whereEqualTo("chatidx", idx).get().addOnCompleteListener { chatroom ->
+            if(chatroom.result.isEmpty) {
+            } else {
+                for(document in chatroom.result) {
+                    /* 나의 아이디 찾기 */
+                    val n0 = document.getString("n0")!!.split("/")
+                    val n1 = document.getString("n1")!!.split("/")
+                    val update: MutableMap<String, Any> = HashMap()
+                    if(n0[0] == yourId) {
+                        update["n1"] = "${n1[0]}/0"
+                    }
+                    else {
+                        update["n0"] = "${n0[0]}/0"
+                    }
+                    dbRefs.document(document.id).set(update, SetOptions.merge())
                 }
             }
         }
