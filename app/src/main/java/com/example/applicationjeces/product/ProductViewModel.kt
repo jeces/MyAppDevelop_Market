@@ -22,8 +22,11 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     /* 각종 라이브데이터 DocumentSnapshot은 firestore와 연결되어있어서 firestore가 변경되면 변경됨 하지만 다른것들은 바꿔줘야함. Snapshot으로 최대한 뽑아보자 */
     var liveTodoData = MutableLiveData<List<DocumentSnapshot>>()
     var productArrayList: MutableList<Product> = ArrayList()
-//    var chatArrayList: MutableList<ChatroomData> = ArrayList()
-    var liveTodoChatroomData = MutableLiveData<List<DocumentSnapshot>?>()
+
+    /* 채팅룸 담을 리스트*/
+    var listChatroom : MutableList<ChatroomData> = mutableListOf()
+    /* 채팅룸 실시간 라이브 데이터 */
+    var liveTodoChatroomData = MutableLiveData<List<ChatroomData>?>()
 
     /* 채팅 담을 리스트 */
     val listChat : MutableList<ChatData> = mutableListOf()
@@ -146,19 +149,24 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
             if (e != null) {
                 return@addSnapshotListener
             }
-            val response = Response()
+            listChatroom.clear()
             for(snapshot in chatrooms!!.documents) {
                 if(snapshot.getString("id")!!.contains(thisUser.toString())) {
-                    snapshot?.let {
-                        if(response.products == null) {
-                            response.products = listOf(it)
-                        } else {
-                            response.products = response.products?.plus(listOf(it))
-                        }
+                    snapshot?.let { chatroom ->
+                        val chatroomDatas = ChatroomData (
+                            chatroom.getString("chatidx").toString(),
+                            chatroom.getString("id").toString(),
+                            chatroom.getString("lastcomment").toString(),
+                            chatroom.getString("n0").toString(),
+                            chatroom.getString("n1").toString(),
+                            chatroom.getTimestamp("time") as Timestamp
+                        )
+                        listChatroom.add(chatroomDatas)
                     }
                 }
             }
-            liveTodoChatroomData.value = response.products
+            liveTodoChatroomData.value = listChatroom
+            Log.d("챗룸ㅇㅇ", liveTodoChatroomData.value.toString())
         }
     }
 
@@ -223,13 +231,6 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
                             dbRef.document(idx).collection(idx).document(document.id).set(update, SetOptions.merge())
                         }
                         isheadFlag = "false"
-//                        /* 시간이 같고 바로 위 대화가 true 면 */
-//                        if(listChat.last().ishead == "true") {
-//                            val update: MutableMap<String, Any> = HashMap()
-//                            update["ishead"] = "false"
-//                        } else {
-//
-//                        }
                     }
                     else {
                         isheadFlag = "true"
@@ -270,7 +271,6 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
             }
             listChat.clear()
             for(document in it!!.documents) {
-                Log.d("다큐멘트뭐니", document.toString())
                 val chatDatas = ChatData(
                     document.getString("chatroomidx").toString(),
                     document.getString("content").toString(),
@@ -280,13 +280,8 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
                     document.getString("isread").toString(),
                     document.getString("ishead").toString()
                 )
-
-                Log.d("데이터머니?1", "${document.getString("content").toString()}/${document.getString("myid").toString()}")
-
-
                 listChat.add(chatDatas)
             }
-            Log.d("데이터머니?1", listChat.toString())
             liveTodoChatDataList.value = listChat
         }
     }

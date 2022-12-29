@@ -2,6 +2,7 @@ package com.example.applicationjeces.chat
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.applicationjeces.R
 import com.example.applicationjeces.product.ProductViewModel
 import kotlinx.android.synthetic.main.fragment_chat.view.*
@@ -50,7 +52,7 @@ class ChatroomFragment : Fragment() {
 
         /* 어뎁터 가져옴 */
         val adapter = ChatroomRecyclerViewAdapter(emptyList(), this@ChatroomFragment, productViewModel.thisUser.toString())
-        val recyclerView = view.chat_profile
+        val recyclerView: RecyclerView = view.chat_profile
         recyclerView.adapter = adapter
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -60,7 +62,9 @@ class ChatroomFragment : Fragment() {
 
         /* 뷰모델 연결 후 뷰모델 옵저버를 통해 불러옴 */
         productViewModel.liveTodoChatroomData.observe(viewLifecycleOwner, Observer { chatroom ->
-            adapter.setData(chatroom)
+            Log.d("챗룸ㅇㅇ3", "${chatroom.toString()}")
+            adapter.submitList(chatroom!!.toMutableList())
+//            adapter.setData(chatroom)
         })
 
         /* 항목 클릭시 */

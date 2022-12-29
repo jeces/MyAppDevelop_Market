@@ -1,15 +1,14 @@
 package com.example.applicationjeces.chat
 
-import android.annotation.SuppressLint
-import android.content.ClipData.Item
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.view.menu.MenuView.ItemView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.applicationjeces.R
@@ -17,34 +16,35 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.chatroom_item_list.view.*
-import kotlinx.android.synthetic.main.product_item_list.view.*
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
-class ChatroomRecyclerViewAdapter(var chatRoomList: List<DocumentSnapshot>, var context: Fragment, var myId: String): RecyclerView.Adapter<ChatroomRecyclerViewAdapter.Holder>() {
+class ChatroomRecyclerViewAdapter(var chatRoomList: List<DocumentSnapshot>, var context: Fragment, var myId: String): ListAdapter<ChatroomData, RecyclerView.ViewHolder>(diffUtil) {
 
-    private val destinationUsers : ArrayList<String> = arrayListOf()
     private val db = FirebaseStorage.getInstance()
 
     /* ViewHolder에게 item을 보여줄 View로 쓰일 item_data_list.xml를 넘기면서 ViewHolder 생성. 아이템 레이아웃과 결합 */
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        Log.d("챗룸ㅇㅇ1", "dd")
         return Holder(LayoutInflater.from(parent.context).inflate(R.layout.chatroom_item_list, parent, false))
     }
 
     /* Holder의 bind 메소드를 호출한다. 내용 입력 */
     /* getItemCount() 리턴값이 0일 경우 호출 안함 */
-    override fun onBindViewHolder(holder: Holder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        Log.d("챗룸ㅇㅇ2", "dd")
+        when(holder) {
+            is Holder -> {
+                holder.bind(currentList[position])
 
-        holder.bind(chatRoomList[position])
-
-        holder.itemView.setOnClickListener {
-            /* 리스트 클릭시 Detail 화면 전환 */
-            itemClickListener.onClick(it, position)
+                holder.itemView.setOnClickListener {
+                    /* 리스트 클릭시 Detail 화면 전환 */
+                    itemClickListener.onClick(it, position)
+                }
+                /* 이미지 초기화 */
+                holder.itemView.chat_item_imageview.setImageBitmap(null)
+            }
         }
-
-        /* 이미지 초기화 */
-        holder.itemView.chat_item_imageview.setImageBitmap(null)
     }
 
     /* (2) 리스너 인터페이스 */
@@ -58,21 +58,9 @@ class ChatroomRecyclerViewAdapter(var chatRoomList: List<DocumentSnapshot>, var 
     /* (4) setItemClickListener로 설정한 함수 실행 */
     private lateinit var itemClickListener : OnItemClickListener
 
-    /* 리스트 아이템 개수 */
-    override fun getItemCount(): Int {
-        /* productList 사이즈를 리턴합니다. */
-        return chatRoomList.size
-    }
-
-    /* 홈 전체 데이터 */
-    @SuppressLint("NotifyDataSetChanged")
-    fun setData(chatroom: List<DocumentSnapshot>?) {
-        if (chatroom != null) {
-            chatRoomList = chatroom
-            Log.d("챗룸리스트", chatRoomList.toString())
-        }
-        /* 변경 알림 */
-        notifyDataSetChanged()
+    override fun getItemViewType(position: Int): Int {
+        Log.d("ㅇㅇㅇㄹ", "ㅇㅇ")
+        return 1
     }
 
     /* inner class로 viewHolder 정의. 레이아웃 내 view 연결 */
@@ -83,10 +71,11 @@ class ChatroomRecyclerViewAdapter(var chatRoomList: List<DocumentSnapshot>, var 
         private val chatroomUserImg: ImageView = ItemView.findViewById(R.id.chat_item_imageview)
         private val chatroomCount: TextView = ItemView.findViewById(R.id.chatroom_read)
 
-        fun bind(item: DocumentSnapshot) {
-            val Id = item.get("id").toString().split(",")
-            val readN0 = item.getString("n0").toString().split("/")
-            val readN1 = item.getString("n1").toString().split("/")
+        fun bind(item: ChatroomData) {
+            Log.d("챗룸ㅇㅇ", "ddd")
+            val Id = item.id.toString().split(",")
+            val readN0 = item.n0.split("/")
+            val readN1 = item.n1.split("/")
             if(myId == Id[0]) {
                 if(readN0[0] == Id[0]) {
                     Log.d("asdfasdf1", readN0[1])
@@ -114,8 +103,8 @@ class ChatroomRecyclerViewAdapter(var chatRoomList: List<DocumentSnapshot>, var 
                 chatroomYourId.text = Id[0]
                 yourChatroomProfilImg(Id[0], chatroomUserImg)
             }
-            lastcomment.text = item.get("lastcomment").toString()
-            time.text = changeTime(item.get("time") as com.google.firebase.Timestamp)
+            lastcomment.text = item.lastComment.toString()
+            time.text = changeTime(item.time as com.google.firebase.Timestamp)
         }
     }
 
@@ -147,6 +136,24 @@ class ChatroomRecyclerViewAdapter(var chatRoomList: List<DocumentSnapshot>, var 
                         .fitCenter()
                         .into(chatroomUserImg)
                 }
+            }
+        }
+    }
+
+    companion object{
+        val diffUtil = object : DiffUtil.ItemCallback<ChatroomData>(){
+            // User의 id를 비교해서 같으면 areContentsTheSame으로 이동(id 대신 data 클래스에 식별할 수 있는 변수 사용)
+            override fun areItemsTheSame(oldItem: ChatroomData, newItem: ChatroomData): Boolean {
+                Log.d("챗룸ㅇㅇ 올드", "${oldItem}/${newItem}")
+                Log.d("챗룸ㅇㅇ 올드", "${oldItem == newItem}/${oldItem == newItem}")
+                return oldItem == newItem
+            }
+            override fun areContentsTheSame(oldItem: ChatroomData, newItem: ChatroomData): Boolean {
+                // User의 내용을 비교해서 같으면 true -> UI 변경 없음
+                // User의 내용을 비교해서 다르면 false -> UI 변경
+                Log.d("챗룸ㅇㅇ 올드ㄴ", "${oldItem}/${newItem}")
+                Log.d("챗룸ㅇㅇ 올드ㄴ", "${oldItem == newItem}/${oldItem == newItem}")
+                return oldItem == newItem
             }
         }
     }
