@@ -88,17 +88,28 @@ class ChatroomRecyclerViewAdapter(var chatRoomList: List<DocumentSnapshot>, var 
             val readN0 = item.getString("n0").toString().split("/")
             val readN1 = item.getString("n1").toString().split("/")
             if(myId == Id[0]) {
-                if(readN0[0] == Id[0]) chatroomCount.text = readN0[1]
-                else if(readN1[0] == Id[0]) chatroomCount.text = readN1[1]
-
+                if(readN0[0] == Id[0]) {
+                    Log.d("asdfasdf1", readN0[1])
+                    if(readN0[1] == "0") chatroomCount.text = " "
+                    else chatroomCount.text = readN0[1]
+                }
+                else if(readN1[0] == Id[0]) {
+                    Log.d("asdfasdf2", readN1[1])
+                    if(readN1[1] == "0") chatroomCount.text = " "
+                    else chatroomCount.text = readN1[1]
+                }
                 chatroomYourId.text = Id[1]
                 yourChatroomProfilImg(Id[1], chatroomUserImg)
             } else {
-                if(readN0[0] == Id[0]) {
-                    chatroomCount.text = readN0[1]
+                if(readN0[0] == Id[1]) {
+                    Log.d("asdfasdf3", readN0[1])
+                    if(readN0[1] == "0") chatroomCount.text = " "
+                    else chatroomCount.text = readN0[1]
                 }
-                else if(readN1[0] == Id[0]) {
-                    chatroomCount.text = readN1[1]
+                else if(readN1[0] == Id[1]) {
+                    Log.d("asdfasdf4", readN1[1])
+                    if(readN1[1] == "0") chatroomCount.text = " "
+                    else chatroomCount.text = readN1[1]
                 }
                 chatroomYourId.text = Id[0]
                 yourChatroomProfilImg(Id[0], chatroomUserImg)

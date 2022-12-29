@@ -16,7 +16,6 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.chat_left_item_list.view.*
 import kotlinx.android.synthetic.main.chatroom_item_list.view.*
-import kotlinx.android.synthetic.main.fragment_chat2.view.*
 import kotlinx.android.synthetic.main.product_item_list.view.*
 import java.text.SimpleDateFormat
 import java.util.*

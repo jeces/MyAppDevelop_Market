@@ -1,8 +1,6 @@
 package com.example.applicationjeces.chat
 
 import android.content.Context
-import android.text.Layout
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +15,6 @@ import com.google.firebase.Timestamp
 import com.google.firebase.storage.FirebaseStorage
 import java.text.SimpleDateFormat
 import java.util.*
-
 
 /* 참고하기
 * https://minoflower.tistory.com/36 */

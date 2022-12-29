@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.applicationjeces.R
 import com.example.applicationjeces.product.ProductViewModel
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.fragment_chat2.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 //
