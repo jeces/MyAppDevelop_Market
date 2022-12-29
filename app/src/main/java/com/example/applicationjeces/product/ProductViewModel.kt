@@ -337,14 +337,6 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         return searchLiveTodoData
     }
 
-    /* 채팅 디테일 데이터를 가지고 있는 데이터 */
-    fun setChatDetail(chatidx: String, lastcomment: String, myid: String, yourid: String, getPosition: Int) {
-//        chatArrayList.clear()
-//        val chatDetail = ChatroomData(chatidx, lastcomment, myid, yourid)
-//        position = getPosition
-//        chatArrayList.add(chatDetail)
-    }
-
     /* 제품 디테일 데이터를 가지고 있는 데이터 */
     fun setProductDetail(productName: String, productPrice: String, productDescription: String, productCount: String, getPosition: Int) {
         productArrayList.clear()
@@ -352,36 +344,6 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         position = getPosition
         productArrayList.add(productDetail)
     }
-
-//    /* 상대방 이름 가져오기 */
-//    fun getYourId(idx: String) {
-//        /* 데이터베이스 담기 */
-//        /* 이것도 response를 만들어서 해줘야하는 듯 */
-//        jecesfirestore!!.collection("Chatroom").whereEqualTo("chatroomidx", idx).addSnapshotListener { chat, e ->
-//            if(e != null) {
-//                return@addSnapshotListener
-//            }
-//            liveTodoChatroomData.value = chat?.documents
-//        }
-//    }
-
-//    /* 상대방 이름 가져오기 */
-//    fun getYourId(idx: String) : MutableLiveData<String> {
-//        /* 데이터베이스 담기 */
-//        /* 이것도 response를 만들어서 해줘야하는 듯 */
-//        val getYourIdLiveData = MutableLiveData<String>()
-//        jecesfirestore!!.collection("Chatroom").whereEqualTo("chatroomidx", idx).get().addOnCompleteListener { chat ->
-//            for (snapshot in chat.result) {
-//                /* 아이디 찾기 */
-//                var yourId : String = snapshot.getString("id")!!.split(",").toString()
-//                /* 상대방 아이디 검색 */
-//                if (yourId[0].toString() != thisUser) getYourIdLiveData.value = yourId[0].toString()
-//                else getYourIdLiveData.value = yourId[1].toString()
-//            }
-//            Log.d("데이터뭘까요?1", getYourIdLiveData.value.toString())
-//        }
-//        return getYourIdLiveData
-//    }
 
     /* 보냈을 때 상대방이 채팅창에 있을 때 나타냄 */
     fun isRead(yourId: String, idx: String) {
@@ -426,7 +388,7 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
 
             }
         }
-        /* 채팅룸 카운트를 바꿔 줌 */
+        /* 채팅룸 카운트를 0으로 바꿔 줌 */
         val dbRefs = jecesfirestore!!.collection("Chatroom")
         dbRefs.whereEqualTo("chatidx", idx).get().addOnCompleteListener { chatroom ->
             if(chatroom.result.isEmpty) {
