@@ -13,13 +13,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.applicationjeces.R
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.chatroom_item_list.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ChatroomRecyclerViewAdapter(var chatRoomList: List<ChatroomData>, var contexts: Fragment, var myId: String): ListAdapter<ChatroomData, RecyclerView.ViewHolder>(diffUtil) {
+class ChatroomRecyclerViewAdapter(var contexts: Fragment, var myId: String): ListAdapter<ChatroomData, RecyclerView.ViewHolder>(diffUtil) {
 
     private val db = FirebaseStorage.getInstance()
 

@@ -54,7 +54,7 @@ class ChatroomFragment : Fragment() {
         val myId = productViewModel.thisUser.toString()
 
         /* 어뎁터 가져옴 */
-        val adapter = ChatroomRecyclerViewAdapter(emptyList(), this@ChatroomFragment, myId)
+        val adapter = ChatroomRecyclerViewAdapter(this@ChatroomFragment, myId)
         val recyclerView: RecyclerView = view.chat_profile
         recyclerView.adapter = adapter
 //        recyclerView.setHasFixedSize(true)
@@ -78,10 +78,8 @@ class ChatroomFragment : Fragment() {
                 /* 프라그먼트에서 프라그먼트로 제어가 불가능하기 때문에 상위 액티비티에서 제어 해주어야 한다. */
                 val intent = Intent(getActivity(), ChatActivity::class.java)
                 intent.apply {
-                    this.putExtra("chatidx", adapter.chatRoomList[position].idx)
-                    val Id = adapter.chatRoomList[position].id.split(",")
-                    if(Id[0] == myId) this.putExtra("chatYourId", Id[1])
-                    else this.putExtra("chatYourId", Id[0])
+                    this.putExtra("chatidx", adapter.currentList[position].idx)
+                    this.putExtra("chatYourId", adapter.currentList[position].id)
                 }
                 startActivity(intent)
             }
