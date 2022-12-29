@@ -63,14 +63,12 @@ class ChatroomFragment : Fragment() {
 
         /* 뷰모델 연결 후 뷰모델 옵저버를 통해 불러옴 */
         productViewModel.liveTodoChatroomData.observe(viewLifecycleOwner, Observer { chatroom ->
-            Log.d("방만들어짐?", "dd")
             adapter.setData(chatroom)
         })
 
         /* 항목 클릭시 */
         adapter.setItemClickListener(object: ChatroomRecyclerViewAdapter.OnItemClickListener {
             override fun onClick(v: View, position: Int) {
-
                 /* 화면 띄움*/
                 /* 프라그먼트에서 프라그먼트로 제어가 불가능하기 때문에 상위 액티비티에서 제어 해주어야 한다. */
                 val intent = Intent(getActivity(), ChatActivity::class.java)
@@ -81,8 +79,6 @@ class ChatroomFragment : Fragment() {
                 startActivity(intent)
             }
         })
-
-
         // Inflate the layout for this fragment
         return view
     }
