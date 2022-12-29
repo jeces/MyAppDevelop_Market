@@ -64,7 +64,7 @@ class ChatroomFragment : Fragment() {
         productViewModel.liveTodoChatroomData.observe(viewLifecycleOwner, Observer { chatroom ->
             Log.d("챗룸ㅇㅇ3", "${chatroom.toString()}")
             adapter.submitList(chatroom!!.toMutableList())
-//            adapter.setData(chatroom)
+            Log.d("챗룸ㅇㅇ4", "${chatroom.toString()}")
         })
 
         /* 항목 클릭시 */

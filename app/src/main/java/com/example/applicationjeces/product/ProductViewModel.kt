@@ -166,7 +166,6 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
                 }
             }
             liveTodoChatroomData.value = listChatroom
-            Log.d("챗룸ㅇㅇ", liveTodoChatroomData.value.toString())
         }
     }
 
