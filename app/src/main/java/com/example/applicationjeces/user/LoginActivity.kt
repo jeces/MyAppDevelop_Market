@@ -1,4 +1,4 @@
-package com.example.applicationjeces
+package com.example.applicationjeces.user
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -6,11 +6,8 @@ import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import com.example.applicationjeces.R
 import com.example.applicationjeces.databinding.ActivityMainLoginBinding
-import com.example.applicationjeces.user.JoinFragment
-import com.example.applicationjeces.user.LoginFragment
-import com.example.applicationjeces.user.LoginViewModel
-import com.example.applicationjeces.user.PageDataLogin
 
 class LoginActivity : AppCompatActivity() {
 

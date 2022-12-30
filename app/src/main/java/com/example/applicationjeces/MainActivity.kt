@@ -18,6 +18,7 @@ import com.example.applicationjeces.frag.*
 import com.example.applicationjeces.page.DataViewModel
 import com.example.applicationjeces.page.PageData
 import com.example.applicationjeces.search.SearchActivity
+import com.example.applicationjeces.user.LoginActivity
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 
