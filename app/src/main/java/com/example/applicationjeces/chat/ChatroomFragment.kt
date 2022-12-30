@@ -57,9 +57,10 @@ class ChatroomFragment : Fragment() {
         val adapter = ChatroomRecyclerViewAdapter(this@ChatroomFragment, myId)
         val recyclerView: RecyclerView = view.chat_profile
         recyclerView.adapter = adapter
+//        /* etHasFixedSize를 true로 설정함으로써 아이템 크기가 변경이 안된다는 것을 명시 */
 //        recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-//        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+//        recyclerView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         /* 채팅룸 가져오기 */
         productViewModel.getAllChatroom()
@@ -87,6 +88,8 @@ class ChatroomFragment : Fragment() {
         // Inflate the layout for this fragment
         return view
     }
+
+
 
     companion object {
         /**

@@ -40,6 +40,11 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
                     .inflate(R.layout.chat_left_head_item_list, parent, false)
                 leftHeadHolder(view)
             }
+            viewtypeChat.RIGHTSAME -> {
+                val view = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.chat_right_same_item_list, parent, false)
+                rightSameHolder(view)
+            }
             else -> throw IllegalArgumentException("viewtype 에러")
         }
     }
@@ -56,6 +61,9 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
                 holder.bind(currentList[position])
             }
             is leftHeadHolder -> {
+                holder.bind(currentList[position])
+            }
+            is rightSameHolder -> {
                 holder.bind(currentList[position])
             }
             /* 무슨 viewHolder인지 제대로 안정해줬으니까, as로 정해주기 */
@@ -81,7 +89,8 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
         /* 각 자신과 상대방에 따라 viewType에 따라서 레이아웃을 다르게 해줌 */
         return when(currentList[position].myid) {
             myId -> {
-                 3
+                if(currentList[position].fronttimesame == "true") 4
+                else 3
             }
             else -> {
                 if(currentList[position].ishead == "true") 1
@@ -126,17 +135,19 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
         private val date: TextView = ItemView.findViewById(R.id.chat_time2)
         private val isRead: TextView = ItemView.findViewById(R.id.isRead)
         fun bind(item: ChatData) {
-            if(item.fronttimesame == "true") {
-                date.text = " "
-                if(item.isread == "true")
-                    isRead.text = " "
-                else isRead.text = "1"
-            } else {
-                date.text = changeTime(item.time as com.google.firebase.Timestamp)
-                if(item.isread == "true")
-                    isRead.text = " "
-                else isRead.text = "1"
-            }
+            if(item.isread == "true") isRead.text = " "
+            else isRead.text = "1"
+            date.text = changeTime(item.time as com.google.firebase.Timestamp)
+            messageText.text = item.content
+        }
+    }
+
+    inner class rightSameHolder(ItemView: View): RecyclerView.ViewHolder(ItemView) {
+        private val messageText: TextView = ItemView.findViewById(R.id.chat_message2_same)
+        private val isRead: TextView = ItemView.findViewById(R.id.isRead_same)
+        fun bind(item: ChatData) {
+            if(item.isread == "true") isRead.text = " "
+            else isRead.text = "1"
             messageText.text = item.content
         }
     }

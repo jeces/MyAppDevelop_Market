@@ -6,12 +6,14 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.View
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applicationjeces.MainActivity
 import com.example.applicationjeces.R
+import com.example.applicationjeces.databinding.ActivityChatBinding
 import com.example.applicationjeces.page.PageData
 import com.example.applicationjeces.product.ProductViewModel
 import com.google.firebase.Timestamp
@@ -56,12 +58,25 @@ class ChatActivity : AppCompatActivity() {
             myId = Id?.get(1)
         }
 
-        /* 어뎁터 가져옴 */
+
+
+
+//        /* 어뎁터 가져옴 */
+//        val adapter = ChatRecyclerViewAdapter(myId.toString(), this@ChatActivity)
+//        val recyclerView: RecyclerView = findViewById(R.id.messageActivity_recyclerview)
+//        recyclerView.adapter = adapter
+//        recyclerView.layoutManager = LinearLayoutManager(this)
+//        recyclerView.setHasFixedSize(true)
+
+
         val adapter = ChatRecyclerViewAdapter(myId.toString(), this@ChatActivity)
         val recyclerView: RecyclerView = findViewById(R.id.messageActivity_recyclerview)
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.setHasFixedSize(true)
+        messageActivity_recyclerview.apply {
+            recyclerView.adapter = adapter
+//            addItemDecoration(SpaceDecoration())
+            addOnLayoutChangeListener(onLayoutChangeListener)
+            recyclerView.layoutManager = LinearLayoutManager(this@ChatActivity)
+        }
 
         /* 채팅 가져오기 */
         productModel.getChat(chatroomidx.toString())
@@ -104,6 +119,8 @@ class ChatActivity : AppCompatActivity() {
             val intent: Intent = Intent(this, MainActivity::class.java)
             MainActivity().changeFragment(PageData.CHATROOM)
             startActivity(intent)
+            /* 임시적으로 db 변경 "chat"이 아닌 다른걸로 만들어 줘야함 */
+
         }
 
         /* 메시지 보냄 */
@@ -119,4 +136,13 @@ class ChatActivity : AppCompatActivity() {
             chat_text.text.clear()
         }
     }
+
+    /* 키보드 유지 레이아웃 */
+    private val onLayoutChangeListener =
+        View.OnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
+            /* 키보드가 올라와 높이가 변함 */
+            if(bottom < oldBottom) {
+                messageActivity_recyclerview.scrollBy(0, oldBottom - bottom)
+            }
+        }
 }
