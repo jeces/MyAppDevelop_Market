@@ -12,7 +12,7 @@ import com.example.applicationjeces.user.LoginFragment
 import com.example.applicationjeces.user.LoginViewModel
 import com.example.applicationjeces.user.PageDataLogin
 
-class MainActivityLogin : AppCompatActivity() {
+class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainLoginBinding
     private val loginViewModel by viewModels<LoginViewModel>()
@@ -23,7 +23,7 @@ class MainActivityLogin : AppCompatActivity() {
         binding.apply {
             /* xml data와 바인딩 */
             loginviewModel = loginViewModel
-            lifecycleOwner = this@MainActivityLogin
+            lifecycleOwner = this@LoginActivity
         }
 
         loginViewModel.currentPages.observe(this) {

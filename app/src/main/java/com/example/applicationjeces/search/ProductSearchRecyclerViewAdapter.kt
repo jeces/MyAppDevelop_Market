@@ -1,4 +1,4 @@
-package com.example.applicationjeces
+package com.example.applicationjeces.search
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.applicationjeces.product.ProductRecyclerViewAdapter
+import com.example.applicationjeces.R
 import com.example.applicationjeces.product.Response
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.storage.FirebaseStorage

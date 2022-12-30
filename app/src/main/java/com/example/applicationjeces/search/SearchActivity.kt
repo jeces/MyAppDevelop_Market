@@ -1,4 +1,4 @@
-package com.example.applicationjeces
+package com.example.applicationjeces.search
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,17 +11,20 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.applicationjeces.JecesViewModel
+import com.example.applicationjeces.MainActivity
+import com.example.applicationjeces.R
 import com.example.applicationjeces.databinding.ActivityMain2Binding
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main2.*
 
-class MainActivity2 : AppCompatActivity() {
+class SearchActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMain2Binding
     private lateinit var jecesViewModel: JecesViewModel
     private lateinit var searchViewProduct: SearchView
-    val adapter = ProductSearchRecyclerViewAdapter(emptyList(), this@MainActivity2)
+    val adapter = ProductSearchRecyclerViewAdapter(emptyList(), this@SearchActivity)
     var jecesfirestore: FirebaseFirestore? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {

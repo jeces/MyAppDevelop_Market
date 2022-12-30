@@ -17,6 +17,7 @@ import com.example.applicationjeces.databinding.ActivityMainBinding
 import com.example.applicationjeces.frag.*
 import com.example.applicationjeces.page.DataViewModel
 import com.example.applicationjeces.page.PageData
+import com.example.applicationjeces.search.SearchActivity
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -64,7 +65,7 @@ class MainActivity : AppCompatActivity() {
                 /* getFragment를 호출하여 Fragment 획득 */
                 targetFragment = getFragment(pageData)
                 if(target == true) {
-                    startActivity(Intent(this@MainActivity, MainActivity2::class.java))
+                    startActivity(Intent(this@MainActivity, SearchActivity::class.java))
                     target = false
                     return
                 }
@@ -128,7 +129,7 @@ class MainActivity : AppCompatActivity() {
                 /* 로그아웃 */
                 FirebaseAuth.getInstance().signOut()
                 /* 페이지 이동 */
-                val it = Intent(this, MainActivityLogin::class.java)
+                val it = Intent(this, LoginActivity::class.java)
                 startActivity(it)
             }
         }
