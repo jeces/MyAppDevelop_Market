@@ -8,15 +8,10 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applicationjeces.databinding.ActivityMain2Binding
-import com.example.applicationjeces.page.DataViewModel
-import com.example.applicationjeces.page.PageData
-import com.example.applicationjeces.product.ProductRecyclerViewAdapter
-import com.example.applicationjeces.product.ProductViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main2.*
@@ -24,7 +19,7 @@ import kotlinx.android.synthetic.main.activity_main2.*
 class MainActivity2 : AppCompatActivity() {
 
     private lateinit var binding: ActivityMain2Binding
-    private lateinit var productViewModel: ProductViewModel
+    private lateinit var jecesViewModel: JecesViewModel
     private lateinit var searchViewProduct: SearchView
     val adapter = ProductSearchRecyclerViewAdapter(emptyList(), this@MainActivity2)
     var jecesfirestore: FirebaseFirestore? = null
@@ -40,7 +35,7 @@ class MainActivity2 : AppCompatActivity() {
         searchViewProduct = findViewById(R.id.search_view)
 
         /* 뷰모델 연결 */
-        productViewModel = ViewModelProvider(this)[ProductViewModel::class.java]
+        jecesViewModel = ViewModelProvider(this)[JecesViewModel::class.java]
 
         val recyclerView: RecyclerView = findViewById(R.id.rv_profile2)
         recyclerView.adapter = adapter
@@ -51,7 +46,7 @@ class MainActivity2 : AppCompatActivity() {
         searchViewProduct.setOnQueryTextListener(searchViewTextListener)
 
         /* 검색 시 */
-        productViewModel.searchProductsCall("").observe(this) { product ->
+        jecesViewModel.searchProductsCall("").observe(this) { product ->
             Log.d("검색observe", product.toString())
             adapter.searchSetData(product)
         }
@@ -122,7 +117,7 @@ class MainActivity2 : AppCompatActivity() {
 
     /* firebase 검색 */
     private fun searchDatabase(searchName: String) {
-        productViewModel.searchProductsCall(searchName).observe(this) {
+        jecesViewModel.searchProductsCall(searchName).observe(this) {
             adapter.searchSetData(it)
         }
     }

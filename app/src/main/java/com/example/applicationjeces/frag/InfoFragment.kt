@@ -1,7 +1,6 @@
 package com.example.applicationjeces.frag
 
 import android.annotation.SuppressLint
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -13,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applicationjeces.R
 import com.example.applicationjeces.product.ProductImageInfoRecyclerViewAdapter
-import com.example.applicationjeces.product.ProductViewModel
+import com.example.applicationjeces.JecesViewModel
 import kotlinx.android.synthetic.main.fragment_add.view.*
 import kotlinx.android.synthetic.main.fragment_info.*
 import kotlinx.android.synthetic.main.fragment_info.view.*
@@ -57,7 +56,7 @@ class InfoFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_info, container, false)
 
-        val productModel: ProductViewModel by activityViewModels()
+        val productModel: JecesViewModel by activityViewModels()
         view.productDetailName.setText(productModel.productArrayList[0].product_name)
         view.productDetailPrice.setText(productModel.productArrayList[0].product_price)
         view.productDetailDescription.setText(productModel.productArrayList[0].product_description)

@@ -16,7 +16,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -28,7 +27,7 @@ import com.example.applicationjeces.page.DataViewModel
 import com.example.applicationjeces.page.PageData
 import com.example.applicationjeces.product.Product
 import com.example.applicationjeces.product.ProductImageRecyclerViewAdapter
-import com.example.applicationjeces.product.ProductViewModel
+import com.example.applicationjeces.JecesViewModel
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_add.*
@@ -74,7 +73,7 @@ class AddFragment : Fragment() {
     private val adapter = ProductImageRecyclerViewAdapter(imagelist, this@AddFragment)
 
     /* ViewModel 이니셜라이즈 */
-    private lateinit var productViewModel: ProductViewModel
+    private lateinit var jecesViewModel: JecesViewModel
 
     /* ViewPage */
     private val pageViewModel by viewModels<DataViewModel>()
@@ -96,7 +95,7 @@ class AddFragment : Fragment() {
         viewProfile = inflater.inflate(R.layout.fragment_add, container, false)
 
         /* ViewModel provider를 실행 */
-        productViewModel = ViewModelProvider(this)[ProductViewModel::class.java]
+        jecesViewModel = ViewModelProvider(this)[JecesViewModel::class.java]
 
         /* Initialize Firebase Storage */
         firebaseStorage = FirebaseStorage.getInstance()
@@ -172,7 +171,7 @@ class AddFragment : Fragment() {
 
         for (i in imagelist) {
             var timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-            imgFileName = productViewModel.thisUser + "_" + productName + "_" + count + "_IMAGE_.png"
+            imgFileName = jecesViewModel.thisUser + "_" + productName + "_" + count + "_IMAGE_.png"
             var storageRef = firebaseStorage!!.reference.child("productimg/").child(imgFileName)
             storageRef.putFile(i).
             addOnSuccessListener {
@@ -198,13 +197,13 @@ class AddFragment : Fragment() {
                 imgFileName = "basic_img.png"
             } else {
                 /* 이미지가 있을 때 */
-                imgFileName = productViewModel.thisUser + "_" + productName + "_0_IMAGE_.png"
+                imgFileName = jecesViewModel.thisUser + "_" + productName + "_0_IMAGE_.png"
             }
 
 
             val product = Product(0, productName, productPrice, productDescription, imgCount, imgFileName)
             /* ViewModel에 addProduct를 해줌으로써 데이터베이스에 product값을 넣어줌 */
-            productViewModel.addProducts(product)
+            jecesViewModel.addProducts(product)
 
             Log.d("뷰모델2", product.toString())
             /* 메시지 */

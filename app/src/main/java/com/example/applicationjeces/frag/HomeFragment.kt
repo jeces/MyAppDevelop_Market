@@ -1,6 +1,5 @@
 package com.example.applicationjeces.frag
 
-import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -17,7 +16,7 @@ import com.example.applicationjeces.R
 import com.example.applicationjeces.page.DataViewModel
 import com.example.applicationjeces.page.PageData
 import com.example.applicationjeces.product.ProductRecyclerViewAdapter
-import com.example.applicationjeces.product.ProductViewModel
+import com.example.applicationjeces.JecesViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
 
@@ -36,7 +35,7 @@ class HomeFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    private  lateinit var productViewModel: ProductViewModel
+    private  lateinit var jecesViewModel: JecesViewModel
 
     override fun onAttach(context: Context) {
         Log.d("jecesAddFragment", "onAttach")
@@ -67,8 +66,8 @@ class HomeFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         /* 뷰모델 연결, 뷰모델을 불러옴 */
-        productViewModel = ViewModelProvider(this)[ProductViewModel::class.java]
-        productViewModel.liveTodoData.observe(viewLifecycleOwner, Observer { product ->
+        jecesViewModel = ViewModelProvider(this)[JecesViewModel::class.java]
+        jecesViewModel.liveTodoData.observe(viewLifecycleOwner, Observer { product ->
             /* ViewModel에 Observe를 활용하여 productViewModel에 ReadAllData 라이브 데이터가 바뀌었을때 캐치하여, adapter에서 만들어준 setData함수를 통해 바뀐데이터를 UI에 업데이트 해줌 */
             Log.d("dkfflwksk", "ddd")
             adapter.setData(product)
@@ -83,7 +82,7 @@ class HomeFragment : Fragment() {
                 val model: DataViewModel by activityViewModels()
                 model.changePageNum(PageData.DETAIL)
 
-                val productModel: ProductViewModel by activityViewModels()
+                val productModel: JecesViewModel by activityViewModels()
                 productModel.liveTodoData.value?.get(position).toString()
                 productModel.setProductDetail(adapter.producFiretList[position].get("productName").toString(), adapter.producFiretList[position].get("productPrice").toString()
                     , adapter.producFiretList[position].get("productDescription").toString(), adapter.producFiretList[position].get("productCount").toString(), position)

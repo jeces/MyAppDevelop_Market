@@ -12,13 +12,11 @@ import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
-import androidx.lifecycle.ViewModelProvider
 import com.example.applicationjeces.chat.ChatroomFragment
 import com.example.applicationjeces.databinding.ActivityMainBinding
 import com.example.applicationjeces.frag.*
 import com.example.applicationjeces.page.DataViewModel
 import com.example.applicationjeces.page.PageData
-import com.example.applicationjeces.product.ProductViewModel
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 

@@ -13,16 +13,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applicationjeces.MainActivity
 import com.example.applicationjeces.R
-import com.example.applicationjeces.databinding.ActivityChatBinding
 import com.example.applicationjeces.page.PageData
-import com.example.applicationjeces.product.ProductViewModel
+import com.example.applicationjeces.JecesViewModel
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_chat.*
 
 class ChatActivity : AppCompatActivity() {
 
-    private lateinit var productModel: ProductViewModel
+    private lateinit var productModel: JecesViewModel
 
     // 키보드 올라왔는지 확인
     private var isOpen = false
@@ -46,7 +45,7 @@ class ChatActivity : AppCompatActivity() {
         jecesfirestore = FirebaseFirestore.getInstance()
 
         /* 뷰모델 초기화 */
-        productModel = ViewModelProvider(this)[ProductViewModel::class.java]
+        productModel = ViewModelProvider(this)[JecesViewModel::class.java]
 
         /* 상대방 이름 가져와서 토픽 이름에 넣기 */
         var Id = chatroomYourId?.split(",")

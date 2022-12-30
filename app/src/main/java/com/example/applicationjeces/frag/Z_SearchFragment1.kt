@@ -9,7 +9,7 @@
 //import androidx.lifecycle.ViewModelProvider
 //import com.example.applicationjeces.R
 //import com.example.applicationjeces.product.ProductRecyclerViewAdapter
-//import com.example.applicationjeces.product.ProductViewModel
+//import com.example.applicationjeces.ProductViewModel
 //import kotlinx.android.synthetic.main.fragment_search1.view.*
 //
 //// TODO: Rename parameter arguments, choose names that match
