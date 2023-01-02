@@ -8,11 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applicationjeces.R
 import com.example.applicationjeces.product.ProductImageInfoRecyclerViewAdapter
 import com.example.applicationjeces.JecesViewModel
+import com.example.applicationjeces.product.Response
 import kotlinx.android.synthetic.main.fragment_add.view.*
 import kotlinx.android.synthetic.main.fragment_info.*
 import kotlinx.android.synthetic.main.fragment_info.view.*
@@ -75,7 +77,6 @@ class InfoFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
 
         view.chat_start_btn.setOnClickListener {
-            Log.d("asdffff", jecesModel.productArrayList[0].product_id)
             /**
              * 1. 채팅하기를 누르면 일단 채팅목록에 해당 상대방과의 채팅이 있는지 검색
              * 2. 있으면 그 채팅화면을 띄워주고
@@ -83,9 +84,10 @@ class InfoFragment : Fragment() {
              * 4. 단 채팅이 없을 경우 다른 화면으로 이동 시 채팅내용 삭제하기
              * 5. 채팅을 칠 경우 채팅룸 생성
              * */
-            jecesModel.searchChat(jecesModel.productArrayList[0].product_id)
+            jecesModel.searchChat(jecesModel.productArrayList[0].product_id).observe(viewLifecycleOwner, { chat ->
+                Log.d("asdfasdf", chat.toString())
 
-
+            })
         }
 
         // Inflate the layout for this fragment

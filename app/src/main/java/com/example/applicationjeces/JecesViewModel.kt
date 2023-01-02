@@ -431,18 +431,28 @@ class JecesViewModel(application: Application): AndroidViewModel(application) {
     /**
      * 채팅목록 찾기
      */
-    fun searchChat(yourId: String) {
+    fun searchChat(yourId: String) : MutableLiveData<Response> {
+        val chatSearchLiveTodoData = MutableLiveData<Response>()
         jecesfirestore!!.collection("Chatroom").get().addOnCompleteListener { chat ->
+            val response = Response()
             for(document in chat.result) {
                 if(document.getString("id")!!.contains(thisUser.toString()) && document.getString("id")!!.contains(yourId)) {
-
-
-
-
+                    /* 리턴을 해주기 */
+                    document?.let {
+                        if(response.searchChat == null) {
+                            response.searchChat = listOf(it)
+                        } else {
+                            response.searchChat = response.searchChat?.plus(listOf(it))
+                        }
+                    }
+                    chatSearchLiveTodoData.value = response
+                    Log.d("asdfasdf1", chatSearchLiveTodoData.value.toString())
+                    break
                 }
             }
         }
+        Log.d("asdfasdf2", chatSearchLiveTodoData.value.toString())
+        return chatSearchLiveTodoData
     }
 }
-
 
