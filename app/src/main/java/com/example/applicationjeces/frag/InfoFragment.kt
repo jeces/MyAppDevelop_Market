@@ -56,14 +56,14 @@ class InfoFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_info, container, false)
 
-        val productModel: JecesViewModel by activityViewModels()
-        view.productDetailName.setText(productModel.productArrayList[0].product_name)
-        view.productDetailPrice.setText(productModel.productArrayList[0].product_price)
-        view.productDetailDescription.setText(productModel.productArrayList[0].product_description)
+        val jecesModel: JecesViewModel by activityViewModels()
+        view.productDetailName.setText(jecesModel.productArrayList[0].product_name)
+        view.productDetailPrice.setText(jecesModel.productArrayList[0].product_price)
+        view.productDetailDescription.setText(jecesModel.productArrayList[0].product_description)
 
-        Log.d("infocount", productModel.productArrayList[0].product_count.toString())
+        Log.d("infocount", jecesModel.productArrayList[0].product_count.toString())
 
-        imagelist = productModel.getImage(productModel.productArrayList[0].product_name, productModel.productArrayList[0].product_count) as ArrayList<String>
+        imagelist = jecesModel.getImage(jecesModel.productArrayList[0].product_name, jecesModel.productArrayList[0].product_count) as ArrayList<String>
 
         /* 이미지 어뎁터 */
         val adapter = ProductImageInfoRecyclerViewAdapter(imagelist, this@InfoFragment)
@@ -73,6 +73,20 @@ class InfoFragment : Fragment() {
         recyclerView.adapter = adapter
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+
+        view.chat_start_btn.setOnClickListener {
+            Log.d("asdffff", jecesModel.productArrayList[0].product_id)
+            /**
+             * 1. 채팅하기를 누르면 일단 채팅목록에 해당 상대방과의 채팅이 있는지 검색
+             * 2. 있으면 그 채팅화면을 띄워주고
+             * 3. 없으면 채팅만 생성하고 화면을 만듬(채팅룸을 만들지는 않음)
+             * 4. 단 채팅이 없을 경우 다른 화면으로 이동 시 채팅내용 삭제하기
+             * 5. 채팅을 칠 경우 채팅룸 생성
+             * */
+            jecesModel.searchChat(jecesModel.productArrayList[0].product_id)
+
+
+        }
 
         // Inflate the layout for this fragment
         return view

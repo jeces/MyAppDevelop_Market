@@ -84,7 +84,7 @@ class HomeFragment : Fragment() {
 
                 val productModel: JecesViewModel by activityViewModels()
                 productModel.liveTodoData.value?.get(position).toString()
-                productModel.setProductDetail(adapter.producFiretList[position].get("productName").toString(), adapter.producFiretList[position].get("productPrice").toString()
+                productModel.setProductDetail(adapter.producFiretList[position].get("ID").toString(), adapter.producFiretList[position].get("productName").toString(), adapter.producFiretList[position].get("productPrice").toString()
                     , adapter.producFiretList[position].get("productDescription").toString(), adapter.producFiretList[position].get("productCount").toString(), position)
 
                 /* Navigation Bar Selected 넘겨야 됨[여기서부터해야함] */

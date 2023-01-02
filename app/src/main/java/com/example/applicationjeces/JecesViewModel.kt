@@ -171,7 +171,11 @@ class JecesViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
-    /* firebase Product 전체 가져오기 */
+    /**
+     *  Product 전체 가져오기
+     *  1. 가입된 아이디 전체 검색
+     *  2. 가입된 아이디 전체로 상품 전체 가져오기
+     **/
     fun allProduct() {
         jecesfirestore!!.collection("Product").addSnapshotListener { products, e ->
             if (e != null) {
@@ -340,9 +344,9 @@ class JecesViewModel(application: Application): AndroidViewModel(application) {
     }
 
     /* 제품 디테일 데이터를 가지고 있는 데이터 */
-    fun setProductDetail(productName: String, productPrice: String, productDescription: String, productCount: String, getPosition: Int) {
+    fun setProductDetail(productId : String, productName: String, productPrice: String, productDescription: String, productCount: String, getPosition: Int) {
         productArrayList.clear()
-        val productDetail = Product(0, productName, productPrice, productDescription, productCount.toInt(), thisUser + "_" + productName + "_0_IMAGE_.png")
+        val productDetail = Product(productId, productName, productPrice, productDescription, productCount.toInt(), thisUser + "_" + productName + "_0_IMAGE_.png")
         position = getPosition
         productArrayList.add(productDetail)
     }
@@ -420,6 +424,22 @@ class JecesViewModel(application: Application): AndroidViewModel(application) {
                 val update: MutableMap<String, Any> = HashMap()
                 update["whereUser"] = where
                 dbRef.document(document.id).set(update, SetOptions.merge())
+            }
+        }
+    }
+
+    /**
+     * 채팅목록 찾기
+     */
+    fun searchChat(yourId: String) {
+        jecesfirestore!!.collection("Chatroom").get().addOnCompleteListener { chat ->
+            for(document in chat.result) {
+                if(document.getString("id")!!.contains(thisUser.toString()) && document.getString("id")!!.contains(yourId)) {
+
+
+
+
+                }
             }
         }
     }

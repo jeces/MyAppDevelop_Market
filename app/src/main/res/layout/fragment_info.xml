@@ -95,7 +95,15 @@
             android:id="@+id/productDetailDescription"
             android:maxLength="30"
             android:layout_width="match_parent"
-            android:layout_height="150dp"/>
+            android:layout_height="70dp"/>
     </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/chat_start_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="200dp"
+        android:layout_marginTop="490dp"
+        android:text="채팅하기" />
 
 </FrameLayout>

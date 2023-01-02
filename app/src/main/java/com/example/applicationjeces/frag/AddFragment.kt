@@ -201,11 +201,10 @@ class AddFragment : Fragment() {
             }
 
 
-            val product = Product(0, productName, productPrice, productDescription, imgCount, imgFileName)
+            val product = Product(jecesViewModel.thisUser.toString(), productName, productPrice, productDescription, imgCount, imgFileName)
             /* ViewModel에 addProduct를 해줌으로써 데이터베이스에 product값을 넣어줌 */
             jecesViewModel.addProducts(product)
 
-            Log.d("뷰모델2", product.toString())
             /* 메시지 */
             Toast.makeText(requireContext(),"Successfully added!", Toast.LENGTH_LONG).show()
             /* 다시 homefragment로 돌려보냅니다. */

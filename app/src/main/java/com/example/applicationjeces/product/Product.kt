@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
 data class Product(
     /* 자동 생성 키 idx 값 */
     @PrimaryKey(autoGenerate = true)
-    var pid: Long,
+    var product_id: String,
 
     /* 상품 이름 */
     @ColumnInfo(name = "product_name")

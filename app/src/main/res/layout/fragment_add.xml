@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".frag.AddFragment">
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="200dp"
@@ -96,7 +95,7 @@
             android:id="@+id/productDescription"
             android:maxLength="30"
             android:layout_width="match_parent"
-            android:layout_height="150dp"/>
+            android:layout_height="70dp"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
@@ -104,7 +103,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="550dp"
+        android:layout_marginTop="470dp"
         android:layout_marginEnd="32dp"
         android:text="ImageUpload"
         android:background="@color/teal_200"
@@ -121,7 +120,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="275dp"
-        android:layout_marginTop="550dp"
+        android:layout_marginTop="470dp"
         android:layout_marginEnd="32dp"
         android:text="등록"
         android:background="@color/teal_200"
