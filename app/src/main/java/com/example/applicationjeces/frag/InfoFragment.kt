@@ -16,6 +16,7 @@ import com.example.applicationjeces.product.ProductImageInfoRecyclerViewAdapter
 import com.example.applicationjeces.JecesViewModel
 import com.example.applicationjeces.chat.ChatActivity
 import com.example.applicationjeces.chat.ChatroomData
+import com.google.firebase.Timestamp
 import kotlinx.android.synthetic.main.fragment_info.view.*
 
 // TODO: Rename parameter arguments, choose names that match
@@ -83,16 +84,12 @@ class InfoFragment : Fragment() {
              * 4. 생성은 됨, 생성하는것에서 다음 화면을 띄워줘야하는데 그게 안됨
              * */
             jecesModel.searchChat(jecesModel.productArrayList[0].product_id).observe(viewLifecycleOwner) { chat ->
-
-                Log.d("asdfasdf01", chat.searchChat!![0].toString())
-
-
-                Log.d("asdfasdf00", chat.searchChat!![0].getString("chatidx").toString())
                 /**
                  * 채팅방이 있으면
                  */
-                if (chat.searchChat!![0].getString("chatidx") != null) {
-                    Log.d("이리로 왔니?0", "ㅇ")
+                Log.d("gfggggggg", jecesModel.liveTodoChatroomDataCount.toString())
+                if (chat.searchChat != null) {
+                    Log.d("asdfasdf02", chat.toString())
                     /* 화면 띄움*/
                     /* 프라그먼트에서 프라그먼트로 제어가 불가능하기 때문에 상위 액티비티에서 제어 해주어야 한다. */
                     val intent = Intent(getActivity(), ChatActivity::class.java)
@@ -101,6 +98,29 @@ class InfoFragment : Fragment() {
                         this.putExtra("chatYourId", chat.searchChat!![0].getString("id").toString())
                     }
                     startActivity(intent)
+                }
+                else {
+                    Log.d("gfgggggggㅎ", jecesModel.liveTodoChatroomDataCount.toString())
+                    var chatroomData = ChatroomData(
+                        "${jecesModel.liveTodoChatroomDataCount}",
+                        "${jecesModel.thisUser},${jecesModel.productArrayList[0].product_id}",
+                        "",
+                        "${jecesModel.thisUser}/0",
+                        "${jecesModel.productArrayList[0].product_id}/0",
+                        Timestamp.now()
+                    )
+                    jecesModel.createChatroom(chatroomData)
+
+                    /* 화면 띄움*/
+                    /* 프라그먼트에서 프라그먼트로 제어가 불가능하기 때문에 상위 액티비티에서 제어 해주어야 한다. */
+                    val intent = Intent(getActivity(), ChatActivity::class.java)
+                    intent.apply {
+                        this.putExtra("chatidx", "2")
+                        this.putExtra("chatYourId", "${jecesModel.thisUser},${jecesModel.productArrayList[0].product_id}")
+                    }
+                    startActivity(intent)
+
+                    Log.d("asdfasdf03", chat.toString())
                 }
             }
         }

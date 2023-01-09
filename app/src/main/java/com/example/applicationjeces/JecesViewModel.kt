@@ -13,7 +13,6 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
-import org.w3c.dom.Document
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -35,6 +34,9 @@ class JecesViewModel(application: Application): AndroidViewModel(application) {
     val listChat : MutableList<ChatData> = mutableListOf()
     /* 채팅 실시간 라이브 데이터 */
     var liveTodoChatDataList = MutableLiveData<List<ChatData>?>()
+
+    /* 전체 채팅룸 카운트 */
+    var liveTodoChatroomDataCount : Int = 0
 
     var jecesfirestore: FirebaseFirestore? = null
     var thisUser: String? = null
@@ -145,7 +147,10 @@ class JecesViewModel(application: Application): AndroidViewModel(application) {
             }
     }
 
-    /* 자신의 채팅목록 전체 가져오기 */
+    /**
+     *  자신의 채팅목록 전체 가져오기
+     *  라스트코멘트가 있는 것만 리스트로 가져오기
+     *  */
     fun getAllChatroom() {
         /* 어떻게 가져올껀지 찾아야한다. */
         jecesfirestore!!.collection("Chatroom").orderBy("time", Query.Direction.DESCENDING).addSnapshotListener { chatrooms, e->
@@ -154,7 +159,7 @@ class JecesViewModel(application: Application): AndroidViewModel(application) {
             }
             listChatroom.clear()
             for(snapshot in chatrooms!!.documents) {
-                if(snapshot.getString("id")!!.contains(thisUser.toString())) {
+                if(snapshot.getString("id")!!.contains(thisUser.toString()) && snapshot.getString("lastcomment").toString() != "") {
                     snapshot?.let { chatroom ->
                         val chatroomDatas = ChatroomData (
                             chatroom.getString("chatidx").toString(),
@@ -169,6 +174,26 @@ class JecesViewModel(application: Application): AndroidViewModel(application) {
                 }
             }
             liveTodoChatroomData.value = listChatroom
+        }
+    }
+
+    /**
+     * 전체 채팅 수 가져오기
+     * */
+    fun getAllChatroomCount() {
+        /* 어떻게 가져올껀지 찾아야한다. */
+        jecesfirestore!!.collection("Chatroom").addSnapshotListener { chatrooms, e->
+            if (e != null) {
+                return@addSnapshotListener
+            }
+            var count = 0
+            for(snapshot in chatrooms!!.documents) {
+                count++
+                Log.d("gfggggggg0-0", count.toString())
+            }
+            liveTodoChatroomDataCount = count
+
+            Log.d("gfggggggg0", liveTodoChatroomDataCount.toString())
         }
     }
 
@@ -434,6 +459,8 @@ class JecesViewModel(application: Application): AndroidViewModel(application) {
      */
     fun searchChat(yourId: String) : MutableLiveData<Response> {
         val chatSearchLiveTodoData = MutableLiveData<Response>()
+        /* 전체 채팅 수 가져오기 */
+        getAllChatroomCount()
         jecesfirestore!!.collection("Chatroom").get().addOnCompleteListener { chat ->
             val response = Response()
             var flags = false
@@ -455,28 +482,16 @@ class JecesViewModel(application: Application): AndroidViewModel(application) {
                 }
             }
             if(flags == false) {
-                /* 목록 없으면 생성 */
-                var chatroomData = ChatroomData(
-                    "2",
-                    "${thisUser},${productArrayList[0].product_id}",
-                    "",
-                    "${thisUser}/0",
-                    "${productArrayList[0].product_id}/0",
-                    null
-                )
-                createChatroom(chatroomData)
+                /* 목록 없으면 null 값 넣기 */
                 response.searchChat = null
                 chatSearchLiveTodoData.value = response
+                Log.d("asdfffff0", chat.result.documents.toString())
             }
             Log.d("asdfffff", chat.result.documents.toString())
         }
         Log.d("asdfasdf2", chatSearchLiveTodoData.value.toString())
         return chatSearchLiveTodoData
     }
-
-
-
-
 
     /**
      * 채팅방 생성
