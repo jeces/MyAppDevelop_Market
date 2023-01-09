@@ -454,5 +454,18 @@ class JecesViewModel(application: Application): AndroidViewModel(application) {
         Log.d("asdfasdf2", chatSearchLiveTodoData.value.toString())
         return chatSearchLiveTodoData
     }
-}
 
+    /**
+     * 채팅방 생성
+     */
+    fun createChatroom(chatroom : ChatroomData) {
+        jecesfirestore!!.collection("Chatroom").add(chatroom)
+            .addOnSuccessListener {
+                /* 성공 */
+                Log.d("데이터 입력 성공", "ㅇㅇ")
+            }.addOnFailureListener { exception ->
+                /* 실패 */
+                Log.w("CHAT 데이터 입력 실패", "Error getting documents")
+            }
+    }
+}

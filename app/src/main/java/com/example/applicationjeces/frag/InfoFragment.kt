@@ -1,6 +1,7 @@
 package com.example.applicationjeces.frag
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -8,15 +9,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applicationjeces.R
 import com.example.applicationjeces.product.ProductImageInfoRecyclerViewAdapter
 import com.example.applicationjeces.JecesViewModel
-import com.example.applicationjeces.product.Response
-import kotlinx.android.synthetic.main.fragment_add.view.*
-import kotlinx.android.synthetic.main.fragment_info.*
+import com.example.applicationjeces.chat.ChatActivity
+import com.example.applicationjeces.chat.ChatroomData
 import kotlinx.android.synthetic.main.fragment_info.view.*
 
 // TODO: Rename parameter arguments, choose names that match
@@ -84,10 +83,46 @@ class InfoFragment : Fragment() {
              * 4. 단 채팅이 없을 경우 다른 화면으로 이동 시 채팅내용 삭제하기
              * 5. 채팅을 칠 경우 채팅룸 생성
              * */
-            jecesModel.searchChat(jecesModel.productArrayList[0].product_id).observe(viewLifecycleOwner, { chat ->
-                Log.d("asdfasdf", chat.toString())
+            jecesModel.searchChat(jecesModel.productArrayList[0].product_id).observe(viewLifecycleOwner) { chat ->
+                Log.d("asdfasdf", chat.searchChat!![0].getString("chatidx").toString())
+                /**
+                 * 채팅방이 있으면
+                 */
+                if (chat.searchChat!![0].getString("chatidx") != null) {
+                    Log.d("이리로 왔니?0", "ㅇ")
+                    /* 화면 띄움*/
+                    /* 프라그먼트에서 프라그먼트로 제어가 불가능하기 때문에 상위 액티비티에서 제어 해주어야 한다. */
+                    val intent = Intent(getActivity(), ChatActivity::class.java)
+                    intent.apply {
+                        this.putExtra("chatidx", chat.searchChat!![0].getString("chatidx").toString())
+                        this.putExtra("chatYourId", chat.searchChat!![0].getString("id").toString())
+                    }
+                    startActivity(intent)
+                    /**
+                     * 채팅방이 없으면 만듬
+                      */
+                } else {
+                    Log.d("이리로 왔니?1", "ㅇ")
+                    var chatroomData = ChatroomData(
+                        "2",
+                        "${jecesModel.thisUser},${jecesModel.productArrayList[0].product_id}",
+                        "",
+                        "${jecesModel.thisUser}/0",
+                        "${jecesModel.productArrayList[0].product_id}/0",
+                        null
+                        )
+                    jecesModel.createChatroom(chatroomData)
 
-            })
+                    /* 화면 띄움*/
+                    /* 프라그먼트에서 프라그먼트로 제어가 불가능하기 때문에 상위 액티비티에서 제어 해주어야 한다. */
+                    val intent = Intent(getActivity(), ChatActivity::class.java)
+                    intent.apply {
+                        this.putExtra("chatidx", "2")
+                        this.putExtra("chatYourId", "${jecesModel.thisUser},${jecesModel.productArrayList[0].product_id}")
+                    }
+                    startActivity(intent)
+                }
+            }
         }
 
         // Inflate the layout for this fragment
