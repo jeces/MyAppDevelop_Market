@@ -79,7 +79,7 @@ class ChatroomFragment : Fragment() {
                 /* 프라그먼트에서 프라그먼트로 제어가 불가능하기 때문에 상위 액티비티에서 제어 해주어야 한다. */
                 val intent = Intent(getActivity(), ChatActivity::class.java)
                 intent.apply {
-                    this.putExtra("chatidx", adapter.currentList[position].idx)
+                    this.putExtra("chatidx", adapter.currentList[position].chatidx)
                     this.putExtra("chatYourId", adapter.currentList[position].id)
                 }
                 startActivity(intent)

@@ -79,12 +79,15 @@ class InfoFragment : Fragment() {
             /**
              * 1. 채팅하기를 누르면 일단 채팅목록에 해당 상대방과의 채팅이 있는지 검색
              * 2. 있으면 그 채팅화면을 띄워주고
-             * 3. 없으면 채팅만 생성하고 화면을 만듬(채팅룸을 만들지는 않음)
-             * 4. 단 채팅이 없을 경우 다른 화면으로 이동 시 채팅내용 삭제하기
-             * 5. 채팅을 칠 경우 채팅룸 생성
+             * 3. 없으면 채팅룸 생성하고 채팅창 생성 - 단 채팅리스트 보여줄때 라스트 네임 있는걸로만 보여주기
+             * 4. 생성은 됨, 생성하는것에서 다음 화면을 띄워줘야하는데 그게 안됨
              * */
             jecesModel.searchChat(jecesModel.productArrayList[0].product_id).observe(viewLifecycleOwner) { chat ->
-                Log.d("asdfasdf", chat.searchChat!![0].getString("chatidx").toString())
+
+                Log.d("asdfasdf01", chat.searchChat!![0].toString())
+
+
+                Log.d("asdfasdf00", chat.searchChat!![0].getString("chatidx").toString())
                 /**
                  * 채팅방이 있으면
                  */
@@ -96,29 +99,6 @@ class InfoFragment : Fragment() {
                     intent.apply {
                         this.putExtra("chatidx", chat.searchChat!![0].getString("chatidx").toString())
                         this.putExtra("chatYourId", chat.searchChat!![0].getString("id").toString())
-                    }
-                    startActivity(intent)
-                    /**
-                     * 채팅방이 없으면 만듬
-                      */
-                } else {
-                    Log.d("이리로 왔니?1", "ㅇ")
-                    var chatroomData = ChatroomData(
-                        "2",
-                        "${jecesModel.thisUser},${jecesModel.productArrayList[0].product_id}",
-                        "",
-                        "${jecesModel.thisUser}/0",
-                        "${jecesModel.productArrayList[0].product_id}/0",
-                        null
-                        )
-                    jecesModel.createChatroom(chatroomData)
-
-                    /* 화면 띄움*/
-                    /* 프라그먼트에서 프라그먼트로 제어가 불가능하기 때문에 상위 액티비티에서 제어 해주어야 한다. */
-                    val intent = Intent(getActivity(), ChatActivity::class.java)
-                    intent.apply {
-                        this.putExtra("chatidx", "2")
-                        this.putExtra("chatYourId", "${jecesModel.thisUser},${jecesModel.productArrayList[0].product_id}")
                     }
                     startActivity(intent)
                 }

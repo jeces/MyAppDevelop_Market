@@ -13,6 +13,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
+import org.w3c.dom.Document
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -435,7 +436,9 @@ class JecesViewModel(application: Application): AndroidViewModel(application) {
         val chatSearchLiveTodoData = MutableLiveData<Response>()
         jecesfirestore!!.collection("Chatroom").get().addOnCompleteListener { chat ->
             val response = Response()
+            var flags = false
             for(document in chat.result) {
+                /* 목록 찾기 */
                 if(document.getString("id")!!.contains(thisUser.toString()) && document.getString("id")!!.contains(yourId)) {
                     /* 리턴을 해주기 */
                     document?.let {
@@ -447,13 +450,33 @@ class JecesViewModel(application: Application): AndroidViewModel(application) {
                     }
                     chatSearchLiveTodoData.value = response
                     Log.d("asdfasdf1", chatSearchLiveTodoData.value.toString())
+                    flags = true
                     break
                 }
             }
+            if(flags == false) {
+                /* 목록 없으면 생성 */
+                var chatroomData = ChatroomData(
+                    "2",
+                    "${thisUser},${productArrayList[0].product_id}",
+                    "",
+                    "${thisUser}/0",
+                    "${productArrayList[0].product_id}/0",
+                    null
+                )
+                createChatroom(chatroomData)
+                response.searchChat = null
+                chatSearchLiveTodoData.value = response
+            }
+            Log.d("asdfffff", chat.result.documents.toString())
         }
         Log.d("asdfasdf2", chatSearchLiveTodoData.value.toString())
         return chatSearchLiveTodoData
     }
+
+
+
+
 
     /**
      * 채팅방 생성

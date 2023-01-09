@@ -104,7 +104,7 @@ class ChatroomRecyclerViewAdapter(var contexts: Fragment, var myId: String): Lis
                 chatroomYourId.text = Id[0]
                 yourChatroomProfilImg(Id[0], chatroomUserImg)
             }
-            lastcomment.text = item.lastComment.toString()
+            lastcomment.text = item.lastcomment.toString()
             time.text = changeTime(item.time as com.google.firebase.Timestamp)
         }
     }
