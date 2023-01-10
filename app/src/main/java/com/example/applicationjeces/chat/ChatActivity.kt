@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
@@ -49,7 +48,6 @@ class ChatActivity : AppCompatActivity() {
 
         /* 상대방 이름 가져와서 토픽 이름에 넣기 */
         var Id = chatroomYourId?.split(",")
-        Log.d("아이디머냐", Id.toString())
         if(Id?.get(0).toString() == productModel.thisUser) {
             yourId = Id?.get(1).toString()
             chat_topic_name.text = yourId
@@ -59,17 +57,6 @@ class ChatActivity : AppCompatActivity() {
             chat_topic_name.text = yourId
             myId = Id?.get(1)
         }
-
-
-
-
-//        /* 어뎁터 가져옴 */
-//        val adapter = ChatRecyclerViewAdapter(myId.toString(), this@ChatActivity)
-//        val recyclerView: RecyclerView = findViewById(R.id.messageActivity_recyclerview)
-//        recyclerView.adapter = adapter
-//        recyclerView.layoutManager = LinearLayoutManager(this)
-//        recyclerView.setHasFixedSize(true)
-
 
         val adapter = ChatRecyclerViewAdapter(myId.toString(), this@ChatActivity)
         val recyclerView: RecyclerView = findViewById(R.id.messageActivity_recyclerview)
