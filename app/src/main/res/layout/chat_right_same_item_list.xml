@@ -57,6 +57,12 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:textSize="10sp" />
+                <TextView
+                    android:id="@+id/chat_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="bottom"
+                    android:textSize="10sp" />
 
             </LinearLayout>
 
@@ -66,7 +72,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:layout_marginTop="3dp"
-                android:background="@drawable/rightbubble"
+                android:background="@drawable/r_1_theme_chatroom_bubble_me_02_image"
                 android:textColor="#000000" />
         </LinearLayout>
 

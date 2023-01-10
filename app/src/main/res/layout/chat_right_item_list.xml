@@ -54,8 +54,6 @@
                     android:layout_gravity="bottom"
                     android:textSize="10sp" />
 
-
-
             </LinearLayout>
 
             <TextView
@@ -64,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:layout_marginTop="3dp"
-                android:background="@drawable/rightbubble"
+                android:background="@drawable/r_theme_chatroom_bubble_me_01_image"
                 android:textColor="#000000" />
         </LinearLayout>
 

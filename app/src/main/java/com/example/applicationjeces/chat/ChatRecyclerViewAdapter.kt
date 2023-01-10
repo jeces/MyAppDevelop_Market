@@ -89,8 +89,8 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
         /* 각 자신과 상대방에 따라 viewType에 따라서 레이아웃을 다르게 해줌 */
         return when(currentList[position].myid) {
             myId -> {
-                if(currentList[position].fronttimesame == "true") 4
-                else 3
+                if(currentList[position].ishead == "true") 3
+                else 4
             }
             else -> {
                 if(currentList[position].ishead == "true") 1
@@ -132,11 +132,13 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
     * 나 자신 말풍선 */
     inner class rightHolder(ItemView: View): RecyclerView.ViewHolder(ItemView) {
         private val messageText: TextView = ItemView.findViewById(R.id.chat_message2)
-        private val date: TextView = ItemView.findViewById(R.id.chat_time2)
         private val isRead: TextView = ItemView.findViewById(R.id.isRead)
+        private val date: TextView = ItemView.findViewById(R.id.chat_time2)
         fun bind(item: ChatData) {
             if(item.isread == "true") isRead.text = " "
             else isRead.text = "1"
+            if(item.fronttimesame == "true") date.text = " "
+            else date.text = changeTime(item.time as com.google.firebase.Timestamp)
             date.text = changeTime(item.time as com.google.firebase.Timestamp)
             messageText.text = item.content
         }
@@ -145,9 +147,12 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
     inner class rightSameHolder(ItemView: View): RecyclerView.ViewHolder(ItemView) {
         private val messageText: TextView = ItemView.findViewById(R.id.chat_message2_same)
         private val isRead: TextView = ItemView.findViewById(R.id.isRead_same)
+        private val date: TextView = ItemView.findViewById(R.id.chat_time)
         fun bind(item: ChatData) {
             if(item.isread == "true") isRead.text = " "
             else isRead.text = "1"
+            if(item.fronttimesame == "true") date.text = " "
+            else date.text = changeTime(item.time as com.google.firebase.Timestamp)
             messageText.text = item.content
         }
     }
