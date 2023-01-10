@@ -58,7 +58,7 @@
                     android:layout_gravity="right"
                     android:textSize="10sp" />
                 <TextView
-                    android:id="@+id/chat_time"
+                    android:id="@+id/chat_time_same"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="bottom"

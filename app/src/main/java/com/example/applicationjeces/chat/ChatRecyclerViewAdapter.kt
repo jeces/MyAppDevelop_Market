@@ -1,6 +1,7 @@
 package com.example.applicationjeces.chat
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -129,7 +130,7 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
     }
 
     /* inner class로 viewHolder 정의. 레이아웃 내 view 연결
-    * 나 자신 말풍선 */
+    * 나 자신 헤드 말풍선 */
     inner class rightHolder(ItemView: View): RecyclerView.ViewHolder(ItemView) {
         private val messageText: TextView = ItemView.findViewById(R.id.chat_message2)
         private val isRead: TextView = ItemView.findViewById(R.id.isRead)
@@ -139,15 +140,17 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
             else isRead.text = "1"
             if(item.fronttimesame == "true") date.text = " "
             else date.text = changeTime(item.time as com.google.firebase.Timestamp)
-            date.text = changeTime(item.time as com.google.firebase.Timestamp)
             messageText.text = item.content
         }
     }
 
+    /**
+     * 나 자신 말풍선
+     */
     inner class rightSameHolder(ItemView: View): RecyclerView.ViewHolder(ItemView) {
         private val messageText: TextView = ItemView.findViewById(R.id.chat_message2_same)
         private val isRead: TextView = ItemView.findViewById(R.id.isRead_same)
-        private val date: TextView = ItemView.findViewById(R.id.chat_time)
+        private val date: TextView = ItemView.findViewById(R.id.chat_time_same)
         fun bind(item: ChatData) {
             if(item.isread == "true") isRead.text = " "
             else isRead.text = "1"
