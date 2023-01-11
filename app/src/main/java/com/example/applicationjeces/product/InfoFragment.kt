@@ -137,6 +137,8 @@ class InfoFragment : Fragment() {
             showDialog()
         }
 
+
+
         // Inflate the layout for this fragment
         return view
     }
