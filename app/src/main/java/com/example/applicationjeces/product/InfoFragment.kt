@@ -1,4 +1,4 @@
-package com.example.applicationjeces.frag
+package com.example.applicationjeces.product
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -76,6 +76,9 @@ class InfoFragment : Fragment() {
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
 
+        /**
+         * 채팅버튼
+         */
         view.chat_start_btn.setOnClickListener {
             /**
              * 1. 채팅하기를 누르면 일단 채팅목록에 해당 상대방과의 채팅이 있는지 검색
@@ -125,9 +128,43 @@ class InfoFragment : Fragment() {
             }
         }
 
+        /**
+         * 입찰버튼
+         * Modal 띄워서 현재입찰가격 위로 입찰 가능하도록 하기
+         * 입찰성공 띄우기
+         */
+        view.price_add_btn.setOnClickListener {
+            showDialog()
+        }
+
         // Inflate the layout for this fragment
         return view
     }
+
+
+
+    fun showDialog() {
+        val bidDialog = BidDialog()
+        bidDialog.show(parentFragmentManager, "BidDialog")
+    }
+
+//    fun showDialog() {
+//        val builder = AlertDialog.Builder(this)
+//        builder.setTitle("Enter some data")
+//
+//        val input = EditText(this)
+//        builder.setView(input)
+//
+//        builder.setPositiveButton("OK") { dialog, which ->
+//            val data = input.text.toString()
+//            // Do something with the data
+//        }
+//        builder.setNegativeButton("Cancel") { dialog, which ->
+//            dialog.cancel()
+//        }
+//
+//        builder.show()
+//    }
 
     companion object {
         /**

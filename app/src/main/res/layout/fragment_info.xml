@@ -17,6 +17,14 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#333333"
+        android:layout_marginTop="330dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnDetailDelete" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -142,7 +150,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:layout_marginEnd="32dp"
                 android:layout_marginTop="90dp"
                 android:text="내용"
                 android:textSize="15dp">
@@ -152,9 +159,9 @@
                 android:id="@+id/chat_start_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="200dp"
+                android:layout_marginStart="180dp"
                 android:layout_marginTop="290dp"
-                android:text="채팅하기" />
+                android:text="Chatting" />
 
             <Button
                 android:id="@+id/price_add_btn"
@@ -162,8 +169,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="300dp"
                 android:layout_marginTop="290dp"
-                android:text="입찰하기" />
-
+                android:text="Bidding" />
 
         </FrameLayout>
     </ScrollView>
