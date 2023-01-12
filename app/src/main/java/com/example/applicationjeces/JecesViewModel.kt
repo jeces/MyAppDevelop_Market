@@ -325,7 +325,10 @@ class JecesViewModel(application: Application): AndroidViewModel(application) {
             "productPrice" to product.product_price,
             "productDescription" to product.product_description,
             "productCount" to product.product_count,
-            "productImgUrl" to product.product_img_url
+            "productImgUrl" to product.product_img_url,
+            "pChatCount" to product.chatCount,
+            "pViewCount" to product.viewCount,
+            "pHeartCount" to product.heartCount
         )
         jecesfirestore!!.collection("Product").add(products)
             .addOnSuccessListener {
