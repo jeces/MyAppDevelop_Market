@@ -370,9 +370,9 @@ class JecesViewModel(application: Application): AndroidViewModel(application) {
     }
 
     /* 제품 디테일 데이터를 가지고 있는 데이터 */
-    fun setProductDetail(productId : String, productName: String, productPrice: String, productDescription: String, productCount: String, getPosition: Int) {
+    fun setProductDetail(productId : String, productName: String, productPrice: String, productDescription: String, productCount: String, pChatCount: String, pViewCount: String, pHearCount: String, getPosition: Int) {
         productArrayList.clear()
-        val productDetail = Product(productId, productName, productPrice, productDescription, productCount.toInt(), thisUser + "_" + productName + "_0_IMAGE_.png")
+        val productDetail = Product(productId, productName, productPrice, productDescription, productCount.toInt(), thisUser + "_" + productName + "_0_IMAGE_.png", pChatCount, pViewCount, pHearCount)
         position = getPosition
         productArrayList.add(productDetail)
     }
@@ -505,5 +505,12 @@ class JecesViewModel(application: Application): AndroidViewModel(application) {
                 /* 실패 */
                 Log.w("CHAT 데이터 입력 실패", "Error getting documents")
             }
+    }
+
+    /**
+     * ViewCount++
+     */
+    fun viewCountUp(pId: String, pName: String) {
+        jecesfirestore!!.collection("Product").whereEqualTo("ID", pId).whereEqualTo("productName", pName)
     }
 }

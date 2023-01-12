@@ -58,14 +58,23 @@ class InfoFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_info, container, false)
 
+
+
+
+
         val jecesModel: JecesViewModel by activityViewModels()
-        view.productDetailName.setText(jecesModel.productArrayList[0].product_name)
+
+        var pId: String = jecesModel.productArrayList[0].product_id
+        var pName: String = jecesModel.productArrayList[0].product_name
+
+        view.productDetailName.setText(pName)
         view.productDetailPrice.setText(jecesModel.productArrayList[0].product_price)
         view.productDetailDescription.setText(jecesModel.productArrayList[0].product_description)
+        view.product_chat_text.setText(jecesModel.productArrayList[0].chatCount)
+        view.product_view_text.setText(jecesModel.productArrayList[0].viewCount)
+        view.product_check_text.setText(jecesModel.productArrayList[0].heartCount)
 
-        Log.d("infocount", jecesModel.productArrayList[0].product_count.toString())
-
-        imagelist = jecesModel.getImage(jecesModel.productArrayList[0].product_name, jecesModel.productArrayList[0].product_count) as ArrayList<String>
+        imagelist = jecesModel.getImage(pName, jecesModel.productArrayList[0].product_count) as ArrayList<String>
 
         /* 이미지 어뎁터 */
         val adapter = ProductImageInfoRecyclerViewAdapter(imagelist, this@InfoFragment)
@@ -75,6 +84,10 @@ class InfoFragment : Fragment() {
         recyclerView.adapter = adapter
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+
+        /* ViewCount ++함 */
+        jecesModel.viewCountUp(pId, pName)
+
 
         /**
          * 채팅버튼
@@ -86,7 +99,7 @@ class InfoFragment : Fragment() {
              * 3. 없으면 채팅룸 생성하고 채팅창 생성 - 단 채팅리스트 보여줄때 라스트 네임 있는걸로만 보여주기
              * 4. 생성은 됨, 생성하는것에서 다음 화면을 띄워줘야하는데 그게 안됨
              * */
-            jecesModel.searchChat(jecesModel.productArrayList[0].product_id).observe(viewLifecycleOwner) { chat ->
+            jecesModel.searchChat(pId).observe(viewLifecycleOwner) { chat ->
                 /**
                  * 채팅방이 있으면
                  */
@@ -106,10 +119,10 @@ class InfoFragment : Fragment() {
                     Log.d("gfgggggggㅎ", jecesModel.liveTodoChatroomDataCount.toString())
                     var chatroomData = ChatroomData(
                         "${jecesModel.liveTodoChatroomDataCount}",
-                        "${jecesModel.thisUser},${jecesModel.productArrayList[0].product_id}",
+                        "${jecesModel.thisUser},${pId}",
                         "",
                         "${jecesModel.thisUser}/0",
-                        "${jecesModel.productArrayList[0].product_id}/0",
+                        "${pId}/0",
                         Timestamp.now()
                     )
                     jecesModel.createChatroom(chatroomData)
@@ -119,11 +132,9 @@ class InfoFragment : Fragment() {
                     val intent = Intent(getActivity(), ChatActivity::class.java)
                     intent.apply {
                         this.putExtra("chatidx", "2")
-                        this.putExtra("chatYourId", "${jecesModel.thisUser},${jecesModel.productArrayList[0].product_id}")
+                        this.putExtra("chatYourId", "${jecesModel.thisUser},${pId}")
                     }
                     startActivity(intent)
-
-                    Log.d("asdfasdf03", chat.toString())
                 }
             }
         }

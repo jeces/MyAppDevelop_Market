@@ -29,6 +29,8 @@ class ProductRecyclerViewAdapter(var producFiretList: List<DocumentSnapshot>, va
         val currentItem2 = producFiretList[position].get("productPrice")
         var currentItem3 = producFiretList[position].get("productImgUrl")
         val currentItem4 = producFiretList[position].get("productCount")
+
+
         /* HomeFragment */
         holder.itemView.product_name.text = currentItem.toString()
         holder.itemView.product_price.text = currentItem2.toString()

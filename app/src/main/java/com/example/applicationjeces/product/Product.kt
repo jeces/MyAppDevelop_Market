@@ -3,6 +3,7 @@ package com.example.applicationjeces.product
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.applicationjeces.search.ProductSearchRecyclerViewAdapter
 
 /* android.arch.persistence.room를 import하게 됨 */
 @Entity(tableName = "product_table")
@@ -29,7 +30,16 @@ data class Product(
 
     /* 이미지 첫화면 URL */
     @ColumnInfo(name = "product_img_url")
-    var product_img_url: String
+    var product_img_url: String,
+
+    /* 채팅 수 */
+    var chatCount: String,
+
+    /* 상품 뷰수 */
+    var viewCount: String,
+
+    /* 상품 하트수 */
+    var heartCount: String
 
 ) {
 
