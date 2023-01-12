@@ -61,6 +61,7 @@ class InfoFragment : Fragment() {
 
         var pId: String = jecesModel.productArrayList[0].product_id
         var pName: String = jecesModel.productArrayList[0].product_name
+        var myId: String = jecesModel.thisUser.toString()
 
         view.productDetailName.setText(pName)
         view.productDetailPrice.setText(jecesModel.productArrayList[0].product_price)
@@ -73,7 +74,7 @@ class InfoFragment : Fragment() {
 
         Log.d("ㄹㄹㄹㄹㄹㄹ", "1")
         /* 이미지 어뎁터 */
-        val adapter = ProductImageInfoRecyclerViewAdapter(imagelist, this@InfoFragment)
+        val adapter = ProductImageInfoRecyclerViewAdapter(myId, pName, imagelist, this@InfoFragment)
         Log.d("ㄹㄹㄹㄹㄹㄹ", "12")
 
         /* 이미지 리사이클러뷰 어뎁터 장착 */
@@ -86,7 +87,7 @@ class InfoFragment : Fragment() {
          * ViewCount ++함
          * 단 자기 자신은 올리지 않음
          */
-        if(jecesModel.thisUser != pId) jecesModel.viewCountUp(pId, pName)
+        if(myId != pId) jecesModel.viewCountUp(pId, pName)
 
         /**
          * 채팅버튼
@@ -118,9 +119,9 @@ class InfoFragment : Fragment() {
                     Log.d("gfgggggggㅎ", jecesModel.liveTodoChatroomDataCount.toString())
                     var chatroomData = ChatroomData(
                         "${jecesModel.liveTodoChatroomDataCount}",
-                        "${jecesModel.thisUser},${pId}",
+                        "${myId},${pId}",
                         "",
-                        "${jecesModel.thisUser}/0",
+                        "${myId}/0",
                         "${pId}/0",
                         Timestamp.now()
                     )
@@ -131,7 +132,7 @@ class InfoFragment : Fragment() {
                     val intent = Intent(getActivity(), ChatActivity::class.java)
                     intent.apply {
                         this.putExtra("chatidx", "2")
-                        this.putExtra("chatYourId", "${jecesModel.thisUser},${pId}")
+                        this.putExtra("chatYourId", "${myId},${pId}")
                     }
                     startActivity(intent)
                 }

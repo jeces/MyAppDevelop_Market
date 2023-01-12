@@ -100,6 +100,9 @@ class AddFragment : Fragment() {
         /* Initialize Firebase Storage */
         firebaseStorage = FirebaseStorage.getInstance()
 
+        /* 내 아이디*/
+        var myId: String = jecesViewModel.thisUser.toString()
+
         /* 업로드 버튼 누르면 */
         viewProfile!!.imgBtn.setOnClickListener {
             /* 앨범 오픈 */
@@ -166,13 +169,14 @@ class AddFragment : Fragment() {
     /* 이미지 업로드 */
     private fun funImageUpload(view : View) {
         val productName = productName.text.toString()
+        val myId = jecesViewModel.thisUser.toString()
         /* 다중이미지 저장 */
         var count = 0
 
         for (i in imagelist) {
             var timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-            imgFileName = jecesViewModel.thisUser + "_" + productName + "_" + count + "_IMAGE_.png"
-            var storageRef = firebaseStorage!!.reference.child("productimg/").child(imgFileName)
+            imgFileName = myId + "_" + productName + "_" + count + "_IMAGE_.png"
+            var storageRef = firebaseStorage!!.reference.child("${myId}/${productName}/").child(imgFileName)
             storageRef.putFile(i).
             addOnSuccessListener {
                 Toast.makeText(view.context, "ImageUploaded", Toast.LENGTH_SHORT).show()

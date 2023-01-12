@@ -15,7 +15,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.product_item_list.view.*
 
-class ProductRecyclerViewAdapter(var producFiretList: List<DocumentSnapshot>, var context: Fragment): RecyclerView.Adapter<ProductRecyclerViewAdapter.Holder>() {
+class ProductRecyclerViewAdapter(var myId: String, var producFiretList: List<DocumentSnapshot>, var context: Fragment): RecyclerView.Adapter<ProductRecyclerViewAdapter.Holder>() {
 
     /* ViewHolder에게 item을 보여줄 View로 쓰일 item_data_list.xml를 넘기면서 ViewHolder 생성. 아이템 레이아웃과 결합 */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
@@ -30,23 +30,29 @@ class ProductRecyclerViewAdapter(var producFiretList: List<DocumentSnapshot>, va
         var currentItem3 = producFiretList[position].get("productImgUrl")
         val currentItem4 = producFiretList[position].get("productCount")
 
-
         /* HomeFragment */
         holder.itemView.product_name.text = currentItem.toString()
         holder.itemView.product_price.text = currentItem2.toString()
 
-        /* 이미지가 없을 때 */
+        /* 이미지가 있을 때와 없을 때 */
         if(currentItem4.toString().equals("0")) {
             currentItem3 = "basic_img.png"
-        }
-
-        FirebaseStorage.getInstance().reference.child("productimg/$currentItem3").downloadUrl.addOnCompleteListener {
-            if(it.isSuccessful) {
-                Glide.with(context)
-                    .load(it.result)
-                    .override(20, 20)
-                    .into(holder.itemView.product_img)
-            } else {
+            FirebaseStorage.getInstance().reference.child("${currentItem3}").downloadUrl.addOnCompleteListener {
+                if(it.isSuccessful) {
+                    Glide.with(context)
+                        .load(it.result)
+                        .override(20, 20)
+                        .into(holder.itemView.product_img)
+                }
+            }
+        } else {
+            FirebaseStorage.getInstance().reference.child("${myId}/${currentItem}/$currentItem3").downloadUrl.addOnCompleteListener {
+                if(it.isSuccessful) {
+                    Glide.with(context)
+                        .load(it.result)
+                        .override(20, 20)
+                        .into(holder.itemView.product_img)
+                }
             }
         }
 
