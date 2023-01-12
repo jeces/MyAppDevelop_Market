@@ -57,11 +57,6 @@ class InfoFragment : Fragment() {
     ): View? {
 
         val view = inflater.inflate(R.layout.fragment_info, container, false)
-
-
-
-
-
         val jecesModel: JecesViewModel by activityViewModels()
 
         var pId: String = jecesModel.productArrayList[0].product_id
@@ -85,9 +80,11 @@ class InfoFragment : Fragment() {
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
 
-        /* ViewCount ++함 */
-        jecesModel.viewCountUp(pId, pName)
-
+        /**
+         * ViewCount ++함
+         * 단 자기 자신은 올리지 않음
+         */
+        if(jecesModel.thisUser != pId) jecesModel.viewCountUp(pId, pName)
 
         /**
          * 채팅버튼
