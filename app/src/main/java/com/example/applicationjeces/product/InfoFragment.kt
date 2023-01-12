@@ -72,10 +72,8 @@ class InfoFragment : Fragment() {
 
         imagelist = jecesModel.getImage(pName, jecesModel.productArrayList[0].product_count) as ArrayList<String>
 
-        Log.d("ㄹㄹㄹㄹㄹㄹ", "1")
         /* 이미지 어뎁터 */
         val adapter = ProductImageInfoRecyclerViewAdapter(myId, pName, imagelist, this@InfoFragment)
-        Log.d("ㄹㄹㄹㄹㄹㄹ", "12")
 
         /* 이미지 리사이클러뷰 어뎁터 장착 */
         val recyclerView =  view!!.imginfo_profile

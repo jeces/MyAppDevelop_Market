@@ -1,20 +1,15 @@
 package com.example.applicationjeces.product
 
-import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.model.Model
 import com.example.applicationjeces.R
-import com.example.applicationjeces.frag.AddFragment
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 
 class ProductImageInfoRecyclerViewAdapter(var myId: String, var productName: String, var productImageList: ArrayList<String>, val context: Fragment): RecyclerView.Adapter<ProductImageInfoRecyclerViewAdapter.Holder>() {
 
@@ -38,7 +33,7 @@ class ProductImageInfoRecyclerViewAdapter(var myId: String, var productName: Str
                 }
             }
         } else {
-            FirebaseStorage.getInstance().reference.child("${productImageList.get(0)}").downloadUrl.addOnCompleteListener {
+            FirebaseStorage.getInstance().reference.child(productImageList.get(0)).downloadUrl.addOnCompleteListener {
                 if(it.isSuccessful) {
                     Glide.with(context)
                         .load(it.result)
