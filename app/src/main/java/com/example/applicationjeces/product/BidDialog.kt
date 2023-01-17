@@ -44,7 +44,8 @@ class BidDialog : DialogFragment() {
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
 
-
+        /**
+         * 다이어로그 뷰 만들기 */
         // Inflate the layout for this fragment
         return view
     }
