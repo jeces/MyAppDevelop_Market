@@ -41,7 +41,7 @@ class BidDialog : DialogFragment() {
     ): View? {
 
         val view = inflater.inflate(R.layout.fragment_bid_dialog, container, false)
-        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
 
         /**
