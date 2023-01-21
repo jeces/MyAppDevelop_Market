@@ -526,4 +526,21 @@ class JecesViewModel(application: Application): AndroidViewModel(application) {
             }
         }
     }
+
+    /**
+     * 입찰하기
+     * */
+    fun bidchange(pId: String, pName: String, bidPrice: String) {
+        var dbRef = jecesfirestore!!.collection("Product")
+        dbRef.whereEqualTo("ID", pId).whereEqualTo("productName", pName).get()
+            .addOnCompleteListener { product ->
+                if (product.isSuccessful) {
+                    for (document in product.result) {
+                        val update: MutableMap<String, Any> = HashMap()
+                        update["productBidPrice"] = bidPrice
+                        dbRef.document(document.id).set(update, SetOptions.merge())
+                    }
+                }
+            }
+    }
 }

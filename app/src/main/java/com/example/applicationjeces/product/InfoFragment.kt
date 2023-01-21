@@ -30,7 +30,6 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 
-
 /* https://greensky0026.tistory.com/224 */
 /* viewpager2 이미지 슬라이더 사용하기 */
 /* 디테일 */
@@ -143,7 +142,7 @@ class InfoFragment : Fragment() {
          * 입찰성공 띄우기
          */
         view.price_add_btn.setOnClickListener {
-            showDialog()
+            showDialog(pId, pName)
         }
 
 
@@ -154,28 +153,10 @@ class InfoFragment : Fragment() {
 
 
 
-    fun showDialog() {
-        val bidDialog = BidDialog()
+    fun showDialog(pId: String, pName: String) {
+        val bidDialog = BidDialog(pId, pName)
         bidDialog.show(parentFragmentManager, "BidDialog")
     }
-
-//    fun showDialog() {
-//        val builder = AlertDialog.Builder(this)
-//        builder.setTitle("Enter some data")
-//
-//        val input = EditText(this)
-//        builder.setView(input)
-//
-//        builder.setPositiveButton("OK") { dialog, which ->
-//            val data = input.text.toString()
-//            // Do something with the data
-//        }
-//        builder.setNegativeButton("Cancel") { dialog, which ->
-//            dialog.cancel()
-//        }
-//
-//        builder.show()
-//    }
 
     companion object {
         /**

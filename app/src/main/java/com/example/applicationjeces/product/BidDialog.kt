@@ -10,7 +10,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.ViewModelProvider
+import com.example.applicationjeces.JecesViewModel
 import com.example.applicationjeces.R
+import kotlinx.android.synthetic.main.fragment_bid_dialog.view.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -22,10 +25,12 @@ private const val ARG_PARAM2 = "param2"
  * Use the [BidDialog.newInstance] factory method to
  * create an instance of this fragment.
  */
-class BidDialog : DialogFragment() {
+class BidDialog(var pId: String, var pName: String) : DialogFragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
+    private lateinit var jecesViewModel: JecesViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,29 +49,21 @@ class BidDialog : DialogFragment() {
 //        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
 
+
+        jecesViewModel = ViewModelProvider(this)[JecesViewModel::class.java]
+
+        view.btnBid.setOnClickListener {
+            var bid_price = view.bid_price.text.toString()
+            jecesViewModel.bidchange(pId, pName, bid_price)
+        }
+
+        view.btnPerch.setOnClickListener {
+
+        }
+
         /**
          * 다이어로그 뷰 만들기 */
         // Inflate the layout for this fragment
         return view
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment BidDialog.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            BidDialog().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 }
