@@ -84,7 +84,6 @@
                     android:textStyle="bold"
                     android:textSize="20sp"
                     tools:ignore="RtlHardcoded" />
-
             </LinearLayout>
 
             <LinearLayout
@@ -98,7 +97,6 @@
                     android:background="#333333"
                     android:layout_marginTop="35dp"
                     app:layout_constraintBottom_toTopOf="@+id/btnDetailDelete" />
-
             </LinearLayout>
 
             <LinearLayout
@@ -157,7 +155,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="32dp"
                     android:text="999"/>
-
             </LinearLayout>
 
             <TextView
@@ -187,7 +184,6 @@
                 android:layout_marginEnd="130dp"
                 android:layout_marginTop="290dp"
                 android:text="@string/bidding" />
-
         </FrameLayout>
     </ScrollView>
 </FrameLayout>

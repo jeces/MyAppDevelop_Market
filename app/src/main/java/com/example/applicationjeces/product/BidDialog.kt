@@ -49,6 +49,7 @@ class BidDialog(var pId: String, var pName: String) : DialogFragment() {
 //        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
 
+        view.bid_titleTextView.text = pName
 
         jecesViewModel = ViewModelProvider(this)[JecesViewModel::class.java]
 
