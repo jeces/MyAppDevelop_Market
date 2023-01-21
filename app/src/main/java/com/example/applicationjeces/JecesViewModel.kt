@@ -328,7 +328,8 @@ class JecesViewModel(application: Application): AndroidViewModel(application) {
             "productImgUrl" to product.product_img_url,
             "pChatCount" to product.chatCount,
             "pViewCount" to product.viewCount,
-            "pHeartCount" to product.heartCount
+            "pHeartCount" to product.heartCount,
+            "productBidPrice" to product.product_bid_price
         )
         jecesfirestore!!.collection("Product").add(products)
             .addOnSuccessListener {
@@ -365,17 +366,15 @@ class JecesViewModel(application: Application): AndroidViewModel(application) {
                     }
                 }
             }
-            Log.d("서치1", searchLiveTodoData.value.toString())
             searchLiveTodoData.value = response
         }
-        Log.d("서치2", searchLiveTodoData.value.toString())
         return searchLiveTodoData
     }
 
     /* 제품 디테일 데이터를 가지고 있는 데이터 */
-    fun setProductDetail(productId : String, productName: String, productPrice: String, productDescription: String, productCount: String, pChatCount: String, pViewCount: String, pHearCount: String, getPosition: Int) {
+    fun setProductDetail(productId : String, productName: String, productPrice: String, productDescription: String, productCount: String, pChatCount: String, pViewCount: String, pHearCount: String, pBidPrice: String, getPosition: Int) {
         productArrayList.clear()
-        val productDetail = Product(productId, productName, productPrice, productDescription, productCount.toInt(), thisUser + "_" + productName + "_0_IMAGE_.png", pChatCount, pViewCount, pHearCount)
+        val productDetail = Product(productId, productName, productPrice, productDescription, productCount.toInt(), thisUser + "_" + productName + "_0_IMAGE_.png", pChatCount, pViewCount, pHearCount, pBidPrice)
         position = getPosition
         productArrayList.add(productDetail)
     }
@@ -479,7 +478,6 @@ class JecesViewModel(application: Application): AndroidViewModel(application) {
                         }
                     }
                     chatSearchLiveTodoData.value = response
-                    Log.d("asdfasdf1", chatSearchLiveTodoData.value.toString())
                     flags = true
                     break
                 }
@@ -488,11 +486,8 @@ class JecesViewModel(application: Application): AndroidViewModel(application) {
                 /* 목록 없으면 null 값 넣기 */
                 response.searchChat = null
                 chatSearchLiveTodoData.value = response
-                Log.d("asdfffff0", chat.result.documents.toString())
             }
-            Log.d("asdfffff", chat.result.documents.toString())
         }
-        Log.d("asdfasdf2", chatSearchLiveTodoData.value.toString())
         return chatSearchLiveTodoData
     }
 

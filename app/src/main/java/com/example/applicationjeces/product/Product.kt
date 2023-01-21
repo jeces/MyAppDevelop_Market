@@ -39,7 +39,10 @@ data class Product(
     var viewCount: String,
 
     /* 상품 하트수 */
-    var heartCount: String
+    var heartCount: String,
+
+    /* 현재 입찰가 */
+    var product_bid_price: String
 
 ) {
 

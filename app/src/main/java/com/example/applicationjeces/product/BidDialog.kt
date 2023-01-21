@@ -56,6 +56,7 @@ class BidDialog(var pId: String, var pName: String) : DialogFragment() {
         view.btnBid.setOnClickListener {
             var bid_price = view.bid_price.text.toString()
             jecesViewModel.bidchange(pId, pName, bid_price)
+            Log.d("입찰함", "ㅇㅇ")
         }
 
         view.btnPerch.setOnClickListener {
