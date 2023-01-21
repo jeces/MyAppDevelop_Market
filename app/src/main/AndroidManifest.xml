@@ -16,6 +16,16 @@
         android:theme="@style/Theme.ApplicationJeces"
         tools:targetApi="31">
         <activity
+            android:name="product.ImageActivity"
+            android:exported="false"
+            android:label="@string/title_activity_image"
+            android:theme="@style/Theme.ApplicationJeces.NoActionBar"
+            tools:ignore="MissingClass">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".chat.ChatActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity"

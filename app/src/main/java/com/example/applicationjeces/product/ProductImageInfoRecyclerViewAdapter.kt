@@ -42,6 +42,11 @@ class ProductImageInfoRecyclerViewAdapter(var myId: String, var productName: Str
                 }
             }
         }
+
+        holder.itemView.setOnClickListener {
+            /* 리스트 클릭시 Detail 화면 전환 */
+            itemClickListener.onClick(it, position)
+        }
     }
 
     /* (2) 리스너 인터페이스 */

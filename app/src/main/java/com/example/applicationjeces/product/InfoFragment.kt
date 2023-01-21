@@ -1,6 +1,7 @@
 package com.example.applicationjeces.product
 
 import android.annotation.SuppressLint
+import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -80,6 +81,18 @@ class InfoFragment : Fragment() {
         recyclerView.adapter = adapter
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+
+        /**
+         * 이미지 클릭시 확대
+         */
+        adapter.setItemClickListener(object: ProductImageInfoRecyclerViewAdapter.OnItemClickListener {
+            override fun onClick(v: View, position: Int) {
+                var intent = Intent(getActivity(), ImageActivity::class.java)
+                intent.putExtra("image", position)
+                val opt = ActivityOptions.makeSceneTransitionAnimation(getActivity(), view, "imgTrans")
+                startActivity(intent, opt.toBundle())
+            }
+        })
 
         /**
          * ViewCount ++함
