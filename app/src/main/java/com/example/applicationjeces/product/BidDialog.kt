@@ -1,5 +1,7 @@
 package com.example.applicationjeces.product
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -9,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.applicationjeces.JecesViewModel
@@ -53,14 +56,27 @@ class BidDialog(var pId: String, var pName: String) : DialogFragment() {
 
         jecesViewModel = ViewModelProvider(this)[JecesViewModel::class.java]
 
+        /* 입찰리스너 */
         view.btnBid.setOnClickListener {
-            var bid_price = view.bid_price.text.toString()
-            jecesViewModel.bidchange(pId, pName, bid_price)
-            Log.d("입찰함", "ㅇㅇ")
+            val builder = AlertDialog.Builder(view.context)
+            builder.setTitle("Module Delete Message")
+                .setMessage("입찰 Complete?")
+                .setPositiveButton("Ok", DialogInterface.OnClickListener {
+                        dialog, id ->
+                    var bid_price = view.bid_price.text.toString()
+                    jecesViewModel.bidchange(pId, pName, bid_price)
+                    Toast.makeText(view.context, "Bid Success", Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton("Cancel", DialogInterface.OnClickListener {
+                        dialog, id ->
+                    Toast.makeText(view.context, "Bid Cancel", Toast.LENGTH_SHORT).show();
+                })
+            builder.show()
+            dismiss()    // 대화상자를 닫는 함수
         }
 
         view.btnPerch.setOnClickListener {
-
+            /* 구입리스너 */
         }
 
         /**
@@ -69,3 +85,6 @@ class BidDialog(var pId: String, var pName: String) : DialogFragment() {
         return view
     }
 }
+
+
+

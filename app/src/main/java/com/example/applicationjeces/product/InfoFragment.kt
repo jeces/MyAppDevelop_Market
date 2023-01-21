@@ -63,11 +63,12 @@ class InfoFragment : Fragment() {
         var myId: String = jecesModel.thisUser.toString()
 
         view.productDetailName.setText(pName)
-        view.productDetailPrice.setText(jecesModel.productArrayList[0].product_price)
+        view.productDetailPrice.setText(jecesModel.productArrayList[0].product_price + "원")
         view.productDetailDescription.setText(jecesModel.productArrayList[0].product_description)
         view.product_chat_text.setText(jecesModel.productArrayList[0].chatCount)
         view.product_view_text.setText(jecesModel.productArrayList[0].viewCount)
         view.product_check_text.setText(jecesModel.productArrayList[0].heartCount)
+        view.product_info_bid_price.setText(jecesModel.productArrayList[0].product_bid_price + "원")
 
         imagelist = jecesModel.getImage(pName, jecesModel.productArrayList[0].product_count) as ArrayList<String>
 
