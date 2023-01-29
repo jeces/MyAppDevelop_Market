@@ -542,6 +542,7 @@ class JecesViewModel(application: Application): AndroidViewModel(application) {
     /**
      * 체크되어있는지 확인하기
      * 1. pCheckId 만들어서 아이디만 넣고 해당 아이디 검색 후 체크되어있는거 확인
+     * 2. 체크되어있으면 checkbox 바꿔줘야함 리턴. response
      **/
     fun isCheckProduct(myId: String) {
         jecesfirestore!!.collection("Product").get().addOnCompleteListener {
