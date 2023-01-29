@@ -7,7 +7,7 @@ import com.example.applicationjeces.search.ProductSearchRecyclerViewAdapter
 
 /* android.arch.persistence.room를 import하게 됨 */
 @Entity(tableName = "product_table")
-data class Product(
+data class  Product(
     /* 자동 생성 키 idx 값 */
     @PrimaryKey(autoGenerate = true)
     var product_id: String,

@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +19,7 @@ import com.example.applicationjeces.JecesViewModel
 import com.example.applicationjeces.chat.ChatActivity
 import com.example.applicationjeces.chat.ChatroomData
 import com.google.firebase.Timestamp
+import kotlinx.android.synthetic.main.fragment_bid_dialog.view.*
 import kotlinx.android.synthetic.main.fragment_info.view.*
 
 // TODO: Rename parameter arguments, choose names that match
@@ -99,6 +101,31 @@ class InfoFragment : Fragment() {
          * 단 자기 자신은 올리지 않음
          */
         if(myId != pId) jecesModel.viewCountUp(pId, pName)
+
+
+        /**
+         * 자기 자신 버튼 숨김
+         */
+        if(myId == pId) {
+            view.chat_start_btn.visibility = View.INVISIBLE
+            view.price_add_btn.visibility = View.INVISIBLE
+        }
+
+        /**
+         * check되어있는지 확인하기
+         */
+        jecesModel.isCheckProduct(myId)
+        view.product_check.isSelected = true
+
+        /**
+         * check 버튼
+         */
+        view.product_check.setOnClickListener {
+            /**
+             * 체크 안되어있다면
+             */
+            it.isSelected = !it.isSelected
+        }
 
         /**
          * 채팅버튼
