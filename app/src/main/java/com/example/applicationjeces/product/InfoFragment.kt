@@ -61,6 +61,11 @@ class InfoFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_info, container, false)
         val jecesModel: JecesViewModel by activityViewModels()
 
+        /**
+         * 자신의 위치 이동 저장
+         */
+        jecesModel.whereMyUser("productInfo")
+
         var pId: String = jecesModel.productArrayList[0].product_id
         var pName: String = jecesModel.productArrayList[0].product_name
         var myId: String = jecesModel.thisUser.toString()
@@ -106,7 +111,9 @@ class InfoFragment : Fragment() {
         /**
          * 자기 자신 버튼 숨김
          */
+
         if(myId == pId) {
+
             view.chat_start_btn.visibility = View.INVISIBLE
             view.price_add_btn.visibility = View.INVISIBLE
         }

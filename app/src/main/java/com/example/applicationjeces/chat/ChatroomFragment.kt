@@ -69,6 +69,8 @@ class ChatroomFragment : Fragment() {
             adapter.submitList(chatroom!!.toMutableList())
         })
 
+        jecesViewModel.whereMyUser("chatroom")
+
         /* 항목 클릭시 */
         adapter.setItemClickListener(object: ChatroomRecyclerViewAdapter.OnItemClickListener {
             override fun onClick(v: View, position: Int) {

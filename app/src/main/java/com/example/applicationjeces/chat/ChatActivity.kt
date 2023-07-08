@@ -25,6 +25,8 @@ class ChatActivity : AppCompatActivity() {
     // 키보드 올라왔는지 확인
     private var isOpen = false
 
+    private var isEmojiPanelVisible = false
+
     var jecesfirestore: FirebaseFirestore? = null
     var chatroomidx : String? = null
     var chatroomYourId : String? = null
@@ -45,6 +47,11 @@ class ChatActivity : AppCompatActivity() {
 
         /* 뷰모델 초기화 */
         productModel = ViewModelProvider(this)[JecesViewModel::class.java]
+
+        /**
+         * 자신의 위치 이동 저장
+         */
+        productModel.whereMyUser("chat")
 
         /* 상대방 이름 가져와서 토픽 이름에 넣기 */
         var Id = chatroomYourId?.split(",")
@@ -125,11 +132,15 @@ class ChatActivity : AppCompatActivity() {
 
         /* 뒤로가기버튼 누를시 */
         chat_back.setOnClickListener {
-            val intent: Intent = Intent(this, MainActivity::class.java)
-            MainActivity().changeFragment(PageData.CHATROOM)
-            startActivity(intent)
-            /* 임시적으로 db 변경 "chat"이 아닌 다른걸로 만들어 줘야함 */
-
+//            val intent: Intent = Intent(this, MainActivity::class.java)
+//            MainActivity().changeFragment(PageData.CHATROOM)
+//            startActivity(intent)
+//            /* 임시적으로 db 변경 "chat"이 아닌 다른걸로 만들어 줘야함 */
+            val mainActivity = Intent(this, MainActivity::class.java)
+            mainActivity.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            mainActivity.putExtra("destinationFragment", PageData.CHATROOM)
+            startActivity(mainActivity)
+            finish()
         }
 
         /* 메시지 보냄 */
@@ -144,6 +155,20 @@ class ChatActivity : AppCompatActivity() {
             productModel.lastChat(chat, chatroomidx.toString(), yourId.toString()).toString()
             chat_text.text.clear()
         }
+
+        /**
+         * 이모티콘 클릭시 패널 염
+         */
+//        edit_emos.setOnClickListener {
+//            isEmojiPanelVisible = !isEmojiPanelVisible
+//            if (isEmojiPanelVisible) {
+//                emoji_panel.visibility = View.VISIBLE
+//                hideKeyboard()
+//                chat_text.clearFocus()
+//            } else {
+//                emoji_panel.visibility = View.GONE
+//            }
+//        }
     }
 
     /* 키보드 유지 레이아웃 */
@@ -154,4 +179,25 @@ class ChatActivity : AppCompatActivity() {
                 messageActivity_recyclerview.scrollBy(0, oldBottom - bottom)
             }
         }
+
+    /**
+     * 키보드를 숨기는 메서드
+     */
+//    private fun hideKeyboard() {
+//        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+//        imm.hideSoftInputFromWindow(chat_text.windowToken, 0)
+//    }
+
+    /**
+     * 이모티콘 패널에서 이모티콘을 선택할 때 호출되는 콜백
+     */
+    fun onEmojiSelected(emoji: String) {
+        val currentPosition = chat_text.selectionEnd
+        chat_text.text?.let {
+            val newText = StringBuilder(it)
+            newText.insert(currentPosition, emoji)
+            chat_text.setText(newText)
+            chat_text.setSelection(currentPosition + emoji.length)
+        }
+    }
 }

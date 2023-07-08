@@ -100,6 +100,11 @@ class AddFragment : Fragment() {
         /* Initialize Firebase Storage */
         firebaseStorage = FirebaseStorage.getInstance()
 
+        /**
+         * 자신의 위치 이동 저장
+         */
+        jecesViewModel.whereMyUser("add")
+
         /* 내 아이디*/
         var myId: String = jecesViewModel.thisUser.toString()
 

@@ -53,6 +53,10 @@ class MainActivity : AppCompatActivity() {
             /* it은 LiveData의 value 값 즉 jecesViewModel 객체의 value값이 넘어온다. 처음 선언된 currentPage 넘어옴 */
             changeFragment(it)
         }
+
+
+
+
     }
 
     /* 현재화면 함수 */
@@ -91,7 +95,7 @@ class MainActivity : AppCompatActivity() {
     /* 실행시 Fragment값 GET 함수 */
     /* 처음은 띄워주기 위해 사용됨. 후에 Hide로 숨겨져서 사용 안함. 한번쓰고 버림 */
     fun getFragment(pageData: PageData): Fragment {
-        Log.d("dddddd", pageData.title)
+
         if(pageData.title == "home") {
             return HomeFragment.newInstance(pageData.title, pageData.tag)
         } else if(pageData.title == "add") {

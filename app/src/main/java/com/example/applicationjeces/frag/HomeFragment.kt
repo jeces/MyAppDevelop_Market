@@ -61,6 +61,11 @@ class HomeFragment : Fragment() {
         jecesViewModel = ViewModelProvider(this)[JecesViewModel::class.java]
         var myId: String = jecesViewModel.thisUser.toString()
 
+        /**
+         * 자신의 위치 이동 저장
+         */
+        jecesViewModel.whereMyUser("home")
+
 
         /* 리사이클러뷰 */
         val adapter = ProductRecyclerViewAdapter(myId, emptyList(), this@HomeFragment)

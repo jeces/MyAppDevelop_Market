@@ -40,6 +40,11 @@ class SearchActivity : AppCompatActivity() {
         /* 뷰모델 연결 */
         jecesViewModel = ViewModelProvider(this)[JecesViewModel::class.java]
 
+        /**
+         * 자신의 위치 이동 저장
+         */
+        jecesViewModel.whereMyUser("search")
+
         val recyclerView: RecyclerView = findViewById(R.id.rv_profile2)
         recyclerView.adapter = adapter
         recyclerView.setHasFixedSize(true)
