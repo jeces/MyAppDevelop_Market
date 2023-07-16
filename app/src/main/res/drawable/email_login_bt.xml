@@ -1,0 +1,5 @@
+<!-- res/drawable/rounded_button_bg.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/teal_200" /> <!-- 버튼의 배경 색상 설정 -->
+    <corners android:radius="15dp" /> <!-- 모서리의 둥근 정도를 조절하는 값 (50dp로 설정) -->
+</shape>

@@ -6,80 +6,174 @@
     android:layout_height="match_parent"
     tools:context=".user.LoginFragment">
 
-    <com.google.android.material.textfield.MaterialAutoCompleteTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="60dp"
-        android:layout_marginEnd="32dp"
-        android:text="Auction"
-        android:textSize="60dp"/>
-
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:id="@+id/loginTextInputLayout"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="250dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="32dp"
-        android:hint="E-mail"
-        app:helperTextTextColor="@color/red"
-        app:helperText="Required*"
-        app:counterEnabled="true"
-        app:counterMaxLength="30"
-        app:endIconMode="clear_text"
-        app:startIconDrawable="@drawable/ic_baseline_email_24"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/loginTextInputEditText"
-            android:maxLength="30"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </com.google.android.material.textfield.TextInputLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:id="@+id/loginPasswordLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="360dp"
-        android:layout_marginEnd="32dp"
-        android:hint="Password"
-        app:helperText="Required*"
-        app:helperTextTextColor="@color/red"
-        app:counterEnabled="true"
-        app:counterMaxLength="30"
-        app:endIconMode="password_toggle"
-        app:startIconDrawable="@drawable/ic_baseline_lock_24"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+                <androidx.constraintlayout.utils.widget.ImageFilterView
+                    android:id="@+id/loginImage"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:src="@drawable/marketplace"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:paddingHorizontal="16dp"
+                    android:layout_marginVertical="32dp"
+                    android:layout_marginHorizontal="32dp"/>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/loginPasswordEditText"
-            android:maxLength="30"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </com.google.android.material.textfield.TextInputLayout>
+                <TextView
+                    android:id="@+id/loginTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Market Place"
+                    android:textSize="30dp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="50dp"
+                    app:layout_constraintTop_toBottomOf="@id/loginImage"
+                    app:layout_constraintStart_toEndOf="@id/loginImage"
+                    app:layout_constraintTop_toTopOf="@id/loginImage"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginHorizontal="32dp"/>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/loginBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="450dp"
-        android:layout_marginEnd="32dp"
-        android:text="L O G I N"
-        android:background="@color/teal_200"
-        app:cornerRadius="50dp"
-        app:icon="@drawable/ic_baseline_person_add_24"
-        app:backgroundTintMode="screen"
-        />
+                <TextView
+                    android:id="@+id/loginTitle2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="free and fair trade"
+                    android:textSize="15dp"
+                    android:textStyle="italic"
+                    app:layout_constraintStart_toEndOf="@id/loginImage"
+                    app:layout_constraintTop_toBottomOf="@id/loginTitle"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginHorizontal="32dp"/>
+
+                <TextView
+                    android:id="@+id/loginTitle3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="free and fair trade"
+                    android:textSize="15dp"
+                    android:textStyle="italic"
+                    app:layout_constraintStart_toEndOf="@id/loginImage"
+                    app:layout_constraintTop_toBottomOf="@id/loginTitle2"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginHorizontal="32dp"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:id="@+id/loginTextInputLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="E-mail"
+                    app:helperTextTextColor="@color/red"
+                    app:helperText="Required*"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="30"
+                    app:endIconMode="clear_text"
+                    app:startIconDrawable="@drawable/ic_baseline_email_24"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/loginImage"
+                    android:layout_marginVertical="32dp"
+                    android:layout_marginHorizontal="32dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/loginTextInputEditText"
+                        android:maxLength="30"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:id="@+id/loginPasswordLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Password"
+                    app:helperText="Required*"
+                    app:helperTextTextColor="@color/red"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="30"
+                    app:endIconMode="password_toggle"
+                    app:startIconDrawable="@drawable/ic_baseline_lock_24"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/loginTextInputLayout"
+                    android:layout_marginHorizontal="32dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/loginPasswordEditText"
+                        android:maxLength="30"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/loginBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Email Login"
+                    android:background="@drawable/email_login_bt"
+                    app:cornerRadius="50dp"
+                    app:icon="@drawable/ic_baseline_person_add_24"
+                    app:backgroundTintMode="screen"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/loginPasswordLayout"
+                    android:layout_marginHorizontal="32dp"
+                    android:layout_marginTop="8dp"/> <!-- 수정된 부분 -->
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/loginBtnNaver"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Naver Login"
+                    android:background="@drawable/naver_login_bt"
+                    app:cornerRadius="50dp"
+                    app:icon="@drawable/ic_baseline_person_add_24"
+                    app:backgroundTintMode="screen"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/loginBtn"
+                    android:layout_marginHorizontal="32dp"
+                    android:layout_marginTop="8dp"/> <!-- 수정된 부분 -->
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/loginBtnGoogle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Google Login"
+                    android:background="@drawable/google_login_bt"
+                    app:cornerRadius="50dp"
+                    app:icon="@drawable/ic_baseline_person_add_24"
+                    app:backgroundTintMode="screen"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/loginBtnNaver"
+                    android:layout_marginHorizontal="32dp"
+                    android:layout_marginTop="8dp"/> <!-- 수정된 부분 -->
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/loginBtnKaKao"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="KaKao Login"
+                    android:background="@drawable/kakao_login_bt"
+                    app:icon="@drawable/ic_baseline_person_add_24"
+                    app:backgroundTintMode="screen"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/loginBtnGoogle"
+                    android:layout_marginHorizontal="32dp"
+                    android:layout_marginTop="8dp"/> <!-- 수정된 부분 -->
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
 
 </FrameLayout>
