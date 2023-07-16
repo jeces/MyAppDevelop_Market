@@ -7,6 +7,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ImageButton
+import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
@@ -48,18 +51,44 @@ class MainActivity : AppCompatActivity() {
 //                .setAction("Action", null).show()
         }
 
-        /* LiveData의 value의 변경을 감지하고 호출 PageNum이 변경되면 호출 */
+        /**
+         *  LiveData의 value의 변경을 감지하고 호출 PageNum이 변경되면 호출
+         **/
         jecesViewModel.currentPages.observe(this) {
             /* it은 LiveData의 value 값 즉 jecesViewModel 객체의 value값이 넘어온다. 처음 선언된 currentPage 넘어옴 */
             changeFragment(it)
         }
 
-
-
-
+        /**
+         * 상단바 메뉴
+         */
+        val toolbarImageButton: ImageButton = findViewById(R.id.toolbarImageButton)
+        toolbarImageButton.setOnClickListener {
+            // 팝업 메뉴 표시
+            val popupMenu = PopupMenu(this, it)
+            popupMenu.inflate(R.menu.option_menu) // 메뉴 리소스 파일 설정
+            popupMenu.setOnMenuItemClickListener { menuItem ->
+                // 메뉴 아이템을 클릭했을 때 수행할 동작
+                when (menuItem.itemId) {
+                    R.id.logout -> {
+                        /* 로그아웃 */
+                        FirebaseAuth.getInstance().signOut()
+                        /* 페이지 이동 */
+                        val it = Intent(this, LoginActivity::class.java)
+                        startActivity(it)
+                        true
+                    }
+                    // 다른 메뉴 아이템 처리
+                    else -> false
+                }
+            }
+            popupMenu.show()
+        }
     }
 
-    /* 현재화면 함수 */
+    /**
+     * 페이지 전환 함수
+     **/
     fun changeFragment(pageData: PageData) {
         /* 현재 Fragment[맨 처음은 tag 등록이 안되어있기 때문에 아래에서 등록을 3개를 시켜줘야함 */
         var targetFragment = supportFragmentManager.findFragmentByTag(pageData.tag)
@@ -112,34 +141,6 @@ class MainActivity : AppCompatActivity() {
         } else {
             return HomeFragment.newInstance(pageData.title, pageData.tag)
         }
-    }
-
-    /* 상단바 옵션 메뉴 */
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        /* 메뉴바 생성 */
-        menuInflater.inflate(R.menu.option_menu, menu)
-
-        /* 메뉴바를 직접 추가하는 것*/
-        menu?.add(Menu.NONE, Menu.FIRST + 1, Menu.NONE, "PROGRAMMATIC MENU1")
-        menu?.add(Menu.NONE, Menu.FIRST + 2, Menu.NONE, "PROGRAMMATIC MENU2")
-
-        var sub: Menu? = menu?.addSubMenu("PROGRAMMATIC MENU3")
-        sub?.add(Menu.NONE, Menu.FIRST + 3, Menu.NONE, "PROGRAMMATIC MENU3-1")
-        sub?.add(Menu.NONE, Menu.FIRST + 4, Menu.NONE, "PROGRAMMATIC MENU3-2")
-        return super.onCreateOptionsMenu(menu)
-    }
-    /* 상단바 옵션 메뉴 클릭*/
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
-            R.id.logout -> {
-                /* 로그아웃 */
-                FirebaseAuth.getInstance().signOut()
-                /* 페이지 이동 */
-                val it = Intent(this, LoginActivity::class.java)
-                startActivity(it)
-            }
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onStart() {

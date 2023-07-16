@@ -34,7 +34,6 @@ class JoinFragment : Fragment() {
     /* firebase Auth */
     private var authStateListener: FirebaseAuth.AuthStateListener? = null
 
-
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
