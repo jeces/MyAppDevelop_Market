@@ -20,7 +20,7 @@
                 android:layout_marginTop="30dp"
                 android:id="@+id/img_profile"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 tools:listitem="@layout/img_item_list"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
