@@ -93,21 +93,20 @@
                     app:layout_constraintTop_toBottomOf="@+id/lin1"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:layout_marginHorizontal="10dp">
 
                     <View
                         android:id="@+id/view"
                         android:layout_width="match_parent"
                         android:layout_height="2dp"
-                        android:background="#333333"
-                        app:layout_constraintBottom_toTopOf="@+id/btnDetailDelete" />
+                        android:background="#333333" />
 
                     <View
                         android:id="@+id/view2"
                         android:layout_width="match_parent"
                         android:layout_height="2dp"
-                        android:background="#333333"
-                        app:layout_constraintBottom_toTopOf="@+id/btnDetailDelete" />
+                        android:background="#333333" />
 
                 </LinearLayout>
 
