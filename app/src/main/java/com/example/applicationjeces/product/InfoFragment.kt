@@ -2,6 +2,8 @@ package com.example.applicationjeces.product
 
 import android.annotation.SuppressLint
 import android.app.ActivityOptions
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +11,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,7 +23,6 @@ import com.example.applicationjeces.JecesViewModel
 import com.example.applicationjeces.chat.ChatActivity
 import com.example.applicationjeces.chat.ChatroomData
 import com.google.firebase.Timestamp
-import kotlinx.android.synthetic.main.fragment_bid_dialog.view.*
 import kotlinx.android.synthetic.main.fragment_info.view.*
 
 // TODO: Rename parameter arguments, choose names that match
@@ -190,11 +193,28 @@ class InfoFragment : Fragment() {
          * 입찰성공 띄우기
          */
         view.price_add_btn.setOnClickListener {
-            showDialog(pId, pName)
+            //showDialog(pId, pName)
+            val builder = AlertDialog.Builder(requireContext())
+            val bidPriceEditText = EditText(requireContext())
+            bidPriceEditText.hint = "입찰 가격을 입력하세요." // 사용자에게 입력할 값을 설명하는 힌트 메시지
+            builder.setTitle("Module Delete Message")
+                .setMessage("입찰 가격")
+                .setView(bidPriceEditText)
+                .setMessage("입찰 가격")
+                .setView(bidPriceEditText)
+                .setMessage("입찰 가격")
+                .setView(bidPriceEditText)
+                .setPositiveButton("입찰") { _, _ ->
+                    val bidPrice = bidPriceEditText.text.toString()
+                    // TODO: 입찰 동작 처리
+                    // jecesViewModel.bidchange(pId, pName, bidPrice)
+                    Toast.makeText(requireContext(), "입찰 완료: $bidPrice", Toast.LENGTH_SHORT).show()
+                }
+                .setNegativeButton("취소") { _, _ ->
+                    Toast.makeText(requireContext(), "입찰 취소", Toast.LENGTH_SHORT).show()
+                }
+            builder.show()
         }
-
-
-
         // Inflate the layout for this fragment
         return view
     }
