@@ -6,6 +6,7 @@
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
     <string name="bidding">Bidding</string>
+    <string name="perchase">Purchase</string>
     <string name="chatting">Chatting</string>
     <string name="title_activity_image">ImageActivity</string>
     <!-- Strings used for fragments for navigation -->

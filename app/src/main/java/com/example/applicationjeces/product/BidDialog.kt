@@ -16,7 +16,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.applicationjeces.JecesViewModel
 import com.example.applicationjeces.R
-import kotlinx.android.synthetic.main.fragment_bid_dialog.view.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -43,47 +42,47 @@ class BidDialog(var pId: String, var pName: String) : DialogFragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+//    override fun onCreateView(
+//        inflater: LayoutInflater, container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View? {
+//
+//        val view = inflater.inflate(R.layout.fragment_bid_dialog, container, false)
+////        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//        dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
+//
+//        view.bid_titleTextView.text = pName
+//
+//        jecesViewModel = ViewModelProvider(this)[JecesViewModel::class.java]
+//
+//        /* 입찰리스너 */
+//        view.btnBid.setOnClickListener {
+//            val builder = AlertDialog.Builder(view.context)
+//            builder.setTitle("Module Delete Message")
+//                .setMessage("입찰 Complete?")
+//                .setPositiveButton("Ok", DialogInterface.OnClickListener {
+//                        dialog, id ->
+//                    var bid_price = view.bid_price.text.toString()
+//                    jecesViewModel.bidchange(pId, pName, bid_price)
+//                    Toast.makeText(view.context, "Bid Success", Toast.LENGTH_SHORT).show();
+//                })
+//                .setNegativeButton("Cancel", DialogInterface.OnClickListener {
+//                        dialog, id ->
+//                    Toast.makeText(view.context, "Bid Cancel", Toast.LENGTH_SHORT).show();
+//                })
+//            builder.show()
+//            dismiss()    // 대화상자를 닫는 함수
+//        }
+//
+//        view.btnPerch.setOnClickListener {
+//            /* 구입리스너 */
+//        }
+//
+//        /**
+//         * 다이어로그 뷰 만들기 */
+//        // Inflate the layout for this fragment
+//        return view
 
-        val view = inflater.inflate(R.layout.fragment_bid_dialog, container, false)
-//        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
-
-        view.bid_titleTextView.text = pName
-
-        jecesViewModel = ViewModelProvider(this)[JecesViewModel::class.java]
-
-        /* 입찰리스너 */
-        view.btnBid.setOnClickListener {
-            val builder = AlertDialog.Builder(view.context)
-            builder.setTitle("Module Delete Message")
-                .setMessage("입찰 Complete?")
-                .setPositiveButton("Ok", DialogInterface.OnClickListener {
-                        dialog, id ->
-                    var bid_price = view.bid_price.text.toString()
-                    jecesViewModel.bidchange(pId, pName, bid_price)
-                    Toast.makeText(view.context, "Bid Success", Toast.LENGTH_SHORT).show();
-                })
-                .setNegativeButton("Cancel", DialogInterface.OnClickListener {
-                        dialog, id ->
-                    Toast.makeText(view.context, "Bid Cancel", Toast.LENGTH_SHORT).show();
-                })
-            builder.show()
-            dismiss()    // 대화상자를 닫는 함수
-        }
-
-        view.btnPerch.setOnClickListener {
-            /* 구입리스너 */
-        }
-
-        /**
-         * 다이어로그 뷰 만들기 */
-        // Inflate the layout for this fragment
-        return view
-    }
 }
 
 
