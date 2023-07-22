@@ -15,7 +15,7 @@ class ProductImageInfoRecyclerViewAdapter(var myId: String, var productName: Str
 
     /* ViewHolder에게 item을 보여줄 View로 쓰일 item_data_list.xml를 넘기면서 ViewHolder 생성. 아이템 레이아웃과 결합 */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        return Holder(LayoutInflater.from(parent.context).inflate(R.layout.img_item_list, parent, false))
+        return Holder(LayoutInflater.from(parent.context).inflate(R.layout.img_info_item_list, parent, false))
     }
 
     /* Holder의 bind 메소드를 호출한다. 내용 입력 */
@@ -70,6 +70,6 @@ class ProductImageInfoRecyclerViewAdapter(var myId: String, var productName: Str
     /* inner class로 viewHolder 정의. 레이아웃 내 view 연결 */
     inner class Holder(ItemView: View): RecyclerView.ViewHolder(ItemView) {
         private var view: View = ItemView
-        var image = ItemView.findViewById<ImageView>(R.id.addimges)
+        var image = ItemView.findViewById<ImageView>(R.id.infoimges)
     }
 }
