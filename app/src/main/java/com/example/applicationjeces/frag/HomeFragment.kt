@@ -10,7 +10,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.applicationjeces.MainActivity
 import com.example.applicationjeces.R
 import com.example.applicationjeces.page.DataViewModel
@@ -72,7 +74,17 @@ class HomeFragment : Fragment() {
         val recyclerView = view.rv_profile
         recyclerView.adapter = adapter
         recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+        //recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+
+        /**
+         * 찜한 상품 리사이클러뷰
+         */
+        val recyclerView2 = view.select_profile
+        recyclerView2.adapter = adapter
+        recyclerView2.setHasFixedSize(true)
+        recyclerView2.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+
 
         /* 뷰모델 연결, 뷰모델을 불러옴 */
         jecesViewModel.liveTodoData.observe(viewLifecycleOwner, Observer { product ->
