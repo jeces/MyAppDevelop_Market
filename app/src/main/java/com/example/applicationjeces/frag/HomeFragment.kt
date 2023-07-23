@@ -69,7 +69,15 @@ class HomeFragment : Fragment() {
         jecesViewModel.whereMyUser("home")
 
 
-        /* 리사이클러뷰 */
+        /**
+         * 맨 위 소개 페이지
+         */
+//        val adapter = HomeRecyclerViewAdapter()
+
+
+        /**
+         * 최근 본 상품
+         */
         val adapter = ProductRecyclerViewAdapter(myId, emptyList(), this@HomeFragment)
         val recyclerView = view.rv_profile
         recyclerView.adapter = adapter
@@ -78,7 +86,7 @@ class HomeFragment : Fragment() {
         //recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
 
         /**
-         * 찜한 상품 리사이클러뷰
+         * 찜한 상품
          */
         val recyclerView2 = view.select_profile
         recyclerView2.adapter = adapter

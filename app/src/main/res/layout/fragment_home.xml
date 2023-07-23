@@ -18,13 +18,10 @@
             app:layout_constraintBottom_toTopOf="@+id/scrollHome">
 
             <!-- 사진 리사이클러 뷰 옆으로 넘기는 -->
-            <TextView
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewPagerHomeProduce"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:text="리사이클러 뷰 사진 "
-                android:textSize="50dp">
-            </TextView>
+                android:layout_height="match_parent"/>
         </LinearLayout>
 
         <ScrollView
