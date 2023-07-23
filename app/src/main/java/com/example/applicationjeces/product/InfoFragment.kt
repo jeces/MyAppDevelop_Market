@@ -1,9 +1,7 @@
 package com.example.applicationjeces.product
 
 import android.annotation.SuppressLint
-import android.app.ActivityOptions
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -17,6 +15,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.example.applicationjeces.R
 import com.example.applicationjeces.product.ProductImageInfoRecyclerViewAdapter
 import com.example.applicationjeces.JecesViewModel
@@ -39,7 +38,7 @@ private const val ARG_PARAM2 = "param2"
 /* https://greensky0026.tistory.com/224 */
 /* viewpager2 이미지 슬라이더 사용하기 */
 /* 디테일 */
-class InfoFragment : Fragment() {
+class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClickListener {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -54,6 +53,14 @@ class InfoFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
     }
+    override fun onClick(images: ArrayList<String>, position: Int, myId: String, pName: String) {
+        // Replace current fragment with FullscreenImageFragment
+        val fullscreenImageFragment = FullscreenImageFragment.newInstance(images, position, myId, pName)
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, fullscreenImageFragment) // Use your fragment container's ID
+            .addToBackStack(null)
+            .commit()
+    }
 
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
@@ -62,16 +69,17 @@ class InfoFragment : Fragment() {
     ): View? {
 
         val view = inflater.inflate(R.layout.fragment_info, container, false)
+        val viewPager = view.findViewById<ViewPager2>(R.id.viewPager)
         val jecesModel: JecesViewModel by activityViewModels()
 
         /**
          * 자신의 위치 이동 저장
          */
-        jecesModel.whereMyUser("productInfo")
 
         var pId: String = jecesModel.productArrayList[0].product_id
         var pName: String = jecesModel.productArrayList[0].product_name
         var myId: String = jecesModel.thisUser.toString()
+        jecesModel.whereMyUser("productInfo")
 
         view.productDetailName.setText(pName)
         view.productDetailPrice.setText(jecesModel.productArrayList[0].product_price + "원")
@@ -84,7 +92,9 @@ class InfoFragment : Fragment() {
         imagelist = jecesModel.getImage(pName, jecesModel.productArrayList[0].product_count) as ArrayList<String>
 
         /* 이미지 어뎁터 */
-        val adapter = ProductImageInfoRecyclerViewAdapter(myId, pName, imagelist, this@InfoFragment)
+        val adapter = ProductImageInfoRecyclerViewAdapter(myId, pName, imagelist, this@InfoFragment, this)
+
+        //viewPager.adapter = adapter
 
         /* 이미지 리사이클러뷰 어뎁터 장착 */
         val recyclerView =  view!!.imginfo_profile
@@ -93,28 +103,14 @@ class InfoFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
 
         /**
-         * 이미지 클릭시 확대
-         */
-        adapter.setItemClickListener(object: ProductImageInfoRecyclerViewAdapter.OnItemClickListener {
-            override fun onClick(v: View, position: Int) {
-                var intent = Intent(getActivity(), ImageActivity::class.java)
-                intent.putExtra("image", position)
-                val opt = ActivityOptions.makeSceneTransitionAnimation(getActivity(), view, "imgTrans")
-                startActivity(intent, opt.toBundle())
-            }
-        })
-
-        /**
          * ViewCount ++함
          * 단 자기 자신은 올리지 않음
          */
         if(myId != pId) jecesModel.viewCountUp(pId, pName)
 
-
         /**
          * 자기 자신 버튼 숨김
          */
-
         if(myId == pId) {
 
             view.chat_start_btn.visibility = View.INVISIBLE
