@@ -40,28 +40,10 @@ class MainActivity : AppCompatActivity() {
         /* 앨범에 접근하는것을 허용하는 메세지 */
         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1)
 
-        /* fab 메세지 */
-        binding.fab.setOnClickListener { view ->
-            Log.d("aaaaaa1", "asd")
-            changeFragment(PageData.MESSAGE)
-            bottomNavigationView.menu.findItem(R.id.detail).isChecked = true
-//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                .setAction("Action", null).show()
-        }
-
-        /**
-         *  LiveData의 value의 변경을 감지하고 호출 PageNum이 변경되면 호출
-         **/
-        jecesViewModel.currentPages.observe(this) {
-            /* it은 LiveData의 value 값 즉 jecesViewModel 객체의 value값이 넘어온다. 처음 선언된 currentPage 넘어옴 */
-            changeFragment(it)
-        }
-
         /**
          * 상단바 메뉴
          */
         binding.toolbarImageButton.setOnClickListener {
-            Log.d("aaaaaa", "asd")
             val popupMenu = PopupMenu(this, it)
             popupMenu.inflate(R.menu.option_menu) // 메뉴 리소스 파일 설정
             popupMenu.setOnMenuItemClickListener { menuItem ->
@@ -82,6 +64,49 @@ class MainActivity : AppCompatActivity() {
             }
             popupMenu.show()
         }
+
+//        /* fab 메세지 */
+//        binding.fab.setOnClickListener { view ->
+//            Log.d("aaaaaa1", "asd")
+//            changeFragment(PageData.MESSAGE)
+//            bottomNavigationView.menu.findItem(R.id.detail).isChecked = true
+////            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+////                .setAction("Action", null).show()
+//        }
+
+        /**
+         *  LiveData의 value의 변경을 감지하고 호출 PageNum이 변경되면 호출
+         **/
+        jecesViewModel.currentPages.observe(this) {
+            /* it은 LiveData의 value 값 즉 jecesViewModel 객체의 value값이 넘어온다. 처음 선언된 currentPage 넘어옴 */
+            changeFragment(it)
+        }
+
+        /**
+         * 상단바 메뉴
+         */
+//        binding.toolbarImageButton.setOnClickListener {
+//            Log.d("aaaaaa", "asd")
+//            val popupMenu = PopupMenu(this, it)
+//            popupMenu.inflate(R.menu.option_menu) // 메뉴 리소스 파일 설정
+//            popupMenu.setOnMenuItemClickListener { menuItem ->
+//                // 메뉴 아이템을 클릭했을 때 수행할 동작
+//                Log.d("aaaaaa", "asd")
+//                when (menuItem.itemId) {
+//                    R.id.logout -> {
+//                        /* 로그아웃 */
+//                        FirebaseAuth.getInstance().signOut()
+//                        /* 페이지 이동 */
+//                        val it = Intent(this, LoginActivity::class.java)
+//                        startActivity(it)
+//                        true
+//                    }
+//                    // 다른 메뉴 아이템 처리
+//                    else -> false
+//                }
+//            }
+//            popupMenu.show()
+//        }
 //
 //        val toolbarImageButton: ImageButton = findViewById(R.id.toolbarImageButton)
 //        toolbarImageButton.setOnClickListener {
