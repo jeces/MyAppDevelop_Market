@@ -42,6 +42,7 @@ class MainActivity : AppCompatActivity() {
 
         /* fab 메세지 */
         binding.fab.setOnClickListener { view ->
+            Log.d("aaaaaa1", "asd")
             changeFragment(PageData.MESSAGE)
             bottomNavigationView.menu.findItem(R.id.detail).isChecked = true
 //            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -59,13 +60,13 @@ class MainActivity : AppCompatActivity() {
         /**
          * 상단바 메뉴
          */
-        val toolbarImageButton: ImageButton = findViewById(R.id.toolbarImageButton)
-        toolbarImageButton.setOnClickListener {
-            // 팝업 메뉴 표시
+        binding.toolbarImageButton.setOnClickListener {
+            Log.d("aaaaaa", "asd")
             val popupMenu = PopupMenu(this, it)
             popupMenu.inflate(R.menu.option_menu) // 메뉴 리소스 파일 설정
             popupMenu.setOnMenuItemClickListener { menuItem ->
                 // 메뉴 아이템을 클릭했을 때 수행할 동작
+                Log.d("aaaaaa", "asd")
                 when (menuItem.itemId) {
                     R.id.logout -> {
                         /* 로그아웃 */
@@ -81,6 +82,31 @@ class MainActivity : AppCompatActivity() {
             }
             popupMenu.show()
         }
+//
+//        val toolbarImageButton: ImageButton = findViewById(R.id.toolbarImageButton)
+//        toolbarImageButton.setOnClickListener {
+//            // 팝업 메뉴 표시
+//            Log.d("aaaaaa", "asd")
+//            val popupMenu = PopupMenu(this, it)
+//            popupMenu.inflate(R.menu.option_menu) // 메뉴 리소스 파일 설정
+//            popupMenu.setOnMenuItemClickListener { menuItem ->
+//                // 메뉴 아이템을 클릭했을 때 수행할 동작
+//                Log.d("aaaaaa", "asd")
+//                when (menuItem.itemId) {
+//                    R.id.logout -> {
+//                        /* 로그아웃 */
+//                        FirebaseAuth.getInstance().signOut()
+//                        /* 페이지 이동 */
+//                        val it = Intent(this, LoginActivity::class.java)
+//                        startActivity(it)
+//                        true
+//                    }
+//                    // 다른 메뉴 아이템 처리
+//                    else -> false
+//                }
+//            }
+//            popupMenu.show()
+//        }
     }
 
     /**
