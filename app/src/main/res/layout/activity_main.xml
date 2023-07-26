@@ -24,7 +24,7 @@
 
         <FrameLayout
             android:id="@+id/frame_layout"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
             app:layout_constraintEnd_toEndOf="parent"
@@ -37,12 +37,13 @@
                 android:id="@+id/toolbarImageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginEnd="15dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginEnd="25dp"
+                android:layout_marginTop="25dp"
                 app:backgroundTint="@android:color/white"
                 app:elevation="0dp"
-                app:srcCompat="@drawable/ic_baseline_menu_24"/>
+                app:srcCompat="@drawable/ic_baseline_menu_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
         </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
