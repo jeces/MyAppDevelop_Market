@@ -44,6 +44,7 @@ class MainActivity : AppCompatActivity() {
          * 상단바 메뉴
          */
         binding.toolbarImageButton.setOnClickListener {
+            Log.d("aaaaaa", "asd")
             val popupMenu = PopupMenu(this, it)
             popupMenu.inflate(R.menu.option_menu) // 메뉴 리소스 파일 설정
             popupMenu.setOnMenuItemClickListener { menuItem ->
