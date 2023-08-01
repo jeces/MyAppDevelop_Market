@@ -4,8 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.common.api.Response
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import retrofit2.http.GET
 
 class SplashViewModel : ViewModel() {
     private val _loading = MutableLiveData<Boolean>()
@@ -14,6 +16,11 @@ class SplashViewModel : ViewModel() {
     init {
         loadData()
     }
+
+//    interface ApiService {
+//        @GET("checkNetworkConnection")
+//        suspend fun checkNetworkConnection(): Response<Unit>
+//    }
 
     private fun loadData() = viewModelScope.launch {
         _loading.value = true

@@ -142,5 +142,9 @@ dependencies {
     /* 스플레시 */
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.X.X'  // 1.X.X 대신에 실제 버전 넘버를 넣어주세요.
 
+    /* retrofit */
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+
 
 }
