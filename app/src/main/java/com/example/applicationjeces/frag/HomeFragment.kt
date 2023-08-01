@@ -1,12 +1,16 @@
 package com.example.applicationjeces.frag
 
 import android.content.Context
+import android.content.Intent
+import android.media.Image
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.PopupMenu
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -19,7 +23,11 @@ import com.example.applicationjeces.page.DataViewModel
 import com.example.applicationjeces.page.PageData
 import com.example.applicationjeces.product.ProductRecyclerViewAdapter
 import com.example.applicationjeces.JecesViewModel
+import com.example.applicationjeces.user.LoginActivity
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
 
 // TODO: Rename parameter arguments, choose names that match
@@ -67,6 +75,35 @@ class HomeFragment : Fragment() {
          * 자신의 위치 이동 저장
          */
         jecesViewModel.whereMyUser("home")
+
+        /**
+         * 상단바 메뉴
+         */
+        val toolbarImage: ImageButton = view.findViewById(R.id.toolbarImageButton)
+        toolbarImage.setOnClickListener {
+            Log.d("aaa123", "123")
+            // val popupMenu = PopupMenu(this, it)
+            val popupMenu = PopupMenu(requireActivity(), it) // 'this'를 'requireActivity()'로 변경
+            popupMenu.inflate(R.menu.option_menu) // 메뉴 리소스 파일 설정
+            popupMenu.setOnMenuItemClickListener { menuItem ->
+                // 메뉴 아이템을 클릭했을 때 수행할 동작
+                when (menuItem.itemId) {
+                    R.id.logout -> {
+                        /* 로그아웃 */
+                        FirebaseAuth.getInstance().signOut()
+                        /* 페이지 이동 */
+                        // val it = Intent(this, LoginActivity::class.java)
+                        val it = Intent(requireActivity(), LoginActivity::class.java) // 'this'를 'requireActivity()'로 변경
+                        requireActivity().startActivity(it) // 'startActivity()' 앞에 'requireActivity().' 추가
+                        true
+                    }
+                    // 다른 메뉴 아이템 처리
+                    else -> false
+                }
+            }
+            popupMenu.show()
+        }
+
 
 
         /**

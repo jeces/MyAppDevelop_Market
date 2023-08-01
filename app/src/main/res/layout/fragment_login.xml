@@ -19,7 +19,7 @@
                     android:id="@+id/loginImage"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
-                    android:src="@drawable/marketplace"
+                    android:src="@drawable/marketplace_img"
                     android:scaleType="centerCrop"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

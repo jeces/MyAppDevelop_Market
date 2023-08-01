@@ -31,19 +31,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <!-- 상단바 이미지 버튼 -->
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/toolbarImageButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="25dp"
-                android:layout_marginTop="25dp"
-                app:backgroundTint="@android:color/white"
-                app:elevation="0dp"
-                app:srcCompat="@drawable/ic_baseline_menu_24"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
         </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

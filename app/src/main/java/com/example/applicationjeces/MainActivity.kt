@@ -40,31 +40,7 @@ class MainActivity : AppCompatActivity() {
         /* 앨범에 접근하는것을 허용하는 메세지 */
         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1)
 
-        /**
-         * 상단바 메뉴
-         */
-        binding.toolbarImageButton.setOnClickListener {
-            Log.d("aaaaaa", "asd")
-            val popupMenu = PopupMenu(this, it)
-            popupMenu.inflate(R.menu.option_menu) // 메뉴 리소스 파일 설정
-            popupMenu.setOnMenuItemClickListener { menuItem ->
-                // 메뉴 아이템을 클릭했을 때 수행할 동작
-                Log.d("aaaaaa", "asd")
-                when (menuItem.itemId) {
-                    R.id.logout -> {
-                        /* 로그아웃 */
-                        FirebaseAuth.getInstance().signOut()
-                        /* 페이지 이동 */
-                        val it = Intent(this, LoginActivity::class.java)
-                        startActivity(it)
-                        true
-                    }
-                    // 다른 메뉴 아이템 처리
-                    else -> false
-                }
-            }
-            popupMenu.show()
-        }
+
 
 //        /* fab 메세지 */
 //        binding.fab.setOnClickListener { view ->

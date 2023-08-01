@@ -7,8 +7,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
+
         <!-- 상단 이미지 뷰 -->
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/adverMain"
             android:layout_width="0dp"
             android:layout_height="300dp"
@@ -22,7 +24,19 @@
                 android:id="@+id/viewPagerHomeProduce"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
-        </LinearLayout>
+
+            <!-- 상단바 이미지 버튼 -->
+            <ImageButton
+                android:id="@+id/toolbarImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginEnd="25dp"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/ic_baseline_menu_24"
+                android:src="@drawable/ic_baseline_menu_24"
+                android:contentDescription="Options"/>
+        </FrameLayout>
 
         <ScrollView
             android:id="@+id/scrollHome"
