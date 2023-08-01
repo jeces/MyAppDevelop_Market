@@ -7,7 +7,6 @@ plugins {
     id 'kotlin-android-extensions'
     id 'com.google.gms.google-services'
 
-
 }
 
 android {
@@ -139,5 +138,9 @@ dependencies {
     /* Glide Glide는 일종의 이미지 라이브러리로, 서버에 저장되어 있는 이미지 데이터를 앱에 출력할 수 있도록 도와주는 라이브러리(빠르다) */
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
+
+    /* 스플레시 */
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.X.X'  // 1.X.X 대신에 실제 버전 넘버를 넣어주세요.
+
 
 }
