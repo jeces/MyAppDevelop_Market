@@ -48,6 +48,9 @@ class JecesViewModel(application: Application): AndroidViewModel(application) {
     /* 이미지를 담는 리스트 */
     var imgList: ArrayList<String> = arrayListOf()
 
+    /* adver 이미지를 담는 리스트 */
+    var adverImgList: ArrayList<String> = arrayListOf()
+
     /* 유저의 현재 위치 */
     var whereUser: String? = null
 
@@ -65,7 +68,9 @@ class JecesViewModel(application: Application): AndroidViewModel(application) {
         allProduct()
     }
 
-    /* firebase storage에서 이미지 가져오기 */
+    /**
+     *  firebase storage에서 상품 이미지 가져오기
+     * */
     fun getImage(productName:String, productCount: Int): MutableList<String>? {
         imgList.clear()
         /* 글자 나누기 */
@@ -82,6 +87,28 @@ class JecesViewModel(application: Application): AndroidViewModel(application) {
                 imgList.add(word)
             }
             imgList
+        }
+    }
+
+    /**
+     *  firebase storage에서 adver 이미지 가져오기
+     * */
+    fun getAdverImage(adverCount: Int): MutableList<String>? {
+        adverImgList.clear()
+        /* 글자 나누기 */
+        /* 카운트는 가져와야함 product에 저장해놓고 */
+        /* User이름, 상품이름, 사진갯수몇가지인지[product에 추가할것], 사진idx값 가져오기 */
+        return if(adverCount <= 0) {
+            var word = "basic_img.png"
+            adverImgList.add(word)
+            adverImgList
+        } else {
+            for(i: Int in 0 until adverCount) {
+                /* 워드를 가져와서 돌림 */
+                var word: String = "adver_" + i + ".jpeg"
+                adverImgList.add(word)
+            }
+            adverImgList
         }
     }
     /* 전체 채팅 수 가져오기 n0, n1 가져와야함 */
@@ -378,6 +405,10 @@ class JecesViewModel(application: Application): AndroidViewModel(application) {
         position = getPosition
         productArrayList.add(productDetail)
     }
+
+    /**
+     * adver 사진을 가지고
+     */
 
     /* 보냈을 때 상대방이 채팅창에 있을 때 나타냄 */
     fun isRead(yourId: String, idx: String) {

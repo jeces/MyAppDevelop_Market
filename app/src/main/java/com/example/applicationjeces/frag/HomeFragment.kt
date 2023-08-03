@@ -17,12 +17,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.example.applicationjeces.MainActivity
 import com.example.applicationjeces.R
 import com.example.applicationjeces.page.DataViewModel
 import com.example.applicationjeces.page.PageData
 import com.example.applicationjeces.product.ProductRecyclerViewAdapter
 import com.example.applicationjeces.JecesViewModel
+import com.example.applicationjeces.product.AdverRecyclerViewAdapter
+import com.example.applicationjeces.product.FullscreenImageFragment
+import com.example.applicationjeces.product.ProductImageInfoRecyclerViewAdapter
 import com.example.applicationjeces.user.LoginActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
@@ -40,10 +44,13 @@ private const val ARG_PARAM2 = "param2"
  * Use the [HomeFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
+    /* adver 이미지 리스트 */
+    var adverImagelist = ArrayList<String>()
 
     private  lateinit var jecesViewModel: JecesViewModel
 
@@ -104,14 +111,6 @@ class HomeFragment : Fragment() {
             popupMenu.show()
         }
 
-
-
-        /**
-         * 맨 위 소개 페이지
-         */
-//        val adapter = HomeRecyclerViewAdapter()
-
-
         /**
          * 최근 본 상품
          */
@@ -157,6 +156,27 @@ class HomeFragment : Fragment() {
                 mActivity.bottomNavigationView.menu.findItem(R.id.detail).isChecked = true
             }
         })
+
+        /**
+         * adver 이미지
+         */
+        adverImagelist = jecesViewModel.getAdverImage(4) as ArrayList<String>
+
+        Log.d("광고이미지", adverImagelist.toString())
+
+        /**
+         * 맨 위 소개 페이지
+         * viewpager2 adapter 장착
+         */
+        val viewPager = view.findViewById<ViewPager2>(R.id.viewPagerHomeProduce)
+        val adapterVp = AdverRecyclerViewAdapter(adverImagelist, this@HomeFragment, this)
+        viewPager.adapter = adapterVp
+////        viewPager.currentItem = position
+
+
+
+
+
 
         // Inflate the layout for this fragment
         return view
@@ -225,5 +245,9 @@ class HomeFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    override fun onClick(images: ArrayList<String>, position: Int) {
+        Log.d("클릭클릭", "클릭")
     }
 }
