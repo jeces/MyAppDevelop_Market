@@ -174,13 +174,11 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
         adapter.setItemClickListener(object: ProductRecyclerViewAdapter.OnItemClickListener {
             override fun onClick(v: View, position: Int) {
                 val productModel: JecesViewModel by activityViewModels()
-                Log.d("aa11", "00")
                 /* 상품 정보 불러오기 */
                 productModel.liveTodoData.value?.get(position).toString()
                 productModel.setProductDetail(adapter.producFiretList[position].get("ID").toString(), adapter.producFiretList[position].get("productName").toString(), adapter.producFiretList[position].get("productPrice").toString()
                     , adapter.producFiretList[position].get("productDescription").toString(), adapter.producFiretList[position].get("productCount").toString(), adapter.producFiretList[position].get("pChatCount").toString(), adapter.producFiretList[position].get("pViewCount").toString(), adapter.producFiretList[position].get("pHeartCount").toString(), adapter.producFiretList[position].get("productBidPrice").toString(), position)
 
-                Log.d("aa11", "11")
                 /* InfoActivity로 화면 전환 */
                 val intent = Intent(getActivity(), InfoActivity::class.java)
                 /* 필요한 데이터를 InfoActivity로 전달하기 위한 인텐트 파라미터 설정 */
@@ -194,9 +192,10 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
                 intent.putExtra("pHeartCount", adapter.producFiretList[position].get("pHeartCount").toString())
                 intent.putExtra("productBidPrice", adapter.producFiretList[position].get("productBidPrice").toString())
                 intent.putExtra("position", position)
-                /* 추가적인 정보를 넣고 싶으시면 위와 같은 방식으로 intent.putExtra를 사용하시면 됩니다. */
-                Log.d("aa11", "22")
                 startActivity(intent)
+
+                /* 애니메이션 적용 */
+                activity?.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
             }
         })
 
