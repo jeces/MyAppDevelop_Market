@@ -11,13 +11,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
-import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.applicationjeces.R
-import com.example.applicationjeces.product.ProductImageInfoRecyclerViewAdapter
 import com.example.applicationjeces.JecesViewModel
 import com.example.applicationjeces.chat.ChatActivity
 import com.example.applicationjeces.chat.ChatroomData
@@ -92,7 +90,7 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
         imagelist = jecesModel.getImage(pName, jecesModel.productArrayList[0].product_count) as ArrayList<String>
 
         /* 이미지 어뎁터 */
-        val adapter = ProductImageInfoRecyclerViewAdapter(myId, pName, imagelist, this@InfoFragment, this)
+        val adapter = ProductImageInfoRecyclerViewAdapter_z(myId, pName, imagelist, this@InfoFragment, this)
 
         //viewPager.adapter = adapter
 

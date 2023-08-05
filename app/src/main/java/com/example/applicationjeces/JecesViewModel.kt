@@ -398,12 +398,15 @@ class JecesViewModel(application: Application): AndroidViewModel(application) {
         return searchLiveTodoData
     }
 
-    /* 제품 디테일 데이터를 가지고 있는 데이터 */
+    /**
+     *  제품 디테일 데이터를 가지고 있는 데이터
+     **/
     fun setProductDetail(productId : String, productName: String, productPrice: String, productDescription: String, productCount: String, pChatCount: String, pViewCount: String, pHearCount: String, pBidPrice: String, getPosition: Int) {
         productArrayList.clear()
         val productDetail = Product(productId, productName, productPrice, productDescription, productCount.toInt(), thisUser + "_" + productName + "_0_IMAGE_.png", pChatCount, pViewCount, pHearCount, pBidPrice)
         position = getPosition
         productArrayList.add(productDetail)
+        Log.d("aa11", productArrayList.toString() + "aaaaa")
     }
 
     /**

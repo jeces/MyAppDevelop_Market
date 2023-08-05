@@ -2,9 +2,11 @@ package com.example.applicationjeces
 
 import android.Manifest
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ImageButton
 import android.widget.PopupMenu
 import androidx.activity.viewModels
@@ -31,6 +33,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        /**
+         * 상태표시줄 투명하게 만들기
+         */
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+        window.statusBarColor = Color.TRANSPARENT
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.apply {
             viewModel = jecesViewModel

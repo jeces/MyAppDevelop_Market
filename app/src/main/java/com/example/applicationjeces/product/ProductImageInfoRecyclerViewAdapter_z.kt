@@ -1,7 +1,5 @@
 package com.example.applicationjeces.product
 
-import android.app.Activity
-import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,13 +11,13 @@ import com.bumptech.glide.Glide
 import com.example.applicationjeces.R
 import com.google.firebase.storage.FirebaseStorage
 
-class ProductImageInfoRecyclerViewAdapter(
+class ProductImageInfoRecyclerViewAdapter_z(
     var myId: String,
     var pName: String,
     var productImageList: ArrayList<String>,
-    val context: Activity,
-    private val onImageClickListener: OnImageClickListener
-): RecyclerView.Adapter<ProductImageInfoRecyclerViewAdapter.Holder>() {
+    val context: Fragment,
+    private val onImageClickListener: InfoFragment
+): RecyclerView.Adapter<ProductImageInfoRecyclerViewAdapter_z.Holder>() {
 
     interface OnImageClickListener {
         fun onClick(images: ArrayList<String>, position: Int, myId: String, pName: String)

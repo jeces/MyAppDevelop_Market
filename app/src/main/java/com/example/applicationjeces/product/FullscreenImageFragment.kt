@@ -23,6 +23,7 @@ import com.example.applicationjeces.chat.ChatActivity
 import com.example.applicationjeces.chat.ChatroomData
 import com.google.firebase.Timestamp
 import com.google.firebase.storage.FirebaseStorage
+import com.tbuonomo.viewpagerdotsindicator.DotsIndicator
 
 /**
  * A simple [Fragment] subclass.
@@ -84,6 +85,13 @@ class FullscreenImageFragment : Fragment() {
         val adapter = FullscreenImageAdapter(images, myId, pName)
         viewPager.adapter = adapter
         viewPager.currentItem = position
+
+        /**
+         * indicator 장착
+         */
+        val dotsIndicator: DotsIndicator = view.findViewById(R.id.dots_indicator_full)
+        val viewPager2: ViewPager2 = view.findViewById(R.id.viewPager)
+        dotsIndicator.setViewPager2(viewPager2)
 
         return view
     }

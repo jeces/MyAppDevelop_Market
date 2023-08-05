@@ -22,11 +22,8 @@ import com.example.applicationjeces.MainActivity
 import com.example.applicationjeces.R
 import com.example.applicationjeces.page.DataViewModel
 import com.example.applicationjeces.page.PageData
-import com.example.applicationjeces.product.ProductRecyclerViewAdapter
 import com.example.applicationjeces.JecesViewModel
-import com.example.applicationjeces.product.AdverRecyclerViewAdapter
-import com.example.applicationjeces.product.FullscreenImageFragment
-import com.example.applicationjeces.product.ProductImageInfoRecyclerViewAdapter
+import com.example.applicationjeces.product.*
 import com.example.applicationjeces.user.LoginActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
@@ -66,6 +63,8 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
+
     }
 
     override fun onCreateView(
@@ -125,6 +124,7 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
         /**
          * 찜한 상품
          */
+        Log.d("aa11", "-2")
         val recyclerView2 = view.select_profile
         recyclerView2.adapter = adapter
         recyclerView2.setHasFixedSize(true)
@@ -138,23 +138,65 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
             adapter.setData(product)
         })
 
-        /* 항목 클릭시 */
+//        /**
+//         *  항목 클릭시
+//         **/
+//        adapter.setItemClickListener(object: ProductRecyclerViewAdapter.OnItemClickListener {
+//            override fun onClick(v: View, position: Int) {
+////                /* 화면 띄움*/
+////                /* 프라그먼트에서 프라그먼트로 제어가 불가능하기 때문에 상위 액티비티에서 제어 해주어야 한다. */
+////                /* ViewModel 가지고와서 PageLiveData 넘기기[업데이트 됨] */
+////                val model: DataViewModel by activityViewModels()
+////                model.changePageNum(PageData.DETAIL)
+////
+////                val productModel: JecesViewModel by activityViewModels()
+////                productModel.liveTodoData.value?.get(position).toString()
+////                productModel.setProductDetail(adapter.producFiretList[position].get("ID").toString(), adapter.producFiretList[position].get("productName").toString(), adapter.producFiretList[position].get("productPrice").toString()
+////                    , adapter.producFiretList[position].get("productDescription").toString(), adapter.producFiretList[position].get("productCount").toString(), adapter.producFiretList[position].get("pChatCount").toString(), adapter.producFiretList[position].get("pViewCount").toString(), adapter.producFiretList[position].get("pHeartCount").toString(), adapter.producFiretList[position].get("productBidPrice").toString(), position)
+////
+////                /* Navigation Bar Selected 넘겨야 됨[여기서부터해야함] */
+////                val mActivity = activity as MainActivity
+////                mActivity.bottomNavigationView.menu.findItem(R.id.detail).isChecked = true
+//
+//                /* 화면 띄움 */
+//                val intent = Intent(getActivity(), InfoActivity::class.java)
+//                intent.putExtra("param1", adapter.producFiretList[position].get("ID").toString())
+//                intent.putExtra("param2", adapter.producFiretList[position].get("productName").toString())
+//                startActivity(intent)
+//                Log.d("들어갔음?", "들어갔음?")
+//            }
+//        })
+
+        /**
+         *  항목 클릭시
+         **/
+        Log.d("aa11", "-1")
         adapter.setItemClickListener(object: ProductRecyclerViewAdapter.OnItemClickListener {
             override fun onClick(v: View, position: Int) {
-                /* 화면 띄움*/
-                /* 프라그먼트에서 프라그먼트로 제어가 불가능하기 때문에 상위 액티비티에서 제어 해주어야 한다. */
-                /* ViewModel 가지고와서 PageLiveData 넘기기[업데이트 됨] */
-                val model: DataViewModel by activityViewModels()
-                model.changePageNum(PageData.DETAIL)
-
                 val productModel: JecesViewModel by activityViewModels()
+                Log.d("aa11", "00")
+                /* 상품 정보 불러오기 */
                 productModel.liveTodoData.value?.get(position).toString()
                 productModel.setProductDetail(adapter.producFiretList[position].get("ID").toString(), adapter.producFiretList[position].get("productName").toString(), adapter.producFiretList[position].get("productPrice").toString()
                     , adapter.producFiretList[position].get("productDescription").toString(), adapter.producFiretList[position].get("productCount").toString(), adapter.producFiretList[position].get("pChatCount").toString(), adapter.producFiretList[position].get("pViewCount").toString(), adapter.producFiretList[position].get("pHeartCount").toString(), adapter.producFiretList[position].get("productBidPrice").toString(), position)
 
-                /* Navigation Bar Selected 넘겨야 됨[여기서부터해야함] */
-                val mActivity = activity as MainActivity
-                mActivity.bottomNavigationView.menu.findItem(R.id.detail).isChecked = true
+                Log.d("aa11", "11")
+                /* InfoActivity로 화면 전환 */
+                val intent = Intent(getActivity(), InfoActivity::class.java)
+                /* 필요한 데이터를 InfoActivity로 전달하기 위한 인텐트 파라미터 설정 */
+                intent.putExtra("ID", adapter.producFiretList[position].get("ID").toString())
+                intent.putExtra("productName", adapter.producFiretList[position].get("productName").toString())
+                intent.putExtra("productPrice", adapter.producFiretList[position].get("productPrice").toString())
+                intent.putExtra("productDescription", adapter.producFiretList[position].get("productDescription").toString())
+                intent.putExtra("productCount", adapter.producFiretList[position].get("productCount").toString())
+                intent.putExtra("pChatCount", adapter.producFiretList[position].get("pChatCount").toString())
+                intent.putExtra("pViewCount", adapter.producFiretList[position].get("pViewCount").toString())
+                intent.putExtra("pHeartCount", adapter.producFiretList[position].get("pHeartCount").toString())
+                intent.putExtra("productBidPrice", adapter.producFiretList[position].get("productBidPrice").toString())
+                intent.putExtra("position", position)
+                /* 추가적인 정보를 넣고 싶으시면 위와 같은 방식으로 intent.putExtra를 사용하시면 됩니다. */
+                Log.d("aa11", "22")
+                startActivity(intent)
             }
         })
 
