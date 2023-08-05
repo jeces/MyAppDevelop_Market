@@ -82,6 +82,9 @@ class LoginFragment : Fragment() {
         if(user != null) {
             val it = Intent(context, MainActivity::class.java)
             startActivity(it)
+
+            /* 애니메이션 적용 */
+            activity?.overridePendingTransition(R.anim.slide_in_top, R.anim.slide_out_bottom)
         }
     }
 
