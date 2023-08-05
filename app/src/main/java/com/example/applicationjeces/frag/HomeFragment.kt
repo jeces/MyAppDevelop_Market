@@ -30,6 +30,7 @@ import com.example.applicationjeces.product.ProductImageInfoRecyclerViewAdapter
 import com.example.applicationjeces.user.LoginActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
+import com.tbuonomo.viewpagerdotsindicator.DotsIndicator
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
@@ -162,7 +163,7 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
          */
         adverImagelist = jecesViewModel.getAdverImage(4) as ArrayList<String>
 
-        Log.d("광고이미지", adverImagelist.toString())
+
 
         /**
          * 맨 위 소개 페이지
@@ -173,9 +174,14 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
         viewPager.adapter = adapterVp
 ////        viewPager.currentItem = position
 
+        /**
+         * indicator 장착
+         */
+        val dotsIndicator: DotsIndicator = view.findViewById(R.id.dots_indicator)
+        val viewPager2: ViewPager2 = view.findViewById(R.id.viewPagerHomeProduce)
+        dotsIndicator.setViewPager2(viewPager2)
 
-
-
+        Log.d("광고이미지", adverImagelist.toString())
 
 
         // Inflate the layout for this fragment
