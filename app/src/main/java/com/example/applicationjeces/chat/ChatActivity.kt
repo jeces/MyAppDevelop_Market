@@ -178,28 +178,6 @@ class ChatActivity : AppCompatActivity() {
             chatViewModel.lastChat(chat, chatroomidx.toString(), chatViewModel.yourId.value.toString())
             binding.chatText.text.clear()
         }
-
-
-
-
-
-        val recyclerView: RecyclerView = findViewById(R.id.messageActivity_recyclerview)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
 
@@ -211,25 +189,4 @@ class ChatActivity : AppCompatActivity() {
                 binding.messageActivityRecyclerview.scrollBy(0, oldBottom - bottom)
             }
         }
-
-//    /**
-//     * 키보드를 숨기는 메서드
-//     */
-////    private fun hideKeyboard() {
-////        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-////        imm.hideSoftInputFromWindow(chat_text.windowToken, 0)
-////    }
-//
-//    /**
-//     * 이모티콘 패널에서 이모티콘을 선택할 때 호출되는 콜백
-//     */
-//    fun onEmojiSelected(emoji: String) {
-//        val currentPosition = chat_text.selectionEnd
-//        chat_text.text?.let {
-//            val newText = StringBuilder(it)
-//            newText.insert(currentPosition, emoji)
-//            chat_text.setText(newText)
-//            chat_text.setSelection(currentPosition + emoji.length)
-//        }
-//    }
 }
