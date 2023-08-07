@@ -23,7 +23,6 @@ import com.example.applicationjeces.product.InfoFragment
 import com.example.applicationjeces.search.SearchActivity
 import com.example.applicationjeces.user.LoginActivity
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
