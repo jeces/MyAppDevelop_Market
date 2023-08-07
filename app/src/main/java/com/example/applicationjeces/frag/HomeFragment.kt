@@ -63,8 +63,6 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
-
-
     }
 
     override fun onCreateView(
@@ -200,11 +198,9 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
         })
 
         /**
-         * adver 이미지
+         * adver 이미지 가져오기
          */
         adverImagelist = jecesViewModel.getAdverImage(4) as ArrayList<String>
-
-
 
         /**
          * 맨 위 소개 페이지

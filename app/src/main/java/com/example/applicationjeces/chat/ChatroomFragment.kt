@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applicationjeces.R
-import com.example.applicationjeces.JecesViewModel
 import kotlinx.android.synthetic.main.fragment_chat.view.*
 
 // TODO: Rename parameter arguments, choose names that match
@@ -29,7 +28,7 @@ class ChatroomFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    private lateinit var jecesViewModel: JecesViewModel
+    private lateinit var chatViewModel: ChatViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,11 +45,11 @@ class ChatroomFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_chat, container, false)
 
-        /* 뷰모델 초기화 */
-        jecesViewModel = ViewModelProvider(this)[JecesViewModel::class.java]
+        /* 뷰모델 초기화 생성자 */
+        chatViewModel = ViewModelProvider(this)[ChatViewModel::class.java]
 
         /* 나의 아이디 */
-        val myId = jecesViewModel.thisUser.toString()
+        val myId = chatViewModel.thisUser.toString()
 
         /* 어뎁터 가져옴 */
         val adapter = ChatroomRecyclerViewAdapter(this@ChatroomFragment, myId)
@@ -61,17 +60,26 @@ class ChatroomFragment : Fragment() {
 //        recyclerView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        /* 채팅룸 가져오기 */
-        jecesViewModel.getAllChatroom()
+        /**
+         *  채팅룸 가져오기
+         **/
+        chatViewModel.getAllChatroom()
 
-        /* 뷰모델 연결 후 뷰모델 옵저버를 통해 불러옴 */
-        jecesViewModel.liveTodoChatroomData.observe(viewLifecycleOwner, Observer { chatroom ->
+        /**
+         *  뷰모델 연결 후 뷰모델 옵저버를 통해 불러옴
+         **/
+        chatViewModel.liveTodoChatroomData.observe(viewLifecycleOwner, Observer { chatroom ->
             adapter.submitList(chatroom!!.toMutableList())
         })
 
-        jecesViewModel.whereMyUser("chatroom")
+        /**
+         * 나의 위치 이동
+         */
+        chatViewModel.whereMyUser("chatroom")
 
-        /* 항목 클릭시 */
+        /**
+         *  항목 클릭시
+         **/
         adapter.setItemClickListener(object: ChatroomRecyclerViewAdapter.OnItemClickListener {
             override fun onClick(v: View, position: Int) {
                 /* 화면 띄움*/
@@ -87,8 +95,6 @@ class ChatroomFragment : Fragment() {
         // Inflate the layout for this fragment
         return view
     }
-
-
 
     companion object {
         /**

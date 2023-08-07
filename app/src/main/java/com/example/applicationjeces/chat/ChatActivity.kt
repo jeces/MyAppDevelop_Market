@@ -7,29 +7,28 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.applicationjeces.JecesViewModel
+import androidx.viewpager2.widget.ViewPager2
 import com.example.applicationjeces.MainActivity
 import com.example.applicationjeces.R
 import com.example.applicationjeces.page.PageData
 import com.example.applicationjeces.databinding.ActivityChatBinding
+import com.example.applicationjeces.product.AdverRecyclerViewAdapter
 import com.google.firebase.Timestamp
 import kotlinx.android.synthetic.main.activity_chat.view.*
 
 class ChatActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityChatBinding
-//    private var chatViewModel by viewModels<ChatViewModel>()
     private lateinit var chatViewModel: ChatViewModel
 
-    // 키보드 올라왔는지 확인
+    /* 키보드 올라왔는지 확인 변수 */
     private var isOpen = false
 
+    /* 각 변수들 */
     var chatroomidx : String? = null
     var chatroomYourId : String? = null
     var messageCheck : String? = null
@@ -61,7 +60,7 @@ class ChatActivity : AppCompatActivity() {
         /**
          * 상대방 이름 가져와서 토픽 이름에 넣기
          */
-        var yourId = chatroomYourId?.let { chatViewModel.updateYourId(it) }
+        yourId = chatroomYourId?.let { chatViewModel.updateYourId(it) }
         binding.chatTopicName.text = yourId.toString()
 
         /**
@@ -72,6 +71,7 @@ class ChatActivity : AppCompatActivity() {
         /**
          * 채팅 리사이클러 뷰
          */
+
         var adapter = ChatRecyclerViewAdapter(chatViewModel.myId.value.toString(), this)
         binding.messageActivityRecyclerview.apply {
             messageActivity_recyclerview.adapter = adapter
