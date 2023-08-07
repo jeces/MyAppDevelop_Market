@@ -127,6 +127,7 @@ class ChatroomRecyclerViewAdapter(var contexts: Fragment, var myId: String): Lis
                     .load(it.result)
                     .override(70, 70)
                     .fitCenter()
+                    .circleCrop() // 또는 .transform(RoundedCorners(radius)) 를 사용하여 모서리의 반경을 설정
                     .into(chatroomUserImg)
             } else {
                 /* 없으면 기본 이미지 들고와라 */
@@ -135,6 +136,7 @@ class ChatroomRecyclerViewAdapter(var contexts: Fragment, var myId: String): Lis
                         .load(its.result)
                         .override(70, 70)
                         .fitCenter()
+                        .circleCrop() // 또는 .transform(RoundedCorners(radius)) 를 사용하여 모서리의 반경을 설정
                         .into(chatroomUserImg)
                 }
             }

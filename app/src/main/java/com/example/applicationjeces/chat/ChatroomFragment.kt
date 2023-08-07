@@ -9,8 +9,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.applicationjeces.R
+import com.example.applicationjeces.databinding.FragmentChatBinding
 import kotlinx.android.synthetic.main.fragment_chat.view.*
 
 // TODO: Rename parameter arguments, choose names that match
@@ -29,6 +28,9 @@ class ChatroomFragment : Fragment() {
     private var param2: String? = null
 
     private lateinit var chatViewModel: ChatViewModel
+    private var _binding: FragmentChatBinding? = null
+    private val binding get() = _binding!!
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,22 +45,31 @@ class ChatroomFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val view = inflater.inflate(R.layout.fragment_chat, container, false)
+        /**
+         * view 바인딩
+         */
+        _binding = FragmentChatBinding.inflate(inflater, container, false)
+        val view = binding.root
 
-        /* 뷰모델 초기화 생성자 */
+        /**
+         * 뷰모델 초기화 생성자
+         **/
         chatViewModel = ViewModelProvider(this)[ChatViewModel::class.java]
 
-        /* 나의 아이디 */
+        /**
+         *  나의 아이디
+         **/
         val myId = chatViewModel.thisUser.toString()
 
-        /* 어뎁터 가져옴 */
+        /**
+         * 채팅 룸 viewpager2
+         */
         val adapter = ChatroomRecyclerViewAdapter(this@ChatroomFragment, myId)
-        val recyclerView: RecyclerView = view.chat_profile
-        recyclerView.adapter = adapter
-//        /* etHasFixedSize를 true로 설정함으로써 아이템 크기가 변경이 안된다는 것을 명시 */
-//        recyclerView.setHasFixedSize(true)
-//        recyclerView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.chatProfile2.adapter = adapter
+        binding.chatProfile2.layoutManager = LinearLayoutManager(requireContext())
+//        val viewPager = binding.chatroomViewpager2
+//        val adapterCr = ChatroomRecyclerViewAdapter(this@ChatroomFragment, myId)
+//        viewPager.adapter = adapterCr
 
         /**
          *  채팅룸 가져오기
