@@ -153,6 +153,8 @@ class ChatActivity : AppCompatActivity() {
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                 putExtra("destinationFragment", PageData.CHATROOM)
             }
+            /* 애니메이션 적용 */
+            overridePendingTransition(R.anim.slide_out_right, R.anim.slide_in_left)
             startActivity(mainActivity)
             finish()
         }

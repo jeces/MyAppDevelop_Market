@@ -2,6 +2,7 @@ package com.example.applicationjeces.chat
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.applicationjeces.R
 import com.example.applicationjeces.databinding.FragmentChatBinding
 import kotlinx.android.synthetic.main.fragment_chat.view.*
 
@@ -80,6 +82,7 @@ class ChatroomFragment : Fragment() {
          *  뷰모델 연결 후 뷰모델 옵저버를 통해 불러옴
          **/
         chatViewModel.liveTodoChatroomData.observe(viewLifecycleOwner, Observer { chatroom ->
+            Log.d("왜안돼니", chatroom.toString())
             adapter.submitList(chatroom!!.toMutableList())
         })
 
@@ -100,7 +103,10 @@ class ChatroomFragment : Fragment() {
                     this.putExtra("chatidx", adapter.currentList[position].chatidx)
                     this.putExtra("chatYourId", adapter.currentList[position].id)
                 }
+
+                /* 애니메이션 적용 */
                 startActivity(intent)
+                activity?.overridePendingTransition(R.anim.slide_out_bottom, R.anim.slide_in_top)
             }
         })
         // Inflate the layout for this fragment

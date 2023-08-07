@@ -109,18 +109,62 @@ class ChatroomRecyclerViewAdapter(var contexts: Fragment, var myId: String): Lis
         }
     }
 
-    /* 시간변환 */
+    /**
+     * 시간변환
+     **/
     fun changeTime(timestamp: Timestamp): String {
         val mils = timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000
-        val sf = SimpleDateFormat("MM월 dd일 aa hh:mm", Locale.KOREA)
-//        val sf = SimpleDateFormat("aa hh:mm", Locale.KOREA)
-        val nDate = Date(mils)
-        val date = sf.format(nDate).toString()
-        return date
+        val currentDate = Calendar.getInstance()
+        val targetDate = Calendar.getInstance().apply { timeInMillis = mils }
+
+        val diff = currentDate[Calendar.DAY_OF_YEAR] - targetDate[Calendar.DAY_OF_YEAR]
+
+        return when {
+            diff == 0 -> {
+                val sf = SimpleDateFormat("aa hh:mm", Locale.KOREA)
+                sf.format(Date(mils))
+            }
+            diff in 1..6 -> {
+                "${diff}일 전"
+            }
+            else -> {
+                val sf = SimpleDateFormat("MM월 dd일", Locale.KOREA)
+                sf.format(Date(mils))
+            }
+        }
     }
 
-    /* 상대방 프로필 이미지 */
+    /**
+     * 상대방 프로필 이미지
+     **/
     fun yourChatroomProfilImg(yourId: String, chatroomUserImg: ImageView) {
+        db.reference.child("${yourId}/${yourId}_profil.png").downloadUrl.addOnCompleteListener {
+            if(it.isSuccessful) {
+                Glide.with(contexts)
+                    .load(it.result)
+                    .override(70, 70)
+                    .fitCenter()
+                    .circleCrop() // 또는 .transform(RoundedCorners(radius)) 를 사용하여 모서리의 반경을 설정
+                    .into(chatroomUserImg)
+            } else {
+                /* 없으면 기본 이미지 들고와라 */
+                db.reference.child("basic_user.png").downloadUrl.addOnCompleteListener { its->
+                    Glide.with(contexts)
+                        .load(its.result)
+                        .override(70, 70)
+                        .fitCenter()
+                        .circleCrop() // 또는 .transform(RoundedCorners(radius)) 를 사용하여 모서리의 반경을 설정
+                        .into(chatroomUserImg)
+                }
+            }
+        }
+    }
+
+    /**
+     * 상대방 판매물품 이미지
+     * 1. 상대방 판매 이미지를 가져와야 함(해당 물품 채팅을 클릭 했을 때의). 클릭했을 때... 이건 고민좀 해보자
+     **/
+    fun yourChatroomProductlImg(yourId: String, chatroomUserImg: ImageView) {
         db.reference.child("${yourId}/${yourId}_profil.png").downloadUrl.addOnCompleteListener {
             if(it.isSuccessful) {
                 Glide.with(contexts)
