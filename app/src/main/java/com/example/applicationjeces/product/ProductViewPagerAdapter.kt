@@ -9,16 +9,17 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.applicationjeces.R
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.storage.FirebaseStorage
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import kotlinx.android.synthetic.main.product_item_list.view.*
 
 class ProductViewPagerAdapter(private val context: Fragment, var myId: String, var producFiretList: List<DocumentSnapshot>): RecyclerView.Adapter<ProductViewPagerAdapter.Holder>() {
 
     /* ViewHolder에게 item을 보여줄 View로 쓰일 item_data_list.xml를 넘기면서 ViewHolder 생성. 아이템 레이아웃과 결합 */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        Log.d("asdfaa3", "asd")
         return Holder(LayoutInflater.from(parent.context).inflate(R.layout.product_item_list, parent, false))
     }
 
@@ -34,11 +35,6 @@ class ProductViewPagerAdapter(private val context: Fragment, var myId: String, v
         holder.itemView.product_name.text = currentItem.toString()
         holder.itemView.product_price.text = currentItem2.toString()
 
-        Log.d("asdfaa", currentItem.toString())
-        Log.d("asdfaa", currentItem2.toString())
-        Log.d("asdfaa", currentItem3.toString())
-        Log.d("asdfaa", currentItem4.toString())
-
         /* 이미지가 있을 때와 없을 때 */
         if(currentItem4.toString().equals("0")) {
             currentItem3 = "basic_img.png"
@@ -46,6 +42,7 @@ class ProductViewPagerAdapter(private val context: Fragment, var myId: String, v
                 if(it.isSuccessful) {
                     Glide.with(context)
                         .load(it.result)
+                        .apply(RequestOptions.bitmapTransform(RoundedCornersTransformation(5, 0)))
                         .override(20, 20)
                         .into(holder.itemView.product_img)
                 }
@@ -55,6 +52,7 @@ class ProductViewPagerAdapter(private val context: Fragment, var myId: String, v
                 if(it.isSuccessful) {
                     Glide.with(context)
                         .load(it.result)
+                        .apply(RequestOptions.bitmapTransform(RoundedCornersTransformation(5, 0)))
                         .override(20, 20)
                         .into(holder.itemView.product_img)
                 }
