@@ -5,13 +5,15 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp">
+        android:layout_marginVertical="5dp"
+        android:layout_marginHorizontal="5dp">
 
         <ImageView
             android:id="@+id/product_img"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:src="@color/black"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/product_name" />
@@ -22,8 +24,9 @@
             android:layout_height="wrap_content"
             android:text="상품이름"
             android:textColor="@color/black"
-            android:textSize="24sp"
+            android:textSize="15sp"
             android:textStyle="bold"
+            android:fontFamily="@font/font_font"
             app:layout_constraintTop_toBottomOf="@id/product_img"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
@@ -34,7 +37,8 @@
             android:layout_height="wrap_content"
             android:text="상품가격"
             android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textSize="12sp"
+            android:fontFamily="@font/font_font"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/product_name" />

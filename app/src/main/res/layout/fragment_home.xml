@@ -9,7 +9,8 @@
             type="com.example.applicationjeces.product.ProductViewModel" />
     </data>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/homeScroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="false">
@@ -32,8 +33,7 @@
                 <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/viewPagerHomeProduce"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_centerInParent="true"/>
+                    android:layout_height="match_parent" />
 
                 <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
                     android:id="@+id/dots_indicator"
@@ -62,11 +62,12 @@
                     android:contentDescription="Options"/>
             </FrameLayout>
 
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/homelinear"
                 android:orientation="vertical"
+                android:layout_marginTop="15dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -86,42 +87,18 @@
                     tools:ignore="SmallSp" />
 
                 <!-- 사진 리사이클러 뷰 옆으로 넘기는 -->
-                <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/viewPagerHomeProduceRecent"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/productRecent"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
-                    android:orientation="horizontal"/>
+                    android:orientation="horizontal"
+                    android:layout_marginTop="20dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:spanCount="5"
+                    tools:listitem="@layout/product_item_list" />
 
-
-<!--                <androidx.recyclerview.widget.RecyclerView-->
-<!--                    android:id="@+id/rv_profile"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:layout_marginHorizontal="10dp"-->
-<!--                    android:orientation="horizontal"-->
-<!--                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
-<!--                    tools:listitem="@layout/product_item_list" />-->
-
-<!--                <TextView-->
-<!--                    android:id="@+id/homeSelect"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginStart="32dp"-->
-<!--                    android:layout_marginEnd="32dp"-->
-<!--                    android:text="찜한 상품"-->
-<!--                    android:textSize="10sp"-->
-<!--                    android:textStyle="bold" />-->
-
-<!--                <androidx.recyclerview.widget.RecyclerView-->
-<!--                    android:id="@+id/select_profile"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:layout_marginHorizontal="10dp"-->
-<!--                    android:orientation="horizontal"-->
-<!--                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
-<!--                    tools:listitem="@layout/product_item_list" />-->
-            </LinearLayout>
+            </FrameLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 </layout>

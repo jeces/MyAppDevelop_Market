@@ -2,17 +2,19 @@ package com.example.applicationjeces.frag
 
 import android.content.Context
 import android.content.Intent
-import android.media.Image
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.AttributeSet
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.PopupMenu
+import android.widget.ScrollView
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -20,17 +22,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.example.applicationjeces.MainActivity
 import com.example.applicationjeces.R
-import com.example.applicationjeces.page.DataViewModel
-import com.example.applicationjeces.page.PageData
-import com.example.applicationjeces.JecesViewModel
-import com.example.applicationjeces.chat.ChatViewModel
-import com.example.applicationjeces.databinding.FragmentChatBinding
 import com.example.applicationjeces.databinding.FragmentHomeBinding
 import com.example.applicationjeces.product.*
 import com.example.applicationjeces.user.LoginActivity
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator
 import kotlinx.android.synthetic.main.activity_main.*
@@ -176,42 +171,65 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
         /**
          * 최근 등록된 상품
          */
-        val viewPagerRecent: ViewPager2 = binding.viewPagerHomeProduceRecent
-        val adapterRp = ProductViewPagerAdapter(requireContext(), myId, emptyList())
-        viewPagerRecent.adapter = adapterRp
+        val adapter = ProductViewPagerAdapter(this@HomeFragment, myId, emptyList())
+        val recyclerView = binding.productRecent
+        recyclerView.adapter = adapter
+        recyclerView.setHasFixedSize(true)
+        // Change from LinearLayoutManager to GridLayoutManager
+        recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
 
-        /* 뷰모델 연결, 뷰모델을 불러옴 */
+        /**
+         * 뷰모델 연결, 뷰모델을 불러옴
+         **/
         productViewModel.liveTodoData.observe(viewLifecycleOwner, Observer { product ->
             /* ViewModel에 Observe를 활용하여 productViewModel에 ReadAllData 라이브 데이터가 바뀌었을때 캐치하여, adapter에서 만들어준 setData함수를 통해 바뀐데이터를 UI에 업데이트 해줌 */
-            Log.d("dkfflwksk", "ddd")
-            adapterRp.setData(product)
+            adapter.setData(product)
         })
+
+
+
+
+//        val viewPagerRecent: ViewPager2 = binding.viewPagerHomeProduceRecent
+//        val scrollView = binding.homeScroll
+//        /* 스크롤뷰 동작 막기 */
+//        viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+//            override fun onPageScrollStateChanged(state: Int) {
+//                // 스크롤 상태가 변경될 때 호출됩니다.
+//                // 스크롤 상태가 변경되면서 ViewPager2가 스크롤되고 있을 때는 ScrollView의 스크롤을 막습니다.
+//                scrollView.isNestedScrollingEnabled = state == ViewPager2.SCROLL_STATE_IDLE
+//            }
+//        })
+//
+//        val adapterRp = ProductViewPagerAdapter(this@HomeFragment, myId, emptyList())
+//        viewPagerRecent.adapter = adapterRp
+//
+
 
         /**
          *  항목 클릭시
          **/
         Log.d("aa11", "-1")
-        adapterRp.setItemClickListener(object: ProductViewPagerAdapter.OnItemClickListener {
+        adapter.setItemClickListener(object: ProductViewPagerAdapter.OnItemClickListener {
             override fun onClick(v: View, position: Int) {
-                val productModel: JecesViewModel by activityViewModels()
+                val productModel: ProductViewModel by activityViewModels()
                 /* 상품 정보 불러오기 */
                 productModel.liveTodoData.value?.get(position).toString()
-                productModel.setProductDetail(adapterRp.producFiretList[position].get("ID").toString(), adapterRp.producFiretList[position].get("productName").toString(), adapterRp.producFiretList[position].get("productPrice").toString()
-                    , adapterRp.producFiretList[position].get("productDescription").toString(), adapterRp.producFiretList[position].get("productCount").toString(), adapterRp.producFiretList[position].get("pChatCount").toString()
-                    , adapterRp.producFiretList[position].get("pViewCount").toString(), adapterRp.producFiretList[position].get("pHeartCount").toString(), adapterRp.producFiretList[position].get("productBidPrice").toString(), position)
+                productModel.setProductDetail(adapter.producFiretList[position].get("ID").toString(), adapter.producFiretList[position].get("productName").toString(), adapter.producFiretList[position].get("productPrice").toString()
+                    , adapter.producFiretList[position].get("productDescription").toString(), adapter.producFiretList[position].get("productCount").toString(), adapter.producFiretList[position].get("pChatCount").toString()
+                    , adapter.producFiretList[position].get("pViewCount").toString(), adapter.producFiretList[position].get("pHeartCount").toString(), adapter.producFiretList[position].get("productBidPrice").toString(), position)
 
                 /* InfoActivity로 화면 전환 */
                 val intent = Intent(getActivity(), InfoActivity::class.java)
                 /* 필요한 데이터를 InfoActivity로 전달하기 위한 인텐트 파라미터 설정 */
-                intent.putExtra("ID", adapterRp.producFiretList[position].get("ID").toString())
-                intent.putExtra("productName", adapterRp.producFiretList[position].get("productName").toString())
-                intent.putExtra("productPrice", adapterRp.producFiretList[position].get("productPrice").toString())
-                intent.putExtra("productDescription", adapterRp.producFiretList[position].get("productDescription").toString())
-                intent.putExtra("productCount", adapterRp.producFiretList[position].get("productCount").toString())
-                intent.putExtra("pChatCount", adapterRp.producFiretList[position].get("pChatCount").toString())
-                intent.putExtra("pViewCount", adapterRp.producFiretList[position].get("pViewCount").toString())
-                intent.putExtra("pHeartCount", adapterRp.producFiretList[position].get("pHeartCount").toString())
-                intent.putExtra("productBidPrice", adapterRp.producFiretList[position].get("productBidPrice").toString())
+                intent.putExtra("ID", adapter.producFiretList[position].get("ID").toString())
+                intent.putExtra("productName", adapter.producFiretList[position].get("productName").toString())
+                intent.putExtra("productPrice", adapter.producFiretList[position].get("productPrice").toString())
+                intent.putExtra("productDescription", adapter.producFiretList[position].get("productDescription").toString())
+                intent.putExtra("productCount", adapter.producFiretList[position].get("productCount").toString())
+                intent.putExtra("pChatCount", adapter.producFiretList[position].get("pChatCount").toString())
+                intent.putExtra("pViewCount", adapter.producFiretList[position].get("pViewCount").toString())
+                intent.putExtra("pHeartCount", adapter.producFiretList[position].get("pHeartCount").toString())
+                intent.putExtra("productBidPrice", adapter.producFiretList[position].get("productBidPrice").toString())
                 intent.putExtra("position", position)
                 startActivity(intent)
 
@@ -242,12 +260,7 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
 
 
 
-//
-//        val recyclerView = view.rv_profile
-//        recyclerView.adapter = adapter
-//        recyclerView.setHasFixedSize(true)
-//        recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-//        //recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+
 
 //        /**
 //         * 찜한 상품

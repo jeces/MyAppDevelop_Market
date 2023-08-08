@@ -1,10 +1,12 @@
 package com.example.applicationjeces.product
 
 import android.annotation.SuppressLint
-import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.applicationjeces.R
@@ -12,10 +14,11 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.product_item_list.view.*
 
-class ProductViewPagerAdapter(private val context: Context, var myId: String, var producFiretList: List<DocumentSnapshot>): RecyclerView.Adapter<ProductViewPagerAdapter.Holder>() {
+class ProductViewPagerAdapter(private val context: Fragment, var myId: String, var producFiretList: List<DocumentSnapshot>): RecyclerView.Adapter<ProductViewPagerAdapter.Holder>() {
 
     /* ViewHolder에게 item을 보여줄 View로 쓰일 item_data_list.xml를 넘기면서 ViewHolder 생성. 아이템 레이아웃과 결합 */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
+        Log.d("asdfaa3", "asd")
         return Holder(LayoutInflater.from(parent.context).inflate(R.layout.product_item_list, parent, false))
     }
 
@@ -30,6 +33,11 @@ class ProductViewPagerAdapter(private val context: Context, var myId: String, va
         /* HomeFragment */
         holder.itemView.product_name.text = currentItem.toString()
         holder.itemView.product_price.text = currentItem2.toString()
+
+        Log.d("asdfaa", currentItem.toString())
+        Log.d("asdfaa", currentItem2.toString())
+        Log.d("asdfaa", currentItem3.toString())
+        Log.d("asdfaa", currentItem4.toString())
 
         /* 이미지가 있을 때와 없을 때 */
         if(currentItem4.toString().equals("0")) {
@@ -58,8 +66,11 @@ class ProductViewPagerAdapter(private val context: Context, var myId: String, va
             itemClickListener.onClick(it, position)
         }
 
+        Log.d("asdfaa1", "asd")
+
         /* 이미지 초기화 */
         holder.itemView.product_img.setImageBitmap(null)
+        Log.d("asdfaa2", "asd")
     }
 
     /* (2) 리스너 인터페이스 */
@@ -83,6 +94,7 @@ class ProductViewPagerAdapter(private val context: Context, var myId: String, va
     @SuppressLint("NotifyDataSetChanged")
     fun setData(product: List<DocumentSnapshot>) {
         producFiretList = product
+        Log.d("dkfflwksk", producFiretList.toString())
         /* 변경 알림 */
         notifyDataSetChanged()
     }

@@ -16,7 +16,6 @@ import com.example.applicationjeces.MainActivity
 import com.example.applicationjeces.R
 import com.example.applicationjeces.page.PageData
 import com.example.applicationjeces.databinding.ActivityChatBinding
-import com.example.applicationjeces.product.AdverRecyclerViewAdapter
 import com.google.firebase.Timestamp
 import kotlinx.android.synthetic.main.activity_chat.view.*
 
