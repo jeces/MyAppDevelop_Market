@@ -19,10 +19,6 @@ import kotlin.collections.HashMap
 /* 뷰모델은 DB에 직접 접근하지 않아야함. Repository 에서 데이터 통신 */
 class ChatViewModel(application: Application) : AndroidViewModel(application) {
 
-    /* 각종 라이브데이터 DocumentSnapshot은 firestore와 연결되어있어서 firestore가 변경되면 변경됨 하지만 다른것들은 바꿔줘야함. Snapshot으로 최대한 뽑아보자 */
-    var liveTodoData = MutableLiveData<List<DocumentSnapshot>>()
-    var productArrayList: MutableList<Product> = ArrayList()
-
     /* 채팅룸 담을 리스트*/
     var listChatroom : MutableList<ChatroomData> = mutableListOf()
     /* 채팅룸 실시간 라이브 데이터 */
@@ -43,10 +39,8 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
     /* firestore 문서 id를 저장하는 곳 */
     var documentId : String? = null
 
-
     /* 유저의 현재 위치 */
     var whereUser: String? = null
-
 
     /**
      * LiveData Chat yourId

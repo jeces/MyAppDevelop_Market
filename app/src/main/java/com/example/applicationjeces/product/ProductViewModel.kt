@@ -1,4 +1,4 @@
-package com.example.applicationjeces
+package com.example.applicationjeces.product
 
 import android.app.Application
 import android.util.Log
@@ -20,7 +20,7 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 /* 뷰모델은 DB에 직접 접근하지 않아야함. Repository 에서 데이터 통신 */
-class JecesViewModel(application: Application): AndroidViewModel(application) {
+class ProductViewModel(application: Application): AndroidViewModel(application) {
 
     /* 각종 라이브데이터 DocumentSnapshot은 firestore와 연결되어있어서 firestore가 변경되면 변경됨 하지만 다른것들은 바꿔줘야함. Snapshot으로 최대한 뽑아보자 */
     var liveTodoData = MutableLiveData<List<DocumentSnapshot>>()

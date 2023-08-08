@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.media.Image
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -23,6 +25,9 @@ import com.example.applicationjeces.R
 import com.example.applicationjeces.page.DataViewModel
 import com.example.applicationjeces.page.PageData
 import com.example.applicationjeces.JecesViewModel
+import com.example.applicationjeces.chat.ChatViewModel
+import com.example.applicationjeces.databinding.FragmentChatBinding
+import com.example.applicationjeces.databinding.FragmentHomeBinding
 import com.example.applicationjeces.product.*
 import com.example.applicationjeces.user.LoginActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -31,6 +36,8 @@ import com.tbuonomo.viewpagerdotsindicator.DotsIndicator
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -47,10 +54,15 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
     private var param1: String? = null
     private var param2: String? = null
 
+    private lateinit var productViewModel: ProductViewModel
+    private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!!
+
     /* adver 이미지 리스트 */
     var adverImagelist = ArrayList<String>()
 
-    private  lateinit var jecesViewModel: JecesViewModel
+    /* adver 이미지 개수 */
+    var adverPageCount = 0
 
     override fun onAttach(context: Context) {
         Log.d("jecesAddFragment", "onAttach")
@@ -69,17 +81,69 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Log.d("홈연결", "ㅇㅇ")
-        /* 레이아웃 연결 */
-        val view = inflater.inflate(R.layout.fragment_home, container, false)
 
-        jecesViewModel = ViewModelProvider(this)[JecesViewModel::class.java]
-        var myId: String = jecesViewModel.thisUser.toString()
+        /**
+         * view 바인딩
+         */
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        val view = binding.root
+
+        /**
+         * 뷰모델 초기화 생성자
+         **/
+        productViewModel = ViewModelProvider(this)[ProductViewModel::class.java]
+
+
+        /**
+         *  나의 아이디
+         **/
+        var myId: String = productViewModel.thisUser.toString()
 
         /**
          * 자신의 위치 이동 저장
          */
-        jecesViewModel.whereMyUser("home")
+        productViewModel.whereMyUser("home")
+
+        /**
+         * adver 이미지 가져오기
+         */
+        adverImagelist = productViewModel.getAdverImage(4) as ArrayList<String>
+
+        /**
+         * 맨 위 소개 페이지
+         * viewpager2 adapter 장착
+         */
+        val viewPager = binding.viewPagerHomeProduce
+        val adapterVp = AdverRecyclerViewAdapter(adverImagelist, this@HomeFragment, this)
+        viewPager.adapter = adapterVp
+////        viewPager.currentItem = position
+
+        /**
+         * indicator 장착
+         */
+        val dotsIndicator: DotsIndicator = binding.dotsIndicator
+        val viewPager2: ViewPager2 = binding.viewPagerHomeProduce
+        dotsIndicator.setViewPager2(viewPager2)
+
+        /**
+         * 자동 슬라이드
+         */
+        productViewModel.getAdverCounts().observe(viewLifecycleOwner, Observer { filesCount ->
+            println("Files count: $filesCount")
+            adverPageCount = filesCount
+        })
+        val handler = Handler(Looper.getMainLooper())
+        val update = Runnable {
+            val currentItem = viewPager2.currentItem
+            viewPager2.setCurrentItem((currentItem + 1) % adverPageCount, true)
+        }
+
+        val swipeTimer = Timer()
+        swipeTimer.schedule(object : TimerTask() {
+            override fun run() {
+                handler.post(update)
+            }
+        }, 5000, 5000)
 
         /**
          * 상단바 메뉴
@@ -110,31 +174,91 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
         }
 
         /**
-         * 최근 본 상품
+         * 최근 등록된 상품
          */
-        val adapter = ProductRecyclerViewAdapter(myId, emptyList(), this@HomeFragment)
-        val recyclerView = view.rv_profile
-        recyclerView.adapter = adapter
-        recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-        //recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
-
-        /**
-         * 찜한 상품
-         */
-        Log.d("aa11", "-2")
-        val recyclerView2 = view.select_profile
-        recyclerView2.adapter = adapter
-        recyclerView2.setHasFixedSize(true)
-        recyclerView2.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-
+        val viewPagerRecent: ViewPager2 = binding.viewPagerHomeProduceRecent
+        val adapterRp = ProductViewPagerAdapter(requireContext(), myId, emptyList())
+        viewPagerRecent.adapter = adapterRp
 
         /* 뷰모델 연결, 뷰모델을 불러옴 */
-        jecesViewModel.liveTodoData.observe(viewLifecycleOwner, Observer { product ->
+        productViewModel.liveTodoData.observe(viewLifecycleOwner, Observer { product ->
             /* ViewModel에 Observe를 활용하여 productViewModel에 ReadAllData 라이브 데이터가 바뀌었을때 캐치하여, adapter에서 만들어준 setData함수를 통해 바뀐데이터를 UI에 업데이트 해줌 */
             Log.d("dkfflwksk", "ddd")
-            adapter.setData(product)
+            adapterRp.setData(product)
         })
+
+        /**
+         *  항목 클릭시
+         **/
+        Log.d("aa11", "-1")
+        adapterRp.setItemClickListener(object: ProductViewPagerAdapter.OnItemClickListener {
+            override fun onClick(v: View, position: Int) {
+                val productModel: JecesViewModel by activityViewModels()
+                /* 상품 정보 불러오기 */
+                productModel.liveTodoData.value?.get(position).toString()
+                productModel.setProductDetail(adapterRp.producFiretList[position].get("ID").toString(), adapterRp.producFiretList[position].get("productName").toString(), adapterRp.producFiretList[position].get("productPrice").toString()
+                    , adapterRp.producFiretList[position].get("productDescription").toString(), adapterRp.producFiretList[position].get("productCount").toString(), adapterRp.producFiretList[position].get("pChatCount").toString()
+                    , adapterRp.producFiretList[position].get("pViewCount").toString(), adapterRp.producFiretList[position].get("pHeartCount").toString(), adapterRp.producFiretList[position].get("productBidPrice").toString(), position)
+
+                /* InfoActivity로 화면 전환 */
+                val intent = Intent(getActivity(), InfoActivity::class.java)
+                /* 필요한 데이터를 InfoActivity로 전달하기 위한 인텐트 파라미터 설정 */
+                intent.putExtra("ID", adapterRp.producFiretList[position].get("ID").toString())
+                intent.putExtra("productName", adapterRp.producFiretList[position].get("productName").toString())
+                intent.putExtra("productPrice", adapterRp.producFiretList[position].get("productPrice").toString())
+                intent.putExtra("productDescription", adapterRp.producFiretList[position].get("productDescription").toString())
+                intent.putExtra("productCount", adapterRp.producFiretList[position].get("productCount").toString())
+                intent.putExtra("pChatCount", adapterRp.producFiretList[position].get("pChatCount").toString())
+                intent.putExtra("pViewCount", adapterRp.producFiretList[position].get("pViewCount").toString())
+                intent.putExtra("pHeartCount", adapterRp.producFiretList[position].get("pHeartCount").toString())
+                intent.putExtra("productBidPrice", adapterRp.producFiretList[position].get("productBidPrice").toString())
+                intent.putExtra("position", position)
+                startActivity(intent)
+
+                /* 애니메이션 적용 */
+                activity?.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+            }
+        })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
+//        val recyclerView = view.rv_profile
+//        recyclerView.adapter = adapter
+//        recyclerView.setHasFixedSize(true)
+//        recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+//        //recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+
+//        /**
+//         * 찜한 상품
+//         */
+//        Log.d("aa11", "-2")
+//        val recyclerView2 = view.select_profile
+//        recyclerView2.adapter = adapter
+//        recyclerView2.setHasFixedSize(true)
+//        recyclerView2.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+
+
 
 //        /**
 //         *  항목 클릭시
@@ -165,60 +289,9 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
 //            }
 //        })
 
-        /**
-         *  항목 클릭시
-         **/
-        Log.d("aa11", "-1")
-        adapter.setItemClickListener(object: ProductRecyclerViewAdapter.OnItemClickListener {
-            override fun onClick(v: View, position: Int) {
-                val productModel: JecesViewModel by activityViewModels()
-                /* 상품 정보 불러오기 */
-                productModel.liveTodoData.value?.get(position).toString()
-                productModel.setProductDetail(adapter.producFiretList[position].get("ID").toString(), adapter.producFiretList[position].get("productName").toString(), adapter.producFiretList[position].get("productPrice").toString()
-                    , adapter.producFiretList[position].get("productDescription").toString(), adapter.producFiretList[position].get("productCount").toString(), adapter.producFiretList[position].get("pChatCount").toString(), adapter.producFiretList[position].get("pViewCount").toString(), adapter.producFiretList[position].get("pHeartCount").toString(), adapter.producFiretList[position].get("productBidPrice").toString(), position)
 
-                /* InfoActivity로 화면 전환 */
-                val intent = Intent(getActivity(), InfoActivity::class.java)
-                /* 필요한 데이터를 InfoActivity로 전달하기 위한 인텐트 파라미터 설정 */
-                intent.putExtra("ID", adapter.producFiretList[position].get("ID").toString())
-                intent.putExtra("productName", adapter.producFiretList[position].get("productName").toString())
-                intent.putExtra("productPrice", adapter.producFiretList[position].get("productPrice").toString())
-                intent.putExtra("productDescription", adapter.producFiretList[position].get("productDescription").toString())
-                intent.putExtra("productCount", adapter.producFiretList[position].get("productCount").toString())
-                intent.putExtra("pChatCount", adapter.producFiretList[position].get("pChatCount").toString())
-                intent.putExtra("pViewCount", adapter.producFiretList[position].get("pViewCount").toString())
-                intent.putExtra("pHeartCount", adapter.producFiretList[position].get("pHeartCount").toString())
-                intent.putExtra("productBidPrice", adapter.producFiretList[position].get("productBidPrice").toString())
-                intent.putExtra("position", position)
-                startActivity(intent)
 
-                /* 애니메이션 적용 */
-                activity?.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
-            }
-        })
 
-        /**
-         * adver 이미지 가져오기
-         */
-        adverImagelist = jecesViewModel.getAdverImage(4) as ArrayList<String>
-
-        /**
-         * 맨 위 소개 페이지
-         * viewpager2 adapter 장착
-         */
-        val viewPager = view.findViewById<ViewPager2>(R.id.viewPagerHomeProduce)
-        val adapterVp = AdverRecyclerViewAdapter(adverImagelist, this@HomeFragment, this)
-        viewPager.adapter = adapterVp
-////        viewPager.currentItem = position
-
-        /**
-         * indicator 장착
-         */
-        val dotsIndicator: DotsIndicator = view.findViewById(R.id.dots_indicator)
-        val viewPager2: ViewPager2 = view.findViewById(R.id.viewPagerHomeProduce)
-        dotsIndicator.setViewPager2(viewPager2)
-
-        Log.d("광고이미지", adverImagelist.toString())
 
 
         // Inflate the layout for this fragment

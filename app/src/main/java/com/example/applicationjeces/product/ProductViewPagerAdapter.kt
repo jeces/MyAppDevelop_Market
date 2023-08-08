@@ -2,20 +2,17 @@ package com.example.applicationjeces.product
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.applicationjeces.R
-import com.example.applicationjeces.frag.HomeFragment
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.product_item_list.view.*
 
-class ProductRecyclerViewAdapter(var myId: String, var producFiretList: List<DocumentSnapshot>, var context: Fragment): RecyclerView.Adapter<ProductRecyclerViewAdapter.Holder>() {
+class ProductViewPagerAdapter(private val context: Context, var myId: String, var producFiretList: List<DocumentSnapshot>): RecyclerView.Adapter<ProductViewPagerAdapter.Holder>() {
 
     /* ViewHolder에게 item을 보여줄 View로 쓰일 item_data_list.xml를 넘기면서 ViewHolder 생성. 아이템 레이아웃과 결합 */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
