@@ -13,8 +13,8 @@
     <item android:title="Chatting"
         android:id="@+id/chatroom"
         android:icon="@drawable/ic_baseline_chat_24"/>
-    <item android:title="Detail"
-        android:id="@+id/detail"
-        android:visible="false" />
+    <item android:title="My"
+        android:id="@+id/my"
+        android:icon="@drawable/ic_baseline_supervised_user_circle_24"/>
 
 </menu>

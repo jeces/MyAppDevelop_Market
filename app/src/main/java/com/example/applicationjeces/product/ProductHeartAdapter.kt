@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -15,7 +16,7 @@ import com.google.firebase.storage.FirebaseStorage
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import kotlinx.android.synthetic.main.product_item_list.view.*
 
-class ProductViewPagerAdapter(private val context: Fragment, var myId: String, var producFiretList: List<DocumentSnapshot>): RecyclerView.Adapter<ProductViewPagerAdapter.Holder>() {
+class ProductHeartAdapter(private val context: Fragment, var myId: String, var producFiretList: List<DocumentSnapshot>): RecyclerView.Adapter<ProductHeartAdapter.Holder>() {
 
     /* ViewHolder에게 item을 보여줄 View로 쓰일 item_data_list.xml를 넘기면서 ViewHolder 생성. 아이템 레이아웃과 결합 */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
@@ -69,8 +70,11 @@ class ProductViewPagerAdapter(private val context: Fragment, var myId: String, v
             itemClickListener.onClick(it, position)
         }
 
+        Log.d("asdfaa1", "asd")
+
         /* 이미지 초기화 */
         holder.itemView.product_img.setImageBitmap(null)
+        Log.d("asdfaa2", "asd")
     }
 
     /* (2) 리스너 인터페이스 */

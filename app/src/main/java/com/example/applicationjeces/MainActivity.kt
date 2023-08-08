@@ -167,7 +167,7 @@ class MainActivity : AppCompatActivity() {
             return HomeFragment.newInstance(pageData.title, pageData.tag)
         } else if(pageData.title == "chatroom") {
             return ChatroomFragment.newInstance(pageData.title, pageData.tag)
-        } else if(pageData.title == "detail") {
+        } else if(pageData.title == "my") {
             return InfoFragment.newInstance(pageData.title, pageData.tag)
         } else if(pageData.title == "message") {
             return ChatroomFragment.newInstance(pageData.title, pageData.tag)
