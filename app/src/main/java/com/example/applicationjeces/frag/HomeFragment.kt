@@ -171,12 +171,12 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
         /**
          * 최근 관심 상품
          */
-//        val adapterHt = ProductHeartAdapter(this@HomeFragment, myId, emptyList())
-//        val recyclerViewHt = binding.productHeart
-//        recyclerViewHt.adapter = adapterHt
-//        recyclerViewHt.setHash
-    // 어댑터에 조건을 추가해서 넣어서 해보기
-
+        val adapterHt = ProductViewPagerAdapter(this@HomeFragment, myId, emptyList())
+        val recyclerViewHt = binding.productHeart
+        recyclerViewHt.adapter = adapterHt
+        recyclerViewHt.setHasFixedSize(true)
+        // 어댑터에 조건을 추가해서 넣어서 해보기
+        recyclerViewHt.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
 
 
 
@@ -192,6 +192,7 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
 
         /**
+         * 이건 뷰페이저로 만들꺼임
          * 뷰모델 연결, 뷰모델을 불러옴
          * 이건 전체 상품
          * 따라서 나눠야 함
@@ -199,6 +200,7 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
          **/
         productViewModel.liveTodoData.observe(viewLifecycleOwner, Observer { product ->
             /* ViewModel에 Observe를 활용하여 productViewModel에 ReadAllData 라이브 데이터가 바뀌었을때 캐치하여, adapter에서 만들어준 setData함수를 통해 바뀐데이터를 UI에 업데이트 해줌 */
+            adapterHt.setData(product)
             adapter.setData(product)
         })
 

@@ -98,7 +98,6 @@ class ProductHeartAdapter(private val context: Fragment, var myId: String, var p
     @SuppressLint("NotifyDataSetChanged")
     fun setData(product: List<DocumentSnapshot>) {
         producFiretList = product
-        Log.d("dkfflwksk", producFiretList.toString())
         /* 변경 알림 */
         notifyDataSetChanged()
     }
