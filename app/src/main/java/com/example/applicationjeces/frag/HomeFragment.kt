@@ -207,20 +207,26 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
+                Log.d("데이터 로드1", "ㅁㅁㄴㅇ")
 
                 val layoutManager = recyclerView.layoutManager as GridLayoutManager
 
                 val visibleItemCount = layoutManager.childCount
                 val totalItemCount = layoutManager.itemCount
                 val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+                Log.d("데이터 로드1", visibleItemCount.toString())
+                Log.d("데이터 로드1", totalItemCount.toString())
+                Log.d("데이터 로드1", firstVisibleItemPosition.toString())
+                Log.d("데이터 로드1", dy.toString())
 
-                if (dy > 0 && (firstVisibleItemPosition + visibleItemCount >= totalItemCount - 5)) {
+                if (dy > 0 && (firstVisibleItemPosition + visibleItemCount >= totalItemCount - 3)) {
                     // 로딩 인디케이터 표시 (옵션)
             //        showLoadingIndicator()
 
                     // 다음 페이지의 데이터 로드
                     productViewModel.fetchNextPage().observe(viewLifecycleOwner, Observer { newItems ->
                         // 데이터를 현재의 어댑터에 추가
+                        Log.d("데이터 로드", "ㅁㅁㄴㅇ")
                         adapter.addData(newItems)
                         adapter.notifyDataSetChanged()
 
