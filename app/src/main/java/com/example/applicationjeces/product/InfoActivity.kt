@@ -38,6 +38,7 @@ class InfoActivity : AppCompatActivity(), ProductImageInfoRecyclerViewAdapter.On
          * 자신의 위치 이동 저장
          */
         val pId = intent.getStringExtra("ID").toString()
+        Log.d("aa123123123", pId)
         val pName = intent.getStringExtra("productName").toString()
         val productPrice = intent.getStringExtra("productPrice")
         val productDescription = intent.getStringExtra("productDescription")
@@ -60,11 +61,11 @@ class InfoActivity : AppCompatActivity(), ProductImageInfoRecyclerViewAdapter.On
         product_info_bid_price.text = productBidPrice + "원"
         Log.d("aa11", "55")
         if (productCount != null) {
-            imagelist = jecesModel.getImage(pName, productCount.toInt()) as ArrayList<String>
+            imagelist = jecesModel.getImage(pId, pName, productCount.toInt()) as ArrayList<String>
         }
 
         /* 이미지 어뎁터 */
-        val adapter = ProductImageInfoRecyclerViewAdapter(myId, pName, imagelist, this, this)
+        val adapter = ProductImageInfoRecyclerViewAdapter(myId, pId, pName, imagelist, this, this)
 
         /* 이미지 리사이클러뷰 어뎁터 장착 */
         imginfo_profile.adapter = adapter

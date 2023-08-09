@@ -165,7 +165,7 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     /* firebase Product 입력 */
     fun addProducts(product: Product) {
         val products = hashMapOf(
-            "ID" to thisUser,
+            "ID" to product.product_id,
             "productName" to product.product_name,
             "productPrice" to product.product_price,
             "productDescription" to product.product_description,

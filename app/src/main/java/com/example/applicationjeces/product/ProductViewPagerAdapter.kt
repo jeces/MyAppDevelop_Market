@@ -25,6 +25,7 @@ class ProductViewPagerAdapter(private val context: Fragment, var myId: String, v
     /* Holder의 bind 메소드를 호출한다. 내용 입력 */
     /* getItemCount() 리턴값이 0일 경우 호출 안함 */
     override fun onBindViewHolder(holder: Holder, position: Int) {
+        val currentItemId = producFiretList[position].get("ID")
         val currentItem = producFiretList[position].get("productName")
         val currentItem2 = producFiretList[position].get("productPrice")
         var currentItem3 = producFiretList[position].get("productImgUrl")
@@ -35,7 +36,7 @@ class ProductViewPagerAdapter(private val context: Fragment, var myId: String, v
         holder.itemView.product_price.text = currentItem2.toString()
 
         Log.d("뭐냐?",currentItem.toString())
-        Log.d("뭐냐?",currentItem2.toString())
+        Log.d("뭐냐?",currentItemId.toString())
         Log.d("뭐냐?",currentItem3.toString())
         Log.d("뭐냐?",currentItem4.toString())
 
@@ -52,7 +53,8 @@ class ProductViewPagerAdapter(private val context: Fragment, var myId: String, v
                 }
             }
         } else {
-            FirebaseStorage.getInstance().reference.child("${myId}/${currentItem}/$currentItem3").downloadUrl.addOnCompleteListener {
+            /* 상품의 아이디가 들어가야 함 */
+            FirebaseStorage.getInstance().reference.child("${currentItemId}/${currentItem}/$currentItem3").downloadUrl.addOnCompleteListener {
                 if(it.isSuccessful) {
                     Log.d("뭐냐?",currentItem3.toString())
                     Glide.with(context)

@@ -87,7 +87,7 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
         view.product_check_text.setText(jecesModel.productArrayList[0].heartCount)
         view.product_info_bid_price.setText(jecesModel.productArrayList[0].product_bid_price + "원")
 
-        imagelist = jecesModel.getImage(pName, jecesModel.productArrayList[0].product_count) as ArrayList<String>
+        imagelist = jecesModel.getImage(pId, pName, jecesModel.productArrayList[0].product_count) as ArrayList<String>
 
         /* 이미지 어뎁터 */
         val adapter = ProductImageInfoRecyclerViewAdapter_z(myId, pName, imagelist, this@InfoFragment, this)

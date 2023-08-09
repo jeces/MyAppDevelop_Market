@@ -179,8 +179,6 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
         recyclerViewHt.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
 
 
-
-
         /**
          * 최근 등록된 상품
          */
@@ -240,6 +238,7 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
                 val intent = Intent(getActivity(), InfoActivity::class.java)
                 /* 필요한 데이터를 InfoActivity로 전달하기 위한 인텐트 파라미터 설정 */
                 intent.putExtra("ID", adapter.producFiretList[position].get("ID").toString())
+                Log.d("1313131313131313", adapter.producFiretList[position].get("ID").toString())
                 intent.putExtra("productName", adapter.producFiretList[position].get("productName").toString())
                 intent.putExtra("productPrice", adapter.producFiretList[position].get("productPrice").toString())
                 intent.putExtra("productDescription", adapter.producFiretList[position].get("productDescription").toString())

@@ -79,7 +79,7 @@ class JecesViewModel(application: Application): AndroidViewModel(application) {
     /**
      *  firebase storage에서 상품 이미지 가져오기
      * */
-    fun getImage(productName:String, productCount: Int): MutableList<String>? {
+    fun getImage(productId: String, productName:String, productCount: Int): MutableList<String>? {
         imgList.clear()
         /* 글자 나누기 */
         /* 카운트는 가져와야함 product에 저장해놓고 */
@@ -91,7 +91,7 @@ class JecesViewModel(application: Application): AndroidViewModel(application) {
         } else {
             for(i: Int in 0 until productCount) {
                 /* 워드를 가져와서 돌림 */
-                var word: String = thisUser + "_" + productName + "_" + i + "_IMAGE_.png"
+                var word: String = productId + "_" + productName + "_" + i + "_IMAGE_.png"
                 imgList.add(word)
             }
             imgList

@@ -15,6 +15,7 @@ import com.google.firebase.storage.FirebaseStorage
 
 class ProductImageInfoRecyclerViewAdapter(
     var myId: String,
+    var productId: String,
     var pName: String,
     var productImageList: ArrayList<String>,
     val context: Activity,
@@ -31,7 +32,8 @@ class ProductImageInfoRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         if(productImageList[0] != "basic_img.png") {
-            FirebaseStorage.getInstance().reference.child("${myId}/${pName}/" + productImageList[position]).downloadUrl.addOnCompleteListener {
+            Log.d("aaaaa", productImageList[position].toString())
+            FirebaseStorage.getInstance().reference.child("${productId}/${pName}/" + productImageList[position]).downloadUrl.addOnCompleteListener {
                 Log.d("이미지온바인드", productImageList[position])
                 if(it.isSuccessful) {
                     Glide.with(context)
