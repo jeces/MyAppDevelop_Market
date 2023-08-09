@@ -101,6 +101,17 @@ class ProductViewPagerAdapter(private val context: Fragment, var myId: String, v
         notifyDataSetChanged()
     }
 
+    /**
+     * 페이징
+     */
+    fun addData(newItems: List<DocumentSnapshot>) {
+        val startSize = producFiretList.size
+        (producFiretList as MutableList).addAll(newItems)
+        notifyItemRangeInserted(startSize, newItems.size)
+    }
+
+
+
     /* inner class로 viewHolder 정의. 레이아웃 내 view 연결 */
     inner class Holder(ItemView: View): RecyclerView.ViewHolder(ItemView) {
 

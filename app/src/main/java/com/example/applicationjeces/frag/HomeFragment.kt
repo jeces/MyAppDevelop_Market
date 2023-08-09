@@ -133,12 +133,13 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
             viewPager2.setCurrentItem((currentItem + 1) % adverPageCount, true)
         }
 
+        /* 타이머 */
         val swipeTimer = Timer()
         swipeTimer.schedule(object : TimerTask() {
             override fun run() {
                 handler.post(update)
             }
-        }, 5000, 5000)
+        }, 2000, 2000)
 
         /**
          * 상단바 메뉴
@@ -187,7 +188,7 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
         recyclerView.adapter = adapter
         recyclerView.setHasFixedSize(true)
         // Change from LinearLayoutManager to GridLayoutManager
-        recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+        recyclerView.layoutManager = GridLayoutManager(requireContext(), 5)
 
         /**
          * 이건 뷰페이저로 만들꺼임
@@ -203,22 +204,32 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
         })
 
 
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
 
+                val layoutManager = recyclerView.layoutManager as GridLayoutManager
 
-//        val viewPagerRecent: ViewPager2 = binding.viewPagerHomeProduceRecent
-//        val scrollView = binding.homeScroll
-//        /* 스크롤뷰 동작 막기 */
-//        viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-//            override fun onPageScrollStateChanged(state: Int) {
-//                // 스크롤 상태가 변경될 때 호출됩니다.
-//                // 스크롤 상태가 변경되면서 ViewPager2가 스크롤되고 있을 때는 ScrollView의 스크롤을 막습니다.
-//                scrollView.isNestedScrollingEnabled = state == ViewPager2.SCROLL_STATE_IDLE
-//            }
-//        })
-//
-//        val adapterRp = ProductViewPagerAdapter(this@HomeFragment, myId, emptyList())
-//        viewPagerRecent.adapter = adapterRp
-//
+                val visibleItemCount = layoutManager.childCount
+                val totalItemCount = layoutManager.itemCount
+                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+
+                if (dy > 0 && (firstVisibleItemPosition + visibleItemCount >= totalItemCount - 5)) {
+                    // 로딩 인디케이터 표시 (옵션)
+            //        showLoadingIndicator()
+
+                    // 다음 페이지의 데이터 로드
+                    productViewModel.fetchNextPage().observe(viewLifecycleOwner, Observer { newItems ->
+                        // 데이터를 현재의 어댑터에 추가
+                        adapter.addData(newItems)
+                        adapter.notifyDataSetChanged()
+
+                        // 로딩 인디케이터 숨기기 (옵션)
+            //            hideLoadingIndicator()
+                    })
+                }
+            }
+        })
 
 
         /**
@@ -254,75 +265,6 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
                 activity?.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
             }
         })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//        /**
-//         * 찜한 상품
-//         */
-//        Log.d("aa11", "-2")
-//        val recyclerView2 = view.select_profile
-//        recyclerView2.adapter = adapter
-//        recyclerView2.setHasFixedSize(true)
-//        recyclerView2.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-
-
-
-//        /**
-//         *  항목 클릭시
-//         **/
-//        adapter.setItemClickListener(object: ProductRecyclerViewAdapter.OnItemClickListener {
-//            override fun onClick(v: View, position: Int) {
-////                /* 화면 띄움*/
-////                /* 프라그먼트에서 프라그먼트로 제어가 불가능하기 때문에 상위 액티비티에서 제어 해주어야 한다. */
-////                /* ViewModel 가지고와서 PageLiveData 넘기기[업데이트 됨] */
-////                val model: DataViewModel by activityViewModels()
-////                model.changePageNum(PageData.DETAIL)
-////
-////                val productModel: JecesViewModel by activityViewModels()
-////                productModel.liveTodoData.value?.get(position).toString()
-////                productModel.setProductDetail(adapter.producFiretList[position].get("ID").toString(), adapter.producFiretList[position].get("productName").toString(), adapter.producFiretList[position].get("productPrice").toString()
-////                    , adapter.producFiretList[position].get("productDescription").toString(), adapter.producFiretList[position].get("productCount").toString(), adapter.producFiretList[position].get("pChatCount").toString(), adapter.producFiretList[position].get("pViewCount").toString(), adapter.producFiretList[position].get("pHeartCount").toString(), adapter.producFiretList[position].get("productBidPrice").toString(), position)
-////
-////                /* Navigation Bar Selected 넘겨야 됨[여기서부터해야함] */
-////                val mActivity = activity as MainActivity
-////                mActivity.bottomNavigationView.menu.findItem(R.id.detail).isChecked = true
-//
-//                /* 화면 띄움 */
-//                val intent = Intent(getActivity(), InfoActivity::class.java)
-//                intent.putExtra("param1", adapter.producFiretList[position].get("ID").toString())
-//                intent.putExtra("param2", adapter.producFiretList[position].get("productName").toString())
-//                startActivity(intent)
-//                Log.d("들어갔음?", "들어갔음?")
-//            }
-//        })
-
-
-
-
-
 
         // Inflate the layout for this fragment
         return view

@@ -45,6 +45,9 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     /* adver 개수 카운트 */
     var adverCount: Int = 0
 
+    private var currentPage = 0
+    private val itemsPerPage = 15  // 이는 한 페이지에 표시될 항목 수입니다.
+
     init {
         /* firebase 연동 */
         jecesfirestore = FirebaseFirestore.getInstance()
@@ -56,6 +59,31 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         allProduct()
         Log.d("전체상품", liveTodoData.value.toString())
     }
+
+    /**
+     * 페이징 메서드
+     */
+    fun fetchNextPage(): LiveData<List<DocumentSnapshot>> {
+        val nextPageLiveData = MutableLiveData<List<DocumentSnapshot>>()
+
+        // 현재 페이지에 따라 데이터를 가져오는 쿼리를 구성합니다.
+        jecesfirestore!!.collection("Product")
+            .orderBy("someField")  // 여기서 "someField"는 데이터를 정렬하는 필드를 나타냅니다.
+            .startAfter(currentPage * itemsPerPage)
+            .limit(itemsPerPage.toLong())
+            .get()
+            .addOnSuccessListener { documents ->
+                nextPageLiveData.value = documents.documents
+                currentPage++
+            }
+            .addOnFailureListener { exception ->
+                // 오류 처리를 해야 합니다.
+                Log.e("ProductViewModel", "Error fetching next page", exception)
+            }
+
+        return nextPageLiveData
+    }
+
 
     /**
      * adver Count

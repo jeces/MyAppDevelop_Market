@@ -119,8 +119,7 @@
                     android:layout_marginHorizontal="10dp"
                     android:orientation="horizontal"
                     android:layout_marginTop="150dp"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:spanCount="5"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     tools:listitem="@layout/product_item_list" />
 
             </FrameLayout>
