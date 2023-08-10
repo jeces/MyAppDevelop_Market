@@ -5,6 +5,6 @@ enum class PageData(val title: String, val tag: String) {
     ADD("add", "add_tag"),
     SEARCH("search", "search_tag"),
     CHATROOM("chatroom", "chatroom_tag"),
-    DETAIL("detail", "detail_tag"),
+    MY("my", "my_tag"),
     MESSAGE("message", "message_tag")
 }

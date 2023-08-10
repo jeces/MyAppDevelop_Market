@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.applicationjeces.R
+import com.example.applicationjeces.frag.MyFragment
 import com.google.firebase.storage.FirebaseStorage
 
 class ProductImageInfoRecyclerViewAdapter_z(
@@ -16,7 +17,7 @@ class ProductImageInfoRecyclerViewAdapter_z(
     var pName: String,
     var productImageList: ArrayList<String>,
     val context: Fragment,
-    private val onImageClickListener: InfoFragment
+    private val onImageClickListener: MyFragment
 ): RecyclerView.Adapter<ProductImageInfoRecyclerViewAdapter_z.Holder>() {
 
     interface OnImageClickListener {
@@ -47,11 +48,6 @@ class ProductImageInfoRecyclerViewAdapter_z(
                         .into(holder.image)
                 }
             }
-        }
-
-        holder.itemView.setOnClickListener {
-            /* 리스트 클릭시 FullscreenImageFragment로 전환 */
-            onImageClickListener.onClick(productImageList, position, myId, pName)
         }
     }
 

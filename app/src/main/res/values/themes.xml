@@ -10,6 +10,8 @@
         <item name="android:checkboxStyle">@style/customCheckboxFontStyle</item>
 
     </style>
+
+
     <style name="Theme.ApplicationJeces" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
@@ -27,6 +29,15 @@
     <style name="Theme.ApplicationJeces.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+    </style>
+
+
+
+    <style name="Theme.ApplicationJeces.NoActionBar.FullScreen" parent="Theme.ApplicationJeces.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
     </style>
 
     <style name="Theme.ApplicationJeces.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

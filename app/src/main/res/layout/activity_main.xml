@@ -20,7 +20,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:menu="@menu/bottom_nav"
-            app:onNavigationItemSelected="@{viewModel::setCurrentPage}"/>
+            app:onNavigationItemSelected="@{viewModel::setCurrentPage}"
+            app:itemIconTint="@menu/nav_item_color_state"
+            app:itemTextColor="@menu/nav_item_color_state"/>
 
         <FrameLayout
             android:id="@+id/frame_layout"

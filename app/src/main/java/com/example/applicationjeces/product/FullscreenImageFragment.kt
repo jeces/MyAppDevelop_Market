@@ -59,8 +59,6 @@ class FullscreenImageFragment : Fragment() {
         }
     }
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -95,6 +93,7 @@ class FullscreenImageFragment : Fragment() {
 
         return view
     }
+
 
     class FullscreenImageAdapter(private val images: ArrayList<String>, private val myId: String, private val pName: String) : RecyclerView.Adapter<FullscreenImageAdapter.ViewHolder>() {
 

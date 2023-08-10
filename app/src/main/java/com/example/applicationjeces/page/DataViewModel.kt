@@ -34,6 +34,7 @@ class DataViewModel() : ViewModel() {
             R.id.add -> PageData.ADD
             R.id.search -> PageData.SEARCH
             R.id.chatroom -> PageData.CHATROOM
+            R.id.my -> PageData.MY
             else -> throw java.lang.IllegalArgumentException("Not found pageNum")
         }
     }

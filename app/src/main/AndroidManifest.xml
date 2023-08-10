@@ -13,14 +13,14 @@
         android:label="Old Auction"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.ApplicationJeces.NoActionBar"
+        android:theme="@style/Theme.ApplicationJeces.NoActionBar.FullScreen"
         tools:targetApi="31">
 
         <activity
             android:name=".chat.ChatActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/Theme.ApplicationJeces.NoActionBar">
+            android:theme="@style/Theme.ApplicationJeces.NoActionBar.FullScreen">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -29,7 +29,7 @@
             android:name=".user.LoginActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize"
-            android:theme="@style/Theme.ApplicationJeces.NoActionBar">
+            android:theme="@style/Theme.ApplicationJeces.NoActionBar.FullScreen">
 <!--            <intent-filter>-->
 <!--                <action android:name="android.intent.action.MAIN" />-->
 <!--                <category android:name="android.intent.category.LAUNCHER" />-->
@@ -43,7 +43,7 @@
             android:exported="false"
             android:label="@string/title_activity_main2"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/Theme.ApplicationJeces.NoActionBar">
+            android:theme="@style/Theme.ApplicationJeces.NoActionBar.FullScreen">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

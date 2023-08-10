@@ -1,6 +1,5 @@
 package com.example.applicationjeces.product
 
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
@@ -12,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
 import com.example.applicationjeces.R
 import com.example.applicationjeces.chat.ChatActivity
 import com.example.applicationjeces.chat.ChatroomData
@@ -29,16 +27,13 @@ class InfoActivity : AppCompatActivity(), ProductImageInfoRecyclerViewAdapter.On
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_info)
-        Log.d("aa11", "33")
 
         jecesModel = ViewModelProvider(this)[JecesViewModel::class.java]
-        Log.d("aa11", jecesModel.productArrayList.toString())
 
         /**
          * 자신의 위치 이동 저장
          */
         val pId = intent.getStringExtra("ID").toString()
-        Log.d("aa123123123", pId)
         val pName = intent.getStringExtra("productName").toString()
         val productPrice = intent.getStringExtra("productPrice")
         val productDescription = intent.getStringExtra("productDescription")
@@ -51,7 +46,6 @@ class InfoActivity : AppCompatActivity(), ProductImageInfoRecyclerViewAdapter.On
         val myId: String = jecesModel.thisUser.toString()
         jecesModel.whereMyUser("productInfo")
 
-        Log.d("aa11", "44")
         productDetailName.text = pName
         productDetailPrice.text = productPrice + "원"
         productDetailDescription.text = productDescription
@@ -59,7 +53,6 @@ class InfoActivity : AppCompatActivity(), ProductImageInfoRecyclerViewAdapter.On
         product_view_text.text = pViewCount
         product_check_text.text = pHeartCount
         product_info_bid_price.text = productBidPrice + "원"
-        Log.d("aa11", "55")
         if (productCount != null) {
             imagelist = jecesModel.getImage(pId, pName, productCount.toInt()) as ArrayList<String>
         }
@@ -176,14 +169,24 @@ class InfoActivity : AppCompatActivity(), ProductImageInfoRecyclerViewAdapter.On
         }
     }
 
+    /**
+     * 항목 풀 스크린
+     **/
     override fun onClick(images: ArrayList<String>, position: Int, myId: String, pName: String) {
-        // Replace current activity with FullscreenImageActivity
-        val intent = Intent(this, FullscreenImageFragment::class.java).apply {
-            putExtra("images", images)
-            putExtra("position", position)
-            putExtra("myId", myId)
-            putExtra("pName", pName)
-        }
-        startActivity(intent)
+        val fragment = FullscreenImageFragment.newInstance(images, position, myId, pName)
+        val transaction = supportFragmentManager.beginTransaction()
+        // Replace your current fragment container with the FullscreenImageFragment
+        transaction.replace(R.id.infoLayout, fragment)
+
+        // Add to backstack, this will allow you to go back to the previous fragment
+        transaction.addToBackStack(null)
+
+        // Commit the transaction
+        transaction.commit()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
     }
 }
