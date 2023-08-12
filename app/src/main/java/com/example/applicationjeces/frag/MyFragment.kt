@@ -60,7 +60,7 @@ class MyFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val view = inflater.inflate(R.layout.fragment_info, container, false)
+        val view = inflater.inflate(R.layout.fragment_myinfo, container, false)
         val jecesModel: JecesViewModel by activityViewModels()
 
         // Inflate the layout for this fragment
