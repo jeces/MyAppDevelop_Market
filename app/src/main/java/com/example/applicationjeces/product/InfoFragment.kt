@@ -50,18 +50,19 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
         val pChatCount = arguments?.getString("pChatCount")
         val pViewCount = arguments?.getString("pViewCount")
         val pHeartCount = arguments?.getString("pHeartCount")
-        val productBidPrice = arguments?.getString("productBidPrice")
+        val productBidPrices = arguments?.getString("productBidPrice")
 //        val position = arguments?.getString("position", -1)
         val myId: String = jecesModel.thisUser.toString()
         jecesModel.whereMyUser("productInfo")
 
-        productDetailName.text = pName
-        productDetailPrice.text = productPrice + "원"
+        sellerName.text = "임시"
+        productName.text = pName
+        productCellPrice.text = productPrice + "원"
+        productBidPrice.text = productBidPrices + "원"
         productDetailDescription.text = productDescription
         product_chat_text.text = pChatCount
         product_view_text.text = pViewCount
         product_check_text.text = pHeartCount
-        product_info_bid_price.text = productBidPrice + "원"
         if (productCount != null) {
             imagelist = jecesModel.getImage(pId, pName, productCount.toInt()) as ArrayList<String>
         }
@@ -84,8 +85,8 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
          * 자기 자신 버튼 숨김
          */
         if (myId == pId) {
-            chat_start_btn.visibility = View.INVISIBLE
-            price_add_btn.visibility = View.INVISIBLE
+//            chat_start_btn.visibility = View.INVISIBLE
+//            price_add_btn.visibility = View.INVISIBLE
         }
 
         /**

@@ -43,7 +43,7 @@
                     android:id="@+id/sellerImage"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:contentDescription="@string/seller_image"
+                    android:background="@drawable/ic_baseline_supervised_user_circle_24"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     tools:src="@tools:sample/avatars" />
@@ -56,13 +56,26 @@
                     app:layout_constraintStart_toEndOf="@+id/sellerImage"
                     app:layout_constraintTop_toTopOf="@+id/sellerImage"
                     app:layout_constraintBottom_toBottomOf="@+id/sellerImage"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/productName"
                     android:layout_marginStart="8dp"
                     tools:text="John Doe" />
 
+                <TextView
+                    android:id="@+id/productName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="상품 이름"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toEndOf="@+id/sellerName"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/sellerImage"
+                    app:layout_constraintBottom_toBottomOf="@+id/sellerImage"
+                    android:layout_marginStart="8dp"
+                    tools:text="Example Product" />
+
                 <!-- 가격 정보 섹션 -->
                 <TextView
-                    android:id="@+id/productDetailName"
+                    android:id="@+id/productCellName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="즉시판매가격:"
@@ -73,22 +86,22 @@
                     android:layout_marginTop="16dp" />
 
                 <TextView
-                    android:id="@+id/productDetailPrice"
+                    android:id="@+id/productCellPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="₩100,000"
                     android:textSize="16sp"
-                    app:layout_constraintBaseline_toBaselineOf="@+id/productDetailName"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/productCellName"
                     app:layout_constraintEnd_toEndOf="parent" />
 
                 <TextView
                     android:id="@+id/bidPriceLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="입찰가격:"
+                    android:text="현재입찰가격:"
                     android:textStyle="bold"
                     android:textSize="16sp"
-                    app:layout_constraintTop_toBottomOf="@+id/productDetailName"
+                    app:layout_constraintTop_toBottomOf="@+id/productCellName"
                     app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginTop="8dp" />
 
@@ -105,6 +118,71 @@
                 <!-- 이 부분은 자세한 아이콘과 텍스트를 표시하는 방법을 아직 명시하지 않았습니다.
                      필요에 따라 추가적인 스타일링 및 아이콘 설정이 필요할 것입니다. -->
 
+                <!-- 채팅, 뷰, 체크 섹션 -->
+                <LinearLayout
+                    android:id="@+id/iconTextSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="14"
+                    app:layout_constraintTop_toBottomOf="@+id/productBidPrice"
+                    android:layout_marginTop="16dp">
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="8"/>
+
+                    <ImageView
+                        android:id="@+id/product_chat"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/ic_baseline_chat_bubble_outline_24" />
+
+                    <TextView
+                        android:id="@+id/product_chat_text"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="99"
+                        android:gravity="left" />
+
+                    <ImageView
+                        android:id="@+id/product_view"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/ic_baseline_visibility_24" />
+
+                    <TextView
+                        android:id="@+id/product_view_text"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="999"
+                        android:gravity="left" />
+
+                    <ImageButton
+                        android:id="@+id/product_check"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:src="@xml/check_selector" />
+
+                    <TextView
+                        android:id="@+id/product_check_text"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="999"
+                        android:gravity="left" />
+
+                </LinearLayout>
+
                 <!-- 상세 설명 섹션 -->
                 <TextView
                     android:id="@+id/productDetailDescription"
@@ -113,7 +191,7 @@
                     android:textSize="18sp"
                     android:padding="8dp"
                     android:text="이곳에 상품의 상세 설명이 들어갑니다..."
-                    app:layout_constraintTop_toBottomOf="@+id/bidPriceLabel"
+                    app:layout_constraintTop_toBottomOf="@+id/iconTextSection"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginTop="16dp" />
