@@ -1,43 +1,36 @@
 package com.example.applicationjeces.product
 
-import android.app.AlertDialog
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.applicationjeces.R
-import com.example.applicationjeces.chat.ChatActivity
-import com.example.applicationjeces.chat.ChatroomData
-import com.example.applicationjeces.JecesViewModel
-import com.google.firebase.Timestamp
-import kotlinx.android.synthetic.main.fragment_info.*
+import com.example.applicationjeces.databinding.FragmentInfoBinding
 
 class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClickListener {
 
     /* 이미지 리스트 */
     var imagelist = ArrayList<String>()
-    private lateinit var jecesModel: JecesViewModel
+    private lateinit var productViewModel: ProductViewModel
+    private var _binding: FragmentInfoBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_info, container, false)
-    }
+        /**
+         * view 바인딩
+         */
+        _binding = FragmentInfoBinding.inflate(inflater, container, false)
+        val view = binding.root
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        jecesModel = ViewModelProvider(this)[JecesViewModel::class.java]
+        /**
+         * 뷰모델 초기화 생성자
+         **/
+        productViewModel = ViewModelProvider(this)[ProductViewModel::class.java]
 
         /**
          * 자신의 위치 이동 저장
@@ -52,34 +45,45 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
         val pHeartCount = arguments?.getString("pHeartCount")
         val productBidPrices = arguments?.getString("productBidPrice")
 //        val position = arguments?.getString("position", -1)
-        val myId: String = jecesModel.thisUser.toString()
-        jecesModel.whereMyUser("productInfo")
+        val myId: String = productViewModel.thisUser.toString()
+        productViewModel.whereMyUser("productInfo")
 
-        sellerName.text = "임시"
-        productName.text = pName
-        productCellPrice.text = productPrice + "원"
-        productBidPrice.text = productBidPrices + "원"
-        productDetailDescription.text = productDescription
-        product_chat_text.text = pChatCount
-        product_view_text.text = pViewCount
-        product_check_text.text = pHeartCount
+        binding.sellerName.text = "임시"
+        binding.productName.text = pName
+        binding.productCellPrice.text = productPrice + "원"
+        binding.productBidPrice.text = productBidPrices + "원"
+        binding.productDetailDescription.text = productDescription
+        binding.productChatText.text = pChatCount
+        binding.productViewText.text = pViewCount
+        binding.productCheckText.text = pHeartCount
         if (productCount != null) {
-            imagelist = jecesModel.getImage(pId, pName, productCount.toInt()) as ArrayList<String>
+            imagelist = productViewModel.getImage(pId, pName, productCount.toInt()) as ArrayList<String>
         }
 
-        /* 이미지 어뎁터 */
-        val adapter = ProductImageInfoRecyclerViewAdapter(myId, pId, pName, imagelist, requireActivity(), this)
+        /**
+         * 맨 위 소개 페이지
+         * viewpager2 adapter 장착
+         */
+        val viewPager = binding.viewPagerInfoProduce
+        val adapterImg = ProductImageInfoRecyclerViewAdapter(myId, pId, pName, imagelist, requireActivity(), this)
+        viewPager.adapter = adapterImg
 
-        /* 이미지 리사이클러뷰 어뎁터 장착 */
-        imginfo_profile.adapter = adapter
-        imginfo_profile.setHasFixedSize(true)
-        imginfo_profile.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+
+////        viewPager.currentItem = position
+
+        /* 이미지 어뎁터 */
+//        val adapter = ProductImageInfoRecyclerViewAdapter(myId, pId, pName, imagelist, requireActivity(), this)
+//
+//        /* 이미지 리사이클러뷰 어뎁터 장착 */
+//        imginfo_profile.adapter = adapter
+//        imginfo_profile.setHasFixedSize(true)
+//        imginfo_profile.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
 
         /**
          * ViewCount ++함
          * 단 자기 자신은 올리지 않음
          */
-        if (myId != pId) jecesModel.viewCountUp(pId, pName)
+        if (myId != pId) productViewModel.viewCountUp(pId, pName)
 
         /**
          * 자기 자신 버튼 숨김
@@ -92,18 +96,19 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
         /**
          * check되어있는지 확인하기
          */
-        jecesModel.isCheckProduct(myId)
-        product_check.isSelected = true
+        productViewModel.isCheckProduct(myId)
+        binding.productCheck.isSelected = true
 
         /**
          * check 버튼
          */
-        product_check.setOnClickListener {
+        binding.productCheck.setOnClickListener {
             /**
              * 체크 안되어있다면
              */
             it.isSelected = !it.isSelected
         }
+
 
 //        /**
 //         * 채팅버튼
@@ -178,18 +183,13 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
 //            builder.show()
 //        }
 //    }
+        return view
     }
 
     /**
      * 항목 풀 스크린
      **/
-    override fun onClick(images: ArrayList<String>, position: Int, myId: String, pName: String) {
-        val fragment = FullscreenImageFragment.newInstance(images, position, myId, pName)
-        val transaction = parentFragmentManager.beginTransaction()
-        transaction.replace(R.id.fragmentContainer, fragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
-    }
+
 
 //
 //    override fun onBackPressed() {
@@ -207,5 +207,12 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
             fragment.arguments = args
             return fragment
         }
+    }
+    override fun onClick(images: ArrayList<String>, position: Int, myId: String, pName: String) {
+        val fragment = FullscreenImageFragment.newInstance(images, position, myId, pName)
+        val transaction = parentFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragmentContainer, fragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
     }
 }

@@ -2,7 +2,9 @@ package com.example.applicationjeces.product
 
 import android.app.Application
 import android.util.Log
+import android.widget.ImageView
 import androidx.lifecycle.*
+import com.bumptech.glide.Glide
 import com.example.applicationjeces.chat.ChatData
 import com.example.applicationjeces.chat.ChatroomData
 import com.example.applicationjeces.product.Product
@@ -108,7 +110,7 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     /**
      *  firebase storage에서 상품 이미지 가져오기
      * */
-    fun getImage(productName:String, productCount: Int): MutableList<String>? {
+    fun getImage(productId: String, productName:String, productCount: Int): MutableList<String>? {
         imgList.clear()
         /* 글자 나누기 */
         /* 카운트는 가져와야함 product에 저장해놓고 */
@@ -120,7 +122,7 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         } else {
             for(i: Int in 0 until productCount) {
                 /* 워드를 가져와서 돌림 */
-                var word: String = thisUser + "_" + productName + "_" + i + "_IMAGE_.png"
+                var word: String = productId + "_" + productName + "_" + i + "_IMAGE_.png"
                 imgList.add(word)
             }
             imgList
@@ -306,6 +308,33 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         }
         return chatSearchLiveTodoData
     }
+
+    /**
+     * 판매자 프로필 이미지
+     **/
+//    fun yourProductProfilImg(yourId: String, chatroomUserImg: ImageView) {
+//        var db = FirebaseStorage.getInstance()
+//        db.reference.child("${yourId}/${yourId}_profil.png").downloadUrl.addOnCompleteListener {
+//            if(it.isSuccessful) {
+//                Glide.with(contexts)
+//                    .load(it.result)
+//                    .override(70, 70)
+//                    .fitCenter()
+//                    .circleCrop() // 또는 .transform(RoundedCorners(radius)) 를 사용하여 모서리의 반경을 설정
+//                    .into(chatroomUserImg)
+//            } else {
+//                /* 없으면 기본 이미지 들고와라 */
+//                db.reference.child("basic_user.png").downloadUrl.addOnCompleteListener { its->
+//                    Glide.with(contexts)
+//                        .load(its.result)
+//                        .override(70, 70)
+//                        .fitCenter()
+//                        .circleCrop() // 또는 .transform(RoundedCorners(radius)) 를 사용하여 모서리의 반경을 설정
+//                        .into(chatroomUserImg)
+//                }
+//            }
+//        }
+//    }
 
     /**
      * 채팅방 생성
