@@ -52,8 +52,8 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
 
         binding.sellerName.text = "임시"
         binding.productName.text = pName
-        binding.productCellPrice.text = productPrice + "원"
-        binding.productBidPrice.text = productBidPrices + "원"
+        binding.productCellPrice.text = "₩" + productPrice + "원"
+        binding.productBidPrice.text = "₩" + productBidPrices + "원"
         binding.productDetailDescription.text = productDescription
         binding.productChatText.text = pChatCount
         binding.productViewText.text = pViewCount

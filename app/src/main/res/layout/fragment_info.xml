@@ -53,6 +53,12 @@
 
         </FrameLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#DDDDDD"
+            app:layout_constraintTop_toBottomOf="@+id/infoPhoto" />
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -99,6 +105,12 @@
                     android:layout_marginStart="8dp"
                     tools:text="Example Product" />
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#DDDDDD"
+                    app:layout_constraintTop_toBottomOf="@+id/sellerImage" />
+
                 <!-- 가격 정보 섹션 -->
                 <TextView
                     android:id="@+id/productCellName"
@@ -139,6 +151,12 @@
                     android:textSize="16sp"
                     app:layout_constraintBaseline_toBaselineOf="@+id/bidPriceLabel"
                     app:layout_constraintEnd_toEndOf="parent" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#DDDDDD"
+                    app:layout_constraintTop_toBottomOf="@+id/productBidPrice" />
 
                 <!-- 채팅, 뷰, 체크 섹션 -->
                 <!-- 이 부분은 자세한 아이콘과 텍스트를 표시하는 방법을 아직 명시하지 않았습니다.
@@ -208,7 +226,6 @@
                         android:gravity="left" />
 
                 </LinearLayout>
-
                 <!-- 상세 설명 섹션 -->
                 <TextView
                     android:id="@+id/productDetailDescription"
