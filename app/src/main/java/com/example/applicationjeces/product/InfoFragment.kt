@@ -6,8 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.viewpager2.widget.ViewPager2
 import com.example.applicationjeces.R
 import com.example.applicationjeces.databinding.FragmentInfoBinding
+import com.tbuonomo.viewpagerdotsindicator.DotsIndicator
 
 class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClickListener {
 
@@ -61,12 +63,19 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
         }
 
         /**
-         * 맨 위 소개 페이지
+         * 맨 위 상품 이미지
          * viewpager2 adapter 장착
          */
         val viewPager = binding.viewPagerInfoProduce
         val adapterImg = ProductImageInfoRecyclerViewAdapter(myId, pId, pName, imagelist, requireActivity(), this)
         viewPager.adapter = adapterImg
+
+        /**
+         * indicator 장착
+         */
+        val dotsIndicator: DotsIndicator = binding.dotsIndicatorInfo
+        val viewPager2: ViewPager2 = binding.viewPagerInfoProduce
+        dotsIndicator.setViewPager2(viewPager2)
 
 
 ////        viewPager.currentItem = position
