@@ -239,8 +239,8 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
      */
     fun setYourImage(pId: String) {
         var db = FirebaseStorage.getInstance()
-        db.reference.child("${pId}/profil/${pId}_Profil_IMAGE_.jpg").downloadUrl.addOnCompleteListener {
-            Log.d("ggggg", "${pId}/profil/${pId}_Profil_IMAGE_.jpg")
+        db.reference.child("${pId}/profil/${pId}_Profil_IMAGE_.png").downloadUrl.addOnCompleteListener {
+            Log.d("ggggg", "${pId}/profil/${pId}_Profil_IMAGE_.png")
             Glide.with(this@InfoFragment)
                 .load(it)
                 .into(binding.sellerImage)
