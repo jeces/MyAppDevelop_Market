@@ -76,7 +76,6 @@
                     android:id="@+id/sellerImage"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:background="@drawable/ic_baseline_supervised_user_circle_24"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     tools:src="@tools:sample/avatars" />

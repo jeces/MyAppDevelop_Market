@@ -1,14 +1,17 @@
 package com.example.applicationjeces.product
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
 import com.example.applicationjeces.R
 import com.example.applicationjeces.databinding.FragmentInfoBinding
+import com.google.firebase.storage.FirebaseStorage
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator
 
 class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClickListener {
@@ -50,7 +53,7 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
         val myId: String = productViewModel.thisUser.toString()
         productViewModel.whereMyUser("productInfo")
 
-        binding.sellerName.text = "임시"
+        binding.sellerName.text = pId
         binding.productName.text = pName
         binding.productCellPrice.text = "₩" + productPrice + "원"
         binding.productBidPrice.text = "₩" + productBidPrices + "원"
@@ -58,6 +61,12 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
         binding.productChatText.text = pChatCount
         binding.productViewText.text = pViewCount
         binding.productCheckText.text = pHeartCount
+
+        /**
+         * 판매자 프로필 이미지
+         */
+        setYourImage(pId)
+
         if (productCount != null) {
             imagelist = productViewModel.getImage(pId, pName, productCount.toInt()) as ArrayList<String>
         }
@@ -223,5 +232,20 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
         transaction.replace(R.id.fragmentContainer, fragment)
         transaction.addToBackStack(null)
         transaction.commit()
+    }
+
+    /**
+     * 판매자 프로필 이미지
+     */
+    fun setYourImage(pId: String) {
+        var db = FirebaseStorage.getInstance()
+        db.reference.child("${pId}/profil/${pId}_Profil_IMAGE_.jpg").downloadUrl.addOnCompleteListener {
+            Log.d("ggggg", "${pId}/profil/${pId}_Profil_IMAGE_.jpg")
+            Glide.with(this@InfoFragment)
+                .load(it)
+                .into(binding.sellerImage)
+        }.addOnFailureListener {
+
+        }
     }
 }

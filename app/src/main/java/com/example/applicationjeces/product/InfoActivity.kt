@@ -111,9 +111,7 @@ class InfoActivity : AppCompatActivity() {
                         /**
                          * 채팅방이 있으면
                          */
-                        Log.d("gfggggggg", productViewModel.liveTodoChatroomDataCount.toString())
                         if (chat.searchChat != null) {
-                            Log.d("asdfasdf02", chat.toString())
                             /* 화면 띄움*/
                             /* 프라그먼트에서 프라그먼트로 제어가 불가능하기 때문에 상위 액티비티에서 제어 해주어야 한다. */
                             val intent = Intent(this, ChatActivity::class.java)
