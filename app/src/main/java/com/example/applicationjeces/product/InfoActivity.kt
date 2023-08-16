@@ -4,16 +4,21 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import com.example.applicationjeces.MainActivity
 import com.example.applicationjeces.R
 import com.example.applicationjeces.chat.ChatActivity
 import com.example.applicationjeces.chat.ChatroomData
 import com.example.applicationjeces.databinding.ActivityInfoBinding
+import com.example.applicationjeces.page.DataViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.Timestamp
 
@@ -69,7 +74,24 @@ class InfoActivity : AppCompatActivity() {
         transaction.replace(R.id.fragmentContainer, fragment)
         transaction.commit()
 
+
+
+
+        /**
+         * Info 네비게이션
+         */
         val bottomNavigation: BottomNavigationView = binding.bottomNavigation
+        /**
+         * 자기 자신 버튼 숨김
+         */
+        if(myId == pId) {
+            bottomNavigation.menu.findItem(R.id.nav_bid).isVisible = false
+            bottomNavigation.menu.findItem(R.id.nav_chat).isVisible = false
+        } else {
+            bottomNavigation.menu.findItem(R.id.nav_edit).isVisible = false
+            bottomNavigation.menu.findItem(R.id.nav_delete).isVisible = false
+            bottomNavigation.menu.findItem(R.id.nav_update).isVisible = false
+        }
         bottomNavigation.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 /**
@@ -127,6 +149,9 @@ class InfoActivity : AppCompatActivity() {
                     }
                     true
                 }
+                /**
+                 * 입찰
+                 */
                 R.id.nav_bid -> {
                     // Dialog 생성
                     Log.d("aaa1313a", "123123")
@@ -149,24 +174,100 @@ class InfoActivity : AppCompatActivity() {
                         }
 
                         // 금액 처리
-                        processBid(bidAmount.toInt())  // 이는 실제로 입찰 금액을 처리하는 함수로 정의해야 합니다.
+                        processBid(pId, pName, bidAmount)  // 이는 실제로 입찰 금액을 처리하는 함수로 정의해야 합니다.
 
                         alertDialog.dismiss()  // 대화상자 닫기
                     }
                     true
                 }
+                /**
+                 * 상품 삭제
+                 */
+                R.id.nav_delete -> {
 
-                // 기타 메뉴 항목 처리
+                    val dialogView = LayoutInflater.from(this).inflate(R.layout.delete_custom_modal, null)
+                    val titleText = dialogView.findViewById<TextView>(R.id.titleText)
+                    val messageText = dialogView.findViewById<TextView>(R.id.messageText)
+                    val positiveButton = dialogView.findViewById<Button>(R.id.OkBtn)
+                    val negativeButton = dialogView.findViewById<Button>(R.id.NoBtn)
+
+                    titleText.text = "상품 삭제"
+                    messageText.text = "정말로 상품을 삭제하시겠습니까?"
+
+                    val builder = AlertDialog.Builder(this)
+                    builder.setView(dialogView)
+
+                    val alertDialog = builder.create()
+
+                    positiveButton.setOnClickListener {
+                        productViewModel.deleteProduct(pId, pName)
+                        Toast.makeText(this, "상품이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                        alertDialog.dismiss()
+                        /* 화면 띄움*/
+                        /* 프라그먼트에서 프라그먼트로 제어가 불가능하기 때문에 상위 액티비티에서 제어 해주어야 한다. */
+                        val intent = Intent(this, MainActivity::class.java)
+                        startActivity(intent)
+                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+                    }
+
+                    negativeButton.setOnClickListener {
+                        // Negative Button 클릭시 작업
+                        alertDialog.dismiss()
+                    }
+
+                    alertDialog.show()
+                    true
+
+                }
+                /**
+                 * 상품 업데이트 수정
+                 */
+                R.id.nav_edit -> {
+                    true
+                }
+                /**
+                 * 상품 최신으로 끌어올리기
+                 */
+                R.id.nav_update -> {
+                    val dialogView = LayoutInflater.from(this).inflate(R.layout.custom_update_dialog, null)
+                    val titleText = dialogView.findViewById<TextView>(R.id.utitleText)
+                    val messageText = dialogView.findViewById<TextView>(R.id.umessageText)
+                    val positiveButton = dialogView.findViewById<Button>(R.id.uOkBtn)
+                    val negativeButton = dialogView.findViewById<Button>(R.id.uNoBtn)
+
+                    titleText.text = "상품 업데이트"
+                    messageText.text = "정말로 상품을 업데이트하시겠습니까?"
+
+                    val builder = AlertDialog.Builder(this)
+                    builder.setView(dialogView)
+
+                    val alertDialog = builder.create()
+
+                    positiveButton.setOnClickListener {
+                        productViewModel.updateProduct(pId, pName)
+                        Toast.makeText(this, "상품이 업데이트되었습니다.", Toast.LENGTH_SHORT).show()
+                        alertDialog.dismiss()
+                    }
+
+                    negativeButton.setOnClickListener {
+                        // Negative Button 클릭시 작업
+                        alertDialog.dismiss()
+                    }
+
+                    alertDialog.show()
+                    true
+                }
+                /**
+                 * 기타
+                 */
                 else -> false
             }
         }
     }
 
-    private fun processBid(amount: Int) {
-        // TODO: 실제 금액 처리 로직을 여기에 추가합니다. 예를 들면 서버에 입찰 요청을 보내는 등의 처리를 합니다.
-
-        // 간단한 토스트 메시지로 처리 예제
-        Toast.makeText(this, "$amount 원으로 입찰하였습니다.", Toast.LENGTH_SHORT).show()
+    private fun processBid(pId : String, pName : String, bid_price : String) {
+        productViewModel.bidchange(pId, pName, bid_price)
+        Toast.makeText(this, "$bid_price 원으로 입찰하였습니다.", Toast.LENGTH_SHORT).show()
     }
 
     override fun onBackPressed() {

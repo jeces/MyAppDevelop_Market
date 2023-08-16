@@ -17,4 +17,6 @@
     <color name="light_gray">#F5F5F5</color>
     <color name="dark_gray">#BDBDBD</color>
     <color name="primary_color">#FF6F00</color>
+    <color name="positive_color">#4CAF50</color> <!-- Green for positive actions -->
+    <color name="negative_color">#FFC107</color> <!-- Amber for negative actions -->
 </resources>

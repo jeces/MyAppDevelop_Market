@@ -161,8 +161,18 @@ class JecesViewModel(application: Application): AndroidViewModel(application) {
         return date
     }
 
-    /* firebase Product 입력 */
+    /**
+     *  firebase Product 입력
+     **/
     fun addProducts(product: Product) {
+
+        /**
+         * 현재시간
+         */
+        val currentTime = Date()
+        val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        val formattedTime = formatter.format(currentTime)
+
         val products = hashMapOf(
             "ID" to thisUser,
             "productName" to product.product_name,
@@ -173,7 +183,8 @@ class JecesViewModel(application: Application): AndroidViewModel(application) {
             "pChatCount" to product.chatCount,
             "pViewCount" to product.viewCount,
             "pHeartCount" to product.heartCount,
-            "productBidPrice" to product.product_bid_price
+            "productBidPrice" to product.product_bid_price,
+            "insertTime" to formattedTime
         )
         jecesfirestore!!.collection("Product").add(products)
             .addOnSuccessListener {

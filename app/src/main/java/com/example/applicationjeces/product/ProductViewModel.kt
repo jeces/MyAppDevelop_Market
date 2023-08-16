@@ -194,6 +194,7 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
 
     /* firebase Product 입력 */
     fun addProducts(product: Product) {
+        val currentTime = Timestamp.now()
         val products = hashMapOf(
             "ID" to product.product_id,
             "productName" to product.product_name,
@@ -204,7 +205,9 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
             "pChatCount" to product.chatCount,
             "pViewCount" to product.viewCount,
             "pHeartCount" to product.heartCount,
-            "productBidPrice" to product.product_bid_price
+            "productBidPrice" to product.product_bid_price,
+            "insertTime" to currentTime
+
         )
         jecesfirestore!!.collection("Product").add(products)
             .addOnSuccessListener {
@@ -394,5 +397,55 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         jecesfirestore!!.collection("Product").get().addOnCompleteListener {
 
         }
+    }
+
+    /**
+     * 상품 삭제
+     */
+    fun deleteProduct(pId: String, pName: String) {
+        var dbRef = jecesfirestore!!.collection("Product")
+        dbRef.whereEqualTo("ID", pId).whereEqualTo("productName", pName).get()
+            .addOnCompleteListener { product ->
+                if (product.isSuccessful) {
+                    for (document in product.result) {
+                        dbRef.document(document.id).delete()
+                            .addOnSuccessListener {
+                                Log.d("Firestore", "Document successfully deleted!")
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w("Firestore", "Error deleting document", e)
+                            }
+                    }
+                }
+            }
+    }
+
+    /**
+     * 상품의 시간을 최신으로 업데이트
+     */
+    fun updateProduct(pId: String, pName: String) {
+        val dbRef = jecesfirestore!!.collection("Product")
+        dbRef.whereEqualTo("ID", pId).whereEqualTo("productName", pName).get()
+            .addOnCompleteListener { product ->
+                if (product.isSuccessful) {
+                    for (document in product.result) {
+                        // 현재 시간으로 설정
+                        val currentTime = Timestamp.now()
+
+                        val update: MutableMap<String, Any> = HashMap()
+                        update["insertTime"] = currentTime
+
+                        dbRef.document(document.id).set(update, SetOptions.merge())
+                            .addOnSuccessListener {
+                                Log.d("Firestore", "Document time successfully updated!")
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w("Firestore", "Error updating document time", e)
+                            }
+                    }
+                } else {
+                    Log.e("Firestore", "Error getting product for update", product.exception)
+                }
+            }
     }
 }

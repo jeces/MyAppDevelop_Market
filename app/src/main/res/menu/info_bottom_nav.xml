@@ -2,12 +2,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/nav_chat"
-        android:icon="@drawable/ic_baseline_add_24"
+        android:icon="@drawable/ic_baseline_chat_bubble_24"
         android:title="Chat" />
     <!-- 기타 메뉴 항목 추가 -->
     <item
         android:id="@+id/nav_bid"
-        android:icon="@drawable/ic_baseline_add_24"
+        android:icon="@drawable/ic_baseline_attach_money_24"
         android:title="Bid" />
+    <item
+        android:id="@+id/nav_delete"
+        android:icon="@drawable/ic_baseline_delete_24"
+        android:title="Delete"/>
+    <item
+        android:id="@+id/nav_edit"
+        android:icon="@drawable/baseline_edit_24"
+        android:title="Edit"/>
+    <item
+        android:id="@+id/nav_update"
+        android:icon="@drawable/ic_baseline_update_24"
+        android:title="Update"/>
     <!-- 기타 메뉴 항목 추가 -->
 </menu>

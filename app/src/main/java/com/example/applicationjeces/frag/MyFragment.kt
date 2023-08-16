@@ -1,28 +1,18 @@
 package com.example.applicationjeces.frag
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.Toast
-import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
-import com.example.applicationjeces.R
-import com.example.applicationjeces.JecesViewModel
-import com.example.applicationjeces.chat.ChatActivity
-import com.example.applicationjeces.chat.ChatroomData
-import com.example.applicationjeces.product.FullscreenImageFragment
-import com.example.applicationjeces.product.ProductImageInfoRecyclerViewAdapter
-import com.google.firebase.Timestamp
+import androidx.lifecycle.ViewModelProvider
+import com.example.applicationjeces.databinding.FragmentMyinfoBinding
+import com.example.applicationjeces.product.ProductViewModel
+import com.example.applicationjeces.user.EditProfileActivity
 import kotlinx.android.synthetic.main.fragment_info.view.*
+import kotlinx.android.synthetic.main.fragment_myinfo.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -43,6 +33,10 @@ class MyFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private lateinit var productViewModel: ProductViewModel
+    private var _binding: FragmentMyinfoBinding? = null
+    private val binding get() = _binding!!
+
     /* 이미지 리스트 */
     var imagelist = ArrayList<String>()
 
@@ -60,8 +54,22 @@ class MyFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val view = inflater.inflate(R.layout.fragment_myinfo, container, false)
-        val jecesModel: JecesViewModel by activityViewModels()
+        /**
+         * view 바인딩
+         */
+        _binding = FragmentMyinfoBinding.inflate(inflater, container, false)
+        val view = binding.root
+
+        /**
+         * 뷰모델 초기화 생성자
+         **/
+        productViewModel = ViewModelProvider(this)[ProductViewModel::class.java]
+
+
+        binding.editProfile.setOnClickListener {
+            val intent = Intent(activity, EditProfileActivity::class.java)
+            startActivity(intent)
+        }
 
         // Inflate the layout for this fragment
         return view

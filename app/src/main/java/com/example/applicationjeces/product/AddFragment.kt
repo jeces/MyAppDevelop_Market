@@ -1,4 +1,4 @@
-package com.example.applicationjeces.frag
+package com.example.applicationjeces.product
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -74,7 +74,7 @@ class AddFragment : Fragment() {
     private val adapter = ProductImageRecyclerViewAdapter(imagelist, this@AddFragment)
 
     /* ViewModel 이니셜라이즈 */
-    private lateinit var jecesViewModel: JecesViewModel
+    private lateinit var jecesViewModel: ProductViewModel
 
     /* ViewPage */
     private val pageViewModel by viewModels<DataViewModel>()
@@ -96,7 +96,7 @@ class AddFragment : Fragment() {
         viewProfile = inflater.inflate(R.layout.fragment_add, container, false)
 
         /* ViewModel provider를 실행 */
-        jecesViewModel = ViewModelProvider(this)[JecesViewModel::class.java]
+        jecesViewModel = ViewModelProvider(this)[ProductViewModel::class.java]
 
         /* Initialize Firebase Storage */
         firebaseStorage = FirebaseStorage.getInstance()
