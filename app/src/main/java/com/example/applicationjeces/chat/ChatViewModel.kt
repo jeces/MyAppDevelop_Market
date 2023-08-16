@@ -61,7 +61,6 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
         /* 현재 로그인 아이디 */
         thisUser = FirebaseAuth.getInstance().currentUser?.email.toString()
 
-
         /* firebase product 전체 가져오기 */
         /* https://velog.io/@nagosooo/%EC%95%88%EB%93%9C%EB%A1%9C%EC%9D%B4%EB%93%9C-TodoList%EC%95%B1-%EB%A7%8C%EB%93%A4%EA%B8%B0 */
     }

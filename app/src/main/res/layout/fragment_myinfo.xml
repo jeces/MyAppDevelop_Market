@@ -150,6 +150,14 @@
                 android:clickable="true"
                 android:focusable="true" />
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/salesRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:background="#ffffff"
+                android:elevation="3dp"/>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -158,11 +166,11 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="나의 구매 목록"
-                android:padding="10dp"
                 android:background="?android:selectableItemBackground"
                 android:clickable="true"
-                android:focusable="true" />
+                android:focusable="true"
+                android:padding="10dp"
+                android:text="나의 구매 목록" />
 
             <View
                 android:layout_width="match_parent"

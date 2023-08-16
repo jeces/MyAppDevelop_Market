@@ -280,6 +280,7 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     fun searchChat(yourId: String) : MutableLiveData<Response> {
         val chatSearchLiveTodoData = MutableLiveData<Response>()
         /* 전체 채팅 수 가져오기 */
+        Log.d("ㅁㅁㅁㅁ", "ㅁㅁㄴㅇ")
         getAllChatroomCount()
         jecesfirestore!!.collection("Chatroom").get().addOnCompleteListener { chat ->
             val response = Response()
