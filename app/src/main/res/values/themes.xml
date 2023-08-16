@@ -8,6 +8,7 @@
         <item name="android:editTextStyle">@style/customEditTextFontStyle</item>
         <item name="android:radioButtonStyle">@style/customRadioButtonFontStyle</item>
         <item name="android:checkboxStyle">@style/customCheckboxFontStyle</item>
+        <item name="android:fontFamily">@font/font_font</item>
 
     </style>
 
@@ -24,11 +25,13 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="android:fontFamily">@font/font_font</item>
     </style>
 
     <style name="Theme.ApplicationJeces.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:fontFamily">@font/font_font</item>
     </style>
 
 
@@ -38,6 +41,7 @@
         <item name="android:windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
+        <item name="android:fontFamily">@font/font_font</item>
     </style>
 
     <style name="Theme.ApplicationJeces.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
