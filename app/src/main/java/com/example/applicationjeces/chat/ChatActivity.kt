@@ -150,11 +150,11 @@ class ChatActivity : AppCompatActivity() {
         binding.chatBack.setOnClickListener {
             val mainActivity = Intent(this, MainActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-                putExtra("destinationFragment", PageData.CHATROOM)
+//                putExtra("destinationFragment", PageData.MY)
             }
+            startActivity(mainActivity)
             /* 애니메이션 적용 */
             overridePendingTransition(R.anim.slide_out_right, R.anim.slide_in_left)
-            startActivity(mainActivity)
             finish()
         }
 

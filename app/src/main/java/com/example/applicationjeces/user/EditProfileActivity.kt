@@ -68,17 +68,17 @@ class EditProfileActivity : AppCompatActivity() {
          */
         binding.saveButton.setOnClickListener {
             // 선택한 이미지가 없으면 Firebase에 업로드하는 동작은 생략하며, 기존 이미지가 그대로 유지됩니다.
-            if (selectedImageUri != null) {
+            if (::selectedImageUri.isInitialized) {
                 ImageUpload(binding.profileImage, selectedImageUri)
             }
 
             val mainActivity = Intent(this, MainActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-                putExtra("myinfo", PageData.MY)
+//                putExtra("myinfo", PageData.MY)
             }
             /* 애니메이션 적용 */
-            overridePendingTransition(R.anim.slide_out_right, R.anim.slide_in_left)
             startActivity(mainActivity)
+            overridePendingTransition(R.anim.slide_out_right, R.anim.slide_in_left)
             finish()
 
             Toast.makeText(this, "Profile updated successfully!", Toast.LENGTH_SHORT).show()
