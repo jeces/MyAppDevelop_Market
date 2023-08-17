@@ -3,6 +3,7 @@ package com.example.applicationjeces.user
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -82,7 +83,7 @@ class MyFragment : Fragment() {
         /**
          * 나의 판매목록 상품
          */
-        val adapter = MyProductRecyclerViewAdapter(this@MyFragment, myId, emptyList())
+        val adapter = MyProductRecyclerViewAdapter(this@MyFragment, myId, emptyList(), "myProduct")
         val recyclerView = binding.myProductSaleV
         recyclerView.adapter = adapter
         recyclerView.setHasFixedSize(true)
@@ -90,17 +91,14 @@ class MyFragment : Fragment() {
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 5)
 
         /**
-         * 이건 뷰페이저로 만들꺼임
-         * 뷰모델 연결, 뷰모델을 불러옴
-         * 이건 전체 상품
-         * 따라서 나눠야 함
-         * 1. adapter를 나누고 표현되어야 함
+         * 옵져브
          **/
-        productViewModel.liveTodoData.observe(viewLifecycleOwner, Observer { product ->
+        productViewModel.mySetProduct()
+        productViewModel.myProductLiveTodoData.observe(viewLifecycleOwner, Observer { product ->
             /* ViewModel에 Observe를 활용하여 productViewModel에 ReadAllData 라이브 데이터가 바뀌었을때 캐치하여, adapter에서 만들어준 setData함수를 통해 바뀐데이터를 UI에 업데이트 해줌 */
+            Log.d("aaaaddd", "aadada")
             adapter.setData(product)
         })
-
 
         /**
          * 나의 판매목록 버튼
@@ -113,6 +111,15 @@ class MyFragment : Fragment() {
             }
         }
 
+        /**
+         * 나의 구매 목록
+         */
+        val adapterPc = MyProductRecyclerViewAdapter(this@MyFragment, myId, emptyList(), "myProductPc")
+        val recyclerViewPc = binding.myProductPc
+        recyclerViewPc.adapter = adapterPc
+        recyclerViewPc.setHasFixedSize(true)
+        // Change from LinearLayoutManager to GridLayoutManager
+        recyclerViewPc.layoutManager = GridLayoutManager(requireContext(), 5)
 
 
         binding.editProfile.setOnClickListener {

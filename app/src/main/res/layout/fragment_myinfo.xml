@@ -165,7 +165,6 @@
                         android:focusable="true" />
 
                     <!-- 여기에 판매 목록 세부 내용 추가 -->
-                    <!-- 사진 리사이클러 뷰 옆으로 넘기는 -->
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/myProductSaleV"
                         android:layout_width="match_parent"
@@ -212,7 +211,18 @@
                         android:clickable="true"
                         android:focusable="true" />
 
-                    <!-- 여기에 구매 목록 세부 내용 추가 -->
+                    <!-- 여기에 판매 목록 세부 내용 추가 -->
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/myProductPc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="10dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:layout_marginTop="20dp"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:spanCount="5"
+                        tools:listitem="@layout/product_item_list" />
                 </LinearLayout>
             </ScrollView>
 

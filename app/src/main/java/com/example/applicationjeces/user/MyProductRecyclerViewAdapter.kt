@@ -15,7 +15,7 @@ import com.google.firebase.storage.FirebaseStorage
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import kotlinx.android.synthetic.main.product_item_list.view.*
 
-class MyProductRecyclerViewAdapter(private val context: Fragment, var myId: String, var producFiretList: List<DocumentSnapshot>): RecyclerView.Adapter<MyProductRecyclerViewAdapter.Holder>() {
+class MyProductRecyclerViewAdapter(private val context: Fragment, var myId: String, var producFiretList: List<DocumentSnapshot>, var flag: String): RecyclerView.Adapter<MyProductRecyclerViewAdapter.Holder>() {
 
     /* ViewHolder에게 item을 보여줄 View로 쓰일 item_data_list.xml를 넘기면서 ViewHolder 생성. 아이템 레이아웃과 결합 */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {

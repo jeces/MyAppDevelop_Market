@@ -28,6 +28,9 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     var liveTodoData = MutableLiveData<List<DocumentSnapshot>>()
     var productArrayList: MutableList<Product> = ArrayList()
 
+    /* 나의 판매목록 */
+    var myProductLiveTodoData = MutableLiveData<List<DocumentSnapshot>>()
+
     /* 전체 채팅룸 카운트 */
     var liveTodoChatroomDataCount : Int = 0
 
@@ -179,6 +182,18 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
                 return@addSnapshotListener
             }
             liveTodoData.value = products?.documents
+        }
+    }
+
+    /**
+     * 나의 판매 상품 가져오기
+     */
+    fun mySetProduct() {
+        jecesfirestore!!.collection("Product").whereEqualTo("ID", thisUser).addSnapshotListener { product, e ->
+            if (e != null) {
+                return@addSnapshotListener
+            }
+            myProductLiveTodoData.value = product?.documents
         }
     }
 
