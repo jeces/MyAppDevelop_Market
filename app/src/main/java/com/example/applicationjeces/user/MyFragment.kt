@@ -1,4 +1,4 @@
-package com.example.applicationjeces.frag
+package com.example.applicationjeces.user
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -7,10 +7,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
+import com.bumptech.glide.Glide
 import com.example.applicationjeces.databinding.FragmentMyinfoBinding
 import com.example.applicationjeces.product.ProductViewModel
+import com.example.applicationjeces.product.ProductViewPagerAdapter
 import com.example.applicationjeces.user.EditProfileActivity
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_info.view.*
 import kotlinx.android.synthetic.main.fragment_myinfo.*
 
@@ -65,6 +70,50 @@ class MyFragment : Fragment() {
          **/
         productViewModel = ViewModelProvider(this)[ProductViewModel::class.java]
 
+        /**
+         * 나의 프로필 이미지 및 이름
+         */
+        var myId = productViewModel.thisUser.toString()
+        setMyImage(myId)
+        binding.profileName.text = myId
+
+
+
+        /**
+         * 나의 판매목록 상품
+         */
+        val adapter = MyProductRecyclerViewAdapter(this@MyFragment, myId, emptyList())
+        val recyclerView = binding.myProductSaleV
+        recyclerView.adapter = adapter
+        recyclerView.setHasFixedSize(true)
+        // Change from LinearLayoutManager to GridLayoutManager
+        recyclerView.layoutManager = GridLayoutManager(requireContext(), 5)
+
+        /**
+         * 이건 뷰페이저로 만들꺼임
+         * 뷰모델 연결, 뷰모델을 불러옴
+         * 이건 전체 상품
+         * 따라서 나눠야 함
+         * 1. adapter를 나누고 표현되어야 함
+         **/
+        productViewModel.liveTodoData.observe(viewLifecycleOwner, Observer { product ->
+            /* ViewModel에 Observe를 활용하여 productViewModel에 ReadAllData 라이브 데이터가 바뀌었을때 캐치하여, adapter에서 만들어준 setData함수를 통해 바뀐데이터를 UI에 업데이트 해줌 */
+            adapter.setData(product)
+        })
+
+
+        /**
+         * 나의 판매목록 버튼
+         */
+        binding.myProductSale.setOnClickListener {
+            if (recyclerView.visibility == View.VISIBLE) {
+                recyclerView.visibility = View.GONE
+            } else {
+                recyclerView.visibility = View.VISIBLE
+            }
+        }
+
+
 
         binding.editProfile.setOnClickListener {
             val intent = Intent(activity, EditProfileActivity::class.java)
@@ -93,5 +142,33 @@ class MyFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    /**
+     * 나의 프로필 이미지
+     */
+    fun setMyImage(myId: String) {
+        var db = FirebaseStorage.getInstance()
+        db.reference.child("${myId}/profil/${myId}_Profil_IMAGE_.png").downloadUrl.addOnCompleteListener {
+            if(it.isSuccessful) {
+                Glide.with(this@MyFragment)
+                    .load(it.result)
+                    .override(70, 70)
+                    .fitCenter()
+                    .circleCrop() // 또는 .transform(RoundedCorners(radius)) 를 사용하여 모서리의 반경을 설정
+                    .into(binding.profileImage)
+            } else {
+                db.reference.child("basic_user.png").downloadUrl.addOnCompleteListener { its ->
+                    Glide.with(this@MyFragment)
+                        .load(it.result)
+                        .override(70, 70)
+                        .fitCenter()
+                        .circleCrop() // 또는 .transform(RoundedCorners(radius)) 를 사용하여 모서리의 반경을 설정
+                        .into(binding.profileImage)
+                }
+            }
+        }.addOnFailureListener {
+
+        }
     }
 }

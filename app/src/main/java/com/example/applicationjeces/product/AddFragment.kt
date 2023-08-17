@@ -144,6 +144,7 @@ class AddFragment : Fragment() {
         if(requestCode == pickImageFromAlbum) {
             if(resultCode == Activity.RESULT_OK) {
                 imagelist.clear()
+                Log.d("aa111a", "adad")
                 /* 사진을 여러개 선택한 경우 */
                 if(data?.clipData != null) {
                     imgCount = data.clipData!!.itemCount

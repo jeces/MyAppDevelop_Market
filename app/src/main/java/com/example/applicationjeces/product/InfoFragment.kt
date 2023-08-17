@@ -240,10 +240,23 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
     fun setYourImage(pId: String) {
         var db = FirebaseStorage.getInstance()
         db.reference.child("${pId}/profil/${pId}_Profil_IMAGE_.png").downloadUrl.addOnCompleteListener {
-            Log.d("ggggg", "${pId}/profil/${pId}_Profil_IMAGE_.png")
-            Glide.with(this@InfoFragment)
-                .load(it)
-                .into(binding.sellerImage)
+            if(it.isSuccessful) {
+                Glide.with(this@InfoFragment)
+                    .load(it.result)
+                    .override(70, 70)
+                    .fitCenter()
+                    .circleCrop() // 또는 .transform(RoundedCorners(radius)) 를 사용하여 모서리의 반경을 설정
+                    .into(binding.sellerImage)
+            } else {
+                db.reference.child("basic_user.png").downloadUrl.addOnCompleteListener { its ->
+                    Glide.with(this@InfoFragment)
+                        .load(it.result)
+                        .override(70, 70)
+                        .fitCenter()
+                        .circleCrop() // 또는 .transform(RoundedCorners(radius)) 를 사용하여 모서리의 반경을 설정
+                        .into(binding.sellerImage)
+                }
+            }
         }.addOnFailureListener {
 
         }

@@ -1,4 +1,4 @@
-package com.example.applicationjeces.frag
+package com.example.applicationjeces.product
 
 import android.content.Context
 import android.content.Intent

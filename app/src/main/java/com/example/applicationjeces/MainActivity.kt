@@ -17,8 +17,9 @@ import com.example.applicationjeces.databinding.ActivityMainBinding
 import com.example.applicationjeces.frag.*
 import com.example.applicationjeces.page.DataViewModel
 import com.example.applicationjeces.page.PageData
-import com.example.applicationjeces.frag.MyFragment
+import com.example.applicationjeces.user.MyFragment
 import com.example.applicationjeces.product.AddFragment
+import com.example.applicationjeces.product.HomeFragment
 import com.example.applicationjeces.search.SearchActivity
 
 class MainActivity : AppCompatActivity() {

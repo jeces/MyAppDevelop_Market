@@ -138,7 +138,7 @@ class ChatroomRecyclerViewAdapter(var contexts: Fragment, var myId: String): Lis
      * 상대방 프로필 이미지
      **/
     fun yourChatroomProfilImg(yourId: String, chatroomUserImg: ImageView) {
-        db.reference.child("${yourId}/${yourId}_profil.png").downloadUrl.addOnCompleteListener {
+        db.reference.child("${yourId}/profil/${yourId}_Profil_IMAGE_.png").downloadUrl.addOnCompleteListener {
             if(it.isSuccessful) {
                 Glide.with(contexts)
                     .load(it.result)
