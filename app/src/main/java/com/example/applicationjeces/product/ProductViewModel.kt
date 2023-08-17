@@ -464,5 +464,11 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
             }
     }
 
+    fun setMyFavorit(pIdx: Any) {
+        val favorites = listOf("${pIdx}")
+        val dbRef = jecesfirestore!!.collection("User")
+//        dbRef.
+    }
+
 
 }

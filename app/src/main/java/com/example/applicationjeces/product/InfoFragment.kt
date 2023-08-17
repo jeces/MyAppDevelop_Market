@@ -51,6 +51,7 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
         val productBidPrices = arguments?.getString("productBidPrice")
 //        val position = arguments?.getString("position", -1)
         val myId: String = productViewModel.thisUser.toString()
+        val pIdx: String = arguments?.getString("IDX").toString()
         productViewModel.whereMyUser("productInfo")
 
         binding.sellerName.text = pId
@@ -125,6 +126,14 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
              * 체크 안되어있다면
              */
             it.isSelected = !it.isSelected
+            if(it.isSelected) {
+                productViewModel.setMyFavorit(pIdx)
+                Log.d("체크1", "ㅊㅋ")
+            } else {
+                Log.d("체크2", "ㅊㅋ")
+            }
+
+
         }
 
 

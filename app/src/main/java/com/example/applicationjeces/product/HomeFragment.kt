@@ -226,7 +226,6 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
                     // 다음 페이지의 데이터 로드
                     productViewModel.fetchNextPage().observe(viewLifecycleOwner, Observer { newItems ->
                         // 데이터를 현재의 어댑터에 추가
-                        Log.d("데이터 로드", "ㅁㅁㄴㅇ")
                         adapter.addData(newItems)
                         adapter.notifyDataSetChanged()
 
@@ -255,7 +254,6 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
                 val intent = Intent(getActivity(), InfoActivity::class.java)
                 /* 필요한 데이터를 InfoActivity로 전달하기 위한 인텐트 파라미터 설정 */
                 intent.putExtra("ID", adapter.producFiretList[position].get("ID").toString())
-                Log.d("1313131313131313", adapter.producFiretList[position].get("ID").toString())
                 intent.putExtra("productName", adapter.producFiretList[position].get("productName").toString())
                 intent.putExtra("productPrice", adapter.producFiretList[position].get("productPrice").toString())
                 intent.putExtra("productDescription", adapter.producFiretList[position].get("productDescription").toString())
@@ -265,6 +263,7 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
                 intent.putExtra("pHeartCount", adapter.producFiretList[position].get("pHeartCount").toString())
                 intent.putExtra("productBidPrice", adapter.producFiretList[position].get("productBidPrice").toString())
                 intent.putExtra("position", position)
+                intent.putExtra("IDX", adapter.producFiretList[position].get("IDX").toString())
                 startActivity(intent)
 
                 /* 애니메이션 적용 */
