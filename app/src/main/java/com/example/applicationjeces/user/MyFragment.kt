@@ -147,6 +147,16 @@ class MyFragment : Fragment() {
         recyclerViewFv.layoutManager = GridLayoutManager(requireContext(), 5)
 
         /**
+         * 옵져브
+         **/
+        productViewModel.mySetProductFv()
+        productViewModel.myProductFvLiveTodoData.observe(viewLifecycleOwner, Observer { product ->
+            /* ViewModel에 Observe를 활용하여 productViewModel에 ReadAllData 라이브 데이터가 바뀌었을때 캐치하여, adapter에서 만들어준 setData함수를 통해 바뀐데이터를 UI에 업데이트 해줌 */
+            Log.d("aaaaddd", "aadada")
+            adapterFv.setData(product)
+        })
+
+        /**
          * 나의 관심목록 버튼
          */
         binding.ProductFv.setOnClickListener {
