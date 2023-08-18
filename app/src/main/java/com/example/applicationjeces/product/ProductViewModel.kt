@@ -30,8 +30,10 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     /* 전체 채팅룸 카운트 */
     var liveTodoChatroomDataCount : Int = 0
 
-    private var jecesfirestore: FirebaseFirestore? = null
-    var thisUser: String? = null
+    /* firebase 연동 */
+    private var jecesfirestore = FirebaseFirestore.getInstance()
+    /* 현재 로그인 아이디 */
+    var thisUser = FirebaseAuth.getInstance().currentUser?.email
     private var position: Int = 0
 
     /* firestore 문서 id를 저장하는 곳 */
@@ -50,11 +52,6 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     private val itemsPerPage = 15  // 이는 한 페이지에 표시될 항목 수입니다.
 
     init {
-        /* firebase 연동 */
-        jecesfirestore = FirebaseFirestore.getInstance()
-        /* 현재 로그인 아이디 */
-        thisUser = FirebaseAuth.getInstance().currentUser?.email
-
         /* firebase product 전체 가져오기 */
         /* https://velog.io/@nagosooo/%EC%95%88%EB%93%9C%EB%A1%9C%EC%9D%B4%EB%93%9C-TodoList%EC%95%B1-%EB%A7%8C%EB%93%A4%EA%B8%B0 */
         allProduct()
