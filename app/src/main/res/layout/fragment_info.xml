@@ -43,6 +43,18 @@
                 app:selectedDotColor="@android:color/darker_gray"
                 app:progressMode="false"/>
 
+            <!-- 상단바 이미지 버튼 -->
+            <ImageButton
+                android:id="@+id/backBt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/ic_baseline_arrow_back_ios_24"
+                android:src="@drawable/ic_baseline_arrow_back_ios_24"
+                android:contentDescription="Options"/>
+
         </FrameLayout>
 
         <View

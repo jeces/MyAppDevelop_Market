@@ -2,18 +2,13 @@ package com.example.applicationjeces.product
 
 import android.app.Application
 import android.util.Log
-import android.widget.ImageView
 import androidx.lifecycle.*
-import com.bumptech.glide.Glide
-import com.example.applicationjeces.chat.ChatData
 import com.example.applicationjeces.chat.ChatroomData
-import com.example.applicationjeces.product.Product
-import com.example.applicationjeces.product.Response
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
 import java.text.SimpleDateFormat
@@ -211,6 +206,7 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
     fun addProducts(product: Product) {
         val currentTime = Timestamp.now()
         val products = hashMapOf(
+            "IDX" to "${product.product_id}_${product.product_name}",
             "ID" to product.product_id,
             "productName" to product.product_name,
             "productPrice" to product.product_price,
@@ -464,11 +460,14 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
             }
     }
 
-    fun setMyFavorit(pIdx: Any) {
+    fun setMyFavorit(pIdx: String) {
         val favorites = listOf("${pIdx}")
-        val dbRef = jecesfirestore!!.collection("User")
-//        dbRef.
+        Log.d("aaaaa123", "${pIdx}")
+        val dbRef = jecesfirestore!!.collection("UserInfo").whereEqualTo("id", "${thisUser}")
+        dbRef.get().addOnSuccessListener { result ->
+            for (document in result) {
+                document.reference.update("favorit", FieldValue.arrayUnion(pIdx))
+            }
+        }
     }
-
-
 }

@@ -78,8 +78,6 @@ class MyFragment : Fragment() {
         setMyImage(myId)
         binding.profileName.text = myId
 
-
-
         /**
          * 나의 판매목록 상품
          */
@@ -120,6 +118,44 @@ class MyFragment : Fragment() {
         recyclerViewPc.setHasFixedSize(true)
         // Change from LinearLayoutManager to GridLayoutManager
         recyclerViewPc.layoutManager = GridLayoutManager(requireContext(), 5)
+
+
+        binding.editProfile.setOnClickListener {
+            val intent = Intent(activity, EditProfileActivity::class.java)
+            startActivity(intent)
+        }
+
+        /**
+         * 나의 구매목록 버튼
+         */
+        binding.ProductPc.setOnClickListener {
+            if (recyclerViewPc.visibility == View.VISIBLE) {
+                recyclerViewPc.visibility = View.GONE
+            } else {
+                recyclerViewPc.visibility = View.VISIBLE
+            }
+        }
+
+        /**
+         * 나의 관심 목록
+         */
+        val adapterFv = MyProductRecyclerViewAdapter(this@MyFragment, myId, emptyList(), "myProductFv")
+        val recyclerViewFv = binding.myProductFv
+        recyclerViewFv.adapter = adapterFv
+        recyclerViewFv.setHasFixedSize(true)
+        // Change from LinearLayoutManager to GridLayoutManager
+        recyclerViewFv.layoutManager = GridLayoutManager(requireContext(), 5)
+
+        /**
+         * 나의 관심목록 버튼
+         */
+        binding.ProductFv.setOnClickListener {
+            if (recyclerViewFv.visibility == View.VISIBLE) {
+                recyclerViewFv.visibility = View.GONE
+            } else {
+                recyclerViewFv.visibility = View.VISIBLE
+            }
+        }
 
 
         binding.editProfile.setOnClickListener {

@@ -45,6 +45,7 @@ class InfoActivity : AppCompatActivity() {
         productViewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application)).get(
             ProductViewModel::class.java)!!
 
+        val pIdx = intent.getStringExtra("IDX").toString()
         val pId = intent.getStringExtra("ID").toString()
         val pName = intent.getStringExtra("productName").toString()
         val productPrice = intent.getStringExtra("productPrice")
@@ -60,6 +61,7 @@ class InfoActivity : AppCompatActivity() {
         val fragment = InfoFragment().apply {
             arguments = Bundle().apply {
                 putString("ID", pId)
+                putString("IDX", pIdx)
                 putString("productName", pName)
                 putString("productPrice", productPrice)
                 putString("productDescription", productDescription)
@@ -73,9 +75,6 @@ class InfoActivity : AppCompatActivity() {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragmentContainer, fragment)
         transaction.commit()
-
-
-
 
         /**
          * Info 네비게이션

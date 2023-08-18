@@ -1,5 +1,6 @@
 package com.example.applicationjeces.product
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,10 +10,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
+import com.example.applicationjeces.MainActivity
 import com.example.applicationjeces.R
 import com.example.applicationjeces.databinding.FragmentInfoBinding
 import com.google.firebase.storage.FirebaseStorage
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+import kotlinx.android.synthetic.main.chat_right_item_list.view.view3_2
 
 class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClickListener {
 
@@ -108,15 +111,14 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
          * 자기 자신 버튼 숨김
          */
         if (myId == pId) {
-//            chat_start_btn.visibility = View.INVISIBLE
-//            price_add_btn.visibility = View.INVISIBLE
+            binding.iconTextSection.visibility = View.INVISIBLE
         }
 
         /**
          * check되어있는지 확인하기
          */
         productViewModel.isCheckProduct(myId)
-        binding.productCheck.isSelected = true
+        binding.productCheck.isSelected = false
 
         /**
          * check 버튼
@@ -127,89 +129,33 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
              */
             it.isSelected = !it.isSelected
             if(it.isSelected) {
+                Log.d("체크1", "${pIdx}")
                 productViewModel.setMyFavorit(pIdx)
-                Log.d("체크1", "ㅊㅋ")
+
             } else {
-                Log.d("체크2", "ㅊㅋ")
+
             }
-
-
         }
 
-
-//        /**
-//         * 채팅버튼
-//         */
-//        chat_start_btn.setOnClickListener {
-//            /**
-//             * 1. 채팅하기를 누르면 일단 채팅목록에 해당 상대방과의 채팅이 있는지 검색
-//             * 2. 있으면 그 채팅화면을 띄워주고
-//             * 3. 없으면 채팅룸 생성하고 채팅창 생성 - 단 채팅리스트 보여줄때 라스트 네임 있는걸로만 보여주기
-//             * 4. 생성은 됨, 생성하는것에서 다음 화면을 띄워줘야하는데 그게 안됨
-//             * */
-//            jecesModel.searchChat(pId).observe(this) { chat ->
-//                /**
-//                 * 채팅방이 있으면
-//                 */
-//                Log.d("gfggggggg", jecesModel.liveTodoChatroomDataCount.toString())
-//                if (chat.searchChat != null) {
-//                    Log.d("asdfasdf02", chat.toString())
-//                    /* 화면 띄움*/
-//                    val intent = Intent(this, ChatActivity::class.java)
-//                    intent.apply {
-//                        this.putExtra("chatidx", chat.searchChat!![0].getString("chatidx").toString())
-//                        this.putExtra("chatYourId", chat.searchChat!![0].getString("id").toString())
-//                    }
-//                    startActivity(intent)
-//                }
-//                else {
-//                    Log.d("gfgggggggㅎ", jecesModel.liveTodoChatroomDataCount.toString())
-//                    var chatroomData = ChatroomData(
-//                        "${jecesModel.liveTodoChatroomDataCount}",
-//                        "${myId},${pId}",
-//                        "",
-//                        "${myId}/0",
-//                        "${pId}/0",
-//                        Timestamp.now()
-//                    )
-//                    jecesModel.createChatroom(chatroomData)
-//
-//                    /* 화면 띄움*/
-//                    val intent = Intent(this, ChatActivity::class.java)
-//                    intent.apply {
-//                        this.putExtra("chatidx", "2")
-//                        this.putExtra("chatYourId", "${myId},${pId}")
-//                    }
-//                    startActivity(intent)
-//                }
+        /**
+         * 뒤로가기버튼 누를시
+         **/
+        binding.backBt.setOnClickListener {
+            val intent = Intent(requireActivity(), MainActivity::class.java)
+            startActivity(intent)
+            requireActivity().finish() // 현재 Activity를 종료하고 싶다면 추가
+            requireActivity().overridePendingTransition(R.anim.slide_out_right, R.anim.slide_in_left)
+        }
+//        binding.backBt.setOnClickListener {
+//            if (parentFragmentManager.backStackEntryCount > 0) {
+//                // Fragment 스택에 이전 Fragment가 있으면 이전 Fragment로 돌아갑니다.
+//                parentFragmentManager.popBackStack()
+//            } else {
+//                // Fragment 스택에 다른 Fragment가 없다면 Activity를 종료하거나 다른 로직을 실행합니다.
+//                requireActivity().finish()
 //            }
 //        }
-//
-//        /**
-//         * 입찰버튼
-//         * Modal 띄워서 현재입찰가격 위로 입찰 가능하도록 하기
-//         * 입찰성공 띄우기
-//         */
-//        price_add_btn.setOnClickListener {
-//            //showDialog(pId, pName)
-//            val builder = AlertDialog.Builder(this)
-//            val bidPriceEditText = EditText(this)
-//            bidPriceEditText.hint = "입찰 가격을 입력하세요." // 사용자에게 입력할 값을 설명하는 힌트 메시지
-//            builder.setTitle("Module Delete Message")
-//                .setMessage("입찰 가격")
-//                .setView(bidPriceEditText)
-//                .setPositiveButton("입찰") { _, _ ->
-//                    val bidPrice = bidPriceEditText.text.toString()
-//                    // TODO: 입찰 동작 처리
-//                    // jecesViewModel.bidchange(pId, pName, bidPrice)
-//                    Toast.makeText(this, "입찰 완료: $bidPrice", Toast.LENGTH_SHORT).show()
-//                }
-//                .setNegativeButton("취소") { _, _ ->
-//                    Toast.makeText(this, "입찰 취소", Toast.LENGTH_SHORT).show()
-//                }
-//            builder.show()
-//        }
-//    }
+
         return view
     }
 
