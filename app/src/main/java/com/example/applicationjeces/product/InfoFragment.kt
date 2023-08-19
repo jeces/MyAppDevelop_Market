@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
@@ -70,9 +71,12 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
          * 판매자 프로필 이미지
          */
         setYourImage(pId)
-
         if (productCount != null) {
-            imagelist = productViewModel.getImage(pId, pName, productCount.toInt()) as ArrayList<String>
+            productViewModel.getImage(pId, pName, productCount.toInt()).observe(viewLifecycleOwner,
+                Observer { list ->
+                    imagelist = list as ArrayList<String>
+                    // 여기서 다른 작업을 수행하십시오.
+                })
         }
 
         /**

@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.example.applicationjeces.R
 import com.google.firebase.Timestamp
 import com.google.firebase.storage.FirebaseStorage
+import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -169,7 +170,11 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
     }
 
     fun yourProfilImg(yourId: String, chatroomUserImg: ImageView) {
+        val contextRef = WeakReference(chatroomUserImg.context)
+
         db.reference.child("${yourId}/${yourId}_profil.png").downloadUrl.addOnCompleteListener {
+            val context = contextRef.get() ?: return@addOnCompleteListener
+
             if(it.isSuccessful) {
                 Glide.with(context)
                     .load(it.result)
@@ -179,7 +184,9 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
             } else {
                 /* 없으면 기본 이미지 들고와라 */
                 db.reference.child("basic_user.png").downloadUrl.addOnCompleteListener { its->
-                    Glide.with(context)
+                    val contextForBasicImage = contextRef.get() ?: return@addOnCompleteListener
+
+                    Glide.with(contextForBasicImage)
                         .load(its.result)
                         .override(70, 70)
                         .fitCenter()
@@ -188,6 +195,8 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
             }
         }
     }
+
+
 
     companion object{
         val diffUtil = object : DiffUtil.ItemCallback<ChatData>(){

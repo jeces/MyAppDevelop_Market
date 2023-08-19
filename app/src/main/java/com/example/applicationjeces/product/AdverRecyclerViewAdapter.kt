@@ -1,6 +1,5 @@
 package com.example.applicationjeces.product
 
-import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +13,7 @@ import com.google.firebase.storage.FirebaseStorage
 
 class AdverRecyclerViewAdapter(
     var adverImageList: ArrayList<String>,
-    val context: Fragment,
+    private val fragment: Fragment,
     private val onImageClickListener: OnImageClickListener
 ): RecyclerView.Adapter<AdverRecyclerViewAdapter.Holder>() {
 
@@ -29,8 +28,8 @@ class AdverRecyclerViewAdapter(
     override fun onBindViewHolder(holder: Holder, position: Int) {
         FirebaseStorage.getInstance().reference.child("adverhome/" + adverImageList[position]).downloadUrl.addOnCompleteListener {
             Log.d("이미지온바인드", adverImageList[position])
-            if(it.isSuccessful) {
-                Glide.with(context)
+            if(it.isSuccessful && fragment.isAdded) {  // Ensure fragment is added before using Glide
+                Glide.with(fragment)
                     .load(it.result)
                     .override(180, 180)
                     .into(holder.image)

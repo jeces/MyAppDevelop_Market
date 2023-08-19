@@ -102,7 +102,22 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
         /**
          * adver 이미지 가져오기
          */
-        adverImagelist = productViewModel.getAdverImage(4) as ArrayList<String>
+//        adverImagelist = productViewModel.getAdverImage(4) as ArrayList<String>
+        productViewModel.getAdverImage(4).observe(viewLifecycleOwner, Observer { images ->
+            adverImagelist.clear()
+            adverImagelist.addAll(images)
+        })
+
+        /**
+         * adver 이미지 수 가져오기
+         */
+        productViewModel.adverCounts.observe(viewLifecycleOwner, Observer { count ->
+            adverPageCount = count
+
+        })
+
+        // Adver counts 가져오기
+        productViewModel.getAdverCounts()
 
         /**
          * 맨 위 소개 페이지
@@ -123,14 +138,19 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
         /**
          * 자동 슬라이드
          */
-        productViewModel.getAdverCounts().observe(viewLifecycleOwner, Observer { filesCount ->
+        productViewModel.liveTodoChatroomDataCount.observe(viewLifecycleOwner, Observer { filesCount ->
             println("Files count: $filesCount")
             adverPageCount = filesCount
         })
         val handler = Handler(Looper.getMainLooper())
         val update = Runnable {
             val currentItem = viewPager2.currentItem
-            viewPager2.setCurrentItem((currentItem + 1) % adverPageCount, true)
+            if (adverPageCount != 0) {
+                val currentItem = viewPager2.currentItem
+                viewPager2.setCurrentItem((currentItem + 1) % adverPageCount, true)
+            } else {
+                // adverPageCount가 0일 때 처리할 코드 (옵션)
+            }
         }
 
         /* 타이머 */
@@ -224,7 +244,7 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
             //        showLoadingIndicator()
 
                     // 다음 페이지의 데이터 로드
-                    productViewModel.fetchNextPage().observe(viewLifecycleOwner, Observer { newItems ->
+                    productViewModel.liveTodoData.observe(viewLifecycleOwner, Observer { newItems ->
                         // 데이터를 현재의 어댑터에 추가
                         adapter.addData(newItems)
                         adapter.notifyDataSetChanged()
@@ -243,10 +263,9 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
         Log.d("aa11", "-1")
         adapter.setItemClickListener(object: ProductViewPagerAdapter.OnItemClickListener {
             override fun onClick(v: View, position: Int) {
-                val productModel: ProductViewModel by activityViewModels()
                 /* 상품 정보 불러오기 */
-                productModel.liveTodoData.value?.get(position).toString()
-                productModel.setProductDetail(adapter.producFiretList[position].get("ID").toString(), adapter.producFiretList[position].get("productName").toString(), adapter.producFiretList[position].get("productPrice").toString()
+                productViewModel.liveTodoData.value?.get(position).toString()
+                productViewModel.setProductDetail(adapter.producFiretList[position].get("ID").toString(), adapter.producFiretList[position].get("productName").toString(), adapter.producFiretList[position].get("productPrice").toString()
                     , adapter.producFiretList[position].get("productDescription").toString(), adapter.producFiretList[position].get("productCount").toString(), adapter.producFiretList[position].get("pChatCount").toString()
                     , adapter.producFiretList[position].get("pViewCount").toString(), adapter.producFiretList[position].get("pHeartCount").toString(), adapter.producFiretList[position].get("productBidPrice").toString(), position)
 
