@@ -11,31 +11,42 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
+import kotlin.collections.ArrayList
 
 /* 뷰모델은 DB에 직접 접근하지 않아야함. Repository 에서 데이터 통신 */
-class ProductViewModel(application: Application): AndroidViewModel(application) {
+class ProductViewModel_bak_2(application: Application): AndroidViewModel(application) {
 
-    private val repository = ProductRepository()
-    private var jecesfirestore: FirebaseFirestore? = null
-
+    /* 각종 라이브데이터 DocumentSnapshot은 firestore와 연결되어있어서 firestore가 변경되면 변경됨 하지만 다른것들은 바꿔줘야함. Snapshot으로 최대한 뽑아보자 */
     var liveTodoData: MutableLiveData<List<DocumentSnapshot>> = MutableLiveData(emptyList())
     var productArrayList: MutableList<Product> = mutableListOf()
 
+    /* 나의 판매, 관심 목록 */
     var myProductLiveTodoData = MutableLiveData<List<DocumentSnapshot>>()
     var myProductFvLiveTodoData = MutableLiveData<List<DocumentSnapshot>>()
 
-    var liveTodoChatroomDataCount: Int = 0
+    /* 전체 채팅룸 카운트 */
+    var liveTodoChatroomDataCount : Int = 0
 
+    /* firebase 연동 */
+    private var jecesfirestore: FirebaseFirestore? = null
+    /* 현재 로그인 아이디 */
     val thisUser: String by lazy { FirebaseAuth.getInstance().currentUser?.email ?: "" }
     private var position: Int = 0
-    private var documentId: String? = null
 
+    /* firestore 문서 id를 저장하는 곳 */
+    private var documentId : String? = null
+
+    /* 이미지를 담는 리스트 */
     private var imgList: ArrayList<String> = arrayListOf()
+
+    /* adver 이미지를 담는 리스트 */
     private var adverImgList: ArrayList<String> = arrayListOf()
+
+    /* adver 개수 카운트 */
     private var adverCount: Int = 0
 
     private var currentPage = 0
-    private val itemsPerPage = 15
+    private val itemsPerPage = 15  // 이는 한 페이지에 표시될 항목 수입니다.
 
     init {
         /* firebase product 전체 가져오기 */
@@ -50,6 +61,13 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
         return jecesfirestore ?: FirebaseFirestore.getInstance().also {
             jecesfirestore = it
         }
+    }
+
+    /**
+     * 나의 아이디
+     */
+    private fun getCurrentUserEmail(): String {
+        return thisUser ?: FirebaseAuth.getInstance().currentUser?.email ?: ""
     }
 
     /**
@@ -189,7 +207,7 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
      * 나의 판매 상품 가져오기
      */
     fun mySetProduct() {
-        getFirestore().collection("Product").whereEqualTo("ID", thisUser)
+        getFirestore().collection("Product").whereEqualTo("ID", getCurrentUserEmail())
             .addSnapshotListener { product, e ->
                 e?.let { return@addSnapshotListener }
                 myProductLiveTodoData.value = product?.documents
@@ -436,7 +454,7 @@ class ProductViewModel(application: Application): AndroidViewModel(application) 
      * 나의 관심목록 Set
      */
     fun setMyFavorit(pIdx: String) {
-        getFirestore().collection("UserInfo").whereEqualTo("id", thisUser)
+        getFirestore().collection("UserInfo").whereEqualTo("id", getCurrentUserEmail())
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
