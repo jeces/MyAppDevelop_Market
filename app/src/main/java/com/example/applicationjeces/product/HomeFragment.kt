@@ -100,33 +100,30 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
         productViewModel.whereMyUser("home")
 
         /**
-         * adver 이미지 가져오기
+         * 맨 위 광고 페이지
+         * viewpager2 adapter 장착
          */
-//        adverImagelist = productViewModel.getAdverImage(4) as ArrayList<String>
-        productViewModel.getAdverImage(4).observe(viewLifecycleOwner, Observer { images ->
-            adverImagelist.clear()
-            adverImagelist.addAll(images)
-        })
+        val viewPager = binding.viewPagerHomeProduce
+        val adapterVp = AdverRecyclerViewAdapter(adverImagelist, this@HomeFragment, this)
+        viewPager.adapter = adapterVp
 
         /**
          * adver 이미지 수 가져오기
          */
         productViewModel.adverCounts.observe(viewLifecycleOwner, Observer { count ->
             adverPageCount = count
-
+            Log.d("141414", "${adverPageCount}")
+            /**
+             * adverCount 값을 기반으로 adver 이미지 가져오기
+             */
+            productViewModel.getAdverImage(adverPageCount).observe(viewLifecycleOwner, Observer { images ->
+                adverImagelist.clear()
+                Log.d("141414", "${adverPageCount}131313")
+                adverImagelist.addAll(images)
+                // 이미지 리스트가 변경되었음을 어댑터에 알림
+                adapterVp.notifyDataSetChanged()
+            })
         })
-
-        // Adver counts 가져오기
-        productViewModel.getAdverCounts()
-
-        /**
-         * 맨 위 소개 페이지
-         * viewpager2 adapter 장착
-         */
-        val viewPager = binding.viewPagerHomeProduce
-        val adapterVp = AdverRecyclerViewAdapter(adverImagelist, this@HomeFragment, this)
-        viewPager.adapter = adapterVp
-////        viewPager.currentItem = position
 
         /**
          * indicator 장착

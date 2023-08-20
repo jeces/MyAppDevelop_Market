@@ -36,18 +36,6 @@ class ProductRepository {
             .get()
     }
 
-    suspend fun fetchAdverCounts(): Int {
-        return withContext(Dispatchers.IO) {
-            try {
-                val listResult = Tasks.await(storageRef.listAll())
-                return@withContext listResult.items.size
-            } catch (e: Exception) {
-                Log.e("AdverCounts", "Error occurred: ${e.message}", e)
-                throw e
-            }
-        }
-    }
-
     suspend fun allProduct(): List<DocumentSnapshot> {
         return getCollection("Product").get().await().documents
     }
@@ -162,8 +150,43 @@ class ProductRepository {
         return imgList
     }
 
+//    suspend fun getAdverImage(adverCount: Int): List<String> {
+//        val adverImgList = mutableListOf<String>()
+//        if (adverCount <= 0) {
+//            adverImgList.add("basic_img.png")
+//        } else {
+//            for (i in 0 until adverCount) {
+//                val word = "adver_${i}.jpeg"
+//                adverImgList.add(word)
+//            }
+//        }
+//        return adverImgList
+//    }
+
+    //    suspend fun fetchAdverCounts(): Int {
+//        return withContext(Dispatchers.IO) {
+//            try {
+//                val listResult = Tasks.await(storageRef.listAll())
+//                return@withContext listResult.items.size
+//            } catch (e: Exception) {
+//                Log.e("AdverCounts", "Error occurred: ${e.message}", e)
+//                throw e
+//            }
+//        }
+//    }
+
+    suspend fun fetchAdverCounts(): Int {
+        return try {
+            val listResult = storageRef.listAll().await()
+            listResult.items.size
+        } catch (e: Exception) {
+            0 // 또는 다른 오류 처리
+        }
+    }
+
     suspend fun getAdverImage(adverCount: Int): List<String> {
-        val adverImgList = mutableListOf<String>()
+        val adverImgList: MutableList<String> = mutableListOf()
+
         if (adverCount <= 0) {
             adverImgList.add("basic_img.png")
         } else {

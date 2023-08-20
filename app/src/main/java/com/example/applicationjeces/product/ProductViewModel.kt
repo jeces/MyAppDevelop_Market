@@ -22,6 +22,9 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     var liveTodoChatroomDataCount: MutableLiveData<Int> = MutableLiveData(0)
     var productArrayList: MutableList<Product> = mutableListOf()
 
+    private val _adverImages = MutableLiveData<List<String>>()
+    val adverImages: LiveData<List<String>> get() = _adverImages
+
     val thisUser: String by lazy { FirebaseAuth.getInstance().currentUser?.email ?: "" }
 
     private var currentPage = 0
@@ -35,6 +38,7 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
 
     init {
         fetchAllProducts()
+        fetchAdverCountsAndImages()
     }
 
     private fun fetchAllProducts() {
@@ -61,6 +65,23 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
             }
 
         return nextPageLiveData
+    }
+
+    fun fetchAdverCountsAndImages() {
+        viewModelScope.launch {
+            try {
+                val count = repository.fetchAdverCounts()
+                _adverCounts.value = count
+                Log.d("AdverCounts", "Number of files in the folder: $count")
+
+                // Count를 기반으로 이미지를 가져옵니다.
+                val images = repository.getAdverImage(count)
+                _adverImages.value = images
+
+            } catch (e: Exception) {
+                Log.e("AdverDataFetch", "Error occurred: ${e.message}", e)
+            }
+        }
     }
 
     fun getAdverCounts() {
