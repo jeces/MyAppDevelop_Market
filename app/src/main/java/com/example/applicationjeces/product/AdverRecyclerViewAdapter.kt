@@ -47,6 +47,12 @@ class AdverRecyclerViewAdapter(
         return adverImageList.size
     }
 
+    fun updateData(newImageList: List<String>) {
+        adverImageList.clear()
+        adverImageList.addAll(newImageList)
+        notifyDataSetChanged()
+    }
+
     inner class Holder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val image = itemView.findViewById<ImageView>(R.id.adver_image)
     }

@@ -71,13 +71,6 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
          * 판매자 프로필 이미지
          */
         setYourImage(pId)
-        if (productCount != null) {
-            productViewModel.getImage(pId, pName, productCount.toInt()).observe(viewLifecycleOwner,
-                Observer { list ->
-                    imagelist = list as ArrayList<String>
-                    // 여기서 다른 작업을 수행하십시오.
-                })
-        }
 
         /**
          * 맨 위 상품 이미지
@@ -88,22 +81,20 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
         viewPager.adapter = adapterImg
 
         /**
+         * 상품 이미지
+         */
+        if (productCount != null) {
+            productViewModel.getImage(pId, pName, productCount.toInt()).observe(viewLifecycleOwner, Observer { list ->
+                adapterImg.updateData(list)  // 어댑터에 데이터가 변경되었음을 알립니다.
+            })
+        }
+
+        /**
          * indicator 장착
          */
         val dotsIndicator: DotsIndicator = binding.dotsIndicatorInfo
         val viewPager2: ViewPager2 = binding.viewPagerInfoProduce
         dotsIndicator.setViewPager2(viewPager2)
-
-
-////        viewPager.currentItem = position
-
-        /* 이미지 어뎁터 */
-//        val adapter = ProductImageInfoRecyclerViewAdapter(myId, pId, pName, imagelist, requireActivity(), this)
-//
-//        /* 이미지 리사이클러뷰 어뎁터 장착 */
-//        imginfo_profile.adapter = adapter
-//        imginfo_profile.setHasFixedSize(true)
-//        imginfo_profile.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
 
         /**
          * ViewCount ++함
@@ -121,8 +112,14 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
         /**
          * check되어있는지 확인하기
          */
-        productViewModel.isCheckProduct(myId)
-        binding.productCheck.isSelected = false
+        // LiveData 가져오기
+        val productExistLiveData = productViewModel.isCheckProduct(myId, pId)
+        Log.d("13131313", productExistLiveData.value.toString())
+        // LiveData 관찰하기
+        productExistLiveData.observe(viewLifecycleOwner, Observer { exists ->
+            Log.d("13131313", exists.toString())
+            binding.productCheck.isSelected = exists
+        })
 
         /**
          * check 버튼
@@ -133,11 +130,10 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
              */
             it.isSelected = !it.isSelected
             if(it.isSelected) {
-                Log.d("체크1", "${pIdx}")
                 productViewModel.setMyFavorit(pIdx)
-
             } else {
-
+                //지워야 함
+                productViewModel.removeMyFavorit(pIdx)
             }
         }
 
@@ -150,15 +146,6 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
             requireActivity().finish() // 현재 Activity를 종료하고 싶다면 추가
             requireActivity().overridePendingTransition(R.anim.slide_out_right, R.anim.slide_in_left)
         }
-//        binding.backBt.setOnClickListener {
-//            if (parentFragmentManager.backStackEntryCount > 0) {
-//                // Fragment 스택에 이전 Fragment가 있으면 이전 Fragment로 돌아갑니다.
-//                parentFragmentManager.popBackStack()
-//            } else {
-//                // Fragment 스택에 다른 Fragment가 없다면 Activity를 종료하거나 다른 로직을 실행합니다.
-//                requireActivity().finish()
-//            }
-//        }
 
         return view
     }

@@ -88,7 +88,6 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
          **/
         productViewModel = ViewModelProvider(this)[ProductViewModel::class.java]
 
-
         /**
          *  나의 아이디
          **/
@@ -112,16 +111,14 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
          */
         productViewModel.adverCounts.observe(viewLifecycleOwner, Observer { count ->
             adverPageCount = count
-            Log.d("141414", "${adverPageCount}")
             /**
              * adverCount 값을 기반으로 adver 이미지 가져오기
              */
             productViewModel.getAdverImage(adverPageCount).observe(viewLifecycleOwner, Observer { images ->
-                adverImagelist.clear()
-                Log.d("141414", "${adverPageCount}131313")
-                adverImagelist.addAll(images)
+//                adverImagelist.clear()
+//                adverImagelist.addAll(images)
                 // 이미지 리스트가 변경되었음을 어댑터에 알림
-                adapterVp.notifyDataSetChanged()
+                adapterVp.updateData(images)
             })
         })
 
@@ -135,28 +132,18 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
         /**
          * 자동 슬라이드
          */
-        productViewModel.liveTodoChatroomDataCount.observe(viewLifecycleOwner, Observer { filesCount ->
-            println("Files count: $filesCount")
-            adverPageCount = filesCount
-        })
+        val delayMillis = 3000L  // 3초에 한 번씩 슬라이드 변경
         val handler = Handler(Looper.getMainLooper())
-        val update = Runnable {
-            val currentItem = viewPager2.currentItem
-            if (adverPageCount != 0) {
-                val currentItem = viewPager2.currentItem
-                viewPager2.setCurrentItem((currentItem + 1) % adverPageCount, true)
-            } else {
-                // adverPageCount가 0일 때 처리할 코드 (옵션)
+        val slideRunnable = object : Runnable {
+            override fun run() {
+                if (adverPageCount != 0) {
+                    val nextItem = (viewPager2.currentItem + 1) % adverPageCount
+                    viewPager2.setCurrentItem(nextItem, true)
+                    handler.postDelayed(this, delayMillis)
+                }
             }
         }
-
-        /* 타이머 */
-        val swipeTimer = Timer()
-        swipeTimer.schedule(object : TimerTask() {
-            override fun run() {
-                handler.post(update)
-            }
-        }, 2000, 2000)
+        handler.postDelayed(slideRunnable, delayMillis)
 
         /**
          * 상단바 메뉴
@@ -218,8 +205,8 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
             /* ViewModel에 Observe를 활용하여 productViewModel에 ReadAllData 라이브 데이터가 바뀌었을때 캐치하여, adapter에서 만들어준 setData함수를 통해 바뀐데이터를 UI에 업데이트 해줌 */
             adapterHt.setData(product)
             adapter.setData(product)
+            Log.d("111313", "1313")
         })
-
 
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {

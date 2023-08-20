@@ -64,6 +64,12 @@ class ProductImageInfoRecyclerViewAdapter(
         return productImageList.size
     }
 
+    fun updateData(newImageList: List<String>) {
+        productImageList.clear()
+        productImageList.addAll(newImageList)
+        notifyDataSetChanged()
+    }
+
     inner class Holder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val image = itemView.findViewById<ImageView>(R.id.infoimges)
     }

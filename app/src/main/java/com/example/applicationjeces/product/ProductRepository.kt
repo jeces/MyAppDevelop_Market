@@ -233,9 +233,26 @@ class ProductRepository {
         }
     }
 
-    suspend fun isProductExistForUser(myId: String): Boolean {
-        val productSnapshot = getFirestore().collection("Product").whereEqualTo("ID", myId).get().await()
+    suspend fun isProductExistForUser(myId: String, pId: String): Boolean {
+        val productSnapshot = getFirestore().collection("UserInfo").whereEqualTo("id", myId).get().await()
 
-        return productSnapshot.documents.isNotEmpty()
+        // 일치하는 문서가 있다면
+        if (productSnapshot.documents.isNotEmpty()) {
+            val userDocument = productSnapshot.documents[0]  // 첫 번째 문서 선택
+            val favoritList = userDocument.get("favorit") as? List<String> ?: listOf()  // 'favorit' 리스트 가져오기
+
+            // 가져온 'favorit' 리스트에서 pId가 있는지 확인
+            return pId in favoritList
+        }
+
+        // 일치하는 문서가 없을 경우
+        return false
+    }
+
+    suspend fun removeMyFavorit(pIdx: String) {
+        val userSnapshot = getFirestore().collection("UserInfo").whereEqualTo("id", thisUser).get().await()
+        userSnapshot.documents.forEach { document ->
+            document.reference.update("favorit", FieldValue.arrayRemove(pIdx)).await()
+        }
     }
 }
