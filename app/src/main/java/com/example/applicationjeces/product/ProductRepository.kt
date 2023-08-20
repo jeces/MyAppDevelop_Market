@@ -233,16 +233,17 @@ class ProductRepository {
         }
     }
 
-    suspend fun isProductExistForUser(myId: String, pId: String): Boolean {
+    suspend fun isProductExistForUser(myId: String, pidx: String): Boolean {
         val productSnapshot = getFirestore().collection("UserInfo").whereEqualTo("id", myId).get().await()
 
         // 일치하는 문서가 있다면
         if (productSnapshot.documents.isNotEmpty()) {
+            Log.d("adadadadad", pidx)
             val userDocument = productSnapshot.documents[0]  // 첫 번째 문서 선택
             val favoritList = userDocument.get("favorit") as? List<String> ?: listOf()  // 'favorit' 리스트 가져오기
 
             // 가져온 'favorit' 리스트에서 pId가 있는지 확인
-            return pId in favoritList
+            return pidx in favoritList
         }
 
         // 일치하는 문서가 없을 경우

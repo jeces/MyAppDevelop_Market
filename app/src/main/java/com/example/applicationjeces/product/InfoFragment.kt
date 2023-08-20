@@ -113,8 +113,7 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
          * check되어있는지 확인하기
          */
         // LiveData 가져오기
-        val productExistLiveData = productViewModel.isCheckProduct(myId, pId)
-        Log.d("13131313", productExistLiveData.value.toString())
+        val productExistLiveData = productViewModel.isCheckProduct(myId, pIdx)
         // LiveData 관찰하기
         productExistLiveData.observe(viewLifecycleOwner, Observer { exists ->
             Log.d("13131313", exists.toString())

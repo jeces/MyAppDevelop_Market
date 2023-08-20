@@ -279,18 +279,17 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-    fun isCheckProduct(myId: String, pId: String): LiveData<Boolean> {
+    fun isCheckProduct(myId: String, pidx: String): LiveData<Boolean> {
         val productExistLiveData = MutableLiveData<Boolean>()
 
         viewModelScope.launch {
             try {
-                val doesExist = repository.isProductExistForUser(myId, pId)
+                val doesExist = repository.isProductExistForUser(myId, pidx)
                 productExistLiveData.value = doesExist
             } catch (e: Exception) {
                 // Handle the exception
             }
         }
-
         return productExistLiveData
     }
 
