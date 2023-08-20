@@ -32,7 +32,7 @@ class ProductImageInfoRecyclerViewAdapter_z(
         if(productImageList[0] != "basic_img.png") {
             FirebaseStorage.getInstance().reference.child("${myId}/${pName}/" + productImageList[position]).downloadUrl.addOnCompleteListener {
                 Log.d("이미지온바인드", productImageList[position])
-                if(it.isSuccessful) {
+                if(it.isSuccessful && context.isAdded) {
                     Glide.with(context)
                         .load(it.result)
                         .override(180, 180)
@@ -41,7 +41,7 @@ class ProductImageInfoRecyclerViewAdapter_z(
             }
         } else {
             FirebaseStorage.getInstance().reference.child(productImageList[0]).downloadUrl.addOnCompleteListener {
-                if(it.isSuccessful) {
+                if(it.isSuccessful && context.isAdded) {
                     Glide.with(context)
                         .load(it.result)
                         .override(180, 180)

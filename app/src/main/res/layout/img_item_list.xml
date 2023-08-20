@@ -3,6 +3,6 @@
         android:id="@+id/addimges"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_margin="4dp"
+        android:layout_margin="5dp"
         android:scaleType="centerCrop"
         android:src="@color/black" />

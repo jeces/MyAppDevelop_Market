@@ -44,7 +44,7 @@ class ProductViewPagerAdapter(private val context: Fragment, var myId: String, v
         if(currentItem4.toString() == "0") {
             currentItem3 = "basic_img.png"
             FirebaseStorage.getInstance().reference.child("${currentItem3}").downloadUrl.addOnCompleteListener {
-                if(it.isSuccessful) {
+                if(it.isSuccessful && context.isAdded) {
                     Glide.with(context)
                         .load(it.result)
                         .apply(RequestOptions.bitmapTransform(RoundedCornersTransformation(5, 0)))
@@ -55,7 +55,7 @@ class ProductViewPagerAdapter(private val context: Fragment, var myId: String, v
         } else {
             /* 상품의 아이디가 들어가야 함 */
             FirebaseStorage.getInstance().reference.child("${currentItemId}/${currentItem}/$currentItem3").downloadUrl.addOnCompleteListener {
-                if(it.isSuccessful) {
+                if(it.isSuccessful && context.isAdded) {
                     Log.d("뭐냐?",currentItem3.toString())
                     Glide.with(context)
                         .load(it.result)

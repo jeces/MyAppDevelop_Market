@@ -16,6 +16,7 @@ import com.example.applicationjeces.chat.ChatroomFragment
 import com.example.applicationjeces.databinding.ActivityMainBinding
 import com.example.applicationjeces.page.DataViewModel
 import com.example.applicationjeces.page.PageData
+import com.example.applicationjeces.product.AddActivity
 import com.example.applicationjeces.user.MyFragment
 import com.example.applicationjeces.product.AddFragment
 import com.example.applicationjeces.product.HomeFragment
@@ -25,7 +26,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private val jecesViewModel by viewModels<DataViewModel>()
-    private var target: Boolean = false
+    private var target: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +53,14 @@ class MainActivity : AppCompatActivity() {
             /* it은 LiveData의 value 값 즉 jecesViewModel 객체의 value값이 넘어온다. 처음 선언된 currentPage 넘어옴 */
             changeFragment(it)
         }
+
+        if(intent.getBooleanExtra("SELECT_HOME", false)) {
+            selectHome()
+        }
+    }
+
+    fun selectHome() {
+        binding.bottomNavigationView.selectedItemId = R.id.home
     }
 
     /**
@@ -67,10 +76,12 @@ class MainActivity : AppCompatActivity() {
             if(targetFragment == null) {
                 /* getFragment를 호출하여 Fragment 획득 */
                 targetFragment = getFragment(pageData)
-                if(target == true) {
+                if(target == "search") {
                     startActivity(Intent(this@MainActivity, SearchActivity::class.java))
-                    target = false
+                    target = ""
                     return
+                } else if(target == "add") {
+                    startActivity(Intent(this@MainActivity, AddActivity::class.java))
                 }
                 /* 현재 Fragment tag에 등록
                 *  맨처음 3번 등록해야지 쓸 수 있음 */
@@ -96,9 +107,10 @@ class MainActivity : AppCompatActivity() {
         if(pageData.title == "home") {
             return HomeFragment.newInstance(pageData.title, pageData.tag)
         } else if(pageData.title == "add") {
+            target = "add"
             return AddFragment.newInstance(pageData.title, pageData.tag)
         } else if(pageData.title == "search") {
-            target = true
+            target = "search"
             return HomeFragment.newInstance(pageData.title, pageData.tag)
         } else if(pageData.title == "chatroom") {
             return ChatroomFragment.newInstance(pageData.title, pageData.tag)

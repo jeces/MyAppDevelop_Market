@@ -98,38 +98,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
-            <!-- Buttons Section -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/imgBtn"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="ImgAdd"
-                android:textAllCaps="false"
-                android:layout_marginTop="16dp"
-                app:icon="@drawable/ic_baseline_upload_file_24"
-                app:layout_constraintTop_toBottomOf="@+id/productDescription"
-                app:layout_constraintEnd_toStartOf="@id/guidelineAdd"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guidelineAdd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.5" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/addBtn"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="Add"
-                android:textAllCaps="false"
-                android:layout_marginTop="16dp"
-                app:icon="@drawable/ic_baseline_add_circle_24"
-                app:layout_constraintTop_toBottomOf="@+id/productDescription"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/guidelineAdd" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </FrameLayout>

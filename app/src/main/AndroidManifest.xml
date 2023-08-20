@@ -60,6 +60,16 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".product.AddActivity"
+            android:exported="false"
+            android:label="@string/title_activity_main2"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.ApplicationJeces.NoActionBar.FullScreen">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".loading.SplashActivity"
             android:exported="true">
             <intent-filter>

@@ -1,5 +1,6 @@
 package com.example.applicationjeces.product
 
+import android.content.Context
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
@@ -9,9 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.applicationjeces.R
-import java.util.Collections
 
-class ProductImageRecyclerViewAdapter(var productImageList: ArrayList<Uri>, val context: Fragment): RecyclerView.Adapter<ProductImageRecyclerViewAdapter.Holder>(), ItemMoveCallback.ItemTouchHelperContract {
+class AddImageRecyclerViewAdapter(var productImageList: ArrayList<Uri>, val context: Context): RecyclerView.Adapter<AddImageRecyclerViewAdapter.Holder>() {
 
     /* ViewHolder에게 item을 보여줄 View로 쓰일 item_data_list.xml를 넘기면서 ViewHolder 생성. 아이템 레이아웃과 결합 */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
@@ -49,29 +49,4 @@ class ProductImageRecyclerViewAdapter(var productImageList: ArrayList<Uri>, val 
         private var view: View = ItemView
         var image = ItemView.findViewById<ImageView>(R.id.addimges)
     }
-
-    override fun onRowMoved(fromPosition: Int, toPosition: Int) {
-        if (fromPosition < toPosition) {
-            for (i in fromPosition until toPosition) {
-                Collections.swap(productImageList, i, i + 1)
-            }
-        } else {
-            for (i in fromPosition downTo toPosition + 1) {
-                Collections.swap(productImageList, i, i - 1)
-            }
-        }
-        notifyItemMoved(fromPosition, toPosition)
-    }
-
-    override fun onRowSelected(viewHolder: RecyclerView.ViewHolder) {
-        // 필요에 따라 구현 (예: 아이템을 드래그할 때의 시각적 효과 등)
-    }
-
-    override fun onRowClear(viewHolder: RecyclerView.ViewHolder) {
-        // 필요에 따라 구현 (예: 아이템 드래그가 끝난 후의 시각적 효과 등)
-    }
-
 }
-
-
-
