@@ -177,27 +177,37 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
         /**
          * 최근 10개 등록 상품
          */
+        // Call this after initializing your viewModel
+        productViewModel.fetchRecentProducts()
         val adapterTen = ProductViewPagerAdapter(this@HomeFragment, myId, emptyList())
         val recyclerViewTen = binding.productRecentTen
         recyclerViewTen.adapter = adapterTen
         recyclerViewTen.setHasFixedSize(true)
         // 어댑터에 조건을 추가해서 넣어서 해보기
         recyclerViewTen.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-
+        productViewModel.recentProducts.observe(viewLifecycleOwner, Observer { products ->
+            // Here you can update your RecyclerView Adapter
+            adapterTen.setData(products)
+        })
 
         /**
          * 가장 많은 하트 상품
          */
+        productViewModel.fetchProductsSortedByHeartCount()
         val adapterHt = ProductViewPagerAdapter(this@HomeFragment, myId, emptyList())
         val recyclerViewHt = binding.productHeart
         recyclerViewHt.adapter = adapterHt
         recyclerViewHt.setHasFixedSize(true)
         // 어댑터에 조건을 추가해서 넣어서 해보기
         recyclerViewHt.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+        productViewModel.productsSortedByHeartCount.observe(viewLifecycleOwner, Observer { products ->
+            adapterHt.setData(products)
+        })
 
         /**
          * 가장 많은 View 상품
          */
+        productViewModel.fetchProductsSortedByViewCount()
         val adapterView = ProductViewPagerAdapter(this@HomeFragment, myId, emptyList())
         val recyclerViewView = binding.productView
         recyclerViewView.adapter = adapterView
@@ -205,6 +215,9 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
         // Change from LinearLayoutManager to GridLayoutManager
 //        recyclerViewView.layoutManager = GridLayoutManager(requireContext(), 5)
         recyclerViewView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+        productViewModel.productsSortedByViewCount.observe(viewLifecycleOwner, Observer { products ->
+            adapterView.setData(products)
+        })
 
         /**
          * 일주일 내에 가장 많은 Heart 상품
@@ -235,15 +248,14 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
          * 따라서 나눠야 함
          * 1. adapter를 나누고 표현되어야 함
          **/
-        productViewModel.liveTodoData.observe(viewLifecycleOwner, Observer { product ->
-            /* ViewModel에 Observe를 활용하여 productViewModel에 ReadAllData 라이브 데이터가 바뀌었을때 캐치하여, adapter에서 만들어준 setData함수를 통해 바뀐데이터를 UI에 업데이트 해줌 */
-            adapterTen.setData(product)
-            adapterHt.setData(product)
-            adapterView.setData(product)
-            adapterSevenHeart.setData(product)
-            adapterSevenView.setData(product)
-            Log.d("111313", "1313")
-        })
+//        productViewModel.liveTodoData.observe(viewLifecycleOwner, Observer { product ->
+//            /* ViewModel에 Observe를 활용하여 productViewModel에 ReadAllData 라이브 데이터가 바뀌었을때 캐치하여, adapter에서 만들어준 setData함수를 통해 바뀐데이터를 UI에 업데이트 해줌 */
+//            adapterHt.setData(product)
+//            adapterView.setData(product)
+//            adapterSevenHeart.setData(product)
+//            adapterSevenView.setData(product)
+//            Log.d("111313", "1313")
+//        })
 
         recyclerViewTen.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -286,9 +298,9 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
             override fun onClick(v: View, position: Int) {
                 /* 상품 정보 불러오기 */
                 productViewModel.liveTodoData.value?.get(position).toString()
-                productViewModel.setProductDetail(adapterTen.producFiretList[position].get("ID").toString(), adapterTen.producFiretList[position].get("productName").toString(), adapterTen.producFiretList[position].get("productPrice").toString()
-                    , adapterTen.producFiretList[position].get("productDescription").toString(), adapterTen.producFiretList[position].get("productCount").toString(), adapterTen.producFiretList[position].get("pChatCount").toString()
-                    , adapterTen.producFiretList[position].get("pViewCount").toString(), adapterTen.producFiretList[position].get("pHeartCount").toString(), adapterTen.producFiretList[position].get("productBidPrice").toString(), position)
+                productViewModel.setProductDetail(adapterTen.producFiretList[position].get("ID").toString(), adapterTen.producFiretList[position].get("productName").toString(), adapterTen.producFiretList[position].get("productPrice").toString().toInt()
+                    , adapterTen.producFiretList[position].get("productDescription").toString(), adapterTen.producFiretList[position].get("productCount").toString().toInt(), adapterTen.producFiretList[position].get("pChatCount").toString().toInt()
+                    , adapterTen.producFiretList[position].get("pViewCount").toString().toInt(), adapterTen.producFiretList[position].get("pHeartCount").toString().toInt(), adapterTen.producFiretList[position].get("productBidPrice").toString().toInt(), position)
 
                 /* InfoActivity로 화면 전환 */
                 val intent = Intent(getActivity(), InfoActivity::class.java)

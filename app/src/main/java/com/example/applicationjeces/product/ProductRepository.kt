@@ -256,4 +256,38 @@ class ProductRepository {
             document.reference.update("favorit", FieldValue.arrayRemove(pIdx)).await()
         }
     }
+
+    /**
+     * 최신 10개 Product 가져오기
+     */
+    suspend fun fetchRecentTenProducts(): List<DocumentSnapshot> {
+        return getCollection("Product")
+            .orderBy("insertTime", Query.Direction.DESCENDING)
+            .limit(10)
+            .get()
+            .await()
+            .documents
+    }
+
+    /**
+     * Manay heartProduct 가져오기
+     */
+    suspend fun getProductsSortedByHeartCount(): List<DocumentSnapshot> {
+        return getCollection("Product")
+            .orderBy("pHeartCount", Query.Direction.ASCENDING)
+            .get()
+            .await()
+            .documents
+    }
+
+    /**
+     * Manay viewProduct 가져오기
+     */
+    suspend fun getProductsSortedByViewCount(): List<DocumentSnapshot> {
+        return getCollection("Product")
+            .orderBy("pViewCount", Query.Direction.ASCENDING)
+            .get()
+            .await()
+            .documents
+    }
 }

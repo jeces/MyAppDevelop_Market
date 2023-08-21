@@ -315,9 +315,9 @@ class ProductViewModel_bak_2(application: Application): AndroidViewModel(applica
         productArrayList.clear()
 
         val imageUrl = "${thisUser}_${productName}_0_IMAGE_.png"
-        val productDetail = Product(productId, productName, productPrice, productDescription, productCount.toInt(), imageUrl, pChatCount, pViewCount, pHearCount, pBidPrice)
-        position = getPosition
-        productArrayList.add(productDetail)
+//        val productDetail = Product(productId, productName, productPrice, productDescription, productCount.toInt(), imageUrl, pChatCount, pViewCount, pHearCount, pBidPrice)
+//        position = getPosition
+//        productArrayList.add(productDetail)
     }
 
     /**

@@ -142,7 +142,7 @@ class AddFragment : Fragment() {
 
         if (productName.isNotEmpty() && productPrice.isNotEmpty()) {
             imgFileName = if (targetImg) "basic_img.png" else "${myId}_${productName}_0_IMAGE_.png"
-            val product = Product(myId, productName, productPrice, productDescription, imgCount, imgFileName, "0", "0", "0", "0")
+            val product = Product(myId, productName, productPrice.toInt(), productDescription, imgCount, imgFileName, 0, 0, 0, 0)
             jecesViewModel.addProducts(product)
 
             Toast.makeText(requireContext(), "Successfully added!", Toast.LENGTH_LONG).show()

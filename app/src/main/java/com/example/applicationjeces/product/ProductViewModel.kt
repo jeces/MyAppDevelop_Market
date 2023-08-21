@@ -22,6 +22,15 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     var liveTodoChatroomDataCount: MutableLiveData<Int> = MutableLiveData(0)
     var productArrayList: MutableList<Product> = mutableListOf()
 
+    private val _recentProducts = MutableLiveData<List<DocumentSnapshot>>()
+    val recentProducts: LiveData<List<DocumentSnapshot>> get() = _recentProducts
+
+    private val _productsSortedByHeartCount = MutableLiveData<List<DocumentSnapshot>>()
+    val productsSortedByHeartCount: LiveData<List<DocumentSnapshot>> get() = _productsSortedByHeartCount
+
+    private val _productsSortedByViewCount = MutableLiveData<List<DocumentSnapshot>>()
+    val productsSortedByViewCount: LiveData<List<DocumentSnapshot>> get() = _productsSortedByViewCount
+
     private val _adverImages = MutableLiveData<List<String>>()
     val adverImages: LiveData<List<String>> get() = _adverImages
 
@@ -231,17 +240,17 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     fun setProductDetail(
         productId: String,
         productName: String,
-        productPrice: String,
+        productPrice: Int,
         productDescription: String,
-        productCount: String,
-        pChatCount: String,
-        pViewCount: String,
-        pHearCount: String,
-        pBidPrice: String,
+        productCount: Int,
+        pChatCount: Int,
+        pViewCount: Int,
+        pHearCount: Int,
+        pBidPrice: Int,
         getPosition: Int
     ) {
         val imageUrl = "${repository.thisUser}_${productName}_0_IMAGE_.png"
-        val productDetail = Product(productId, productName, productPrice, productDescription, productCount.toInt(), imageUrl, pChatCount, pViewCount, pHearCount, pBidPrice)
+        val productDetail = Product(productId, productName, productPrice, productDescription, productCount, imageUrl, pChatCount, pViewCount, pHearCount, pBidPrice)
 
         position = getPosition
         productArrayList.add(productDetail)
@@ -298,6 +307,45 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         viewModelScope.launch {
             try {
                 repository.removeMyFavorit(pIdx)
+            } catch (e: Exception) {
+                // Handle the exception
+            }
+        }
+    }
+
+    /**
+     * 최신 10개
+     */
+    fun fetchRecentProducts() {
+        viewModelScope.launch {
+            try {
+                _recentProducts.value = repository.fetchRecentTenProducts()
+            } catch (e: Exception) {
+                // Handle the exception
+            }
+        }
+    }
+
+    /**
+     * 가장 많은 Heart
+     */
+    fun fetchProductsSortedByHeartCount() {
+        viewModelScope.launch {
+            try {
+                _productsSortedByHeartCount.value = repository.getProductsSortedByHeartCount()
+            } catch (e: Exception) {
+                // Handle the exception
+            }
+        }
+    }
+
+    /**
+     * 가장 많은 View
+     */
+    fun fetchProductsSortedByViewCount() {
+        viewModelScope.launch {
+            try {
+                _productsSortedByViewCount.value = repository.getProductsSortedByViewCount()
             } catch (e: Exception) {
                 // Handle the exception
             }

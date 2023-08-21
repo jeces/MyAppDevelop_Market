@@ -18,7 +18,7 @@ data class  Product(
 
     /* 상품 가격 */
     @ColumnInfo(name = "product_price")
-    var product_price: String,
+    var product_price: Int,
 
     /* 상품 설명 */
     @ColumnInfo(name = "product_description")
@@ -33,16 +33,16 @@ data class  Product(
     var product_img_url: String,
 
     /* 채팅 수 */
-    var chatCount: String,
+    var chatCount: Int,
 
     /* 상품 뷰수 */
-    var viewCount: String,
+    var viewCount: Int,
 
     /* 상품 하트수 */
-    var heartCount: String,
+    var heartCount: Int,
 
     /* 현재 입찰가 */
-    var product_bid_price: String
+    var product_bid_price: Int
 
 ) {
 
