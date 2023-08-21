@@ -173,8 +173,20 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
             popupMenu.show()
         }
 
+
         /**
-         * 최근 관심 상품
+         * 최근 10개 등록 상품
+         */
+        val adapterTen = ProductViewPagerAdapter(this@HomeFragment, myId, emptyList())
+        val recyclerViewTen = binding.productRecentTen
+        recyclerViewTen.adapter = adapterTen
+        recyclerViewTen.setHasFixedSize(true)
+        // 어댑터에 조건을 추가해서 넣어서 해보기
+        recyclerViewTen.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+
+
+        /**
+         * 가장 많은 하트 상품
          */
         val adapterHt = ProductViewPagerAdapter(this@HomeFragment, myId, emptyList())
         val recyclerViewHt = binding.productHeart
@@ -183,16 +195,38 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
         // 어댑터에 조건을 추가해서 넣어서 해보기
         recyclerViewHt.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
 
+        /**
+         * 가장 많은 View 상품
+         */
+        val adapterView = ProductViewPagerAdapter(this@HomeFragment, myId, emptyList())
+        val recyclerViewView = binding.productView
+        recyclerViewView.adapter = adapterView
+        recyclerViewView.setHasFixedSize(true)
+        // Change from LinearLayoutManager to GridLayoutManager
+//        recyclerViewView.layoutManager = GridLayoutManager(requireContext(), 5)
+        recyclerViewView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
 
         /**
-         * 최근 등록된 상품
+         * 일주일 내에 가장 많은 Heart 상품
          */
-        val adapter = ProductViewPagerAdapter(this@HomeFragment, myId, emptyList())
-        val recyclerView = binding.productRecent
-        recyclerView.adapter = adapter
-        recyclerView.setHasFixedSize(true)
+        val adapterSevenHeart = ProductViewPagerAdapter(this@HomeFragment, myId, emptyList())
+        val recyclerViewSevenHeart = binding.productView
+        recyclerViewSevenHeart.adapter = adapterSevenHeart
+        recyclerViewSevenHeart.setHasFixedSize(true)
         // Change from LinearLayoutManager to GridLayoutManager
-        recyclerView.layoutManager = GridLayoutManager(requireContext(), 5)
+//        recyclerViewSevenHeart.layoutManager = GridLayoutManager(requireContext(), 5)
+        recyclerViewSevenHeart.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+
+        /**
+         * 일주일 내에 가장 많은 View 상품
+         */
+        val adapterSevenView = ProductViewPagerAdapter(this@HomeFragment, myId, emptyList())
+        val recyclerViewSevenView = binding.productView
+        recyclerViewSevenView.adapter = adapterSevenView
+        recyclerViewSevenView.setHasFixedSize(true)
+        // Change from LinearLayoutManager to GridLayoutManager
+//        recyclerViewSevenView.layoutManager = GridLayoutManager(requireContext(), 5)
+        recyclerViewSevenView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
 
         /**
          * 이건 뷰페이저로 만들꺼임
@@ -203,17 +237,20 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
          **/
         productViewModel.liveTodoData.observe(viewLifecycleOwner, Observer { product ->
             /* ViewModel에 Observe를 활용하여 productViewModel에 ReadAllData 라이브 데이터가 바뀌었을때 캐치하여, adapter에서 만들어준 setData함수를 통해 바뀐데이터를 UI에 업데이트 해줌 */
+            adapterTen.setData(product)
             adapterHt.setData(product)
-            adapter.setData(product)
+            adapterView.setData(product)
+            adapterSevenHeart.setData(product)
+            adapterSevenView.setData(product)
             Log.d("111313", "1313")
         })
 
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        recyclerViewTen.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 Log.d("데이터 로드1", "ㅁㅁㄴㅇ")
 
-                val layoutManager = recyclerView.layoutManager as GridLayoutManager
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
 
                 val visibleItemCount = layoutManager.childCount
                 val totalItemCount = layoutManager.itemCount
@@ -225,16 +262,16 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
 
                 if (dy > 0 && (firstVisibleItemPosition + visibleItemCount >= totalItemCount - 3)) {
                     // 로딩 인디케이터 표시 (옵션)
-            //        showLoadingIndicator()
+                    //        showLoadingIndicator()
 
                     // 다음 페이지의 데이터 로드
                     productViewModel.liveTodoData.observe(viewLifecycleOwner, Observer { newItems ->
                         // 데이터를 현재의 어댑터에 추가
-                        adapter.addData(newItems)
-                        adapter.notifyDataSetChanged()
+                        adapterTen.addData(newItems)
+                        adapterTen.notifyDataSetChanged()
 
                         // 로딩 인디케이터 숨기기 (옵션)
-            //            hideLoadingIndicator()
+                        //            hideLoadingIndicator()
                     })
                 }
             }
@@ -245,27 +282,27 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
          *  항목 클릭시
          **/
         Log.d("aa11", "-1")
-        adapter.setItemClickListener(object: ProductViewPagerAdapter.OnItemClickListener {
+        adapterTen.setItemClickListener(object: ProductViewPagerAdapter.OnItemClickListener {
             override fun onClick(v: View, position: Int) {
                 /* 상품 정보 불러오기 */
                 productViewModel.liveTodoData.value?.get(position).toString()
-                productViewModel.setProductDetail(adapter.producFiretList[position].get("ID").toString(), adapter.producFiretList[position].get("productName").toString(), adapter.producFiretList[position].get("productPrice").toString()
-                    , adapter.producFiretList[position].get("productDescription").toString(), adapter.producFiretList[position].get("productCount").toString(), adapter.producFiretList[position].get("pChatCount").toString()
-                    , adapter.producFiretList[position].get("pViewCount").toString(), adapter.producFiretList[position].get("pHeartCount").toString(), adapter.producFiretList[position].get("productBidPrice").toString(), position)
+                productViewModel.setProductDetail(adapterTen.producFiretList[position].get("ID").toString(), adapterTen.producFiretList[position].get("productName").toString(), adapterTen.producFiretList[position].get("productPrice").toString()
+                    , adapterTen.producFiretList[position].get("productDescription").toString(), adapterTen.producFiretList[position].get("productCount").toString(), adapterTen.producFiretList[position].get("pChatCount").toString()
+                    , adapterTen.producFiretList[position].get("pViewCount").toString(), adapterTen.producFiretList[position].get("pHeartCount").toString(), adapterTen.producFiretList[position].get("productBidPrice").toString(), position)
 
                 /* InfoActivity로 화면 전환 */
                 val intent = Intent(getActivity(), InfoActivity::class.java)
                 /* 필요한 데이터를 InfoActivity로 전달하기 위한 인텐트 파라미터 설정 */
-                intent.putExtra("ID", adapter.producFiretList[position].get("ID").toString())
-                intent.putExtra("IDX", adapter.producFiretList[position].get("IDX").toString())
-                intent.putExtra("productName", adapter.producFiretList[position].get("productName").toString())
-                intent.putExtra("productPrice", adapter.producFiretList[position].get("productPrice").toString())
-                intent.putExtra("productDescription", adapter.producFiretList[position].get("productDescription").toString())
-                intent.putExtra("productCount", adapter.producFiretList[position].get("productCount").toString())
-                intent.putExtra("pChatCount", adapter.producFiretList[position].get("pChatCount").toString())
-                intent.putExtra("pViewCount", adapter.producFiretList[position].get("pViewCount").toString())
-                intent.putExtra("pHeartCount", adapter.producFiretList[position].get("pHeartCount").toString())
-                intent.putExtra("productBidPrice", adapter.producFiretList[position].get("productBidPrice").toString())
+                intent.putExtra("ID", adapterTen.producFiretList[position].get("ID").toString())
+                intent.putExtra("IDX", adapterTen.producFiretList[position].get("IDX").toString())
+                intent.putExtra("productName", adapterTen.producFiretList[position].get("productName").toString())
+                intent.putExtra("productPrice", adapterTen.producFiretList[position].get("productPrice").toString())
+                intent.putExtra("productDescription", adapterTen.producFiretList[position].get("productDescription").toString())
+                intent.putExtra("productCount", adapterTen.producFiretList[position].get("productCount").toString())
+                intent.putExtra("pChatCount", adapterTen.producFiretList[position].get("pChatCount").toString())
+                intent.putExtra("pViewCount", adapterTen.producFiretList[position].get("pViewCount").toString())
+                intent.putExtra("pHeartCount", adapterTen.producFiretList[position].get("pHeartCount").toString())
+                intent.putExtra("productBidPrice", adapterTen.producFiretList[position].get("productBidPrice").toString())
                 intent.putExtra("position", position)
 
                 startActivity(intent)

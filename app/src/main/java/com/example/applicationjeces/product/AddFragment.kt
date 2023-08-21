@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -122,9 +123,10 @@ class AddFragment : Fragment() {
 
     private fun funImageUpload(view: View) {
         val productName = view.productName.text.toString()
-        val myId = jecesViewModel.thisUser.toString()
+        val myId = jecesViewModel.thisUser
         imagelist.forEachIndexed { index, uri ->
             val imgFileName = "${myId}_${productName}_${index}_IMAGE_.png"
+            Log.d("사진업로드", imgFileName)
             val storageRef = firebaseStorage?.reference?.child("$myId/$productName/")?.child(imgFileName)
             storageRef?.putFile(uri)
                 ?.addOnSuccessListener { Toast.makeText(view.context, "ImageUploaded", Toast.LENGTH_SHORT).show() }
@@ -159,6 +161,7 @@ class AddFragment : Fragment() {
         val photoPickerIntent = Intent(Intent.ACTION_PICK).apply {
             data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
             putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+            action = Intent.ACTION_GET_CONTENT
             type = "image/*"
         }
         startActivityForResult(photoPickerIntent, pickImageFromAlbum)

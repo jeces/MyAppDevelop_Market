@@ -47,7 +47,8 @@ class ProductImageRecyclerViewAdapter(var productImageList: ArrayList<Uri>, val 
     /* inner class로 viewHolder 정의. 레이아웃 내 view 연결 */
     inner class Holder(ItemView: View): RecyclerView.ViewHolder(ItemView) {
         private var view: View = ItemView
-        var image = ItemView.findViewById<ImageView>(R.id.addimges)
+//        var image = ItemView.findViewById<ImageView>(R.id.addimges)
+        var image: ImageView = itemView.findViewById(R.id.addimges)
     }
 
     override fun onRowMoved(fromPosition: Int, toPosition: Int) {

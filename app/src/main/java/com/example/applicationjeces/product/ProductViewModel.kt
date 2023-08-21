@@ -37,6 +37,7 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         get() = _adverCounts
 
     init {
+        Log.d("thisuser", thisUser)
         fetchAllProducts()
         fetchAdverCountsAndImages()
     }

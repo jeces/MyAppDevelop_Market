@@ -75,20 +75,20 @@
                 app:layout_constraintBottom_toBottomOf="parent">
 
                 <TextView
-                    android:id="@+id/homeHeart"
+                    android:id="@+id/homeRecentTen"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="32dp"
-                    android:text="나의 관심 상품"
+                    android:fontFamily="@font/font_font"
+                    android:text="Manay Heart Product"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:fontFamily="@font/font_font"
                     tools:ignore="SmallSp" />
 
                 <!-- 사진 리사이클러 뷰 옆으로 넘기는 -->
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/productHeart"
+                    android:id="@+id/productRecentTen"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
@@ -98,27 +98,101 @@
                     app:spanCount="5"
                     tools:listitem="@layout/product_item_list" />
 
+
                 <TextView
-                    android:id="@+id/homeRecent"
+                    android:id="@+id/homeHeart"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="32dp"
-                    android:text="최근 등록 상품"
+                    android:fontFamily="@font/font_font"
+                    android:text="Manay Heart Product"
+                    android:layout_marginTop="130dp"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:fontFamily="@font/font_font"
-                    android:layout_marginTop="130dp"
                     tools:ignore="SmallSp" />
 
                 <!-- 사진 리사이클러 뷰 옆으로 넘기는 -->
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/productRecent"
+                    android:id="@+id/productHeart"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
                     android:orientation="horizontal"
                     android:layout_marginTop="150dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:spanCount="5"
+                    tools:listitem="@layout/product_item_list" />
+
+                <TextView
+                    android:id="@+id/homeView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="32dp"
+                    android:text="Manay View Product"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/font_font"
+                    android:layout_marginTop="260dp"
+                    tools:ignore="SmallSp" />
+
+                <!-- 사진 리사이클러 뷰 옆으로 넘기는 -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/productView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="280dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/product_item_list" />
+
+                <TextView
+                    android:id="@+id/homeRecentHeart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="32dp"
+                    android:text="Rcent Heart Many Product"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/font_font"
+                    android:layout_marginTop="390dp"
+                    tools:ignore="SmallSp" />
+
+                <!-- 사진 리사이클러 뷰 옆으로 넘기는 -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/productRecentHeart"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="410dp"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    tools:listitem="@layout/product_item_list" />
+
+                <TextView
+                    android:id="@+id/homeRecentView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="32dp"
+                    android:text="Rcent Heart Many Product"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/font_font"
+                    android:layout_marginTop="520dp"
+                    tools:ignore="SmallSp" />
+
+                <!-- 사진 리사이클러 뷰 옆으로 넘기는 -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/productRecentView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="540dp"
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     tools:listitem="@layout/product_item_list" />
 
@@ -126,4 +200,3 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>
-
