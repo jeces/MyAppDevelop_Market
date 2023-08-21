@@ -176,7 +176,7 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
             val context = contextRef.get() ?: return@addOnCompleteListener
 
             if(it.isSuccessful) {
-                Glide.with(context)
+                Glide.with(context.applicationContext)
                     .load(it.result)
                     .override(70, 70)
                     .fitCenter()
@@ -186,7 +186,7 @@ class ChatRecyclerViewAdapter(private var myId: String, var context: Context): L
                 db.reference.child("basic_user.png").downloadUrl.addOnCompleteListener { its->
                     val contextForBasicImage = contextRef.get() ?: return@addOnCompleteListener
 
-                    Glide.with(contextForBasicImage)
+                    Glide.with(contextForBasicImage.applicationContext)
                         .load(its.result)
                         .override(70, 70)
                         .fitCenter()

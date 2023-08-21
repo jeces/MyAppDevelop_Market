@@ -368,6 +368,7 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
                 _productRecentByHeartCount.value = repository.getRecentProductHeartCount()
             } catch (e: Exception) {
                 // Handle the exception
+                Log.d("aafaf", e.toString())
             }
         }
     }
@@ -378,9 +379,10 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     fun fetRecentProductViewCount() {
         viewModelScope.launch {
             try {
-                Log.d("agagagag", repository.getRecentProductViewCount().toString())
+
                 _productRecentByViewCount.value = repository.getRecentProductViewCount()
             } catch (e: Exception) {
+                Log.d("aafaf", e.toString())
                 // Handle the exception
             }
         }

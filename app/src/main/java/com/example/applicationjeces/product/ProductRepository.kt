@@ -275,7 +275,7 @@ class ProductRepository {
      */
     suspend fun getProductsSortedByHeartCount(): List<DocumentSnapshot> {
         return getCollection("Product")
-            .orderBy("pHeartCount", Query.Direction.ASCENDING)
+            .orderBy("pHeartCount", Query.Direction.DESCENDING)
             .get()
             .await()
             .documents
@@ -286,7 +286,7 @@ class ProductRepository {
      */
     suspend fun getProductsSortedByViewCount(): List<DocumentSnapshot> {
         return getCollection("Product")
-            .orderBy("pViewCount", Query.Direction.ASCENDING)
+            .orderBy("pViewCount", Query.Direction.DESCENDING)
             .get()
             .await()
             .documents
@@ -300,8 +300,9 @@ class ProductRepository {
             add(Calendar.DAY_OF_YEAR, -7)
         }.time
         return getCollection("Product")
-            .whereGreaterThanOrEqualTo("insertTime", oneWeekAgo)
-            .orderBy("pHeartCount", Query.Direction.ASCENDING)
+            .whereGreaterThanOrEqualTo("insertTime", Timestamp(oneWeekAgo))
+            .orderBy("insertTime")
+            .orderBy("pHeartCount", Query.Direction.DESCENDING)
             .get()
             .await()
             .documents
@@ -314,11 +315,14 @@ class ProductRepository {
         val oneWeekAgo = Calendar.getInstance().apply {
             add(Calendar.DAY_OF_YEAR, -7)
         }.time
+        Log.d("실행하니", "ㅇ")
         return getCollection("Product")
-            .whereGreaterThanOrEqualTo("insertTime", oneWeekAgo)
-            .orderBy("pViewCount", Query.Direction.ASCENDING)
+            .whereGreaterThanOrEqualTo("insertTime", Timestamp(oneWeekAgo))
+            .orderBy("insertTime")
+            .orderBy("pViewCount", Query.Direction.DESCENDING)
             .get()
             .await()
             .documents
+
     }
 }
