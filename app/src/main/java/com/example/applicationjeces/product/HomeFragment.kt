@@ -201,6 +201,7 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
         // 어댑터에 조건을 추가해서 넣어서 해보기
         recyclerViewHt.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
         productViewModel.productsSortedByHeartCount.observe(viewLifecycleOwner, Observer { products ->
+            Log.d("13131313134", products.toString())
             adapterHt.setData(products)
         })
 
@@ -209,7 +210,7 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
          */
         productViewModel.fetchProductsSortedByViewCount()
         val adapterView = ProductViewPagerAdapter(this@HomeFragment, myId, emptyList())
-        val recyclerViewView = binding.productView
+        val recyclerViewView = binding.productViewCount
         recyclerViewView.adapter = adapterView
         recyclerViewView.setHasFixedSize(true)
         // Change from LinearLayoutManager to GridLayoutManager
@@ -222,24 +223,32 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
         /**
          * 일주일 내에 가장 많은 Heart 상품
          */
+        productViewModel.fetRecentProductHeartCount()
         val adapterSevenHeart = ProductViewPagerAdapter(this@HomeFragment, myId, emptyList())
-        val recyclerViewSevenHeart = binding.productView
+        val recyclerViewSevenHeart = binding.productRecentHeart
         recyclerViewSevenHeart.adapter = adapterSevenHeart
         recyclerViewSevenHeart.setHasFixedSize(true)
         // Change from LinearLayoutManager to GridLayoutManager
 //        recyclerViewSevenHeart.layoutManager = GridLayoutManager(requireContext(), 5)
         recyclerViewSevenHeart.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+        productViewModel.productRecentByHeartCount.observe(viewLifecycleOwner, Observer { products ->
+            adapterSevenHeart.setData(products)
+        })
 
         /**
          * 일주일 내에 가장 많은 View 상품
          */
+        productViewModel.fetRecentProductViewCount()
         val adapterSevenView = ProductViewPagerAdapter(this@HomeFragment, myId, emptyList())
-        val recyclerViewSevenView = binding.productView
+        val recyclerViewSevenView = binding.productRecentView
         recyclerViewSevenView.adapter = adapterSevenView
         recyclerViewSevenView.setHasFixedSize(true)
         // Change from LinearLayoutManager to GridLayoutManager
 //        recyclerViewSevenView.layoutManager = GridLayoutManager(requireContext(), 5)
         recyclerViewSevenView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+        productViewModel.productRecentByViewCount.observe(viewLifecycleOwner, Observer { products ->
+            adapterSevenView.setData(products)
+        })
 
         /**
          * 이건 뷰페이저로 만들꺼임

@@ -31,6 +31,12 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     private val _productsSortedByViewCount = MutableLiveData<List<DocumentSnapshot>>()
     val productsSortedByViewCount: LiveData<List<DocumentSnapshot>> get() = _productsSortedByViewCount
 
+    private val _productRecentByHeartCount = MutableLiveData<List<DocumentSnapshot>>()
+    val productRecentByHeartCount: LiveData<List<DocumentSnapshot>> get() = _productRecentByHeartCount
+
+    private val _productRecentByViewCount = MutableLiveData<List<DocumentSnapshot>>()
+    val productRecentByViewCount: LiveData<List<DocumentSnapshot>> get() = _productRecentByViewCount
+
     private val _adverImages = MutableLiveData<List<String>>()
     val adverImages: LiveData<List<String>> get() = _adverImages
 
@@ -346,6 +352,34 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         viewModelScope.launch {
             try {
                 _productsSortedByViewCount.value = repository.getProductsSortedByViewCount()
+            } catch (e: Exception) {
+                // Handle the exception
+            }
+        }
+    }
+
+    /**
+     * 최근 많은 Heart
+     */
+    fun fetRecentProductHeartCount() {
+        viewModelScope.launch {
+            try {
+                Log.d("agagagag", repository.getRecentProductHeartCount().toString())
+                _productRecentByHeartCount.value = repository.getRecentProductHeartCount()
+            } catch (e: Exception) {
+                // Handle the exception
+            }
+        }
+    }
+
+    /**
+     * 최근 많은 View
+     */
+    fun fetRecentProductViewCount() {
+        viewModelScope.launch {
+            try {
+                Log.d("agagagag", repository.getRecentProductViewCount().toString())
+                _productRecentByViewCount.value = repository.getRecentProductViewCount()
             } catch (e: Exception) {
                 // Handle the exception
             }

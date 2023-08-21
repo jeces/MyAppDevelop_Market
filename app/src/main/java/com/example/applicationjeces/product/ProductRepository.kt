@@ -11,6 +11,7 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import java.util.*
 
 class ProductRepository {
 
@@ -285,6 +286,36 @@ class ProductRepository {
      */
     suspend fun getProductsSortedByViewCount(): List<DocumentSnapshot> {
         return getCollection("Product")
+            .orderBy("pViewCount", Query.Direction.ASCENDING)
+            .get()
+            .await()
+            .documents
+    }
+
+    /**
+     * 최근 hearProduct 가져오기
+     */
+    suspend fun getRecentProductHeartCount(): List<DocumentSnapshot> {
+        val oneWeekAgo = Calendar.getInstance().apply {
+            add(Calendar.DAY_OF_YEAR, -7)
+        }.time
+        return getCollection("Product")
+            .whereGreaterThanOrEqualTo("insertTime", oneWeekAgo)
+            .orderBy("pHeartCount", Query.Direction.ASCENDING)
+            .get()
+            .await()
+            .documents
+    }
+
+    /**
+     * 최근 viewProduct 가져오기
+     */
+    suspend fun getRecentProductViewCount(): List<DocumentSnapshot> {
+        val oneWeekAgo = Calendar.getInstance().apply {
+            add(Calendar.DAY_OF_YEAR, -7)
+        }.time
+        return getCollection("Product")
+            .whereGreaterThanOrEqualTo("insertTime", oneWeekAgo)
             .orderBy("pViewCount", Query.Direction.ASCENDING)
             .get()
             .await()

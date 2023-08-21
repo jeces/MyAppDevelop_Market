@@ -139,7 +139,7 @@
 
                 <!-- 사진 리사이클러 뷰 옆으로 넘기는 -->
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/productView"
+                    android:id="@+id/productViewCount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
@@ -169,7 +169,7 @@
                     android:layout_marginHorizontal="10dp"
                     android:orientation="horizontal"
                     android:layout_marginTop="410dp"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/product_item_list" />
 
                 <TextView
@@ -193,7 +193,7 @@
                     android:layout_marginHorizontal="10dp"
                     android:orientation="horizontal"
                     android:layout_marginTop="540dp"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/product_item_list" />
 
             </FrameLayout>
