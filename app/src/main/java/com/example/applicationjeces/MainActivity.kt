@@ -108,7 +108,7 @@ class MainActivity : AppCompatActivity() {
             return HomeFragment.newInstance(pageData.title, pageData.tag)
         } else if(pageData.title == "add") {
             target = "add"
-            return AddFragment.newInstance(pageData.title, pageData.tag)
+            return HomeFragment.newInstance(pageData.title, pageData.tag)
         } else if(pageData.title == "search") {
             target = "search"
             return HomeFragment.newInstance(pageData.title, pageData.tag)
