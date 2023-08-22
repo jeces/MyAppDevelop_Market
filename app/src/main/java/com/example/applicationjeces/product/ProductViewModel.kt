@@ -48,6 +48,9 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
 
     val thisUser: String by lazy { FirebaseAuth.getInstance().currentUser?.email ?: "" }
 
+    private val _nickName = MutableLiveData<String>()
+    val nickName: LiveData<String> get() = _nickName
+
     private var currentPage = 0
     private val itemsPerPage = 15
 
@@ -410,10 +413,22 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     fun fetMyProductHeartCount() {
         viewModelScope.launch {
             try {
-                Log.d("adadadadad", repository.getMyProductHeartCount().toString())
                 _productMyHeartCount.value = repository.getMyProductHeartCount()
             } catch (e: Exception) {
                 // Handle the exception
+            }
+        }
+    }
+
+    /**
+     * 닉네임 가져오기
+     */
+    fun fetchUserName() {
+        viewModelScope.launch {
+            try {
+                _nickName.value = repository.fetchUserName()
+            } catch (e: Exception) {
+                Log.e("ProductViewModel", "Error fetching user name", e)
             }
         }
     }

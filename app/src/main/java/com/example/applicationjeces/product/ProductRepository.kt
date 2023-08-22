@@ -350,4 +350,14 @@ class ProductRepository {
             0
         }
     }
+
+    suspend fun fetchUserName(): String? {
+        return try {
+            val userQuery = getCollection("UserInfo").whereEqualTo("id", thisUser).get().await()
+            val firstDocument = userQuery.documents.firstOrNull() ?: return null
+            firstDocument.getString("name")
+        } catch (e: Exception) {
+            null
+        }
+    }
 }

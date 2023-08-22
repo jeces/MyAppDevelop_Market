@@ -74,9 +74,17 @@ class MyFragment : Fragment() {
         /**
          * 나의 프로필 이미지 및 이름
          */
-        var myId = productViewModel.thisUser.toString()
+        var myId = productViewModel.thisUser
+        Log.d("adadadadad", "adadadadad")
         setMyImage(myId)
-        binding.profileName.text = myId
+
+        /**
+         * 프로필 이름 옵저버
+         */
+        productViewModel.fetchUserName()
+        productViewModel.nickName.observe(viewLifecycleOwner, Observer { nick->
+            binding.profileName.text = nick
+        })
 
         /**
          * 나의 판매목록 상품
