@@ -37,6 +37,12 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     private val _productRecentByViewCount = MutableLiveData<List<DocumentSnapshot>>()
     val productRecentByViewCount: LiveData<List<DocumentSnapshot>> get() = _productRecentByViewCount
 
+    private val _productMyCellCount = MutableLiveData<Int>()
+    val productMyCellCount: LiveData<Int> get() = _productMyCellCount
+
+    private val _productMyHeartCount = MutableLiveData<Int>()
+    val productMyHeartCount: LiveData<Int> get() = _productMyHeartCount
+
     private val _adverImages = MutableLiveData<List<String>>()
     val adverImages: LiveData<List<String>> get() = _adverImages
 
@@ -368,7 +374,6 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
                 _productRecentByHeartCount.value = repository.getRecentProductHeartCount()
             } catch (e: Exception) {
                 // Handle the exception
-                Log.d("aafaf", e.toString())
             }
         }
     }
@@ -379,10 +384,35 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     fun fetRecentProductViewCount() {
         viewModelScope.launch {
             try {
-
                 _productRecentByViewCount.value = repository.getRecentProductViewCount()
             } catch (e: Exception) {
-                Log.d("aafaf", e.toString())
+                // Handle the exception
+            }
+        }
+    }
+
+    /**
+     * 내 판매 물품 수
+     */
+    fun fetMyProductCellCount() {
+        viewModelScope.launch {
+            try {
+                _productMyCellCount.value = repository.getMyProductCellCount()
+            } catch (e: Exception) {
+                // Handle the exception
+            }
+        }
+    }
+
+    /**
+     * 내 찜한 물품 수
+     */
+    fun fetMyProductHeartCount() {
+        viewModelScope.launch {
+            try {
+                Log.d("adadadadad", repository.getMyProductHeartCount().toString())
+                _productMyHeartCount.value = repository.getMyProductHeartCount()
+            } catch (e: Exception) {
                 // Handle the exception
             }
         }

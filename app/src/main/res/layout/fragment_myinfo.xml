@@ -97,6 +97,7 @@
                 android:gravity="center">
 
                 <TextView
+                    android:id="@+id/ProductCellCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="12"
@@ -123,6 +124,7 @@
                 android:gravity="center">
 
                 <TextView
+                    android:id="@+id/ProductHeartCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="5"
@@ -132,7 +134,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="구매 상품"
+                    android:text="찜한 상품"
                     android:textSize="14sp" />
             </LinearLayout>
         </LinearLayout>

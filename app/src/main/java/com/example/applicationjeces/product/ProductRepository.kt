@@ -315,7 +315,6 @@ class ProductRepository {
         val oneWeekAgo = Calendar.getInstance().apply {
             add(Calendar.DAY_OF_YEAR, -7)
         }.time
-        Log.d("실행하니", "ㅇ")
         return getCollection("Product")
             .whereGreaterThanOrEqualTo("insertTime", Timestamp(oneWeekAgo))
             .orderBy("insertTime")
@@ -324,5 +323,31 @@ class ProductRepository {
             .await()
             .documents
 
+    }
+
+    /**
+     * 나의 판매 상품 수
+     */
+    suspend fun getMyProductCellCount(): Int {
+        return try {
+            val listResult = getCollection("Product").whereEqualTo("ID", thisUser).get().await()
+            listResult.size()
+        } catch (e: Exception) {
+            0
+        }
+    }
+
+    /**
+     * 나의 찜한 상품 수
+     */
+    suspend fun getMyProductHeartCount(): Int {
+        return try {
+            val listResult = getCollection("UserInfo").whereEqualTo("id", thisUser).get().await()
+            val firstDocument = listResult.documents.firstOrNull() ?: return 0
+            val favoritList = firstDocument.get("favorit") as? List<*>
+            favoritList?.size ?: 0
+        } catch (e: Exception) {
+            0
+        }
     }
 }

@@ -10,8 +10,8 @@
 
         <ImageView
             android:id="@+id/product_img"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="105dp"
+            android:layout_height="105dp"
             android:src="@color/black"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:text="상품이름"
             android:textColor="@color/black"
-            android:textSize="15sp"
+            android:textSize="25sp"
             android:textStyle="bold"
             android:fontFamily="@font/font_font"
             app:layout_constraintTop_toBottomOf="@id/product_img"
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:text="상품가격"
             android:textColor="@color/black"
-            android:textSize="12sp"
+            android:textSize="20sp"
             android:fontFamily="@font/font_font"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

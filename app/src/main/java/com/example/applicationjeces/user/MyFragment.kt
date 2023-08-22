@@ -89,6 +89,22 @@ class MyFragment : Fragment() {
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 5)
 
         /**
+         * 나의 판매 개수
+         */
+        productViewModel.fetMyProductCellCount()
+        productViewModel.productMyCellCount.observe(viewLifecycleOwner, Observer { count ->
+            binding.ProductCellCount.text = count.toString()
+        })
+
+        /**
+         * 나의 찜한 개수
+         */
+        productViewModel.fetMyProductHeartCount()
+        productViewModel.productMyHeartCount.observe(viewLifecycleOwner, Observer { count ->
+            binding.ProductHeartCount.text = count.toString()
+        })
+
+        /**
          * 옵져브
          **/
         productViewModel.mySetProduct()

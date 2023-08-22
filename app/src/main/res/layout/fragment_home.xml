@@ -89,7 +89,7 @@
                 <!-- 사진 리사이클러 뷰 옆으로 넘기는 -->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/productRecentTen"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
                     android:orientation="horizontal"
@@ -107,7 +107,7 @@
                     android:layout_marginEnd="32dp"
                     android:fontFamily="@font/font_font"
                     android:text="Manay Heart Product"
-                    android:layout_marginTop="130dp"
+                    android:layout_marginTop="180dp"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     tools:ignore="SmallSp" />
@@ -115,11 +115,11 @@
                 <!-- 사진 리사이클러 뷰 옆으로 넘기는 -->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/productHeart"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
                     android:orientation="horizontal"
-                    android:layout_marginTop="150dp"
+                    android:layout_marginTop="200dp"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:spanCount="5"
                     tools:listitem="@layout/product_item_list" />
@@ -134,7 +134,7 @@
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:fontFamily="@font/font_font"
-                    android:layout_marginTop="260dp"
+                    android:layout_marginTop="360dp"
                     tools:ignore="SmallSp" />
 
                 <!-- 사진 리사이클러 뷰 옆으로 넘기는 -->
@@ -144,7 +144,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
                     android:orientation="horizontal"
-                    android:layout_marginTop="280dp"
+                    android:layout_marginTop="380dp"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/product_item_list" />
 
@@ -158,7 +158,7 @@
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:fontFamily="@font/font_font"
-                    android:layout_marginTop="390dp"
+                    android:layout_marginTop="540dp"
                     tools:ignore="SmallSp" />
 
                 <!-- 사진 리사이클러 뷰 옆으로 넘기는 -->
@@ -168,7 +168,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
                     android:orientation="horizontal"
-                    android:layout_marginTop="410dp"
+                    android:layout_marginTop="560dp"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/product_item_list" />
 
@@ -182,7 +182,7 @@
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:fontFamily="@font/font_font"
-                    android:layout_marginTop="520dp"
+                    android:layout_marginTop="720dp"
                     tools:ignore="SmallSp" />
 
                 <!-- 사진 리사이클러 뷰 옆으로 넘기는 -->
@@ -192,7 +192,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
                     android:orientation="horizontal"
-                    android:layout_marginTop="540dp"
+                    android:layout_marginTop="740dp"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/product_item_list" />
 
