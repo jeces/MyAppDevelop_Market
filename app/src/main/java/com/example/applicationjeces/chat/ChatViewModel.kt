@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.applicationjeces.product.Product
+import com.example.applicationjeces.product.ProductRepository
 import com.example.applicationjeces.product.Response
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -11,6 +12,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -41,6 +43,17 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
 
     /* 유저의 현재 위치 */
     var whereUser: String? = null
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * LiveData Chat yourId

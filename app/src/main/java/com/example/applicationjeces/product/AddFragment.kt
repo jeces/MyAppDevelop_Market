@@ -139,6 +139,7 @@ class AddFragment : Fragment() {
         val productPrice = viewProfile.productPrice.text.toString()
         val productDescription = viewProfile.productDescription.text.toString()
         val myId = jecesViewModel.thisUser
+        val nickName = jecesViewModel
 
         if (productName.isNotEmpty() && productPrice.isNotEmpty()) {
             imgFileName = if (targetImg) "basic_img.png" else "${myId}_${productName}_0_IMAGE_.png"

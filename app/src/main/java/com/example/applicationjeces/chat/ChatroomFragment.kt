@@ -70,9 +70,6 @@ class ChatroomFragment : Fragment() {
          **/
         val myId = chatViewModel.thisUser.toString()
 
-
-
-
         /**
          * 채팅 룸 viewpager2
          */
@@ -94,7 +91,6 @@ class ChatroomFragment : Fragment() {
          *  뷰모델 연결 후 뷰모델 옵저버를 통해 불러옴
          **/
         chatViewModel.liveTodoChatroomData.observe(viewLifecycleOwner, Observer { chatroom ->
-            Log.d("왜안돼니", chatroom.toString())
             adapter.submitList(chatroom!!.toMutableList())
         })
 

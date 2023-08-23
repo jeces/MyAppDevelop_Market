@@ -56,9 +56,12 @@ class ProductRepository {
 
     suspend fun addProducts(product: Product) {
         val currentTime = Timestamp.now()
+        val userSnapshot = getFirestore().collection("UserInfo").whereEqualTo("id", product.product_id).get().await()
+        val userName = userSnapshot.documents.firstOrNull()?.getString("name") ?: ""
         val productMap = mapOf(
             "IDX" to "${product.product_id}_${product.product_name}",
             "ID" to product.product_id,
+            "nickName" to userName,
             "productName" to product.product_name,
             "productPrice" to product.product_price,
             "productDescription" to product.product_description,

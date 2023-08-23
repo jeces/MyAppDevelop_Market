@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.applicationjeces.MainActivity
 import com.example.applicationjeces.R
@@ -56,6 +57,7 @@ class InfoActivity : AppCompatActivity() {
         val pViewCount = intent.getStringExtra("pViewCount")
         val pHeartCount = intent.getStringExtra("pHeartCount")
         val productBidPrice = intent.getStringExtra("productBidPrice")
+
         var myId = productViewModel.thisUser
 
         // 기본적으로 InfoFragment를 표시합니다.
@@ -97,7 +99,6 @@ class InfoActivity : AppCompatActivity() {
                 /**
                  * 채팅버튼
                  */
-
                 R.id.nav_chat -> {
                     // InfoFragment 표시
                     /**
@@ -138,6 +139,9 @@ class InfoActivity : AppCompatActivity() {
                             /* 프라그먼트에서 프라그먼트로 제어가 불가능하기 때문에 상위 액티비티에서 제어 해주어야 한다. */
                             val intent = Intent(this, ChatActivity::class.java)
                             intent.apply {
+                                /**
+                                 * 채팅방없으면 생성해야함 chatidx count
+                                 */
                                 this.putExtra("chatidx", "2")
                                 this.putExtra("chatYourId", "${myId},${pId}")
                             }

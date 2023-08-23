@@ -63,14 +63,7 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
 
         binding.productName.text = pName
 
-        /**
-         * 상대방 닉네임 가져오기
-         */
-        productViewModel.fetchProductNickName(pId)
-        productViewModel.productNickName.observe(viewLifecycleOwner, Observer { productNick ->
-//            binding.productBidPrice.text = "₩ " + addCommasToNumberString(productBidPrices.toString()) + "원"
-            binding.sellerName.text = productNick
-        })
+
 
         /**
          * 입찰가 업데이트(상시)
@@ -83,10 +76,11 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
         })
 
 
+
         val formattedPrice = addCommasToNumberString(productPrice.toString())
         binding.productCellPrice.text = getString(R.string.product_price_format, formattedPrice)
 //        binding.productCellPrice.text = "₩ " + addCommasToNumberString(productPrice.toString()) + "원"
-
+        binding.sellerName.text = pId
         binding.productDetailDescription.text = productDescription
         binding.productChatText.text = pChatCount
         binding.productViewText.text = pViewCount

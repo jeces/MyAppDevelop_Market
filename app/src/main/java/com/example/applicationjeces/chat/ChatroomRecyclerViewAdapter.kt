@@ -73,11 +73,13 @@ class ChatroomRecyclerViewAdapter(var contexts: Fragment, var myId: String): Lis
 
         fun bind(item: ChatroomData) {
             Log.d("챗룸ㅇㅇ4", "ddd")
-            val Id = item.id.toString().split(",")
+            val Id = item.id.split(",")
+            val yourNickName1 = Id[0].split("/")
+            val yourNickName2 = Id[1].split("/")
             val readN0 = item.n0.split("/")
             val readN1 = item.n1.split("/")
             Log.d("챗룸ㅇㅇ4", "${readN0}/${readN1}/${Id}")
-            if(myId == Id[0]) {
+            if(myId == yourNickName1[0]) {
                 if(readN0[0] == Id[0]) {
                     Log.d("asdfasdf1", readN0[1])
                     if(readN0[1] == "0") chatroomCount.text = " "
@@ -88,7 +90,7 @@ class ChatroomRecyclerViewAdapter(var contexts: Fragment, var myId: String): Lis
                     if(readN1[1] == "0") chatroomCount.text = " "
                     else chatroomCount.text = readN1[1]
                 }
-                chatroomYourId.text = Id[1]
+                chatroomYourId.text = yourNickName2[1]
                 yourChatroomProfilImg(Id[1], chatroomUserImg)
             } else {
                 if(readN0[0] == Id[1]) {
@@ -101,7 +103,7 @@ class ChatroomRecyclerViewAdapter(var contexts: Fragment, var myId: String): Lis
                     if(readN1[1] == "0") chatroomCount.text = " "
                     else chatroomCount.text = readN1[1]
                 }
-                chatroomYourId.text = Id[0]
+                chatroomYourId.text = yourNickName1[1]
                 yourChatroomProfilImg(Id[0], chatroomUserImg)
             }
             lastcomment.text = item.lastcomment.toString()
