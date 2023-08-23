@@ -27,7 +27,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/homelinear">
+                app:layout_constraintBottom_toTopOf="@+id/section_divider_1">
 
                 <!-- 사진 리사이클러 뷰 옆으로 넘기는 -->
                 <androidx.viewpager2.widget.ViewPager2
@@ -62,6 +62,14 @@
                     android:contentDescription="Options"/>
             </FrameLayout>
 
+            <!-- Section Divider 1 -->
+            <View
+                android:id="@+id/section_divider_1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#DDDDDD"
+                app:layout_constraintTop_toBottomOf="@+id/adverMain" />
+
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -71,8 +79,9 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/adverMain"
-                app:layout_constraintBottom_toBottomOf="parent">
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/section_divider_1"
+                app:layout_constraintBottom_toTopOf="@+id/section_divider_2">
 
                 <TextView
                     android:id="@+id/homeRecentTen"
@@ -80,6 +89,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="32dp"
+                    android:textColor="#333333"
                     android:fontFamily="@font/font_font"
                     android:text="Recent Ten Product"
                     android:textSize="14sp"
@@ -197,6 +207,14 @@
                     tools:listitem="@layout/product_item_list" />
 
             </FrameLayout>
+
+            <!-- Section Divider 2 -->
+            <View
+                android:id="@+id/section_divider_2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#DDDDDD"
+                app:layout_constraintTop_toBottomOf="@+id/homelinear" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>

@@ -79,6 +79,14 @@ class MyFragment : Fragment() {
         setMyImage(myId)
 
         /**
+         * 화면 폭 계산
+         * GridLayout 계산
+         */
+        val displayMetrics = resources.displayMetrics
+        val dpWidth = displayMetrics.widthPixels / displayMetrics.density
+        val numberOfColumns = (dpWidth / 100).toInt()
+
+        /**
          * 프로필 이름 옵저버
          */
         productViewModel.fetchUserName()
@@ -94,7 +102,7 @@ class MyFragment : Fragment() {
         recyclerView.adapter = adapter
         recyclerView.setHasFixedSize(true)
         // Change from LinearLayoutManager to GridLayoutManager
-        recyclerView.layoutManager = GridLayoutManager(requireContext(), 5)
+        recyclerView.layoutManager = GridLayoutManager(requireContext(), numberOfColumns)
 
         /**
          * 나의 판매 개수
@@ -141,7 +149,7 @@ class MyFragment : Fragment() {
         recyclerViewPc.adapter = adapterPc
         recyclerViewPc.setHasFixedSize(true)
         // Change from LinearLayoutManager to GridLayoutManager
-        recyclerViewPc.layoutManager = GridLayoutManager(requireContext(), 5)
+        recyclerViewPc.layoutManager = GridLayoutManager(requireContext(), numberOfColumns)
 
 
         binding.editProfile.setOnClickListener {
@@ -168,7 +176,7 @@ class MyFragment : Fragment() {
         recyclerViewFv.adapter = adapterFv
         recyclerViewFv.setHasFixedSize(true)
         // Change from LinearLayoutManager to GridLayoutManager
-        recyclerViewFv.layoutManager = GridLayoutManager(requireContext(), 5)
+        recyclerViewFv.layoutManager = GridLayoutManager(requireContext(), numberOfColumns)
 
         /**
          * 옵져브

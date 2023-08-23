@@ -47,8 +47,8 @@ class MyProductRecyclerViewAdapter(private val context: Fragment, var myId: Stri
                 if(it.isSuccessful) {
                     Glide.with(context)
                         .load(it.result)
-                        .apply(RequestOptions.bitmapTransform(RoundedCornersTransformation(5, 0)))
-                        .override(20, 20)
+                        .override(100, 100)
+                        .fitCenter()
                         .into(holder.itemView.product_img)
                 }
             }
@@ -59,8 +59,8 @@ class MyProductRecyclerViewAdapter(private val context: Fragment, var myId: Stri
                     Log.d("뭐냐?",currentItem3.toString())
                     Glide.with(context)
                         .load(it.result)
-                        .apply(RequestOptions.bitmapTransform(RoundedCornersTransformation(5, 0)))
-                        .override(20, 20)
+                        .override(100, 100)
+                        .fitCenter()
                         .into(holder.itemView.product_img)
                 }
             }

@@ -169,14 +169,14 @@
                     <!-- 여기에 판매 목록 세부 내용 추가 -->
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/myProductSaleV"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="10dp"
                         android:orientation="horizontal"
                         android:visibility="gone"
                         android:layout_marginTop="20dp"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        app:spanCount="5"
+                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                        app:spanCount="3"
                         tools:listitem="@layout/product_item_list" />
 
                 </LinearLayout>
@@ -217,14 +217,14 @@
                     <!-- 여기에 판매 목록 세부 내용 추가 -->
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/myProductPc"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="10dp"
                         android:orientation="horizontal"
                         android:visibility="gone"
                         android:layout_marginTop="20dp"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        app:spanCount="5"
+                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                        app:spanCount="3"
                         tools:listitem="@layout/product_item_list" />
                 </LinearLayout>
             </ScrollView>
@@ -256,14 +256,14 @@
                     <!-- 여기에 판매 목록 세부 내용 추가 -->
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/myProductFv"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="10dp"
                         android:orientation="horizontal"
                         android:visibility="gone"
                         android:layout_marginTop="20dp"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        app:spanCount="5"
+                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                        app:spanCount="3"
                         tools:listitem="@layout/product_item_list" />
                 </LinearLayout>
             </ScrollView>

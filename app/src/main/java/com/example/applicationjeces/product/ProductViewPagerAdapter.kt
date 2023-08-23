@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.applicationjeces.R
 import com.google.firebase.firestore.DocumentSnapshot
@@ -47,8 +48,8 @@ class ProductViewPagerAdapter(private val context: Fragment, var myId: String, v
                 if(it.isSuccessful && context.isAdded) {
                     Glide.with(context)
                         .load(it.result)
-                        .apply(RequestOptions.bitmapTransform(RoundedCornersTransformation(5, 0)))
-                        .override(20, 20)
+                        .override(100, 100)
+                        .fitCenter()
                         .into(holder.itemView.product_img)
                 }
             }
@@ -59,8 +60,8 @@ class ProductViewPagerAdapter(private val context: Fragment, var myId: String, v
                     Log.d("뭐냐?",currentItem3.toString())
                     Glide.with(context)
                         .load(it.result)
-                        .apply(RequestOptions.bitmapTransform(RoundedCornersTransformation(5, 0)))
                         .override(100, 100) //픽셀
+                        .fitCenter()
                         .into(holder.itemView.product_img)
                 }
             }
