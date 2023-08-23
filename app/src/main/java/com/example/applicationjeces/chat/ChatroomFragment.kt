@@ -145,7 +145,7 @@ class ChatroomFragment : Fragment() {
             }
     }
 
-    inner class SwipeCallback : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+    inner class SwipeCallback : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
 
         override fun onMove(
             recyclerView: RecyclerView,
@@ -155,11 +155,13 @@ class ChatroomFragment : Fragment() {
             return false // 아이템 이동은 처리하지 않습니다.
         }
 
+        private var swipedPosition = -1
+
+        private val optionButtonWidth = 200f
+
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
             // 스와이프한 항목의 위치를 얻습니다.
-            // 스와이프된 아이템을 원래 위치로 되돌립니다.
-            val adapter = binding.chatProfile2.adapter
-            adapter?.notifyItemChanged(viewHolder.adapterPosition)
+            swipedPosition = viewHolder.adapterPosition
         }
 
         private fun showOptionsForItem(position: Int) {
@@ -174,43 +176,50 @@ class ChatroomFragment : Fragment() {
             dX: Float, dY: Float, actionState: Int,
             isCurrentlyActive: Boolean
         ) {
-            // 원래의 onChildDraw() 호출을 그대로 사용하여 아이템 뷰가 그려지도록 합니다.
-            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-
             val itemView = viewHolder.itemView
+            val paint = Paint()
+
+            // 항목 뷰를 움직이는 범위를 제한합니다.
+            val newDX = when {
+                dX > optionButtonWidth -> optionButtonWidth
+                dX < -optionButtonWidth -> -optionButtonWidth
+                else -> dX
+            }
 
             if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
-                // 오른쪽으로 스와이프할 때
-                val itemView = viewHolder.itemView
-                val paint = Paint()
-                paint.color = Color.WHITE
-                paint.textSize = 40f
-                if (dX > 0) {
-
-                    // 박스 그리기
+                if (dX > 0) { // 오른쪽 스와이프
+                    paint.color = Color.WHITE
                     val background = RectF(itemView.left.toFloat(), itemView.top.toFloat(), dX, itemView.bottom.toFloat())
                     c.drawRect(background, paint)
 
-                    // "알림" 텍스트 그리기
+                    paint.color = Color.BLACK
+                    paint.textSize = 40f
                     val textWidth = paint.measureText("알림")
                     c.drawText("알림", itemView.left.toFloat() + textWidth / 2, itemView.top.toFloat() + (itemView.bottom.toFloat() - itemView.top.toFloat()) / 2, paint)
-                } else if (dX < 0) { // 왼쪽으로 스와이프할 때
-                    // 왼쪽으로 스와이프할 때 "나가기" 텍스트와 박스를 그립니다.
-
-                    // 박스 그리기
+                } else if (dX < 0) { // 왼쪽 스와이프
+                    paint.color = Color.WHITE
                     val background = RectF(itemView.right.toFloat() + dX, itemView.top.toFloat(), itemView.right.toFloat(), itemView.bottom.toFloat())
                     c.drawRect(background, paint)
 
-                    // "나가기" 텍스트 그리기
+                    paint.color = Color.BLACK
+                    paint.textSize = 40f
                     val textWidth = paint.measureText("나가기")
                     c.drawText("나가기", itemView.right.toFloat() - textWidth * 1.5f, itemView.top.toFloat() + (itemView.bottom.toFloat() - itemView.top.toFloat()) / 2, paint)
                 }
             }
 
-            // 스와이프되는 거리(dX)가 아이템 너비의 절반을 넘어갈 경우 아이템을 원래 위치로 되돌립니다.
-            if (Math.abs(dX) > viewHolder.itemView.width / 2) {
-                val adapter = binding.chatProfile2.adapter
-                adapter?.notifyItemChanged(viewHolder.adapterPosition)
+            // super.onChildDraw 메서드의 dX 값을 newDX로 변경합니다.
+            super.onChildDraw(c, recyclerView, viewHolder, newDX, dY, actionState, isCurrentlyActive)
+        }
+
+        // 스와이프 후 항목이 원래 위치로 되돌아오지 않게 하기
+        override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
+            super.clearView(recyclerView, viewHolder)
+
+            if (swipedPosition != -1) {
+                // 여기서 해당 항목의 상태를 변경하거나 리사이클러뷰의 어댑터를 업데이트합니다.
+                // 예: adapter.notifyItemChanged(swipedPosition)
+                swipedPosition = -1
             }
         }
     }
