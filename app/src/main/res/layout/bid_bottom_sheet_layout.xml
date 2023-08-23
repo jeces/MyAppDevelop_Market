@@ -32,6 +32,16 @@
             android:inputType="number"
             android:maxLength="10" />
 
+        <TextView
+            android:id="@+id/error_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="현재 입찰가보다 낮습니다."
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="10dp"
+            android:layout_marginTop="8dp"
+            android:visibility="gone" />
+
         <Button
             android:id="@+id/bidSubmitButton"
             android:layout_width="match_parent"

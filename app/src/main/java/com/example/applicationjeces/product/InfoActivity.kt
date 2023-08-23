@@ -158,6 +158,7 @@ class InfoActivity : AppCompatActivity() {
                         arguments = Bundle().apply {
                             putString("pId", pId)
                             putString("pName", pName)
+                            putString("productBidPrice", productBidPrice)
                         }
                     }
                     bottomSheetBidFragment.show(supportFragmentManager, bottomSheetBidFragment.tag)

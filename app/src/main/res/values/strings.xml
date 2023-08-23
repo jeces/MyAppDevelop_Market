@@ -19,4 +19,13 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
     <string name="navcolor">NavColor</string>
+
+
+
+
+
+    <!-- -->
+    <string name="bid_price_format">₩ %1$s원</string>
+    <string name="product_price_format">₩ %1$s원</string>
+
 </resources>

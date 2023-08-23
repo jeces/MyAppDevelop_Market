@@ -373,6 +373,19 @@ class ProductRepository {
     }
 
     /**
+     * 상품 상대 닉네임
+     */
+    suspend fun fetchProductNickName(pId: String): String? {
+        return try {
+            val userQuery = getCollection("UserInfo").whereEqualTo("id", pId).get().await()
+            val firstDocument = userQuery.documents.firstOrNull() ?: return null
+            firstDocument.getString("name")
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    /**
      * 입찰가
      */
     fun listenForBidUpdates(pId: String, pName: String): Flow<String> = callbackFlow {

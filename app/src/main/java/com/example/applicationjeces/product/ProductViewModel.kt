@@ -52,6 +52,9 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     private val _nickName = MutableLiveData<String>()
     val nickName: LiveData<String> get() = _nickName
 
+    private val _productNickName = MutableLiveData<String>()
+    val productNickName: LiveData<String> get() = _productNickName
+
     private var currentPage = 0
     private val itemsPerPage = 15
 
@@ -265,7 +268,7 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         pChatCount: Int,
         pViewCount: Int,
         pHearCount: Int,
-        pBidPrice: Int,
+        pBidPrice: String,
         getPosition: Int
     ) {
         val imageUrl = "${repository.thisUser}_${productName}_0_IMAGE_.png"
@@ -431,6 +434,19 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         viewModelScope.launch {
             try {
                 _nickName.value = repository.fetchUserName()
+            } catch (e: Exception) {
+                Log.e("ProductViewModel", "Error fetching user name", e)
+            }
+        }
+    }
+
+    /**
+     * 상품 판매자 닉네임 가져오기
+     */
+    fun fetchProductNickName(pId: String) {
+        viewModelScope.launch {
+            try {
+                _productNickName.value = repository.fetchProductNickName(pId)
             } catch (e: Exception) {
                 Log.e("ProductViewModel", "Error fetching user name", e)
             }

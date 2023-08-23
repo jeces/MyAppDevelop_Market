@@ -17,6 +17,9 @@ import com.example.applicationjeces.databinding.FragmentInfoBinding
 import com.google.firebase.storage.FirebaseStorage
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator
 import kotlinx.android.synthetic.main.chat_right_item_list.view.view3_2
+import java.text.NumberFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClickListener {
 
@@ -58,19 +61,31 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
         val pIdx: String = arguments?.getString("IDX").toString()
         productViewModel.whereMyUser("productInfo")
 
-        binding.sellerName.text = pId
         binding.productName.text = pName
+
+        /**
+         * 상대방 닉네임 가져오기
+         */
+        productViewModel.fetchProductNickName(pId)
+        productViewModel.productNickName.observe(viewLifecycleOwner, Observer { productNick ->
+//            binding.productBidPrice.text = "₩ " + addCommasToNumberString(productBidPrices.toString()) + "원"
+            binding.sellerName.text = productNick
+        })
 
         /**
          * 입찰가 업데이트(상시)
          */
         productViewModel.startListeningForBidUpdates(pId, pName)
         productViewModel.bidPrice.observe(viewLifecycleOwner, Observer { productBidPrices ->
-            Log.d("afafaf", "${productBidPrices}")
-            binding.productBidPrice.text = "₩ " + productBidPrices + "원"
+//            binding.productBidPrice.text = "₩ " + addCommasToNumberString(productBidPrices.toString()) + "원"
+            val formattedBidPrice = addCommasToNumberString(productBidPrices.toString())
+            binding.productBidPrice.text = getString(R.string.bid_price_format, formattedBidPrice)
         })
 
-        binding.productCellPrice.text = "₩ " + productPrice + "원"
+
+        val formattedPrice = addCommasToNumberString(productPrice.toString())
+        binding.productCellPrice.text = getString(R.string.product_price_format, formattedPrice)
+//        binding.productCellPrice.text = "₩ " + addCommasToNumberString(productPrice.toString()) + "원"
 
         binding.productDetailDescription.text = productDescription
         binding.productChatText.text = pChatCount
@@ -216,4 +231,17 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
 
         }
     }
+
+    /**
+     * 단위 (,) 찍기
+     */
+    fun addCommasToNumberString(numberString: String): String {
+        val number = numberString.replace(",", "").toLongOrNull()
+        return if (number != null) {
+            NumberFormat.getNumberInstance(Locale.US).format(number)
+        } else {
+            "" // 또는 원하는 기본값을 반환합니다.
+        }
+    }
+
 }

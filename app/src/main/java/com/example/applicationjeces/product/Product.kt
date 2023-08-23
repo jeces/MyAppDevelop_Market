@@ -42,7 +42,7 @@ data class  Product(
     var heartCount: Int,
 
     /* 현재 입찰가 */
-    var product_bid_price: Int
+    var product_bid_price: String
 
 ) {
 

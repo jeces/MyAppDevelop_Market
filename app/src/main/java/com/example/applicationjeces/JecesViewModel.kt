@@ -231,7 +231,7 @@ class JecesViewModel(application: Application): AndroidViewModel(application) {
      **/
     fun setProductDetail(productId : String, productName: String, productPrice: String, productDescription: String, productCount: String, pChatCount: String, pViewCount: String, pHearCount: String, pBidPrice: String, getPosition: Int) {
         productArrayList.clear()
-        val productDetail = Product(productId, productName, productPrice.toInt(), productDescription, productCount.toInt(), thisUser + "_" + productName + "_0_IMAGE_.png", pChatCount.toInt(), pViewCount.toInt(), pHearCount.toInt(), pBidPrice.toInt())
+        val productDetail = Product(productId, productName, productPrice.toInt(), productDescription, productCount.toInt(), thisUser + "_" + productName + "_0_IMAGE_.png", pChatCount.toInt(), pViewCount.toInt(), pHearCount.toInt(), pBidPrice)
         position = getPosition
         productArrayList.add(productDetail)
         Log.d("aa11", productArrayList.toString() + "aaaaa")

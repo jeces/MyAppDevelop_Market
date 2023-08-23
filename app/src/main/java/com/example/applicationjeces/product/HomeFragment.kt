@@ -293,7 +293,7 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
                 productViewModel.liveTodoData.value?.get(position).toString()
                 productViewModel.setProductDetail(adapterTen.producFiretList[position].get("ID").toString(), adapterTen.producFiretList[position].get("productName").toString(), adapterTen.producFiretList[position].get("productPrice").toString().toInt()
                     , adapterTen.producFiretList[position].get("productDescription").toString(), adapterTen.producFiretList[position].get("productCount").toString().toInt(), adapterTen.producFiretList[position].get("pChatCount").toString().toInt()
-                    , adapterTen.producFiretList[position].get("pViewCount").toString().toInt(), adapterTen.producFiretList[position].get("pHeartCount").toString().toInt(), adapterTen.producFiretList[position].get("productBidPrice").toString().toInt(), position)
+                    , adapterTen.producFiretList[position].get("pViewCount").toString().toInt(), adapterTen.producFiretList[position].get("pHeartCount").toString().toInt(), adapterTen.producFiretList[position].get("productBidPrice").toString(), position)
 
                 /* InfoActivity로 화면 전환 */
                 val intent = Intent(getActivity(), InfoActivity::class.java)
