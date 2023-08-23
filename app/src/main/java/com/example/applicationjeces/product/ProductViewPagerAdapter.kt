@@ -60,7 +60,7 @@ class ProductViewPagerAdapter(private val context: Fragment, var myId: String, v
                     Glide.with(context)
                         .load(it.result)
                         .apply(RequestOptions.bitmapTransform(RoundedCornersTransformation(5, 0)))
-                        .override(20, 20)
+                        .override(100, 100) //픽셀
                         .into(holder.itemView.product_img)
                 }
             }

@@ -1,5 +1,6 @@
 package com.example.applicationjeces.product
 
+import SettingCustomBottomSheetDialogFragment
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -146,33 +147,16 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
         handler.postDelayed(slideRunnable, delayMillis)
 
         /**
-         * 상단바 메뉴
+         * 상단바 메뉴 클릭
          */
         val toolbarImage: ImageButton = view.findViewById(R.id.toolbarImageButton)
         toolbarImage.setOnClickListener {
-            Log.d("aaa123", "123")
-            // val popupMenu = PopupMenu(this, it)
-            val popupMenu = PopupMenu(requireActivity(), it) // 'this'를 'requireActivity()'로 변경
-            popupMenu.inflate(R.menu.option_menu) // 메뉴 리소스 파일 설정
-            popupMenu.setOnMenuItemClickListener { menuItem ->
-                // 메뉴 아이템을 클릭했을 때 수행할 동작
-                when (menuItem.itemId) {
-                    R.id.logout -> {
-                        /* 로그아웃 */
-                        FirebaseAuth.getInstance().signOut()
-                        /* 페이지 이동 */
-                        // val it = Intent(this, LoginActivity::class.java)
-                        val it = Intent(requireActivity(), LoginActivity::class.java) // 'this'를 'requireActivity()'로 변경
-                        requireActivity().startActivity(it) // 'startActivity()' 앞에 'requireActivity().' 추가
-                        true
-                    }
-                    // 다른 메뉴 아이템 처리
-                    else -> false
-                }
-            }
-            popupMenu.show()
+            /**
+             * 밑에서 올라오는 슬라이드
+             */
+            val bottomSheetFragment = SettingCustomBottomSheetDialogFragment()
+            bottomSheetFragment.show(parentFragmentManager, bottomSheetFragment.tag)
         }
-
 
         /**
          * 최근 10개 등록 상품
