@@ -156,8 +156,8 @@ class ChatroomFragment : Fragment() {
         }
 
         private var swipedPosition = -1
-
         private val optionButtonWidth = 200f
+        private val swipeThreshold = optionButtonWidth // 스와이프의 임계치 설정
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
             // 스와이프한 항목의 위치를 얻습니다.
@@ -179,10 +179,16 @@ class ChatroomFragment : Fragment() {
             val itemView = viewHolder.itemView
             val paint = Paint()
 
+            // 항목이 반대로 스와이프되어 복구될 때 아이템 뷰를 원래 위치로 되돌리는 로직
+            if (!isCurrentlyActive && dX == 0f) {
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                return
+            }
+
             // 항목 뷰를 움직이는 범위를 제한합니다.
             val newDX = when {
-                dX > optionButtonWidth -> optionButtonWidth
-                dX < -optionButtonWidth -> -optionButtonWidth
+                dX > swipeThreshold -> swipeThreshold
+                dX < -swipeThreshold -> -swipeThreshold
                 else -> dX
             }
 
@@ -208,13 +214,16 @@ class ChatroomFragment : Fragment() {
                 }
             }
 
-            // super.onChildDraw 메서드의 dX 값을 newDX로 변경합니다.
+            // 항목 뷰의 위치를 업데이트하는 코드
             super.onChildDraw(c, recyclerView, viewHolder, newDX, dY, actionState, isCurrentlyActive)
         }
 
-        // 스와이프 후 항목이 원래 위치로 되돌아오지 않게 하기
+        // 스와이프 후 항목이 원래 위치로 되돌아오게 설정
         override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
             super.clearView(recyclerView, viewHolder)
+
+            // 스와이프 애니메이션 종료 후 아이템 뷰를 원래 위치로 되돌리기
+            viewHolder.itemView.translationX = 0f
 
             if (swipedPosition != -1) {
                 // 여기서 해당 항목의 상태를 변경하거나 리사이클러뷰의 어댑터를 업데이트합니다.
