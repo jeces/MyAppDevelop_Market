@@ -52,7 +52,7 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
         val pChatCount = arguments?.getString("pChatCount")
         val pViewCount = arguments?.getString("pViewCount")
         val pHeartCount = arguments?.getString("pHeartCount")
-        val productBidPrices = arguments?.getString("productBidPrice")
+//        val productBidPrices = arguments?.getString("productBidPrice")
 //        val position = arguments?.getString("position", -1)
         val myId: String = productViewModel.thisUser.toString()
         val pIdx: String = arguments?.getString("IDX").toString()
@@ -60,8 +60,18 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
 
         binding.sellerName.text = pId
         binding.productName.text = pName
-        binding.productCellPrice.text = "₩" + productPrice + "원"
-        binding.productBidPrice.text = "₩" + productBidPrices + "원"
+
+        /**
+         * 입찰가 업데이트(상시)
+         */
+        productViewModel.startListeningForBidUpdates(pId, pName)
+        productViewModel.bidPrice.observe(viewLifecycleOwner, Observer { productBidPrices ->
+            Log.d("afafaf", "${productBidPrices}")
+            binding.productBidPrice.text = "₩ " + productBidPrices + "원"
+        })
+
+        binding.productCellPrice.text = "₩ " + productPrice + "원"
+
         binding.productDetailDescription.text = productDescription
         binding.productChatText.text = pChatCount
         binding.productViewText.text = pViewCount

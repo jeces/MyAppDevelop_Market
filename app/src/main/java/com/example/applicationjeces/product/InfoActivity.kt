@@ -1,5 +1,6 @@
 package com.example.applicationjeces.product
 
+import BidCustomBottomSheetDialogFragment
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
@@ -150,31 +151,16 @@ class InfoActivity : AppCompatActivity() {
                  * 입찰
                  */
                 R.id.nav_bid -> {
-                    // Dialog 생성
-                    Log.d("aaa1313a", "123123")
-                    val dialogView = layoutInflater.inflate(R.layout.bid_dialog_layout, null)
-                    val bidAmountEditText = dialogView.findViewById<EditText>(R.id.bidAmount)
-                    val bidSubmitButton = dialogView.findViewById<Button>(R.id.bidSubmitButton)
-
-                    val builder = AlertDialog.Builder(this)
-                    builder.setView(dialogView)
-                    builder.setTitle("입찰")
-                    val alertDialog = builder.create()
-                    alertDialog.show()
-
-                    // 제출 버튼 클릭 리스너
-                    bidSubmitButton.setOnClickListener {
-                        val bidAmount = bidAmountEditText.text.toString().trim()
-                        if (bidAmount.isEmpty()) {
-                            Toast.makeText(this, "금액을 입력하세요.", Toast.LENGTH_SHORT).show()
-                            return@setOnClickListener
+                    /**
+                     * 밑에서 올라오는 슬라이드
+                     */
+                    val bottomSheetBidFragment = BidCustomBottomSheetDialogFragment().apply {
+                        arguments = Bundle().apply {
+                            putString("pId", pId)
+                            putString("pName", pName)
                         }
-
-                        // 금액 처리
-                        processBid(pId, pName, bidAmount)  // 이는 실제로 입찰 금액을 처리하는 함수로 정의해야 합니다.
-
-                        alertDialog.dismiss()  // 대화상자 닫기
                     }
+                    bottomSheetBidFragment.show(supportFragmentManager, bottomSheetBidFragment.tag)
                     true
                 }
                 /**
@@ -262,10 +248,7 @@ class InfoActivity : AppCompatActivity() {
         }
     }
 
-    private fun processBid(pId : String, pName : String, bid_price : String) {
-        productViewModel.bidchange(pId, pName, bid_price)
-        Toast.makeText(this, "$bid_price 원으로 입찰하였습니다.", Toast.LENGTH_SHORT).show()
-    }
+
 
     override fun onBackPressed() {
         super.onBackPressed()

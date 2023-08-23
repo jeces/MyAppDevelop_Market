@@ -9,6 +9,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.util.*
@@ -94,14 +97,19 @@ class ProductRepository {
 
     suspend fun bidchange(pId: String, pName: String, bidPrice: String) {
         val fieldMap = mapOf("productBidPrice" to bidPrice)
-        val productSnapshot = getCollection("Product")
-            .whereEqualTo("ID", pId)
-            .whereEqualTo("productName", pName)
-            .get()
-            .await()
+        try {
+            val productSnapshot = getCollection("Product")
+                .whereEqualTo("ID", pId)
+                .whereEqualTo("productName", pName)
+                .get()
+                .await()
 
-        productSnapshot.documents.forEach { document ->
-            document.reference.update(fieldMap).await()
+            productSnapshot.documents.forEach { document ->
+                document.reference.update(fieldMap).await()
+            }
+        } catch (e: Exception) {
+            // Log the error or print it
+            Log.e("BID_CHANGE_ERROR", "Failed to change bid: ", e)
         }
     }
 
@@ -351,6 +359,9 @@ class ProductRepository {
         }
     }
 
+    /**
+     * 나의 닉네임
+     */
     suspend fun fetchUserName(): String? {
         return try {
             val userQuery = getCollection("UserInfo").whereEqualTo("id", thisUser).get().await()
@@ -358,6 +369,29 @@ class ProductRepository {
             firstDocument.getString("name")
         } catch (e: Exception) {
             null
+        }
+    }
+
+    /**
+     * 입찰가
+     */
+    fun listenForBidUpdates(pId: String, pName: String): Flow<String> = callbackFlow {
+        val dbRef = getCollection("Product")
+        val listenerRegistration = dbRef.whereEqualTo("ID", pId).whereEqualTo("productName", pName)
+            .addSnapshotListener { snapshot, exception ->
+                if (exception != null) {
+                    // Handle error or close the flow if necessary
+                    close(exception)
+                    return@addSnapshotListener
+                }
+                val product = snapshot?.documents?.firstOrNull()
+                val bidPrice = product?.getString("productBidPrice") ?: ""
+                trySend(bidPrice).isSuccess // send value to the flow
+            }
+
+        // Clean up
+        awaitClose {
+            listenerRegistration.remove()
         }
     }
 }

@@ -4,12 +4,11 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.applicationjeces.chat.ChatroomData
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class ProductViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -45,6 +44,8 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
 
     private val _adverImages = MutableLiveData<List<String>>()
     val adverImages: LiveData<List<String>> get() = _adverImages
+
+    val bidPrice = MutableLiveData<String>()
 
     val thisUser: String by lazy { FirebaseAuth.getInstance().currentUser?.email ?: "" }
 
@@ -173,8 +174,11 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-    fun bidchange(pId: String, pName: String, bidPrice: String) {
-        viewModelScope.launch {
+    /**
+     * processBid 함수에서 bidchange를 호출하기 전에 Deferred 객체를 반환받아 프래그먼트가 종료되기 전에 코루틴이 완료될 때까지 기다
+     */
+    fun bidchange(pId: String, pName: String, bidPrice: String): Deferred<Unit> {
+        return viewModelScope.async {
             try {
                 repository.bidchange(pId, pName, bidPrice)
             } catch (e: Exception) {
@@ -429,6 +433,21 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
                 _nickName.value = repository.fetchUserName()
             } catch (e: Exception) {
                 Log.e("ProductViewModel", "Error fetching user name", e)
+            }
+        }
+    }
+
+    /**
+     * 입찰가 업데이트
+     */
+    fun startListeningForBidUpdates(pId: String, pName: String) {
+        viewModelScope.launch {
+            try {
+                repository.listenForBidUpdates(pId, pName).collect { newBidPrice ->
+                    bidPrice.postValue(newBidPrice)
+                }
+            } catch (e: Exception) {
+                // Handle exception, e.g., show an error message to the user
             }
         }
     }
