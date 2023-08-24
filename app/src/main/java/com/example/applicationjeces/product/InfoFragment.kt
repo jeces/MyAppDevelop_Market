@@ -83,8 +83,6 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
             binding.productBidPrice.text = getString(R.string.bid_price_format, formattedBidPrice)
         })
 
-
-
         val formattedPrice = addCommasToNumberString(productPrice.toString())
         binding.productCellPrice.text = getString(R.string.product_price_format, formattedPrice)
 //        binding.productCellPrice.text = "₩ " + addCommasToNumberString(productPrice.toString()) + "원"

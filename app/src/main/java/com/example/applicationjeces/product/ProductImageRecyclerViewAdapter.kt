@@ -49,6 +49,19 @@ class ProductImageRecyclerViewAdapter(var productImageList: ArrayList<Uri>, val 
         private var view: View = ItemView
 //        var image = ItemView.findViewById<ImageView>(R.id.addimges)
         var image: ImageView = itemView.findViewById(R.id.addimges)
+
+        val closeButton: ImageView = itemView.findViewById(R.id.closeButton) // X 버튼 연결
+
+        init {
+            closeButton.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    productImageList.removeAt(position)
+                    notifyItemRemoved(position)
+                    notifyItemRangeChanged(position, productImageList.size)
+                }
+            }
+        }
     }
 
     override fun onRowMoved(fromPosition: Int, toPosition: Int) {
