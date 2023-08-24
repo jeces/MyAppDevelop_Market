@@ -6,8 +6,9 @@
         android:layout_height="wrap_content"
         android:layout_marginVertical="5dp"
         android:layout_marginHorizontal="5dp"
+        app:cardBackgroundColor="@android:color/transparent"
         app:cardCornerRadius="15dp"
-        app:cardElevation="2dp">
+        app:cardElevation="0dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
@@ -21,6 +22,7 @@
                 android:layout_gravity="center"
                 android:background="@drawable/round_img"
                 android:scaleType="centerCrop"
+                android:layout_margin="2dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
