@@ -65,6 +65,41 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
         super.onAttach(context)
     }
 
+    // 공통으로 사용할 항목 클릭 메서드
+    fun onProductClicked(product: HashMap<String, Any>, position: Int) {
+        productViewModel.setProductDetail(product["ID"].toString(), product["productName"].toString(), product["productPrice"].toString().toInt(),
+            product["productDescription"].toString(), product["productCount"].toString().toInt(), product["pChatCount"].toString().toInt(),
+            product["pViewCount"].toString().toInt(), product["pHeartCount"].toString().toInt(), product["productBidPrice"].toString(), position)
+
+        val intent = Intent(getActivity(), InfoActivity::class.java)
+        intent.apply {
+            putExtra("ID", product["ID"].toString())
+            putExtra("IDX", product["IDX"].toString())
+            putExtra("productName", product["productName"].toString())
+            putExtra("productPrice", product["productPrice"].toString())
+            putExtra("productDescription", product["productDescription"].toString())
+            putExtra("productCount", product["productCount"].toString())
+            putExtra("pChatCount", product["pChatCount"].toString())
+            putExtra("pViewCount", product["pViewCount"].toString())
+            putExtra("pHeartCount", product["pHeartCount"].toString())
+            putExtra("productBidPrice", product["productBidPrice"].toString())
+            putExtra("position", position)
+        }
+
+        startActivity(intent)
+        activity?.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+    }
+
+    // 리스너 설정 함수
+    fun setupItemClickListener(adapter: ProductViewPagerAdapter) {
+        adapter.setItemClickListener(object : ProductViewPagerAdapter.OnItemClickListener {
+            override fun onClick(v: View, position: Int) {
+                val product = adapter.producFiretList[position].data as HashMap<String, Any>
+                onProductClicked(product, position)
+            }
+        })
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -283,43 +318,54 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
         })
 
 
-        /**
-         *  항목 클릭시
-         **/
-        Log.d("aa11", "-1")
-        adapterTen.setItemClickListener(object: ProductViewPagerAdapter.OnItemClickListener {
-            override fun onClick(v: View, position: Int) {
-                /* 상품 정보 불러오기 */
-                productViewModel.liveTodoData.value?.get(position).toString()
-                productViewModel.setProductDetail(adapterTen.producFiretList[position].get("ID").toString(), adapterTen.producFiretList[position].get("productName").toString(), adapterTen.producFiretList[position].get("productPrice").toString().toInt()
-                    , adapterTen.producFiretList[position].get("productDescription").toString(), adapterTen.producFiretList[position].get("productCount").toString().toInt(), adapterTen.producFiretList[position].get("pChatCount").toString().toInt()
-                    , adapterTen.producFiretList[position].get("pViewCount").toString().toInt(), adapterTen.producFiretList[position].get("pHeartCount").toString().toInt(), adapterTen.producFiretList[position].get("productBidPrice").toString(), position)
+        // 각 어댑터에 클릭 리스너 설정
+        setupItemClickListener(adapterTen)
+        setupItemClickListener(adapterHt)
+        setupItemClickListener(adapterView)
+        setupItemClickListener(adapterSevenHeart)
+        setupItemClickListener(adapterSevenView)
 
-                /* InfoActivity로 화면 전환 */
-                val intent = Intent(getActivity(), InfoActivity::class.java)
-                /* 필요한 데이터를 InfoActivity로 전달하기 위한 인텐트 파라미터 설정 */
-                intent.putExtra("ID", adapterTen.producFiretList[position].get("ID").toString())
-                intent.putExtra("IDX", adapterTen.producFiretList[position].get("IDX").toString())
-                intent.putExtra("productName", adapterTen.producFiretList[position].get("productName").toString())
-                intent.putExtra("productPrice", adapterTen.producFiretList[position].get("productPrice").toString())
-                intent.putExtra("productDescription", adapterTen.producFiretList[position].get("productDescription").toString())
-                intent.putExtra("productCount", adapterTen.producFiretList[position].get("productCount").toString())
-                intent.putExtra("pChatCount", adapterTen.producFiretList[position].get("pChatCount").toString())
-                intent.putExtra("pViewCount", adapterTen.producFiretList[position].get("pViewCount").toString())
-                intent.putExtra("pHeartCount", adapterTen.producFiretList[position].get("pHeartCount").toString())
-                intent.putExtra("productBidPrice", adapterTen.producFiretList[position].get("productBidPrice").toString())
-                intent.putExtra("position", position)
 
-                startActivity(intent)
+//        /**
+//         *  항목 클릭시
+//         **/
+//        adapterTen.setItemClickListener(object: ProductViewPagerAdapter.OnItemClickListener {
+//            override fun onClick(v: View, position: Int) {
+//                /* 상품 정보 불러오기 */
+//                productViewModel.liveTodoData.value?.get(position).toString()
+//                productViewModel.setProductDetail(adapterTen.producFiretList[position].get("ID").toString(), adapterTen.producFiretList[position].get("productName").toString(), adapterTen.producFiretList[position].get("productPrice").toString().toInt()
+//                    , adapterTen.producFiretList[position].get("productDescription").toString(), adapterTen.producFiretList[position].get("productCount").toString().toInt(), adapterTen.producFiretList[position].get("pChatCount").toString().toInt()
+//                    , adapterTen.producFiretList[position].get("pViewCount").toString().toInt(), adapterTen.producFiretList[position].get("pHeartCount").toString().toInt(), adapterTen.producFiretList[position].get("productBidPrice").toString(), position)
+//
+//                /* InfoActivity로 화면 전환 */
+//                val intent = Intent(getActivity(), InfoActivity::class.java)
+//                /* 필요한 데이터를 InfoActivity로 전달하기 위한 인텐트 파라미터 설정 */
+//                intent.putExtra("ID", adapterTen.producFiretList[position].get("ID").toString())
+//                intent.putExtra("IDX", adapterTen.producFiretList[position].get("IDX").toString())
+//                intent.putExtra("productName", adapterTen.producFiretList[position].get("productName").toString())
+//                intent.putExtra("productPrice", adapterTen.producFiretList[position].get("productPrice").toString())
+//                intent.putExtra("productDescription", adapterTen.producFiretList[position].get("productDescription").toString())
+//                intent.putExtra("productCount", adapterTen.producFiretList[position].get("productCount").toString())
+//                intent.putExtra("pChatCount", adapterTen.producFiretList[position].get("pChatCount").toString())
+//                intent.putExtra("pViewCount", adapterTen.producFiretList[position].get("pViewCount").toString())
+//                intent.putExtra("pHeartCount", adapterTen.producFiretList[position].get("pHeartCount").toString())
+//                intent.putExtra("productBidPrice", adapterTen.producFiretList[position].get("productBidPrice").toString())
+//                intent.putExtra("position", position)
+//
+//                startActivity(intent)
+//
+//                /* 애니메이션 적용 */
+//                activity?.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+//            }
+//        })
 
-                /* 애니메이션 적용 */
-                activity?.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
-            }
-        })
+
 
         // Inflate the layout for this fragment
         return view
     }
+
+
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         Log.d("jecesAddFragment", "onViewStateRestored")
