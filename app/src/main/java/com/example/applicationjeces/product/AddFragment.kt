@@ -1,5 +1,6 @@
 package com.example.applicationjeces.product
 
+import CategoryBottomSheetFragment
 import ItemMoveCallback
 import android.Manifest
 import android.annotation.SuppressLint
@@ -9,6 +10,8 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -22,11 +25,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.example.applicationjeces.MainActivity
 import com.example.applicationjeces.R
+import com.example.applicationjeces.databinding.BidBottomSheetLayoutBinding
+import com.example.applicationjeces.databinding.FragmentAddBinding
 import com.example.applicationjeces.page.DataViewModel
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_add.*
 import kotlinx.android.synthetic.main.fragment_add.view.*
+import java.text.NumberFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -42,7 +48,7 @@ private const val ARG_PARAM2 = "param2"
  */
 
 /* Product 추가 Fragment  */
-class AddFragment : Fragment() {
+class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener {
 
     private var param1: String? = null
     private var param2: String? = null
@@ -56,8 +62,23 @@ class AddFragment : Fragment() {
     private var targetImg = false
     private val imagelist = ArrayList<Uri>()
     private val adapter = ProductImageRecyclerViewAdapter(imagelist, this)
-    private lateinit var jecesViewModel: ProductViewModel
-    private val pageViewModel by viewModels<DataViewModel>()
+    private lateinit var productViewModel: ProductViewModel
+
+    private var _binding: FragmentAddBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCategorySelected(category: String) {
+        // 카테고리 배열을 가져옵니다.
+        val categories = resources.getStringArray(R.array.product_categories)
+        // 선택된 카테고리의 인덱스를 찾습니다.
+        val index = categories.indexOf(category)
+        // 인덱스를 사용하여 Spinner의 값을 설정합니다.
+        binding.productCategorySpinner.setSelection(index)
+    }
+
+    private fun showCategoryBottomSheet() {
+        CategoryBottomSheetFragment().show(childFragmentManager, "categoryBottomSheet")
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,13 +95,55 @@ class AddFragment : Fragment() {
     ): View {
         viewProfile = inflater.inflate(R.layout.fragment_add, container, false)
 
-        jecesViewModel = ViewModelProvider(this)[ProductViewModel::class.java]
+        productViewModel = ViewModelProvider(this)[ProductViewModel::class.java]
         firebaseStorage = FirebaseStorage.getInstance()
-        jecesViewModel.whereMyUser("add")
+        productViewModel.whereMyUser("add")
 
         setupRecyclerView()
 
-        return viewProfile
+        /**
+         * view 바인딩
+         */
+        _binding = FragmentAddBinding.inflate(inflater, container, false)
+        val view = binding.root
+
+        /**
+         * 단위 입력(,)
+         */
+        binding.productPrice.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+                // Do nothing here
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                // Do nothing here
+            }
+
+            override fun afterTextChanged(s: Editable) {
+                binding.productPrice.removeTextChangedListener(this)  // prevent infinite loop
+
+                val str = s.toString().replace(",", "")
+                if (str.isNotEmpty()) {
+                    val formattedNumber = NumberFormat.getNumberInstance(Locale.US).format(str.toLong())
+                    binding.productPrice.setText(formattedNumber)
+                    binding.productPrice.setSelection(formattedNumber.length)  // move cursor to the end
+                }
+                binding.productPrice.addTextChangedListener(this)  // re-add to start listening again
+            }
+        })
+
+//        // Spinner 클릭시 BottomSheet 표시
+//        binding.productCategorySpinner.setOnClickListener {
+//            showCategoryBottomSheet()
+//        }
+
+        // Spinner 클릭 인터셉터에 BottomSheet 표시 리스너를 연결
+        binding.categoryClickInterceptor.setOnClickListener {
+            showCategoryBottomSheet()
+        }
+
+
+        return view
     }
 
     private fun setupRecyclerView() {
@@ -123,7 +186,7 @@ class AddFragment : Fragment() {
 
     private fun funImageUpload(view: View) {
         val productName = view.productName.text.toString()
-        val myId = jecesViewModel.thisUser
+        val myId = productViewModel.thisUser
         imagelist.forEachIndexed { index, uri ->
             val imgFileName = "${myId}_${productName}_${index}_IMAGE_.png"
             Log.d("사진업로드", imgFileName)
@@ -138,13 +201,13 @@ class AddFragment : Fragment() {
         val productName = viewProfile.productName.text.toString()
         val productPrice = viewProfile.productPrice.text.toString()
         val productDescription = viewProfile.productDescription.text.toString()
-        val myId = jecesViewModel.thisUser
-        val nickName = jecesViewModel
+        val myId = productViewModel.thisUser
+        val nickName = productViewModel
 
         if (productName.isNotEmpty() && productPrice.isNotEmpty()) {
             imgFileName = if (targetImg) "basic_img.png" else "${myId}_${productName}_0_IMAGE_.png"
             val product = Product(myId, productName, productPrice.toInt(), productDescription, imgCount, imgFileName, 0, 0, 0, "0")
-            jecesViewModel.addProducts(product)
+            productViewModel.addProducts(product)
 
             Toast.makeText(requireContext(), "Successfully added!", Toast.LENGTH_LONG).show()
 

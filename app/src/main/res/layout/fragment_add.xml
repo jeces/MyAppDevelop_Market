@@ -1,114 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <ScrollView
+    <data>
+        <variable
+            name="productViewModel"
+            type="com.example.applicationjeces.product.ProductViewModel" />
+    </data>
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:background="@color/white">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp">
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
-            <!-- Image Section -->
-            <TextView
-                android:id="@+id/tv_registered_photo"
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Registered Photo"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="#333333"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                android:padding="16dp">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/img_profile"
-                android:layout_width="0dp"
-                android:layout_height="200dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                android:orientation="horizontal"
-                tools:listitem="@layout/img_item_list"
-                app:layout_constraintTop_toBottomOf="@id/tv_registered_photo"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-            <!-- Product Category Selection -->
-            <Spinner
-                android:id="@+id/productCategorySpinner"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:entries="@array/product_categories"
-                app:layout_constraintTop_toBottomOf="@id/img_profile"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-            <!-- Product Name Section -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/ProductNameLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:hint="Product Name"
-                app:counterEnabled="true"
-                app:counterMaxLength="30"
-                app:endIconMode="clear_text"
-                app:layout_constraintTop_toBottomOf="@+id/productCategorySpinner"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" >
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/productName"
-                    android:layout_width="match_parent"
+                <!-- Image Section -->
+                <TextView
+                    android:id="@+id/tv_registered_photo"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:maxLength="30" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:text="Registered Photo"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#333333"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
 
-            <!-- Product Price Section -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/ProductPriceLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:hint="Product Price"
-                app:counterEnabled="true"
-                app:counterMaxLength="30"
-                app:endIconMode="clear_text"
-                app:layout_constraintTop_toBottomOf="@+id/ProductNameLayout"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" >
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/img_profile"
+                    android:layout_width="0dp"
+                    android:layout_height="200dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:orientation="horizontal"
+                    tools:listitem="@layout/img_item_list"
+                    app:layout_constraintTop_toBottomOf="@id/tv_registered_photo"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/productPrice"
-                    android:layout_width="match_parent"
+                <!-- Product Category Selection -->
+                <Spinner
+                    android:id="@+id/productCategorySpinner"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:maxLength="30" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_marginTop="16dp"
+                    android:entries="@array/product_categories"
+                    app:layout_constraintTop_toBottomOf="@id/img_profile"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
 
-            <!-- Product Description Section -->
-            <EditText
-                android:id="@+id/productDescription"
-                android:layout_width="0dp"
-                android:layout_height="250dp"
-                android:layout_marginTop="16dp"
-                android:hint="Product Description"
-                android:background="@drawable/edit_text_bg"
-                android:padding="8dp"
-                android:inputType="textMultiLine"
-                android:maxLength="500"
-                app:layout_constraintTop_toBottomOf="@+id/ProductPriceLayout"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                <View
+                    android:id="@+id/categoryClickInterceptor"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    app:layout_constraintTop_toBottomOf="@id/img_profile"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@id/productCategorySpinner" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
-</FrameLayout>
+                <!-- Product Name Section -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/ProductNameLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Product Name"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="30"
+                    app:endIconMode="clear_text"
+                    app:layout_constraintTop_toBottomOf="@+id/productCategorySpinner"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" >
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/productName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLength="30" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Product Price Section -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/ProductPriceLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Product Price"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="20"
+                    app:endIconMode="clear_text"
+                    app:layout_constraintTop_toBottomOf="@+id/ProductNameLayout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" >
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/productPrice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:maxLength="30" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Product Description Section -->
+                <EditText
+                    android:id="@+id/productDescription"
+                    android:layout_width="0dp"
+                    android:layout_height="250dp"
+                    android:layout_marginTop="16dp"
+                    android:hint="Product Description"
+                    android:background="@drawable/edit_text_bg"
+                    android:padding="8dp"
+                    android:inputType="textMultiLine"
+                    android:maxLength="500"
+                    app:layout_constraintTop_toBottomOf="@+id/ProductPriceLayout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+    </FrameLayout>
+</layout>
