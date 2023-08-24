@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -25,6 +26,12 @@ class ProductImageRecyclerViewAdapter(var productImageList: ArrayList<Uri>, val 
         Glide.with(context).load(item)
             .override(180, 180)
             .into(holder.image)
+
+        if (position == 0) {
+            holder.mainLabel.visibility = View.VISIBLE
+        } else {
+            holder.mainLabel.visibility = View.GONE
+        }
     }
 
     /* (2) 리스너 인터페이스 */
@@ -49,6 +56,7 @@ class ProductImageRecyclerViewAdapter(var productImageList: ArrayList<Uri>, val 
         private var view: View = ItemView
 //        var image = ItemView.findViewById<ImageView>(R.id.addimges)
         var image: ImageView = itemView.findViewById(R.id.addimges)
+        val mainLabel: TextView = itemView.findViewById(R.id.mainLabel)
 
         val closeButton: ImageView = itemView.findViewById(R.id.closeButton) // X 버튼 연결
 

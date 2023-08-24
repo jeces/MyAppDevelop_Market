@@ -19,4 +19,15 @@
         android:layout_marginTop="5dp"
         android:background="?android:attr/selectableItemBackground"
         android:src="@drawable/ic_baseline_close_24" />
+
+    <TextView
+        android:id="@+id/mainLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Main"
+        android:textColor="@android:color/white"
+        android:background="@drawable/rounded_corner_label"
+        android:gravity="center"
+        android:visibility="gone"
+        android:layout_gravity="top|start"/>
 </FrameLayout>
