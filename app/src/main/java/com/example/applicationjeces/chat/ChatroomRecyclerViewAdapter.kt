@@ -12,7 +12,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.applicationjeces.R
+import com.example.applicationjeces.databinding.ChatroomItemListBinding
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.UserInfo
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.chatroom_item_list.view.*
 import java.text.SimpleDateFormat
@@ -21,6 +24,7 @@ import java.util.*
 class ChatroomRecyclerViewAdapter(var contexts: Fragment, var myId: String): ListAdapter<ChatroomData, RecyclerView.ViewHolder>(diffUtil) {
 
     private val db = FirebaseStorage.getInstance()
+    private val firestoreDb = FirebaseFirestore.getInstance()
 
     /* ViewHolder에게 item을 보여줄 View로 쓰일 item_data_list.xml를 넘기면서 ViewHolder 생성. 아이템 레이아웃과 결합 */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -65,50 +69,87 @@ class ChatroomRecyclerViewAdapter(var contexts: Fragment, var myId: String): Lis
 
     /* inner class로 viewHolder 정의. 레이아웃 내 view 연결 */
     inner class roomHolder(ItemView: View): RecyclerView.ViewHolder(ItemView) {
-        private val chatroomYourId: TextView = ItemView.findViewById(R.id.chat_yourid)
-        private val lastcomment: TextView = ItemView.findViewById(R.id.chat_lastchat)
-        private val time: TextView = ItemView.findViewById(R.id.chatroom_time)
-        private val chatroomUserImg: ImageView = ItemView.findViewById(R.id.chat_item_imageview)
-        private val chatroomCount: TextView = ItemView.findViewById(R.id.chatroom_read)
+
+        private val binding = ChatroomItemListBinding.bind(ItemView)
+
+        val chatroomYourId = binding.chatYourid
+        val lastcomment = binding.chatLastchat
+        val time = binding.chatroomTime
+        val chatroomUserImg = binding.chatItemImageview
+        val chatroomCount = binding.chatroomRead
 
         fun bind(item: ChatroomData) {
-            Log.d("챗룸ㅇㅇ4", "ddd")
-            val Id = item.id.split(",")
-            val yourNickName1 = Id[0].split("/")
-            val yourNickName2 = Id[1].split("/")
+            val ids = parseIds(item.id)
             val readN0 = item.n0.split("/")
             val readN1 = item.n1.split("/")
-            Log.d("챗룸ㅇㅇ4", "${readN0}/${readN1}/${Id}")
-            if(myId == yourNickName1[0]) {
-                if(readN0[0] == Id[0]) {
-                    Log.d("asdfasdf1", readN0[1])
-                    if(readN0[1] == "0") chatroomCount.text = " "
-                    else chatroomCount.text = readN0[1]
-                }
-                else if(readN1[0] == Id[0]) {
-                    Log.d("asdfasdf2", readN1[1])
-                    if(readN1[1] == "0") chatroomCount.text = " "
-                    else chatroomCount.text = readN1[1]
-                }
-                chatroomYourId.text = yourNickName2[1]
-                yourChatroomProfilImg(Id[1], chatroomUserImg)
-            } else {
-                if(readN0[0] == Id[1]) {
-                    Log.d("asdfasdf3", readN0[1])
-                    if(readN0[1] == "0") chatroomCount.text = " "
-                    else chatroomCount.text = readN0[1]
-                }
-                else if(readN1[0] == Id[1]) {
-                    Log.d("asdfasdf4", readN1[1])
-                    if(readN1[1] == "0") chatroomCount.text = " "
-                    else chatroomCount.text = readN1[1]
-                }
-                chatroomYourId.text = yourNickName1[1]
-                yourChatroomProfilImg(Id[0], chatroomUserImg)
-            }
+
+            assignChatroomCount(ids, readN0, readN1)
+            assignUserNameAndProfileImage(ids)
+
             lastcomment.text = item.lastcomment.toString()
             time.text = changeTime(item.time as com.google.firebase.Timestamp)
         }
+
+        private fun parseIds(idString: String): List<String> {
+            return idString.split(",").also {
+                Log.d("챗룸ㅇㅇ4", "${it[0]}/${it[1]}")
+            }
+        }
+
+        private fun assignChatroomCount(ids: List<String>, readN0: List<String>, readN1: List<String>) {
+            if(myId == ids[0]) {
+                chatroomCount.text = getChatroomCountForId(ids[0], readN0, readN1)
+            } else {
+                chatroomCount.text = getChatroomCountForId(ids[1], readN0, readN1)
+            }
+        }
+
+        private fun getChatroomCountForId(id: String, readN0: List<String>, readN1: List<String>): String {
+            if(readN0[0] == id) {
+                return if(readN0[1] == "0") " " else readN0[1]
+            } else if(readN1[0] == id) {
+                return if(readN1[1] == "0") " " else readN1[1]
+            }
+            return " "
+        }
+
+        private fun assignUserNameAndProfileImage(ids: List<String>) {
+            if(myId == ids[0]) {
+                setUserName(ids[1], chatroomYourId)
+                yourChatroomProfilImg(ids[1], chatroomUserImg)
+            } else {
+                setUserName(ids[0], chatroomYourId)
+                yourChatroomProfilImg(ids[0], chatroomUserImg)
+            }
+        }
+    }
+
+    /**
+     * 상대이름[Firestore 쿼리 캐싱]]
+     */
+    private val userNameCache = mutableMapOf<String, String>()
+    fun setUserName(yourId: String, textView: TextView) {
+        userNameCache[yourId]?.let { cachedName ->
+            textView.text = cachedName
+            return
+        }
+        firestoreDb.collection("UserInfo")
+            .whereEqualTo("id", yourId)
+            .limit(1)  // 한 개의 결과만을 원합니다.
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                if (!querySnapshot.isEmpty) {
+                    val name = querySnapshot.documents[0].getString("name") ?: "Unknown"
+                    userNameCache[yourId] = name  // 캐시에 이름 저장
+                    textView.text = name
+                } else {
+                    textView.text = "Unknown"  // 또는 기본값을 설정
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d("FirestoreError", "Error getting documents: ", exception)
+                textView.text = "Error"  // 적절한 에러 처리를 수행
+            }
     }
 
     /**
@@ -195,7 +236,7 @@ class ChatroomRecyclerViewAdapter(var contexts: Fragment, var myId: String): Lis
             override fun areItemsTheSame(oldItem: ChatroomData, newItem: ChatroomData): Boolean {
                 Log.d("챗룸ㅇㅇ 올드", "${oldItem}/${newItem}")
                 Log.d("챗룸ㅇㅇ 올드", "${oldItem == newItem}/${oldItem == newItem}")
-                return oldItem == newItem
+                return oldItem.id == newItem.id
             }
             override fun areContentsTheSame(oldItem: ChatroomData, newItem: ChatroomData): Boolean {
                 // User의 내용을 비교해서 같으면 true -> UI 변경 없음
