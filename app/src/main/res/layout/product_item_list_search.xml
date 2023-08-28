@@ -1,44 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/colorViews"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     app:cardElevation="8dp"
-    app:cardCornerRadius="8dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    app:cardCornerRadius="8dp">
 
-    <ImageView
-        android:id="@+id/product_img"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@color/black"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/product_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="120dp"
-        android:text="상품이름"
-        android:textColor="@color/black"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toRightOf="@id/product_img"
-        app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:id="@+id/product_img"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@color/black"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/product_price"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="120dp"
-        android:layout_marginTop="70dp"
-        android:text="상품가격"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        app:layout_constraintLeft_toRightOf="@id/product_img"
-        app:layout_constraintTop_toBottomOf="@id/product_name" />
+        <TextView
+            android:id="@+id/product_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="상품이름"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="@id/product_img"
+            app:layout_constraintBottom_toBottomOf="@id/product_img"
+            app:layout_constraintStart_toEndOf="@id/product_img"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintVertical_bias="0.3" />
+
+        <TextView
+            android:id="@+id/product_price"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="상품가격"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintTop_toBottomOf="@id/product_name"
+            app:layout_constraintStart_toEndOf="@id/product_img"
+            app:layout_constraintEnd_toStartOf="@id/location" />
+
+        <TextView
+            android:id="@+id/location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="서울시 강남구"
+            android:textColor="@color/dark_gray"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/product_price"
+            app:layout_constraintBottom_toBottomOf="@id/product_price" />
+
+        <TextView
+            android:id="@+id/upload_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="1시간 전"
+            android:textColor="@color/dark_gray"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@id/product_img"
+            app:layout_constraintEnd_toStartOf="@id/heart_icon"
+            app:layout_constraintTop_toBottomOf="@id/product_price" />
+
+        <!-- 찜수 아이콘 -->
+        <ImageView
+            android:id="@+id/heart_icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_baseline_check_circle_24"
+            app:layout_constraintEnd_toStartOf="@id/like_count"
+            app:layout_constraintTop_toTopOf="@id/upload_time"
+            app:layout_constraintBottom_toBottomOf="@id/upload_time"
+            android:layout_marginEnd="8dp" />
+
+        <!-- 찜수 숫자 -->
+        <TextView
+            android:id="@+id/like_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="123"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toStartOf="@id/chat_icon"
+            app:layout_constraintTop_toTopOf="@id/heart_icon"
+            app:layout_constraintBottom_toBottomOf="@id/heart_icon"
+            android:layout_marginEnd="8dp" />
+
+        <!-- 채팅수 아이콘 -->
+        <ImageView
+            android:id="@+id/chat_icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_baseline_chat_24"
+            app:layout_constraintEnd_toStartOf="@id/chat_count"
+            app:layout_constraintTop_toTopOf="@id/upload_time"
+            app:layout_constraintBottom_toBottomOf="@id/upload_time"
+            android:layout_marginEnd="8dp" />
+
+        <!-- 채팅수 숫자 -->
+        <TextView
+            android:id="@+id/chat_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="45"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/chat_icon"
+            app:layout_constraintBottom_toBottomOf="@id/chat_icon" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
