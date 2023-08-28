@@ -29,7 +29,7 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main2)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_search)
 
         /* firestore 가져옴 */
         jecesfirestore = FirebaseFirestore.getInstance()
