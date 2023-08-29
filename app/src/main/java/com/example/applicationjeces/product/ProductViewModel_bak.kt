@@ -291,9 +291,9 @@ class ProductViewModel_bak(application: Application): AndroidViewModel(applicati
     /**
      *  제품 디테일 데이터를 가지고 있는 데이터
      **/
-    fun setProductDetail(productId : String, productName: String, productPrice: Int, productDescription: String, productCount: String, pChatCount: Int, pViewCount: Int, pHearCount: Int, pBidPrice: String, getPosition: Int) {
+    fun setProductDetail(productId : String, productName: String, productPrice: Int, productDescription: String, productCount: String, pChatCount: Int, pViewCount: Int, pHearCount: Int, pBidPrice: String, insertTime: String, getPosition: Int) {
         productArrayList.clear()
-        val productDetail = Product(productId, productName, productPrice, productDescription, productCount.toInt(), thisUser + "_" + productName + "_0_IMAGE_.png", pChatCount, pViewCount, pHearCount, pBidPrice)
+        val productDetail = Product(productId, productName, productPrice, productDescription, productCount.toInt(), thisUser + "_" + productName + "_0_IMAGE_.png", pChatCount, pViewCount, pHearCount, pBidPrice, insertTime)
         position = getPosition
         productArrayList.add(productDetail)
         Log.d("aa11", productArrayList.toString() + "aaaaa")

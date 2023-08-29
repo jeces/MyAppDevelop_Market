@@ -19,15 +19,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.example.applicationjeces.MainActivity
 import com.example.applicationjeces.R
-import com.example.applicationjeces.databinding.BidBottomSheetLayoutBinding
 import com.example.applicationjeces.databinding.FragmentAddBinding
-import com.example.applicationjeces.page.DataViewModel
+import com.example.applicationjeces.databinding.FragmentHomeBinding
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_add.*
@@ -93,19 +91,21 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewProfile = inflater.inflate(R.layout.fragment_add, container, false)
-
-        productViewModel = ViewModelProvider(this)[ProductViewModel::class.java]
-        firebaseStorage = FirebaseStorage.getInstance()
-        productViewModel.whereMyUser("add")
-
-        setupRecyclerView()
-
         /**
          * view 바인딩
          */
         _binding = FragmentAddBinding.inflate(inflater, container, false)
         val view = binding.root
+
+        /**
+        * 뷰모델 초기화 생성자
+        **/
+        productViewModel = ViewModelProvider(this)[ProductViewModel::class.java]
+
+        firebaseStorage = FirebaseStorage.getInstance()
+        productViewModel.whereMyUser("add")
+
+        setupRecyclerView()
 
         /**
          * 단위 입력(,)
@@ -147,7 +147,7 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener {
     }
 
     private fun setupRecyclerView() {
-        viewProfile.img_profile.apply {
+        binding.imgProfile.apply {
             adapter = this@AddFragment.adapter
             setHasFixedSize(true)
             layoutManager = GridLayoutManager(requireContext(), 5)
@@ -160,7 +160,7 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener {
 
     fun registerProduct() {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            funImageUpload(viewProfile)
+            funImageUpload()
         }
         insertProduct()
     }
@@ -184,29 +184,29 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener {
         }
     }
 
-    private fun funImageUpload(view: View) {
-        val productName = view.productName.text.toString()
+    private fun funImageUpload() {
+        val productName = binding.productName.text.toString()
         val myId = productViewModel.thisUser
         imagelist.forEachIndexed { index, uri ->
             val imgFileName = "${myId}_${productName}_${index}_IMAGE_.png"
             Log.d("사진업로드", imgFileName)
             val storageRef = firebaseStorage?.reference?.child("$myId/$productName/")?.child(imgFileName)
             storageRef?.putFile(uri)
-                ?.addOnSuccessListener { Toast.makeText(view.context, "ImageUploaded", Toast.LENGTH_SHORT).show() }
+                ?.addOnSuccessListener { Toast.makeText(context, "ImageUploaded", Toast.LENGTH_SHORT).show() }
                 ?.addOnFailureListener { /* Handle error */ }
         }
     }
 
     private fun insertProduct() {
-        val productName = viewProfile.productName.text.toString()
-        val productPrice = viewProfile.productPrice.text.toString()
-        val productDescription = viewProfile.productDescription.text.toString()
+        val productName = binding.productName.text.toString()
+        val productPrice = binding.productPrice.text.toString().replace(",", "")
+        val productDescription = binding.productDescription.text.toString()
         val myId = productViewModel.thisUser
         val nickName = productViewModel
 
         if (productName.isNotEmpty() && productPrice.isNotEmpty()) {
             imgFileName = if (targetImg) "basic_img.png" else "${myId}_${productName}_0_IMAGE_.png"
-            val product = Product(myId, productName, productPrice.toInt(), productDescription, imgCount, imgFileName, 0, 0, 0, "0")
+            val product = Product(myId, productName, productPrice.toInt(), productDescription, imgCount, imgFileName, 0, 0, 0, "0", "0")
             productViewModel.addProducts(product)
 
             Toast.makeText(requireContext(), "Successfully added!", Toast.LENGTH_LONG).show()

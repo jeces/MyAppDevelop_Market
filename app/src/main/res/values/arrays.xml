@@ -5,4 +5,26 @@
         <item>Category 2</item>
         <!-- ... 기타 카테고리 항목 ... -->
     </string-array>
+
+    <!-- 카테고리 항목 -->
+    <string-array name="categories">
+        <item>의류</item>
+        <item>가전제품</item>
+        <item>가구</item>
+        <!-- ... -->
+    </string-array>
+
+    <!-- 정렬 옵션 -->
+    <string-array name="sortingOptions">
+        <item>최신순</item>
+        <item>저가순</item>
+        <item>고가순</item>
+    </string-array>
+
+    <!-- 기간 설정 -->
+    <string-array name="timePeriods">
+        <item>오늘</item>
+        <item>1주일</item>
+        <item>1개월</item>
+    </string-array>
 </resources>

@@ -83,6 +83,10 @@ class AddActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
+        val intent = Intent(this, MainActivity::class.java)
+        intent.putExtra("SELECT_HOME", true)
+        startActivity(intent)
+        finish()
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
     }
 }

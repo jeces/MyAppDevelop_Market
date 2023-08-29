@@ -36,6 +36,9 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     private val _productRecentByViewCount = MutableLiveData<List<DocumentSnapshot>>()
     val productRecentByViewCount: LiveData<List<DocumentSnapshot>> get() = _productRecentByViewCount
 
+    private val _searchResponse = MutableLiveData<Response>()
+    val searchResponse: LiveData<Response> get() = _searchResponse
+
     private val _productMyCellCount = MutableLiveData<Int>()
     val productMyCellCount: LiveData<Int> get() = _productMyCellCount
 
@@ -155,16 +158,15 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-    fun searchProductsCall(searchName: String): LiveData<List<DocumentSnapshot>> {
-        val searchLiveData = MutableLiveData<List<DocumentSnapshot>>()
+    fun searchProducts(searchName: String) {
         viewModelScope.launch {
             try {
-                searchLiveData.value = repository.searchProductsCall(searchName)
+                val response = repository.searchProducts(searchName)
+                _searchResponse.value = response
             } catch (e: Exception) {
-                // Handle the exception
+                // Handle exceptions, for example, by updating a LiveData that the UI observes
             }
         }
-        return searchLiveData
     }
 
     fun viewCountUp(pId: String, pName: String) {
@@ -269,10 +271,11 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         pViewCount: Int,
         pHearCount: Int,
         pBidPrice: String,
+        uploadTime: String,
         getPosition: Int
     ) {
         val imageUrl = "${repository.thisUser}_${productName}_0_IMAGE_.png"
-        val productDetail = Product(productId, productName, productPrice, productDescription, productCount, imageUrl, pChatCount, pViewCount, pHearCount, pBidPrice)
+        val productDetail = Product(productId, productName, productPrice, productDescription, productCount, imageUrl, pChatCount, pViewCount, pHearCount, pBidPrice, uploadTime)
 
         position = getPosition
         productArrayList.add(productDetail)

@@ -28,6 +28,17 @@
                 android:paddingEnd="13dp"
                 android:paddingBottom="13dp">
 
+                <!-- 필터 버튼 추가 -->
+                <ImageButton
+                    android:id="@+id/filterButton"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_baseline_menu_24"
+                    android:background="?android:selectableItemBackground"
+                    android:contentDescription="@string/navcolor" />
+
                 <ImageView
                     android:id="@+id/search_back"
                     android:layout_width="30dp"
@@ -54,12 +65,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <androidx.viewpager.widget.ViewPager
-                    android:id="@+id/view_pager"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
                 <androidx.recyclerview.widget.RecyclerView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -81,15 +86,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:visibility="gone" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="24dp"
-            app:srcCompat="@android:drawable/ic_dialog_email" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

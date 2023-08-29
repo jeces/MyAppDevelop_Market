@@ -8,10 +8,12 @@ import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.util.*
@@ -77,10 +79,26 @@ class ProductRepository {
         getFirestore().collection("Product").add(productMap).await()
     }
 
-    suspend fun searchProductsCall(searchName: String): List<DocumentSnapshot> {
-        val productSearch = getFirestore().collection("Product").get().await()
-        return productSearch.filter {
-            it.getString("productName")?.contains(searchName) == true
+    suspend fun searchProducts(searchName: String): Response {
+        return try {
+            val productSearch = getCollection("Product").get().await()
+            val response = Response()
+
+            for (snapshot in productSearch) {
+                snapshot.getString("productName")?.let { productName ->
+                    if (productName.contains(searchName)) {
+                        if (response.products == null) {
+                            response.products = listOf(snapshot)
+                        } else {
+                            response.products = response.products?.plus(listOf(snapshot))
+                        }
+                    }
+                }
+            }
+
+            response
+        } catch (e: Exception) {
+            throw CancellationException("Task was cancelled")
         }
     }
 

@@ -15,6 +15,10 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.storage.FirebaseStorage
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import kotlinx.android.synthetic.main.product_item_list.view.*
+import kotlinx.android.synthetic.main.product_item_list.view.product_img
+import kotlinx.android.synthetic.main.product_item_list.view.product_name
+import kotlinx.android.synthetic.main.product_item_list.view.product_price
+import kotlinx.android.synthetic.main.product_item_list_search.view.*
 
 class ProductViewPagerAdapter(private val context: Fragment, var myId: String, var producFiretList: List<DocumentSnapshot>): RecyclerView.Adapter<ProductViewPagerAdapter.Holder>() {
 
@@ -32,14 +36,10 @@ class ProductViewPagerAdapter(private val context: Fragment, var myId: String, v
         var currentItem3 = producFiretList[position].get("productImgUrl")
         val currentItem4 = producFiretList[position].get("productCount")
 
+
         /* HomeFragment */
         holder.itemView.product_name.text = currentItem.toString()
         holder.itemView.product_price.text = currentItem2.toString()
-
-        Log.d("뭐냐?",currentItem.toString())
-        Log.d("뭐냐?",currentItemId.toString())
-        Log.d("뭐냐?",currentItem3.toString())
-        Log.d("뭐냐?",currentItem4.toString())
 
         /* 이미지가 있을 때와 없을 때 */
         if(currentItem4.toString() == "0") {
@@ -91,6 +91,18 @@ class ProductViewPagerAdapter(private val context: Fragment, var myId: String, v
     override fun getItemCount(): Int {
         /* productList 사이즈를 리턴합니다. */
         return producFiretList.size
+    }
+
+    fun getTimeAgo(time: Long): String {
+        val now = System.currentTimeMillis()
+        val diff = now - time
+
+        return when {
+            diff < 60 * 1000 -> "방금 전"
+            diff < 60 * 1000 * 60 -> "${diff / (60 * 1000)}분 전"
+            diff < 60 * 1000 * 60 * 24 -> "${diff / (60 * 1000 * 60)}시간 전"
+            else -> "어제"
+        }
     }
 
     /* 홈 전체 데이터 */

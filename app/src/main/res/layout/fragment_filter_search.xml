@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- 최소가격 & 최대금액 -->
+    <EditText
+        android:id="@+id/minPriceEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="최소 가격" />
+
+    <EditText
+        android:id="@+id/maxPriceEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="최대 가격"
+        android:layout_marginTop="16dp" />
+
+    <!-- 카테고리 Spinner -->
+    <Spinner
+        android:id="@+id/categorySpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:entries="@array/categories" />
+
+    <!-- 판매완료 여부 -->
+    <CheckBox
+        android:id="@+id/saleCompletedCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="판매 완료 포함" />
+
+    <!-- 정렬 옵션 -->
+    <Spinner
+        android:id="@+id/sortingSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:entries="@array/sortingOptions" />
+
+    <!-- 같은 지역 옵션 -->
+    <CheckBox
+        android:id="@+id/sameRegionCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="같은 지역" />
+
+    <!-- 기간 설정 -->
+    <Spinner
+        android:id="@+id/timePeriodSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:entries="@array/timePeriods" />
+
+    <!-- 필터 적용 버튼 -->
+    <Button
+        android:id="@+id/applyFilterButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="적용" />
+</LinearLayout>

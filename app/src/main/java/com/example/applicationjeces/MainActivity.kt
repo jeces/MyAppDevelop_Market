@@ -31,9 +31,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        /**
-         * 상태표시줄 투명하게 만들기
-         */
+        // 상태표시줄 투명하게 만들기
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
         window.statusBarColor = Color.TRANSPARENT
 
@@ -43,56 +41,45 @@ class MainActivity : AppCompatActivity() {
             lifecycleOwner = this@MainActivity
         }
 
-        /* 앨범에 접근하는것을 허용하는 메세지 */
+        // 앨범에 접근하는것을 허용하는 메세지
         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1)
 
-        /**
-         *  LiveData의 value의 변경을 감지하고 호출 PageNum이 변경되면 호출
-         **/
+        // LiveData의 value의 변경을 감지하고 호출 PageNum이 변경되면 호출
         jecesViewModel.currentPages.observe(this) {
-            /* it은 LiveData의 value 값 즉 jecesViewModel 객체의 value값이 넘어온다. 처음 선언된 currentPage 넘어옴 */
             changeFragment(it)
         }
 
-        if(intent.getBooleanExtra("SELECT_HOME", false)) {
-            selectHome()
+        intent.getBooleanExtra("SELECT_HOME", false).let {
+            if (it) selectHome()
         }
     }
 
-    fun selectHome() {
+    private fun selectHome() {
         binding.bottomNavigationView.selectedItemId = R.id.home
     }
 
     /**
      * 페이지 전환 함수
      **/
-    fun changeFragment(pageData: PageData) {
-        /* 현재 Fragment[맨 처음은 tag 등록이 안되어있기 때문에 아래에서 등록을 3개를 시켜줘야함 */
+    private fun changeFragment(pageData: PageData) {
         var targetFragment = supportFragmentManager.findFragmentByTag(pageData.tag)
 
-        /* Fragment Ktx의 commit 함수 */
         supportFragmentManager.commit {
-            /* 현재 Fragment가 null이라면[무조건 들어옴] */
-            if(targetFragment == null) {
-                /* getFragment를 호출하여 Fragment 획득 */
+            if (targetFragment == null) {
                 targetFragment = getFragment(pageData)
-                if(target == "search") {
-                    startActivity(Intent(this@MainActivity, SearchActivity::class.java))
+                if (target == "search" || target == "add") {
+                    startActivity(Intent(this@MainActivity, if(target == "search") SearchActivity::class.java else AddActivity::class.java))
+                    // 추가된 부분: `target` 값을 초기화
                     target = ""
-                    return
-                } else if(target == "add") {
-                    startActivity(Intent(this@MainActivity, AddActivity::class.java))
+                    return@commit
                 }
-                /* 현재 Fragment tag에 등록
-                *  맨처음 3번 등록해야지 쓸 수 있음 */
                 add(R.id.frame_layout, targetFragment!!, pageData.tag)
             }
-            /* 현재 Fragment show */
             show(targetFragment!!)
-            /* 나머지 Fragment hide */
+
             PageData.values()
                 .filterNot { it == pageData }
-                .forEach {type ->
+                .forEach { type ->
                     supportFragmentManager.findFragmentByTag(type.tag)?.let {
                         hide(it)
                     }
@@ -102,25 +89,15 @@ class MainActivity : AppCompatActivity() {
     // startActivity(Intent(this@MainActivity, MainActivity2::class.java))
     /* 실행시 Fragment값 GET 함수 */
     /* 처음은 띄워주기 위해 사용됨. 후에 Hide로 숨겨져서 사용 안함. 한번쓰고 버림 */
-    fun getFragment(pageData: PageData): Fragment {
-
-        if(pageData.title == "home") {
-            return HomeFragment.newInstance(pageData.title, pageData.tag)
-        } else if(pageData.title == "add") {
-            target = "add"
-            return HomeFragment.newInstance(pageData.title, pageData.tag)
-        } else if(pageData.title == "search") {
-            target = "search"
-            return HomeFragment.newInstance(pageData.title, pageData.tag)
-        } else if(pageData.title == "chatroom") {
-            return ChatroomFragment.newInstance(pageData.title, pageData.tag)
-        } else if(pageData.title == "my") {
-            return MyFragment.newInstance(pageData.title, pageData.tag)
-        } else if(pageData.title == "message") {
-            return ChatroomFragment.newInstance(pageData.title, pageData.tag)
-        } else {
-            return HomeFragment.newInstance(pageData.title, pageData.tag)
+    private fun getFragment(pageData: PageData): Fragment = when (pageData.title) {
+        "home" -> HomeFragment.newInstance(pageData.title, pageData.tag)
+        "add", "search" -> {
+            target = pageData.title
+            HomeFragment.newInstance(pageData.title, pageData.tag)
         }
+        "chatroom", "message" -> ChatroomFragment.newInstance(pageData.title, pageData.tag)
+        "my" -> MyFragment.newInstance(pageData.title, pageData.tag)
+        else -> HomeFragment.newInstance(pageData.title, pageData.tag)
     }
 
     override fun onStart() {

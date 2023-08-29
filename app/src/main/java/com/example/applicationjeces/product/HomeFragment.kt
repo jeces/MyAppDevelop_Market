@@ -69,7 +69,7 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
     fun onProductClicked(product: HashMap<String, Any>, position: Int) {
         productViewModel.setProductDetail(product["ID"].toString(), product["productName"].toString(), product["productPrice"].toString().toInt(),
             product["productDescription"].toString(), product["productCount"].toString().toInt(), product["pChatCount"].toString().toInt(),
-            product["pViewCount"].toString().toInt(), product["pHeartCount"].toString().toInt(), product["productBidPrice"].toString(), position)
+            product["pViewCount"].toString().toInt(), product["pHeartCount"].toString().toInt(), product["productBidPrice"].toString(), product["insertTime"].toString(), position)
 
         val intent = Intent(getActivity(), InfoActivity::class.java)
         intent.apply {
@@ -83,6 +83,7 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
             putExtra("pViewCount", product["pViewCount"].toString())
             putExtra("pHeartCount", product["pHeartCount"].toString())
             putExtra("productBidPrice", product["productBidPrice"].toString())
+            putExtra("insertTime", product["insertTime"].toString())
             putExtra("position", position)
         }
 
