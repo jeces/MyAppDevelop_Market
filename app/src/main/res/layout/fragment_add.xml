@@ -115,19 +115,26 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Product Description Section -->
-                <EditText
-                    android:id="@+id/productDescription"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/ProductDescriptionLayout"
                     android:layout_width="0dp"
-                    android:layout_height="250dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:hint="Product Description"
-                    android:background="@drawable/edit_text_bg"
-                    android:padding="8dp"
-                    android:inputType="textMultiLine"
-                    android:maxLength="500"
                     app:layout_constraintTop_toBottomOf="@+id/ProductPriceLayout"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/productDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="250dp"
+                        android:hint="Product Description"
+                        android:background="@drawable/edit_text_bg"
+                        android:padding="8dp"
+                        android:inputType="textMultiLine"
+                        android:maxLength="500" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
