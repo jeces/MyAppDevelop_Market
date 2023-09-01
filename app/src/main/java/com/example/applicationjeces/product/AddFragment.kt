@@ -238,7 +238,7 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener {
         val productName = binding.productName.text.toString()
         val myId = productViewModel.thisUser
         imagelist.forEachIndexed { index, uri ->
-            val imgFileName = "${myId}_${productName}_${index}_IMAGE_.png"
+            val imgFileName = "${myId}_${index}_IMAGE_.png"
             Log.d("사진업로드", imgFileName)
             val storageRef = firebaseStorage?.reference?.child("$myId/$productName/")?.child(imgFileName)
             storageRef?.putFile(uri)
