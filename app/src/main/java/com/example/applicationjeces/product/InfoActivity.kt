@@ -57,6 +57,7 @@ class InfoActivity : AppCompatActivity() {
         val pViewCount = intent.getStringExtra("pViewCount")
         val pHeartCount = intent.getStringExtra("pHeartCount")
         val productBidPrice = intent.getStringExtra("productBidPrice")
+        val tagsJson = intent.getStringExtra("tags")
 
         var myId = productViewModel.thisUser
 
@@ -73,6 +74,7 @@ class InfoActivity : AppCompatActivity() {
                 putString("pViewCount", pViewCount)
                 putString("pHeartCount", pHeartCount)
                 putString("productBidPrice", productBidPrice)
+                putString("tags", tagsJson)
             }
         }
         val transaction = supportFragmentManager.beginTransaction()

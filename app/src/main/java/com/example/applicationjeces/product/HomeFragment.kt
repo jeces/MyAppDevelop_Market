@@ -28,6 +28,7 @@ import com.example.applicationjeces.databinding.FragmentHomeBinding
 import com.example.applicationjeces.product.*
 import com.example.applicationjeces.user.LoginActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.gson.Gson
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -67,10 +68,14 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
 
     // 공통으로 사용할 항목 클릭 메서드
     fun onProductClicked(product: HashMap<String, Any>, position: Int) {
+        val gson = Gson()
+        val tags = listOf(product["tags"]) as List<String>
         productViewModel.setProductDetail(product["ID"].toString(), product["productName"].toString(), product["productPrice"].toString().toInt(),
             product["productDescription"].toString(), product["productCount"].toString().toInt(), product["pChatCount"].toString().toInt(),
-            product["pViewCount"].toString().toInt(), product["pHeartCount"].toString().toInt(), product["productBidPrice"].toString(), product["insertTime"].toString(), position)
-
+            product["pViewCount"].toString().toInt(), product["pHeartCount"].toString().toInt(), product["productBidPrice"].toString(), product["insertTime"].toString(), position,
+            tags, product["category"].toString(), product["state"].toString()
+        )
+        val tagsJson = gson.toJson(tags)
         val intent = Intent(getActivity(), InfoActivity::class.java)
         intent.apply {
             putExtra("ID", product["ID"].toString())
@@ -85,6 +90,7 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
             putExtra("productBidPrice", product["productBidPrice"].toString())
             putExtra("insertTime", product["insertTime"].toString())
             putExtra("position", position)
+            putExtra("tags", tagsJson)
         }
 
         startActivity(intent)

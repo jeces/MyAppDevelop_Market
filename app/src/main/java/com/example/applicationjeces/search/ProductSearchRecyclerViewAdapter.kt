@@ -39,6 +39,7 @@ class ProductSearchRecyclerViewAdapter(var producFiretList: List<DocumentSnapsho
         val currentItem4 = producFiretList[position].get("productCount")
         val pChatCount = producFiretList[position].get("pChatCount")
         val pHearCount = producFiretList[position].get("pHeartCount")
+        val bidPrice = producFiretList[position].get("productBidPrice")
 
 
         val timestampString = producFiretList[position].get("insertTime").toString()
@@ -55,6 +56,7 @@ class ProductSearchRecyclerViewAdapter(var producFiretList: List<DocumentSnapsho
         holder.itemView.upload_time.text = timeAgo
         holder.itemView.like_count.text = pHearCount.toString()
         holder.itemView.chat_count.text = pChatCount.toString()
+        holder.itemView.current_bid.text = bidPrice.toString()
 
         /* 이미지가 있을 때와 없을 때 */
         if(currentItem4.toString() == "0") {

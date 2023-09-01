@@ -163,5 +163,11 @@ dependencies {
 
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4' // 버전은 해당 시점의 최신 버전을 사용하세요.
 
+    /* retrofit */
+    implementation 'com.squareup.retrofit2:retrofit:2.x.y'
+    implementation 'com.squareup.retrofit2:converter-gson:2.x.y'
+
+    /* flexbox 사용 */
+    implementation 'com.google.android.flexbox:flexbox:3.0.0'
 
 }

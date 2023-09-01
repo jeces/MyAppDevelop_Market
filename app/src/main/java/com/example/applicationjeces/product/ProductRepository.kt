@@ -59,11 +59,10 @@ class ProductRepository {
     suspend fun addProducts(product: Product) {
         val currentTime = Timestamp.now()
         val userSnapshot = getFirestore().collection("UserInfo").whereEqualTo("id", product.product_id).get().await()
-        val userName = userSnapshot.documents.firstOrNull()?.getString("name") ?: ""
+//        val userName = userSnapshot.documents.firstOrNull()?.getString("name") ?: ""
         val productMap = mapOf(
             "IDX" to "${product.product_id}_${product.product_name}",
             "ID" to product.product_id,
-            "nickName" to userName,
             "productName" to product.product_name,
             "productPrice" to product.product_price,
             "productDescription" to product.product_description,
@@ -73,7 +72,10 @@ class ProductRepository {
             "pViewCount" to product.viewCount,
             "pHeartCount" to product.heartCount,
             "productBidPrice" to product.product_bid_price,
-            "insertTime" to currentTime
+            "insertTime" to currentTime,
+            "tags" to product.tags,
+            "category" to product.category,
+            "product_state" to product.state
             // ... (remaining fields as earlier)
         )
         getFirestore().collection("Product").add(productMap).await()

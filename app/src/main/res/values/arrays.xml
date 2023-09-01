@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="product_categories">
-        <item>Category 1</item>
-        <item>Category 2</item>
+        <item>의류</item>
+        <item>가전제품</item>
+        <item>가구</item>
         <!-- ... 기타 카테고리 항목 ... -->
     </string-array>
 

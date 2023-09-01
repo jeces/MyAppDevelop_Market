@@ -45,8 +45,16 @@ data class  Product(
     var product_bid_price: String,
 
     /*업로드 시간 */
-    var upload_time: String
+    var upload_time: String,
 
+    /* 테그 */
+    var tags: List<String> = listOf(),
+
+    /* 카테고리 */
+    val category: String,
+
+    /* 상품 상태 */
+    val state: String
 ) {
 
 }

@@ -272,10 +272,13 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         pHearCount: Int,
         pBidPrice: String,
         uploadTime: String,
-        getPosition: Int
+        getPosition: Int,
+        tags: List<String>,
+        category: String,
+        state: String
     ) {
         val imageUrl = "${repository.thisUser}_${productName}_0_IMAGE_.png"
-        val productDetail = Product(productId, productName, productPrice, productDescription, productCount, imageUrl, pChatCount, pViewCount, pHearCount, pBidPrice, uploadTime)
+        val productDetail = Product(productId, productName, productPrice, productDescription, productCount, imageUrl, pChatCount, pViewCount, pHearCount, pBidPrice, uploadTime, tags, category, state)
 
         position = getPosition
         productArrayList.add(productDetail)

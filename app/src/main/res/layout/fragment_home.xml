@@ -63,6 +63,7 @@
             </FrameLayout>
 
             <!-- Section Divider 1 -->
+            <!-- 구분선 1 -->
             <View
                 android:id="@+id/section_divider_1"
                 android:layout_width="match_parent"
@@ -70,151 +71,144 @@
                 android:background="#DDDDDD"
                 app:layout_constraintTop_toBottomOf="@+id/adverMain" />
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/homelinear"
-                android:orientation="vertical"
+            <TextView
+                android:id="@+id/homeRecentTen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="15dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
+                android:textColor="#333333"
+                android:fontFamily="@font/font_font"
+                android:text="최근 10개 상품"
+                android:textSize="14sp"
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/section_divider_1"
-                app:layout_constraintBottom_toTopOf="@+id/section_divider_2">
+                app:layout_constraintTop_toBottomOf="@+id/section_divider_1" />
 
-                <TextView
-                    android:id="@+id/homeRecentTen"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="32dp"
-                    android:textColor="#333333"
-                    android:fontFamily="@font/font_font"
-                    android:text="Recent Ten Product"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    tools:ignore="SmallSp" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/productRecentTen"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/homeRecentTen"
+                tools:listitem="@layout/product_item_list"
+                android:orientation="horizontal"
+                app:spanCount="5"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-                <!-- 사진 리사이클러 뷰 옆으로 넘기는 -->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/productRecentTen"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="20dp"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:spanCount="5"
-                    tools:listitem="@layout/product_item_list" />
+            <TextView
+                android:id="@+id/homeHeart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/font_font"
+                android:text="많이 좋아하는 상품"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/productRecentTen" />
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/productHeart"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/homeHeart"
+                tools:listitem="@layout/product_item_list"
+                android:orientation="horizontal"
+                app:spanCount="5"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-                <TextView
-                    android:id="@+id/homeHeart"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="32dp"
-                    android:fontFamily="@font/font_font"
-                    android:text="Manay Heart Product"
-                    android:layout_marginTop="180dp"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    tools:ignore="SmallSp" />
+            <TextView
+                android:id="@+id/homeView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
+                android:text="많이 본 상품"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/font_font"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/productHeart" />
 
-                <!-- 사진 리사이클러 뷰 옆으로 넘기는 -->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/productHeart"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="200dp"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:spanCount="5"
-                    tools:listitem="@layout/product_item_list" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/productViewCount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/homeView"
+                tools:listitem="@layout/product_item_list"
+                android:orientation="horizontal"
+                app:spanCount="5"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-                <TextView
-                    android:id="@+id/homeView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="32dp"
-                    android:text="Manay View Product"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:fontFamily="@font/font_font"
-                    android:layout_marginTop="360dp"
-                    tools:ignore="SmallSp" />
+            <TextView
+                android:id="@+id/homeRecentHeart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
+                android:text="최근 많이 좋아하는 상품"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/font_font"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/productViewCount" />
 
-                <!-- 사진 리사이클러 뷰 옆으로 넘기는 -->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/productViewCount"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="380dp"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/product_item_list" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/productRecentHeart"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/homeRecentHeart"
+                tools:listitem="@layout/product_item_list"
+                android:orientation="horizontal"
+                app:spanCount="5"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-                <TextView
-                    android:id="@+id/homeRecentHeart"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="32dp"
-                    android:text="Rcent Heart Many Product"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:fontFamily="@font/font_font"
-                    android:layout_marginTop="540dp"
-                    tools:ignore="SmallSp" />
+            <TextView
+                android:id="@+id/homeRecentView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
+                android:text="최근 많이 본 상품"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/font_font"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/productRecentHeart" />
 
-                <!-- 사진 리사이클러 뷰 옆으로 넘기는 -->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/productRecentHeart"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="560dp"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/product_item_list" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/productRecentView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/homeRecentView"
+                tools:listitem="@layout/product_item_list"
+                android:orientation="horizontal"
+                app:spanCount="5"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-                <TextView
-                    android:id="@+id/homeRecentView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="32dp"
-                    android:text="Rcent View Many Product"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:fontFamily="@font/font_font"
-                    android:layout_marginTop="720dp"
-                    tools:ignore="SmallSp" />
-
-                <!-- 사진 리사이클러 뷰 옆으로 넘기는 -->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/productRecentView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="740dp"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/product_item_list" />
-
-            </FrameLayout>
-
-            <!-- Section Divider 2 -->
+            <!-- 구분선 2 -->
             <View
                 android:id="@+id/section_divider_2"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#DDDDDD"
-                app:layout_constraintTop_toBottomOf="@+id/homelinear" />
+                app:layout_constraintTop_toBottomOf="@+id/productRecentView" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>

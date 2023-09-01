@@ -13,14 +13,10 @@ import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
@@ -50,7 +46,7 @@ private const val ARG_PARAM2 = "param2"
  */
 
 /* Product 추가 Fragment  */
-class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener {
+class EditFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener {
 
     private var param1: String? = null
     private var param2: String? = null
@@ -75,7 +71,7 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener {
         // 선택된 카테고리의 인덱스를 찾습니다.
         val index = categories.indexOf(category)
         // 인덱스를 사용하여 Spinner의 값을 설정합니다.
-        binding.productCategorySpinner.setSelection(index)
+//        binding.productCategorySpinner.setSelection(index)
     }
 
     private fun showCategoryBottomSheet() {
@@ -146,66 +142,20 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener {
             showCategoryBottomSheet()
         }
 
-        /**
-         * 테그 입력
-         * */
-        binding.tagInput.setOnEditorActionListener { v, actionId, event ->
-            if (actionId == EditorInfo.IME_ACTION_DONE || (event?.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)) {
-                val tagText = v.text.toString().trim()
-                if (tagText.isNotEmpty()) {
-                    addTagToContainer(tagText)
-                    v.text = ""
-                }
-                true
-            } else {
-                false
-            }
-        }
-
 
         return view
     }
 
     private fun setupRecyclerView() {
         binding.imgProfile.apply {
-            adapter = this@AddFragment.adapter
+            adapter = this@EditFragment.adapter
             setHasFixedSize(true)
             layoutManager = GridLayoutManager(requireContext(), 5)
 
             // ItemTouchHelper 연결
-            val itemTouchHelper = ItemTouchHelper(ItemMoveCallback(this@AddFragment.adapter))
+            val itemTouchHelper = ItemTouchHelper(ItemMoveCallback(this@EditFragment.adapter))
             itemTouchHelper.attachToRecyclerView(this)
         }
-    }
-
-    private fun addTagToContainer(tag: String) {
-        val tagView = LayoutInflater.from(context).inflate(R.layout.tag_item, binding.tagsContainer, false)
-        val tagName = tagView.findViewById<TextView>(R.id.tag_name)
-        val deleteButton = tagView.findViewById<ImageView>(R.id.delete_button)
-
-        tagName.text = "#$tag"
-        deleteButton.setOnClickListener {
-            binding.tagsContainer.removeView(tagView)
-        }
-
-        binding.tagsContainer.addView(tagView)
-    }
-
-    private fun getTagsFromContainer(): List<String> {
-        val tags = mutableListOf<String>()
-        for (i in 0 until binding.tagsContainer.childCount) {
-            val childView = binding.tagsContainer.getChildAt(i)
-            val tagView = childView.findViewById<TextView>(R.id.tag_name) // 이 ID는 실제 태그 TextView의 ID와 일치해야 합니다.
-            tagView?.let {
-                tags.add(it.text.toString().replace("#", ""))
-            }
-            Log.d("TAGS", "Tags: $tags")
-        }
-        return tags
-    }
-
-    private fun getSelectedCategory(): String {
-        return binding.productCategorySpinner.selectedItem.toString()
     }
 
     fun registerProduct() {
@@ -248,28 +198,27 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener {
     }
 
     private fun insertProduct() {
-        val productName = binding.productName.text.toString()
-        val productPrice = binding.productPrice.text.toString().replace(",", "")
-        val productDescription = binding.productDescription.text.toString()
-        val tags = getTagsFromContainer() // 태그 가져오기
-        val category = getSelectedCategory() // 선택된 카테고리 가져오기
-        val myId = productViewModel.thisUser
-
-        if (productName.isNotEmpty() && productPrice.isNotEmpty()) {
-            imgFileName = if (targetImg) "basic_img.png" else "${myId}_${productName}_0_IMAGE_.png"
-            val product = Product(myId, productName, productPrice.toInt(), productDescription, imgCount, imgFileName, 0, 0, 0, "0", "0", tags, category, "판매중") // tags 추가
-            productViewModel.addProducts(product) // 이 함수 내에서 Firestore에 저장되는 코드가 있어야 합니다.
-
-            Toast.makeText(requireContext(), "Successfully added!", Toast.LENGTH_LONG).show()
-
-            val mainActivityIntent = Intent(activity, MainActivity::class.java).apply {
-                putExtra("SELECT_HOME", true)
-            }
-            startActivity(mainActivityIntent)
-            activity?.finish()
-        } else {
-            Toast.makeText(requireContext(), "Please fill out all fields.", Toast.LENGTH_LONG).show()
-        }
+//        val productName = binding.productName.text.toString()
+//        val productPrice = binding.productPrice.text.toString().replace(",", "")
+//        val productDescription = binding.productDescription.text.toString()
+//        val myId = productViewModel.thisUser
+//        val nickName = productViewModel
+//
+//        if (productName.isNotEmpty() && productPrice.isNotEmpty()) {
+//            imgFileName = if (targetImg) "basic_img.png" else "${myId}_${productName}_0_IMAGE_.png"
+//            val product = Product(myId, productName, productPrice.toInt(), productDescription, imgCount, imgFileName, 0, 0, 0, "0", "0")
+//            productViewModel.addProducts(product)
+//
+//            Toast.makeText(requireContext(), "Successfully added!", Toast.LENGTH_LONG).show()
+//
+//            val mainActivityIntent = Intent(activity, MainActivity::class.java).apply {
+//                putExtra("SELECT_HOME", true)
+//            }
+//            startActivity(mainActivityIntent)
+//            activity?.finish()
+//        } else {
+//            Toast.makeText(requireContext(), "Please fill out all fields.", Toast.LENGTH_LONG).show()
+//        }
     }
 
     fun openImagePicker() {

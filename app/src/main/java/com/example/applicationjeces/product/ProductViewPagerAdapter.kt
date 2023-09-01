@@ -35,11 +35,13 @@ class ProductViewPagerAdapter(private val context: Fragment, var myId: String, v
         val currentItem2 = producFiretList[position].get("productPrice")
         var currentItem3 = producFiretList[position].get("productImgUrl")
         val currentItem4 = producFiretList[position].get("productCount")
+        val bidPrice = producFiretList[position].get("productBidPrice")
 
 
         /* HomeFragment */
-        holder.itemView.product_name.text = currentItem.toString()
-        holder.itemView.product_price.text = currentItem2.toString()
+        holder.itemView.product_name.text = "${currentItem.toString()}"
+        holder.itemView.product_price.text = "판매가 : ${currentItem2.toString()}"
+        holder.itemView.current_bid_price.text = "입찰가 : ${bidPrice.toString()}"
 
         /* 이미지가 있을 때와 없을 때 */
         if(currentItem4.toString() == "0") {

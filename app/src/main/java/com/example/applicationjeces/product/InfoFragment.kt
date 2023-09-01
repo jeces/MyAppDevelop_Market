@@ -14,7 +14,10 @@ import com.bumptech.glide.Glide
 import com.example.applicationjeces.MainActivity
 import com.example.applicationjeces.R
 import com.example.applicationjeces.databinding.FragmentInfoBinding
+import com.google.common.reflect.TypeToken
 import com.google.firebase.storage.FirebaseStorage
+import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator
 import kotlinx.android.synthetic.main.chat_right_item_list.view.view3_2
 import java.text.NumberFormat
@@ -55,6 +58,19 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
         val pChatCount = arguments?.getString("pChatCount")
         val pViewCount = arguments?.getString("pViewCount")
         val pHeartCount = arguments?.getString("pHeartCount")
+        val tagsJson = arguments?.getString("tags")
+        Log.d("afafafaf", tagsJson.toString())
+        val gson = Gson()
+        val tags: List<List<String>> = try {
+            gson.fromJson(tagsJson, object : TypeToken<List<List<String>>>() {}.type)
+        } catch (e: JsonSyntaxException) {
+            Log.e("InfoFragment", "Failed to parse tags JSON", e)
+            emptyList<List<String>>()
+        }
+
+        val tagsText = tags.flatten().joinToString(" ") { "#$it" }
+        binding.tagsTextView.text = tagsText
+
 //        val productBidPrices = arguments?.getString("productBidPrice")
 //        val position = arguments?.getString("position", -1)
         val myId: String = productViewModel.thisUser.toString()
