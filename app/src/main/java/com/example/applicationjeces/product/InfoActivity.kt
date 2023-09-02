@@ -213,6 +213,29 @@ class InfoActivity : AppCompatActivity() {
                  * 상품 업데이트 수정
                  */
                 R.id.nav_edit -> {
+                    // EditFragment 인스턴스 생성
+                    val editFragment = EditFragment().apply {
+                        arguments = Bundle().apply {
+                            putString("ID", pId)
+                            putString("IDX", pIdx)
+                            putString("productName", pName)
+                            putString("productPrice", productPrice)
+                            putString("productDescription", productDescription)
+                            putString("productCount", productCount)
+                            putString("pChatCount", pChatCount)
+                            putString("pViewCount", pViewCount)
+                            putString("pHeartCount", pHeartCount)
+                            putString("productBidPrice", productBidPrice)
+                            putString("tags", tagsJson)
+                        }
+                    }
+
+                    // EditFragment를 표시
+                    val transaction = supportFragmentManager.beginTransaction()
+                    transaction.replace(R.id.fragmentContainer, editFragment)
+                    transaction.addToBackStack(null)  // 현재 Fragment를 스택에 추가 (뒤로 가기로 복귀 가능)
+                    transaction.commit()
+
                     true
                 }
                 /**
