@@ -1,6 +1,7 @@
 package com.example.applicationjeces.product
 
 import android.annotation.SuppressLint
+import android.provider.Settings.Global.getString
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +20,8 @@ import kotlinx.android.synthetic.main.product_item_list.view.product_img
 import kotlinx.android.synthetic.main.product_item_list.view.product_name
 import kotlinx.android.synthetic.main.product_item_list.view.product_price
 import kotlinx.android.synthetic.main.product_item_list_search.view.*
+import java.text.NumberFormat
+import java.util.*
 
 class ProductViewPagerAdapter(private val context: Fragment, var myId: String, var producFiretList: List<DocumentSnapshot>): RecyclerView.Adapter<ProductViewPagerAdapter.Holder>() {
 
@@ -37,11 +40,13 @@ class ProductViewPagerAdapter(private val context: Fragment, var myId: String, v
         val currentItem4 = producFiretList[position].get("productCount")
         val bidPrice = producFiretList[position].get("productBidPrice")
 
+        val formattedPrice = addCommasToNumberString(currentItem2.toString())
+        val formattedBidPrice = addCommasToNumberString(bidPrice.toString())
 
         /* HomeFragment */
         holder.itemView.product_name.text = "${currentItem.toString()}"
-        holder.itemView.product_price.text = "판매가 : ${currentItem2.toString()}"
-        holder.itemView.current_bid_price.text = "입찰가 : ${bidPrice.toString()}"
+        holder.itemView.product_price.text = "판매가 : ${context.requireContext().getString(R.string.bid_price_format, formattedPrice)}"
+        holder.itemView.current_bid_price.text = "입찰가 : ${context.requireContext().getString(R.string.bid_price_format, formattedBidPrice)}"
 
         /* 이미지가 있을 때와 없을 때 */
         if(currentItem4.toString() == "0") {
@@ -123,6 +128,18 @@ class ProductViewPagerAdapter(private val context: Fragment, var myId: String, v
         val startSize = producFiretList.size
         (producFiretList as MutableList).addAll(newItems)
         notifyItemRangeInserted(startSize, newItems.size)
+    }
+
+    /**
+     * 단위 (,) 찍기
+     */
+    fun addCommasToNumberString(numberString: String): String {
+        val number = numberString.replace(",", "").toLongOrNull()
+        return if (number != null) {
+            NumberFormat.getNumberInstance(Locale.US).format(number)
+        } else {
+            "" // 또는 원하는 기본값을 반환합니다.
+        }
     }
 
 

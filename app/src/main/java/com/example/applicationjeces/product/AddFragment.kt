@@ -179,6 +179,17 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener {
     }
 
     private fun addTagToContainer(tag: String) {
+        // 태그의 길이를 확인
+        if (tag.length > 7) {
+            Toast.makeText(context, "태그는 7자 이하로 입력해야 합니다.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // 태그 개수 제한 확인
+        if (binding.tagsContainer.childCount >= 5) {
+            Toast.makeText(context, "최대 5개의 태그만 추가할 수 있습니다.", Toast.LENGTH_SHORT).show()
+            return
+        }
         val tagView = LayoutInflater.from(context).inflate(R.layout.tag_item, binding.tagsContainer, false)
         val tagName = tagView.findViewById<TextView>(R.id.tag_name)
         val deleteButton = tagView.findViewById<ImageView>(R.id.delete_button)

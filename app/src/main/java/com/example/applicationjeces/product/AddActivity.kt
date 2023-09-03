@@ -1,27 +1,14 @@
 package com.example.applicationjeces.product
 
-import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.applicationjeces.MainActivity
 import com.example.applicationjeces.R
-import com.example.applicationjeces.chat.ChatActivity
-import com.example.applicationjeces.chat.ChatroomData
 import com.example.applicationjeces.databinding.ActivityAddBinding
-import com.example.applicationjeces.databinding.ActivityInfoBinding
-import com.example.applicationjeces.page.DataViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.Timestamp
 
 class AddActivity : AppCompatActivity() {
 

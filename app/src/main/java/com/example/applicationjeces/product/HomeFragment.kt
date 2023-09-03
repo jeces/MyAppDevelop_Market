@@ -33,6 +33,7 @@ import com.tbuonomo.viewpagerdotsindicator.DotsIndicator
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
+import java.text.NumberFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -407,4 +408,6 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
     override fun onClick(images: ArrayList<String>, position: Int) {
         Log.d("클릭클릭", "클릭")
     }
+
+
 }
