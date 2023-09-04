@@ -195,16 +195,15 @@ class InfoActivity : AppCompatActivity() {
 
                     positiveButton.setOnClickListener {
                         productViewModel.deleteProduct(pId, pName)
-
-                        deleteImagesFromOldFolder(myId, pName)
-
-                        Toast.makeText(this, "상품이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
-                        alertDialog.dismiss()
-                        /* 화면 띄움*/
-                        /* 프라그먼트에서 프라그먼트로 제어가 불가능하기 때문에 상위 액티비티에서 제어 해주어야 한다. */
-                        val intent = Intent(this, MainActivity::class.java)
-                        startActivity(intent)
-                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+                        deleteImagesFromOldFolder(myId, pName) {
+                            Toast.makeText(this, "상품이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                            alertDialog.dismiss()
+                            /* 화면 띄움*/
+                            /* 프라그먼트에서 프라그먼트로 제어가 불가능하기 때문에 상위 액티비티에서 제어 해주어야 한다. */
+                            val intent = Intent(this, MainActivity::class.java)
+                            startActivity(intent)
+                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+                        }
                     }
 
                     negativeButton.setOnClickListener {
@@ -285,11 +284,13 @@ class InfoActivity : AppCompatActivity() {
         }
     }
 
-    private fun deleteImagesFromOldFolder(myId: String, oldProductName: String) {
+    private fun deleteImagesFromOldFolder(myId: String, oldProductName: String, onComplete: () -> Unit) {
         val oldDirectoryRef = firebaseStorage?.reference?.child("${myId}/${oldProductName}/")
+        Log.d("adadadadadad", "${myId}/${oldProductName}/")
         oldDirectoryRef?.listAll()?.addOnSuccessListener { listResult ->
             val deleteTasks = listResult.items.map { it.delete() }
             Tasks.whenAllSuccess<Void>(deleteTasks).addOnSuccessListener {
+                onComplete()
                 Toast.makeText(this, "All images deleted successfully.", Toast.LENGTH_SHORT).show()
             }.addOnFailureListener { exception -> // 실패 콜백 추가
                 Log.e("DeleteImages", "Failed to delete images: ${exception.message}")
