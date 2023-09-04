@@ -34,6 +34,8 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_add.*
 import kotlinx.android.synthetic.main.fragment_add.view.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.tasks.await
 import java.text.NumberFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -54,6 +56,9 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener {
 
     private var param1: String? = null
     private var param2: String? = null
+
+    private val job = Job()
+    private val coroutineScope = CoroutineScope(Dispatchers.Main + job)
 
     private lateinit var viewProfile: View
     private val pickImageFromAlbum = 0
@@ -222,8 +227,9 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener {
     fun registerProduct() {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             funImageUpload()
+        } else {
+            insertProduct()
         }
-        insertProduct()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -245,16 +251,55 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener {
         }
     }
 
+//    private fun funImageUpload() {
+//        val productName = binding.productName.text.toString()
+//        val myId = productViewModel.thisUser
+//        imagelist.forEachIndexed { index, uri ->
+//            val imgFileName = "${myId}_${index}_IMAGE_.png"
+//            Log.d("사진업로드", imgFileName)
+//            val storageRef = firebaseStorage?.reference?.child("$myId/$productName/")?.child(imgFileName)
+//            storageRef?.putFile(uri)
+//                ?.addOnSuccessListener { if(isAdded) {
+//                    Toast.makeText(requireContext(), "ImageUploaded", Toast.LENGTH_SHORT).show()
+//                } }
+//                ?.addOnFailureListener { exception -> Log.e("ImageUploadError", exception.message ?: "Unknown error") }
+//        }
+//    }
+
     private fun funImageUpload() {
-        val productName = binding.productName.text.toString()
-        val myId = productViewModel.thisUser
-        imagelist.forEachIndexed { index, uri ->
+        coroutineScope.launch {
+            val productName = binding.productName.text.toString()
+            val myId = productViewModel.thisUser
+
+            val deferredList = mutableListOf<Deferred<Boolean>>()
+
+            imagelist.forEachIndexed { index, uri ->
+                val deferred = async(Dispatchers.IO) { uploadImage(index, productName, myId, uri) }
+                deferredList.add(deferred)
+            }
+
+            val results = deferredList.awaitAll()
+            if (results.all { it }) {
+                // All images uploaded successfully
+                insertProduct()
+            } else {
+                // Handle failure
+                Toast.makeText(requireContext(), "Failed to upload some images.", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private suspend fun uploadImage(index: Int, productName: String, myId: String, uri: Uri): Boolean {
+        return withContext(Dispatchers.IO) {
             val imgFileName = "${myId}_${index}_IMAGE_.png"
-            Log.d("사진업로드", imgFileName)
             val storageRef = firebaseStorage?.reference?.child("$myId/$productName/")?.child(imgFileName)
-            storageRef?.putFile(uri)
-                ?.addOnSuccessListener { Toast.makeText(context, "ImageUploaded", Toast.LENGTH_SHORT).show() }
-                ?.addOnFailureListener { /* Handle error */ }
+            try {
+                storageRef?.putFile(uri)?.await()
+                true
+            } catch (e: Exception) {
+                Log.e("ImageUploadError", "Failed to upload $imgFileName. Error: ${e.message}")
+                false
+            }
         }
     }
 
@@ -267,7 +312,7 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener {
         val myId = productViewModel.thisUser
 
         if (productName.isNotEmpty() && productPrice.isNotEmpty()) {
-            imgFileName = if (targetImg) "basic_img.png" else "${myId}_${productName}_0_IMAGE_.png"
+            imgFileName = if (targetImg) "basic_img.png" else "${myId}_0_IMAGE_.png"
             val product = Product(myId, productName, productPrice.toInt(), productDescription, imgCount, imgFileName, 0, 0, 0, "0", "0", tags, category, "판매중") // tags 추가
             productViewModel.addProducts(product) // 이 함수 내에서 Firestore에 저장되는 코드가 있어야 합니다.
 

@@ -51,12 +51,13 @@ class ProductSearchRecyclerViewAdapter(var producFiretList: List<DocumentSnapsho
 
         /* MainActivity2 */
         val formattedPrice = addCommasToNumberString(currentItem2.toString())
+        val formattedBidPrice = addCommasToNumberString(bidPrice.toString())
         holder.itemView.product_name.text = currentItem.toString()
         holder.itemView.product_price.text = context.getString(R.string.product_price_format, formattedPrice)
         holder.itemView.upload_time.text = timeAgo
         holder.itemView.like_count.text = pHearCount.toString()
         holder.itemView.chat_count.text = pChatCount.toString()
-        holder.itemView.current_bid.text = bidPrice.toString()
+        holder.itemView.current_bid.text = context.getString(R.string.product_price_format, formattedBidPrice)
 
         /* 이미지가 있을 때와 없을 때 */
         if(currentItem4.toString() == "0") {

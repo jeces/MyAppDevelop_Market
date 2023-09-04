@@ -175,7 +175,7 @@ class ProductRepository {
             imgList.add("basic_img.png")
         } else {
             for (i in 0 until productCount) {
-                val word = "${productId}_${productName}_${i}_IMAGE_.png"
+                val word = "${productId}_${i}_IMAGE_.png"
                 imgList.add(word)
             }
         }

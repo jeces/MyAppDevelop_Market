@@ -125,7 +125,8 @@ class EditFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener {
         val pHeartCount = arguments?.getString("pHeartCount")
         val tagsJson = arguments?.getString("tags")
 
-        Log.d("afafafaf", tagsJson.toString())
+        loadProductImages(pId, binding.editProductName.text.toString()) // 상품 이미지 로드
+
         val gson = Gson()
         val tags: List<List<String>> = try {
             gson.fromJson(tagsJson, object : TypeToken<List<List<String>>>() {}.type)
@@ -143,10 +144,6 @@ class EditFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener {
         binding.editProductName.setText(pName)
         binding.editProductPrice.setText(productPrice)
         binding.editProductDescription.setText(productDescription)
-
-
-
-
 
         firebaseStorage = FirebaseStorage.getInstance()
         productViewModel.whereMyUser("edit")
@@ -205,7 +202,21 @@ class EditFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener {
             showCategoryBottomSheet()
         }
 
+        loadProductImagesFromFirebaseStorage(pId, pName)
+
         return view
+    }
+
+    private fun setupRecyclerView() {
+        binding.editImgProfile.apply {
+            adapter = this@EditFragment.adapter
+            setHasFixedSize(true)
+            layoutManager = GridLayoutManager(requireContext(), 5)
+
+            // ItemTouchHelper 연결
+            val itemTouchHelper = ItemTouchHelper(ItemMoveCallback(this@EditFragment.adapter))
+            itemTouchHelper.attachToRecyclerView(this)
+        }
     }
 
     // 태그를 FlexboxLayout에 추가하는 함수
@@ -274,25 +285,6 @@ class EditFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener {
         }
     }
 
-    private fun setupRecyclerView() {
-        binding.editImgProfile.apply {
-            adapter = this@EditFragment.adapter
-            setHasFixedSize(true)
-            layoutManager = GridLayoutManager(requireContext(), 5)
-
-            // ItemTouchHelper 연결
-            val itemTouchHelper = ItemTouchHelper(ItemMoveCallback(this@EditFragment.adapter))
-            itemTouchHelper.attachToRecyclerView(this)
-        }
-    }
-
-    fun registerProduct() {
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            funImageUpload()
-        }
-        insertProduct()
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == pickImageFromAlbum && resultCode == Activity.RESULT_OK) {
@@ -312,6 +304,32 @@ class EditFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener {
         }
     }
 
+    private fun loadProductImagesFromFirebaseStorage(myId: String, productName: String) {
+        val directoryRef = firebaseStorage?.reference?.child("$myId/$productName/")
+
+        directoryRef?.listAll()?.addOnSuccessListener { listResult ->
+            val maxImageCount = listResult.items.size
+
+            for (i in 0 until maxImageCount) {
+                val imgFileName = "${myId}_${i}_IMAGE_.png"
+                Log.d("adadadadad", imgFileName.toString())
+                val storageRef = directoryRef.child(imgFileName)
+
+                storageRef.downloadUrl.addOnSuccessListener { uri ->
+                    imagelist.add(uri)
+                    adapter.notifyDataSetChanged()
+                }.addOnFailureListener {
+                    // 이미지 로딩에 실패했을 때 처리, 필요한 경우 로깅 또는 오류 메시지 표시
+                    Log.e("LoadProductImages", "Error loading product image: $imgFileName")
+                }
+            }
+        }?.addOnFailureListener {
+            // 디렉토리 내용을 가져오는 데 실패했을 때 처리
+            Log.e("LoadProductImages", "Error listing images in directory: $myId/$productName/")
+        }
+    }
+
+
     private fun funImageUpload() {
         val productName = binding.editProductName.text.toString()
         val myId = productViewModel.thisUser
@@ -325,36 +343,6 @@ class EditFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener {
         }
     }
 
-    // 상품 아이디를 기반으로 데이터를 로드하는 함수
-    private fun loadProductData(productId: String) {
-        // 데이터베이스나 서버에서 상품 아이디를 사용하여 상품 정보를 로드합니다.
-        // 로드한 데이터를 UI에 설정합니다.
-    }
-
-    private fun insertProduct() {
-//        val productName = binding.productName.text.toString()
-//        val productPrice = binding.productPrice.text.toString().replace(",", "")
-//        val productDescription = binding.productDescription.text.toString()
-//        val myId = productViewModel.thisUser
-//        val nickName = productViewModel
-//
-//        if (productName.isNotEmpty() && productPrice.isNotEmpty()) {
-//            imgFileName = if (targetImg) "basic_img.png" else "${myId}_${productName}_0_IMAGE_.png"
-//            val product = Product(myId, productName, productPrice.toInt(), productDescription, imgCount, imgFileName, 0, 0, 0, "0", "0")
-//            productViewModel.addProducts(product)
-//
-//            Toast.makeText(requireContext(), "Successfully added!", Toast.LENGTH_LONG).show()
-//
-//            val mainActivityIntent = Intent(activity, MainActivity::class.java).apply {
-//                putExtra("SELECT_HOME", true)
-//            }
-//            startActivity(mainActivityIntent)
-//            activity?.finish()
-//        } else {
-//            Toast.makeText(requireContext(), "Please fill out all fields.", Toast.LENGTH_LONG).show()
-//        }
-    }
-
     fun openImagePicker() {
         val photoPickerIntent = Intent(Intent.ACTION_PICK).apply {
             data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
@@ -363,6 +351,23 @@ class EditFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener {
             type = "image/*"
         }
         startActivityForResult(photoPickerIntent, pickImageFromAlbum)
+    }
+
+    private fun loadProductData(productId: String) {
+
+    }
+
+    private fun loadProductImages(productId: String, productName: String) {
+        // 상품 이미지를 가져오기 위한 코드를 추가합니다.
+        // 예:
+         for (i in 0 until imgCount) {
+             val imgFileName = "${productId}_${productName}_${i}_IMAGE_.png"
+             val storageRef = firebaseStorage?.reference?.child("$productId/$productName/")?.child(imgFileName)
+             storageRef?.downloadUrl?.addOnSuccessListener { uri ->
+                 imagelist.add(uri)
+                 adapter.notifyDataSetChanged()
+             }
+         }
     }
 
     companion object {
