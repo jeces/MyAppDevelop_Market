@@ -158,6 +158,16 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
+    fun updateProducts(product: UpdateProduct, oldProductName: String) {
+        viewModelScope.launch {
+            try {
+                repository.updateProducts(product, oldProductName)
+            } catch (e: Exception) {
+                // Handle the exception
+            }
+        }
+    }
+
     fun searchProducts(searchName: String) {
         viewModelScope.launch {
             try {

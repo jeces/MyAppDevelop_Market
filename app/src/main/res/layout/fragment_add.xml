@@ -36,6 +36,18 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
 
+                <ImageButton
+                    android:id="@+id/add_photo_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:contentDescription="@string/navcolor"
+                    android:src="@drawable/ic_baseline_add_photo_alternate_24"
+                    app:layout_constraintTop_toTopOf="@+id/tv_registered_photo"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_registered_photo"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/img_profile"
                     android:layout_width="0dp"

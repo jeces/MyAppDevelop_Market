@@ -81,6 +81,52 @@ class ProductRepository {
         getFirestore().collection("Product").add(productMap).await()
     }
 
+    suspend fun updateProducts(product: UpdateProduct, oldProductName: String) {
+        // 여기서 제품 ID를 얻습니다. 이 ID는 문서를 정확히 지정하는 데 사용됩니다.
+        // 이 예제에서는 "IDX" 필드를 사용했는데, 실제 데이터 구조에 따라 적절히 조정해야 합니다.
+        val productID = "${product.product_id}_${product.product_name}"
+        val productOldId = "${product.product_id}_${oldProductName}"
+        Log.d("ahgahrahrah", productOldId)
+        // 업데이트할 필드만 지정합니다.
+        val productMap = mapOf(
+            "IDX" to productID,
+            "productName" to product.product_name,
+            "productPrice" to product.product_price,
+            "productDescription" to product.product_description,
+            "productCount" to product.product_count,
+            "productImgUrl" to product.product_img_url,
+            "tags" to product.tags,
+            "category" to product.category
+            // ... (다른 업데이트할 필드들)
+        )
+
+        val productSnapshot = getCollection("Product")
+            .whereEqualTo("IDX", productOldId)
+            .get()
+            .await()
+
+        productSnapshot.documents.forEach { document ->
+            document.reference.update(productMap).await()
+        }
+
+//        // Firebase Storage에서 폴더 이름 변경 부분
+//        val storage = FirebaseStorage.getInstance()
+//        for (i in 0 until product.product_count) { // MAX_IMAGE_COUNT는 저장된 최대 이미지 수를 나타냅니다.
+//            Log.d("ahgahrahrah", "${product.product_id}/${oldProductName}/${product.product_id}_${i}_IMAGE_.png")
+//            val oldImageRef = storage.reference.child("${product.product_id}/${oldProductName}/${product.product_id}_${i}_IMAGE_.png")
+//            val newImageRef = storage.reference.child("${product.product_id}/${product.product_name}/${product.product_id}_${i}_IMAGE_.png")
+//
+//            // 이미지를 새 위치로 복사
+//            oldImageRef.getBytes(Long.MAX_VALUE).await().also { bytes ->
+//                newImageRef.putBytes(bytes).await()
+//            }
+//
+//            // 원래 이미지 삭제
+//            oldImageRef.delete().await()
+//        }
+    }
+
+
     suspend fun searchProducts(searchName: String): Response {
         return try {
             val productSearch = getCollection("Product").get().await()
@@ -162,10 +208,19 @@ class ProductRepository {
         }
     }
 
+
+
     suspend fun setMyFavorit(pIdx: String) {
         val userSnapshot = getFirestore().collection("UserInfo").whereEqualTo("id", thisUser).get().await()
         userSnapshot.documents.forEach { document ->
             document.reference.update("favorit", FieldValue.arrayUnion(pIdx)).await()
+        }
+        val productSnapshot = getFirestore().collection("Product").whereEqualTo("IDX", pIdx).get().await()
+        productSnapshot.documents.forEach { document ->
+            // 기존의 pHeartCount 값
+            val currentHeartCount = document.getLong("pHeartCount")?.toInt() ?: 0
+            // pHeartCount 값을 증가시킨 다음 업데이트
+            document.reference.update("pHeartCount", currentHeartCount + 1).await()
         }
     }
 
@@ -286,6 +341,16 @@ class ProductRepository {
         val userSnapshot = getFirestore().collection("UserInfo").whereEqualTo("id", thisUser).get().await()
         userSnapshot.documents.forEach { document ->
             document.reference.update("favorit", FieldValue.arrayRemove(pIdx)).await()
+        }
+        val productSnapshot = getFirestore().collection("Product").whereEqualTo("IDX", pIdx).get().await()
+        productSnapshot.documents.forEach { document ->
+            // 기존의 pHeartCount 값을 가져옵니다.
+            val currentHeartCount = document.getLong("pHeartCount")?.toInt() ?: 0
+
+            // pHeartCount 값이 0보다 큰 경우에만 감소시키고 업데이트합니다.
+            if (currentHeartCount > 0) {
+                document.reference.update("pHeartCount", currentHeartCount - 1).await()
+            }
         }
     }
 

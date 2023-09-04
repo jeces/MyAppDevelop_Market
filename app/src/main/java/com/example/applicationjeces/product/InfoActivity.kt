@@ -15,19 +15,23 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.navArgument
 import com.example.applicationjeces.MainActivity
 import com.example.applicationjeces.R
 import com.example.applicationjeces.chat.ChatActivity
 import com.example.applicationjeces.chat.ChatroomData
 import com.example.applicationjeces.databinding.ActivityInfoBinding
 import com.example.applicationjeces.page.DataViewModel
+import com.google.android.gms.tasks.Tasks
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.Timestamp
+import com.google.firebase.storage.FirebaseStorage
 
 class InfoActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityInfoBinding
     private lateinit var productViewModel: ProductViewModel
+    private var firebaseStorage: FirebaseStorage? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -191,6 +195,9 @@ class InfoActivity : AppCompatActivity() {
 
                     positiveButton.setOnClickListener {
                         productViewModel.deleteProduct(pId, pName)
+
+                        deleteImagesFromOldFolder(myId, pName)
+
                         Toast.makeText(this, "상품이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
                         alertDialog.dismiss()
                         /* 화면 띄움*/
@@ -278,6 +285,21 @@ class InfoActivity : AppCompatActivity() {
         }
     }
 
+    private fun deleteImagesFromOldFolder(myId: String, oldProductName: String) {
+        val oldDirectoryRef = firebaseStorage?.reference?.child("${myId}/${oldProductName}/")
+        oldDirectoryRef?.listAll()?.addOnSuccessListener { listResult ->
+            val deleteTasks = listResult.items.map { it.delete() }
+            Tasks.whenAllSuccess<Void>(deleteTasks).addOnSuccessListener {
+                Toast.makeText(this, "All images deleted successfully.", Toast.LENGTH_SHORT).show()
+            }.addOnFailureListener { exception -> // 실패 콜백 추가
+                Log.e("DeleteImages", "Failed to delete images: ${exception.message}")
+                Toast.makeText(this, "Failed to delete images.", Toast.LENGTH_SHORT).show()
+            }
+        }?.addOnFailureListener { exception -> // 디렉토리의 이미지 목록 검색 실패 콜백 추가
+            Log.e("ListImages", "Failed to list images in directory: ${exception.message}")
+            Toast.makeText(this, "Failed to list images.", Toast.LENGTH_SHORT).show()
+        }
+    }
 
 
     override fun onBackPressed() {

@@ -36,6 +36,18 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
 
+                <ImageButton
+                    android:id="@+id/edit_photo_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:contentDescription="@string/navcolor"
+                    android:src="@drawable/ic_baseline_add_photo_alternate_24"
+                    app:layout_constraintTop_toTopOf="@+id/edit_tv_registered_photo"
+                    app:layout_constraintBottom_toBottomOf="@+id/edit_tv_registered_photo"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/edit_img_profile"
                     android:layout_width="0dp"
@@ -168,6 +180,22 @@
                         android:maxLength="500" />
 
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Update Completed Button -->
+                <Button
+                    android:id="@+id/edit_complete_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="수정 완료"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/round_img"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>

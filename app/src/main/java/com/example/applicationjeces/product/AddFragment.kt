@@ -151,6 +151,10 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener {
             showCategoryBottomSheet()
         }
 
+        binding.addPhotoButton.setOnClickListener {
+            openImagePicker()
+        }
+
         /**
          * 테그 입력
          * */
