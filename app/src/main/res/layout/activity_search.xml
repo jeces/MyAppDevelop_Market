@@ -19,48 +19,46 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <RelativeLayout
+            <LinearLayout
                 android:id="@+id/RelativeLayout1Area"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:paddingStart="13dp"
                 android:paddingTop="13dp"
                 android:paddingEnd="13dp"
-                android:paddingBottom="13dp">
-
-                <!-- 필터 버튼 추가 -->
-                <ImageButton
-                    android:id="@+id/filterButton"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/ic_baseline_menu_24"
-                    android:background="?android:selectableItemBackground"
-                    android:contentDescription="@string/navcolor" />
+                android:paddingBottom="13dp"
+                android:gravity="center_vertical">
 
                 <ImageView
                     android:id="@+id/search_back"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:src="@drawable/ic_baseline_arrow_back_24" />
 
                 <androidx.appcompat.widget.SearchView
                     android:id="@+id/search_view"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_toEndOf="@id/search_back"
-                    android:layout_marginStart="10dp"
+                    android:layout_weight="9"
                     android:iconifiedByDefault="false"
-                    app:queryHint="Search for products..."
                     android:paddingTop="5dp"
-                    android:paddingBottom="5dp" />
+                    android:paddingBottom="5dp"
+                    app:queryHint="Search for products..." />
 
-            </RelativeLayout>
+                <!-- 필터 버튼 추가 -->
+                <ImageButton
+                    android:id="@+id/filterButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_baseline_menu_24"
+                    android:background="?android:selectableItemBackground"
+                    android:contentDescription="@string/navcolor" />
+            </LinearLayout>
 
-            <RelativeLayout
+            <LinearLayout
                 android:id="@+id/RelativeLayout2Area"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -76,7 +74,7 @@
                     android:paddingEnd="16dp"
                     tools:listitem="@layout/product_item_list_search" />
 
-            </RelativeLayout>
+            </LinearLayout>
 
         </LinearLayout>
 

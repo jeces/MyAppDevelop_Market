@@ -2,6 +2,7 @@ package com.example.applicationjeces.product
 
 import android.util.Log
 import com.example.applicationjeces.chat.ChatroomData
+import com.example.applicationjeces.search.FilterCriteria
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.Timestamp
@@ -108,38 +109,55 @@ class ProductRepository {
         productSnapshot.documents.forEach { document ->
             document.reference.update(productMap).await()
         }
-
-//        // Firebase Storage에서 폴더 이름 변경 부분
-//        val storage = FirebaseStorage.getInstance()
-//        for (i in 0 until product.product_count) { // MAX_IMAGE_COUNT는 저장된 최대 이미지 수를 나타냅니다.
-//            Log.d("ahgahrahrah", "${product.product_id}/${oldProductName}/${product.product_id}_${i}_IMAGE_.png")
-//            val oldImageRef = storage.reference.child("${product.product_id}/${oldProductName}/${product.product_id}_${i}_IMAGE_.png")
-//            val newImageRef = storage.reference.child("${product.product_id}/${product.product_name}/${product.product_id}_${i}_IMAGE_.png")
-//
-//            // 이미지를 새 위치로 복사
-//            oldImageRef.getBytes(Long.MAX_VALUE).await().also { bytes ->
-//                newImageRef.putBytes(bytes).await()
-//            }
-//
-//            // 원래 이미지 삭제
-//            oldImageRef.delete().await()
-//        }
     }
 
 
-    suspend fun searchProducts(searchName: String): Response {
+//    suspend fun searchProducts(searchName: String? = null, filterCriteria: FilterCriteria? = null): Response {
+//        return try {
+//            val productSearch = getCollection("Product").get().await()
+//            val response = Response()
+//
+//            for (snapshot in productSearch) {
+//                val productName = snapshot.getString("productName")
+//                val productPrice = snapshot.getLong("price")?.toInt() ?: 0 // 예시로 가격을 사용. 필요에 따라 수정
+//                Log.d("afafafaf", "${productPrice.toString()}/${filterCriteria?.minPrice}/${filterCriteria?.maxPrice}")
+//                if (productName?.contains(searchName ?: "") == true &&
+//                    (filterCriteria?.minPrice == null || productPrice >= filterCriteria.minPrice) &&
+//                    (filterCriteria?.maxPrice == null || productPrice <= filterCriteria.maxPrice)
+//                // 필요한 다른 필터 조건들도 여기에 추가...
+//                ) {
+//                    if (response.products == null) {
+//                        response.products = listOf(snapshot)
+//                    } else {
+//                        response.products = response.products?.plus(listOf(snapshot))
+//                    }
+//                }
+//            }
+//
+//            response
+//        } catch (e: Exception) {
+//            throw CancellationException("Task was cancelled")
+//        }
+//    }
+
+    suspend fun searchProducts(searchName: String? = null, filterCriteria: FilterCriteria? = null): Response {
         return try {
             val productSearch = getCollection("Product").get().await()
             val response = Response()
 
             for (snapshot in productSearch) {
-                snapshot.getString("productName")?.let { productName ->
-                    if (productName.contains(searchName)) {
-                        if (response.products == null) {
-                            response.products = listOf(snapshot)
-                        } else {
-                            response.products = response.products?.plus(listOf(snapshot))
-                        }
+                val productName = snapshot.getString("productName")
+                val productPrice = snapshot.getLong("productPrice")?.toInt() ?: 0
+                Log.d("afafafaf", "${productName.toString()}/${productPrice.toString()}/${filterCriteria?.minPrice}/${filterCriteria?.maxPrice}")
+                if (productName?.contains(searchName ?: "") == true &&
+                    (filterCriteria?.minPrice == null || productPrice >= filterCriteria.minPrice) &&
+                    (filterCriteria?.maxPrice == null || productPrice <= filterCriteria.maxPrice)
+                // 필요한 다른 필터 조건들도 여기에 추가...
+                ) {
+                    if (response.products == null) {
+                        response.products = listOf(snapshot)
+                    } else {
+                        response.products = response.products?.plus(listOf(snapshot))
                     }
                 }
             }
@@ -236,31 +254,6 @@ class ProductRepository {
         }
         return imgList
     }
-
-//    suspend fun getAdverImage(adverCount: Int): List<String> {
-//        val adverImgList = mutableListOf<String>()
-//        if (adverCount <= 0) {
-//            adverImgList.add("basic_img.png")
-//        } else {
-//            for (i in 0 until adverCount) {
-//                val word = "adver_${i}.jpeg"
-//                adverImgList.add(word)
-//            }
-//        }
-//        return adverImgList
-//    }
-
-    //    suspend fun fetchAdverCounts(): Int {
-//        return withContext(Dispatchers.IO) {
-//            try {
-//                val listResult = Tasks.await(storageRef.listAll())
-//                return@withContext listResult.items.size
-//            } catch (e: Exception) {
-//                Log.e("AdverCounts", "Error occurred: ${e.message}", e)
-//                throw e
-//            }
-//        }
-//    }
 
     suspend fun fetchAdverCounts(): Int {
         return try {

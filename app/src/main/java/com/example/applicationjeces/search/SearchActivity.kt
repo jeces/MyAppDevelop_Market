@@ -19,6 +19,7 @@ import com.example.applicationjeces.MainActivity
 import com.example.applicationjeces.R
 import com.example.applicationjeces.databinding.ActivityMain2Binding
 import com.example.applicationjeces.databinding.ActivitySearchBinding
+import com.google.firebase.firestore.Filter
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main2.*
@@ -27,6 +28,7 @@ class SearchActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySearchBinding
     private lateinit var productViewModel: ProductViewModel
+    private var currentFilterCriteria: FilterCriteria? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,8 +57,9 @@ class SearchActivity : AppCompatActivity() {
             override fun onQueryTextSubmit(query: String?) = false
 
             override fun onQueryTextChange(newText: String?): Boolean {
+
                 Log.d("검색", "SearchView Text is changed : $newText")
-                productViewModel.searchProducts(newText ?: "")
+                productViewModel.searchProducts(newText ?: "", currentFilterCriteria)
                 return false
             }
         })
@@ -66,10 +69,19 @@ class SearchActivity : AppCompatActivity() {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
-        
+
         // 옵션 선택 리스너
         binding.filterButton.setOnClickListener {
             val filterFragment = FilterFragment()
+            filterFragment.setFilterListener(object: FilterListener {
+                override fun onFilterApplied(filterCriteria: FilterCriteria) {
+                    currentFilterCriteria = filterCriteria
+                    // 필터가 적용된 상태로 다시 검색
+                    val currentQuery = binding.searchView.query.toString()
+                    productViewModel.searchProducts(currentQuery, currentFilterCriteria)
+                }
+            })
+            filterFragment.currentFilterCriteria = currentFilterCriteria // 값을 전달
             filterFragment.show(supportFragmentManager, filterFragment.tag)
         }
 

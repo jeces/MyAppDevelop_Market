@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.applicationjeces.chat.ChatroomData
+import com.example.applicationjeces.search.FilterCriteria
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import kotlinx.coroutines.Deferred
@@ -168,10 +169,10 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-    fun searchProducts(searchName: String) {
+    fun searchProducts(searchName: String? = null, filterCriteria: FilterCriteria? = null) {
         viewModelScope.launch {
             try {
-                val response = repository.searchProducts(searchName)
+                val response = repository.searchProducts(searchName, filterCriteria)
                 _searchResponse.value = response
             } catch (e: Exception) {
                 // Handle exceptions, for example, by updating a LiveData that the UI observes
