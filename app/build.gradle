@@ -170,4 +170,7 @@ dependencies {
     /* flexbox 사용 */
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
 
+    /* 위치 */
+    implementation 'com.google.android.gms:play-services-location:21.0.1' // Google Location Services
+
 }

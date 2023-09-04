@@ -5,8 +5,10 @@ import ItemMoveCallback
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -57,6 +59,8 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener {
     private var param1: String? = null
     private var param2: String? = null
 
+    private val LOCATION_PERMISSION_REQUEST_CODE = 1234
+
     private val job = Job()
     private val coroutineScope = CoroutineScope(Dispatchers.Main + job)
 
@@ -73,6 +77,8 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener {
 
     private var _binding: FragmentAddBinding? = null
     private val binding get() = _binding!!
+
+
 
     override fun onCategorySelected(category: String) {
         // 카테고리 배열을 가져옵니다.
@@ -100,6 +106,8 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+
         /**
          * view 바인딩
          */
@@ -341,6 +349,89 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener {
         }
         startActivityForResult(photoPickerIntent, pickImageFromAlbum)
     }
+
+//    /**
+//     * 위치 권한 체크 요청
+//     */
+//    private fun requestLocationPermission() {
+//        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+//            != PackageManager.PERMISSION_GRANTED
+//        ) {
+//            requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
+//        } else {
+//            // 권한이 이미 승인됨.
+//            getCurrentLocation()
+//        }
+//    }
+//
+//    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+//        when (requestCode) {
+//            LOCATION_PERMISSION_REQUEST_CODE -> {
+//                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+//                    getCurrentLocation()
+//                } else {
+//                    Toast.makeText(requireContext(), "Location permission denied", Toast.LENGTH_SHORT).show()
+//                }
+//                return
+//            }
+//            else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+//        }
+//    }
+//
+//    /**
+//     * 현재 위치 얻기
+//     */
+//    private fun getCurrentLocation() {
+//        val locationManager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+//
+//        if (ContextCompat.checkSelfPermission(
+//                requireContext(),
+//                Manifest.permission.ACCESS_FINE_LOCATION
+//            ) == PackageManager.PERMISSION_GRANTED
+//        ) {
+//            // 권한이 부여된 경우
+//            fetchLocation(locationManager)
+//        } else {
+//            // 권한이 부여되지 않은 경우 권한 요청
+//            requestPermissions(
+//                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+//                LOCATION_PERMISSION_REQUEST_CODE
+//            )
+//        }
+//    }
+//
+//    /**
+//     * 권한부여
+//     */
+//    private fun fetchLocation(locationManager: LocationManager) {
+//        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+//            val lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+//            lastLocation?.let {
+//                val latitude = it.latitude
+//                val longitude = it.longitude
+//                // Firebase 또는 기타 데이터베이스에 저장
+//                saveLocationToDatabase(latitude, longitude)
+//            }
+//        }
+//    }
+//
+//    /**
+//     * 파이어베이스 저장
+//    **/
+//    private fun saveLocationToDatabase(latitude: Double, longitude: Double) {
+//        // 여기서 Firebase나 다른 데이터베이스에 위치를 저장합니다.
+//        val productLocation = hashMapOf(
+//            "latitude" to latitude,
+//            "longitude" to longitude
+//        )
+//
+//        // Firestore 예제
+//        val db = FirebaseFirestore.getInstance()
+//        db.collection("products").document("your_product_id").set(productLocation)
+//            .addOnSuccessListener { Log.d("Location", "Location successfully written!") }
+//            .addOnFailureListener { e -> Log.w("Location", "Error writing location", e) }
+//    }
+    
 
     companion object {
         @JvmStatic
