@@ -9,6 +9,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
+
+
     <!-- 진동 -->
     <uses-permission android:name="android.permission.VIBRATE" />
 
@@ -18,10 +20,16 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="Old Auction"
+        android:hardwareAccelerated="false"
         android:roundIcon="@mipmap/ic_launcher_round"
+        android:usesCleartextTraffic="true"
         android:supportsRtl="true"
         android:theme="@style/Theme.ApplicationJeces.NoActionBar.FullScreen"
         tools:targetApi="31">
+
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="4439697b7d28209722c913921b1c22c5"/>
 
         <activity
             android:name=".chat.ChatActivity"

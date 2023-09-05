@@ -171,6 +171,14 @@ dependencies {
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
 
     /* 위치 */
-    implementation 'com.google.android.gms:play-services-location:21.0.1' // Google Location Services
+//    implementation 'com.kakao.sdk:v2-user:2.7.0'  // User Management
+//    implementation 'com.kakao.sdk:v2-map:2.7.0'  // Map
+//    implementation 'net.daum.mf.map.android:map-view:1.9.0'
+    //kakao map
 
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation files('libs/libDaumMapAndroid.jar')
+
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 }

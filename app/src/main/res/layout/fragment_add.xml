@@ -72,6 +72,29 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
 
+                <TextView
+                    android:id="@+id/location_text_view"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="Location will appear here"
+                    android:textSize="16sp"
+                    app:layout_constraintTop_toBottomOf="@+id/productCategorySpinner"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/add_location_button" />
+
+                <ImageButton
+                    android:id="@+id/add_location_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:contentDescription="@string/navcolor"
+                    android:src="@drawable/ic_baseline_location_on_24"
+                    app:layout_constraintTop_toBottomOf="@+id/productCategorySpinner"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
                 <!-- Tags Section -->
                 <TextView
                     android:id="@+id/tag_label"
@@ -81,7 +104,7 @@
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="#333333"
-                    app:layout_constraintTop_toBottomOf="@id/productCategorySpinner"
+                    app:layout_constraintTop_toBottomOf="@id/add_location_button"
                     app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginTop="16dp" />
 

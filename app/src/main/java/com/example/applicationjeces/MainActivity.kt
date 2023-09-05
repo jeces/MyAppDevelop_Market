@@ -2,9 +2,11 @@ package com.example.applicationjeces
 
 import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
@@ -21,6 +23,7 @@ import com.example.applicationjeces.user.MyFragment
 import com.example.applicationjeces.product.AddFragment
 import com.example.applicationjeces.product.HomeFragment
 import com.example.applicationjeces.search.SearchActivity
+import java.security.MessageDigest
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,6 +37,9 @@ class MainActivity : AppCompatActivity() {
         // 상태표시줄 투명하게 만들기
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
         window.statusBarColor = Color.TRANSPARENT
+
+        // 해시키
+        getAppKeyHash()
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.apply {
@@ -53,6 +59,25 @@ class MainActivity : AppCompatActivity() {
             if (it) selectHome()
         }
     }
+
+    // 앱 해시 키 얻는 코드
+    fun getAppKeyHash() {
+        try {
+            val info =
+                packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
+            for (signature in info.signatures) {
+                var md: MessageDigest
+                md = MessageDigest.getInstance("SHA")
+                md.update(signature.toByteArray())
+                val something = String(Base64.encode(md.digest(), 0))
+                Log.e("Hash key", something)
+            }
+        } catch (e: Exception) {
+
+            Log.e("name not found", e.toString())
+        }
+    }
+
 
     private fun selectHome() {
         binding.bottomNavigationView.selectedItemId = R.id.home
