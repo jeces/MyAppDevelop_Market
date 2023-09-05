@@ -149,15 +149,6 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener {
             }
         })
 
-        // 사용자가 '현재 위치 추가' 버튼을 클릭했을 때
-//        binding.addLocationButton.setOnClickListener {
-//            if (isLocationPermissionGranted()) {
-//                getCurrentLocation()
-//            } else {
-//                requestLocationPermission()
-//            }
-//        }
-
         binding.addLocationButton.setOnClickListener {
             val bottomSheet = LocationBottomSheetFragment()
             bottomSheet.show(parentFragmentManager, bottomSheet.tag)

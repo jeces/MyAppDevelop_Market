@@ -6,7 +6,7 @@ import retrofit2.http.Headers
 import retrofit2.http.Query
 
 interface KakaoAPI {
-    @Headers("Authorization: KakaoAK YOUR_REST_API_KEY")
+    @Headers("Authorization: KakaoAK 103b3b720839955ba692e653677062b7")
     @GET("v2/local/geo/coord2address.json")
     fun getReverseGeo(
         @Query("x") longitude: Double,

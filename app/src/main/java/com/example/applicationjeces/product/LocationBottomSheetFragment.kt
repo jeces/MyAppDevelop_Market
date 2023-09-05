@@ -49,12 +49,17 @@ class LocationBottomSheetFragment : BottomSheetDialogFragment() {
             val latitude = mapCenterPoint.mapPointGeoCoord.latitude
             val longitude = mapCenterPoint.mapPointGeoCoord.longitude
 
-            Log.d("adadadad", "${mapCenterPoint}/${latitude}/${longitude.toString()}/")
-
             api.getReverseGeo(longitude, latitude).enqueue(object : Callback<KakaoResponse> {
                 override fun onResponse(call: Call<KakaoResponse>, response: Response<KakaoResponse>) {
                     val address = response.body()?.documents?.get(0)?.address?.address_name
+                    Log.d("adadadad", "${mapCenterPoint}/${latitude}/${address}/")
 //                    yourTextView.text = address ?: "주소를 가져오지 못했습니다."
+
+
+                    /** 여기서 addfragment로 데이터 전달
+                     *
+                     */
+                    dismiss()
                 }
 
                 override fun onFailure(call: Call<KakaoResponse>, t: Throwable) {
