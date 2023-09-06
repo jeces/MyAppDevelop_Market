@@ -189,6 +189,16 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
             requireActivity().overridePendingTransition(R.anim.slide_out_right, R.anim.slide_in_left)
         }
 
+        /**
+         * 상대방 프로필 확인
+         */
+        binding.sellerImage.setOnClickListener {
+            val intent = Intent(requireActivity(), MainActivity::class.java)
+            startActivity(intent)
+            requireActivity().finish() // 현재 Activity를 종료하고 싶다면 추가
+            requireActivity().overridePendingTransition(R.anim.slide_out_right, R.anim.slide_in_left)
+        }
+
         return view
     }
 
