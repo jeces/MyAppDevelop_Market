@@ -56,7 +56,7 @@ private const val ARG_PARAM2 = "param2"
  */
 
 /* Product 추가 Fragment  */
-class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener {
+class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener, LocationBottomSheetFragment.OnAddressSelectedListener {
 
     private var param1: String? = null
     private var param2: String? = null
@@ -79,6 +79,14 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener {
 
     private var _binding: FragmentAddBinding? = null
     private val binding get() = _binding!!
+
+    override fun onAddressSelected(address: String) {
+        // 주소 데이터가 도착했을 때 원하는 작업을 여기에 구현합니다.
+        Log.d("adadadad", "frag")
+        Toast.makeText(context, address, Toast.LENGTH_SHORT).show()
+        // 예: 주소를 TextView에 표시
+        binding.locationTextView.text = address
+    }
 
     override fun onCategorySelected(category: String) {
         // 카테고리 배열을 가져옵니다.
@@ -151,7 +159,7 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener {
 
         binding.addLocationButton.setOnClickListener {
             val bottomSheet = LocationBottomSheetFragment()
-            bottomSheet.show(parentFragmentManager, bottomSheet.tag)
+            bottomSheet.show(childFragmentManager, bottomSheet.tag)
         }
 
 

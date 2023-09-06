@@ -1,4 +1,5 @@
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
@@ -30,6 +31,21 @@ class LocationBottomSheetFragment : BottomSheetDialogFragment() {
     private val binding get() = _binding!!
     private lateinit var mapView: MapView
 
+    interface OnAddressSelectedListener {
+        fun onAddressSelected(address: String)
+    }
+
+    private var listener: OnAddressSelectedListener? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (parentFragment is OnAddressSelectedListener) {
+            listener = parentFragment as OnAddressSelectedListener
+        } else {
+            throw RuntimeException("The parent fragment must implement OnAddressSelectedListener")
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -52,6 +68,7 @@ class LocationBottomSheetFragment : BottomSheetDialogFragment() {
             api.getReverseGeo(longitude, latitude).enqueue(object : Callback<KakaoResponse> {
                 override fun onResponse(call: Call<KakaoResponse>, response: Response<KakaoResponse>) {
                     val address = response.body()?.documents?.get(0)?.address?.address_name
+                    listener?.onAddressSelected(address ?: "주소를 가져오지 못했습니다.")
                     Log.d("adadadad", "${mapCenterPoint}/${latitude}/${address}/")
 //                    yourTextView.text = address ?: "주소를 가져오지 못했습니다."
 
