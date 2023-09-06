@@ -82,10 +82,14 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener, Lo
 
     override fun onAddressSelected(address: String) {
         // 주소 데이터가 도착했을 때 원하는 작업을 여기에 구현합니다.
-        Log.d("adadadad", "frag")
-        Toast.makeText(context, address, Toast.LENGTH_SHORT).show()
+        val processedAddress = if (address.contains("동")) {
+            address.substring(0, address.indexOf("동") + 1)
+        } else {
+            address
+        }
+        Toast.makeText(context, processedAddress, Toast.LENGTH_SHORT).show()
         // 예: 주소를 TextView에 표시
-        binding.locationTextView.text = address
+        binding.locationTextView.text = processedAddress
     }
 
     override fun onCategorySelected(category: String) {
