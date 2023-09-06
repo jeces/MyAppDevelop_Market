@@ -80,6 +80,8 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener, Lo
     private var _binding: FragmentAddBinding? = null
     private val binding get() = _binding!!
 
+    private var addressSet = ""
+
     override fun onAddressSelected(address: String) {
         // 주소 데이터가 도착했을 때 원하는 작업을 여기에 구현합니다.
         val processedAddress = if (address.contains("동")) {
@@ -88,6 +90,7 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener, Lo
             address
         }
         Toast.makeText(context, processedAddress, Toast.LENGTH_SHORT).show()
+        addressSet = processedAddress
         // 예: 주소를 TextView에 표시
         binding.locationTextView.text = processedAddress
     }
@@ -276,21 +279,6 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener, Lo
         }
     }
 
-//    private fun funImageUpload() {
-//        val productName = binding.productName.text.toString()
-//        val myId = productViewModel.thisUser
-//        imagelist.forEachIndexed { index, uri ->
-//            val imgFileName = "${myId}_${index}_IMAGE_.png"
-//            Log.d("사진업로드", imgFileName)
-//            val storageRef = firebaseStorage?.reference?.child("$myId/$productName/")?.child(imgFileName)
-//            storageRef?.putFile(uri)
-//                ?.addOnSuccessListener { if(isAdded) {
-//                    Toast.makeText(requireContext(), "ImageUploaded", Toast.LENGTH_SHORT).show()
-//                } }
-//                ?.addOnFailureListener { exception -> Log.e("ImageUploadError", exception.message ?: "Unknown error") }
-//        }
-//    }
-
     private fun funImageUpload() {
         coroutineScope.launch {
             val productName = binding.productName.text.toString()
@@ -339,7 +327,10 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener, Lo
         if (productName.isNotEmpty() && productPrice.isNotEmpty()) {
             imgFileName = if (targetImg) "basic_img.png" else "${myId}_0_IMAGE_.png"
             val product = Product(myId, productName, productPrice.toInt(), productDescription, imgCount, imgFileName, 0, 0, 0, "0", "0", tags, category, "판매중") // tags 추가
-            productViewModel.addProducts(product) // 이 함수 내에서 Firestore에 저장되는 코드가 있어야 합니다.
+            if(addressSet == "") {
+                addressSet = "지역없음"
+            }
+            productViewModel.addProducts(product, addressSet) // 이 함수 내에서 Firestore에 저장되는 코드가 있어야 합니다.
 
             Toast.makeText(requireContext(), "Successfully added!", Toast.LENGTH_LONG).show()
 
@@ -458,7 +449,6 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener, Lo
             .addOnSuccessListener { Log.d("Location", "Location successfully written!") }
             .addOnFailureListener { e -> Log.w("Location", "Error writing location", e) }
     }
-    
 
     companion object {
         @JvmStatic

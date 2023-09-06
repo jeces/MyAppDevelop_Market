@@ -149,10 +149,10 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-    fun addProducts(product: Product) {
+    fun addProducts(product: Product, addressSet: String) {
         viewModelScope.launch {
             try {
-                repository.addProducts(product)
+                repository.addProducts(product, addressSet)
             } catch (e: Exception) {
                 // Handle the exception
             }

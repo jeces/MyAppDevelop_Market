@@ -57,7 +57,7 @@ class ProductRepository {
         return jecesfirestore!!.collection("Product").whereIn("IDX", favoritList).get().await().documents
     }
 
-    suspend fun addProducts(product: Product) {
+    suspend fun addProducts(product: Product, addressSet: String) {
         val currentTime = Timestamp.now()
         val userSnapshot = getFirestore().collection("UserInfo").whereEqualTo("id", product.product_id).get().await()
 //        val userName = userSnapshot.documents.firstOrNull()?.getString("name") ?: ""
@@ -76,7 +76,8 @@ class ProductRepository {
             "insertTime" to currentTime,
             "tags" to product.tags,
             "category" to product.category,
-            "product_state" to product.state
+            "product_state" to product.state,
+            "address" to addressSet
             // ... (remaining fields as earlier)
         )
         getFirestore().collection("Product").add(productMap).await()
