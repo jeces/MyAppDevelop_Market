@@ -12,6 +12,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.example.applicationjeces.MainActivity
 import com.example.applicationjeces.R
 import com.example.applicationjeces.databinding.FragmentInfoBinding
@@ -60,7 +63,6 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
         val pViewCount = arguments?.getString("pViewCount")
         val pHeartCount = arguments?.getString("pHeartCount")
         val tagsJson = arguments?.getString("tags")
-        Log.d("afafafaf", tagsJson.toString())
         val gson = Gson()
         val tags: List<List<String>> = try {
             gson.fromJson(tagsJson, object : TypeToken<List<List<String>>>() {}.type)
@@ -230,9 +232,10 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
                 if (isAdded) {
                     Glide.with(this@InfoFragment)
                         .load(it.result)
-                        .override(70, 70)
+                        .override(60, 60)
                         .fitCenter()
                         .circleCrop()
+                        .apply(RequestOptions().transforms(CenterCrop(), RoundedCorners(40)))
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .skipMemoryCache(true)
                         .into(binding.sellerImage)
@@ -242,9 +245,10 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
                     if (isAdded) {
                         Glide.with(this@InfoFragment)
                             .load(it.result)
-                            .override(70, 70)
+                            .override(60, 60)
                             .fitCenter()
                             .circleCrop()
+                            .apply(RequestOptions().transforms(CenterCrop(), RoundedCorners(40)))
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .skipMemoryCache(true)
                             .into(binding.sellerImage)

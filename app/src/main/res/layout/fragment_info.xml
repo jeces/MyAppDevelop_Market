@@ -76,10 +76,12 @@
                 android:padding="16dp">
 
                 <!-- 판매자 섹션 -->
-                <ImageView
+                <ImageButton
                     android:id="@+id/sellerImage"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
+                    android:scaleType="fitXY"
+                    android:background="@null"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     tools:src="@tools:sample/avatars" />
