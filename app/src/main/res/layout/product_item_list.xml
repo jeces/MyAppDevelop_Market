@@ -18,7 +18,7 @@
                 android:id="@+id/product_img"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@color/black"
+                android:layout_gravity="center"
                 android:background="@drawable/round_img"
                 android:scaleType="centerCrop"
                 app:layout_constraintTop_toTopOf="parent"

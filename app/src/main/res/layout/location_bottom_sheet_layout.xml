@@ -4,8 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".product.AddActivity">
+    android:layout_height="match_parent">
 
     <FrameLayout
         android:id="@+id/map_container"
@@ -20,7 +19,6 @@
         android:background="@drawable/naver_login_bt"
         app:cornerRadius="50dp"
         app:icon="@drawable/ic_baseline_check_circle_outline_24"
-        app:backgroundTintMode="screen"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

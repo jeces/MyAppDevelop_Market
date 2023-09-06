@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.applicationjeces.R
@@ -24,6 +26,9 @@ import java.text.NumberFormat
 import java.util.*
 
 class ProductViewPagerAdapter(private val context: Fragment, var myId: String, var producFiretList: List<DocumentSnapshot>): RecyclerView.Adapter<ProductViewPagerAdapter.Holder>() {
+
+
+    private val cachedUrls = mutableMapOf<String, String>()
 
     /* ViewHolder에게 item을 보여줄 View로 쓰일 item_data_list.xml를 넘기면서 ViewHolder 생성. 아이템 레이아웃과 결합 */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
@@ -48,31 +53,53 @@ class ProductViewPagerAdapter(private val context: Fragment, var myId: String, v
         holder.itemView.product_price.text = "판매가 : ${context.requireContext().getString(R.string.bid_price_format, formattedPrice)}"
         holder.itemView.current_bid_price.text = "입찰가 : ${context.requireContext().getString(R.string.bid_price_format, formattedBidPrice)}"
 
-        /* 이미지가 있을 때와 없을 때 */
-        if(currentItem4.toString() == "0") {
-            currentItem3 = "basic_img.png"
-            FirebaseStorage.getInstance().reference.child("${currentItem3}").downloadUrl.addOnCompleteListener {
-                if(it.isSuccessful && context.isAdded) {
-                    Glide.with(context)
-                        .load(it.result)
-                        .override(100, 100)
-                        .fitCenter()
-                        .into(holder.itemView.product_img)
-                }
-            }
+        val imageUrl = if (currentItem4.toString() == "0") {
+            "basic_img.png"
         } else {
-            /* 상품의 아이디가 들어가야 함 */
-            FirebaseStorage.getInstance().reference.child("${currentItemId}/${currentItem}/$currentItem3").downloadUrl.addOnCompleteListener {
-                if(it.isSuccessful && context.isAdded) {
-                    Log.d("뭐냐?",currentItem3.toString())
-                    Glide.with(context)
-                        .load(it.result)
-                        .override(100, 100) //픽셀
-                        .fitCenter()
-                        .into(holder.itemView.product_img)
+            "${currentItemId}/${currentItem}/${currentItem3}"
+
+        }
+        Log.d("131312", "${currentItemId}/${currentItem}/${currentItem3}")
+        val storageReference = FirebaseStorage.getInstance().reference.child(imageUrl)
+
+        // 이미지 URL 캐싱
+        if (cachedUrls.containsKey(imageUrl)) {
+            loadRoundedImage(holder, cachedUrls[imageUrl]!!)
+        } else {
+            storageReference.downloadUrl.addOnCompleteListener {
+                if (it.isSuccessful && context.isAdded) {
+                    val downloadUrl = it.result.toString()
+                    cachedUrls[imageUrl] = downloadUrl
+                    loadRoundedImage(holder, downloadUrl)
                 }
             }
         }
+//
+//        /* 이미지가 있을 때와 없을 때 */
+//        if(currentItem4.toString() == "0") {
+//            currentItem3 = "basic_img.png"
+//            FirebaseStorage.getInstance().reference.child("${currentItem3}").downloadUrl.addOnCompleteListener {
+//                if(it.isSuccessful && context.isAdded) {
+//                    Glide.with(context)
+//                        .load(it.result)
+//                        .override(100, 100)
+//                        .fitCenter()
+//                        .into(holder.itemView.product_img)
+//                }
+//            }
+//        } else {
+//            /* 상품의 아이디가 들어가야 함 */
+//            FirebaseStorage.getInstance().reference.child("${currentItemId}/${currentItem}/$currentItem3").downloadUrl.addOnCompleteListener {
+//                if(it.isSuccessful && context.isAdded) {
+//                    Log.d("뭐냐?",currentItem3.toString())
+//                    Glide.with(context)
+//                        .load(it.result)
+//                        .override(100, 100) //픽셀
+//                        .fitCenter()
+//                        .into(holder.itemView.product_img)
+//                }
+//            }
+//        }
 
         holder.itemView.setOnClickListener {
             /* 리스트 클릭시 Detail 화면 전환 */
@@ -81,6 +108,19 @@ class ProductViewPagerAdapter(private val context: Fragment, var myId: String, v
 
         /* 이미지 초기화 */
         holder.itemView.product_img.setImageBitmap(null)
+    }
+
+    // 라운드 처리된 이미지 로딩
+    private fun loadRoundedImage(holder: Holder, url: String) {
+//        val roundedCornersOption = RequestOptions().transform(RoundedCornersTransformation(16, 0))
+        Glide.with(context)
+            .load(url)
+            .placeholder(R.drawable.ic_baseline_add_24)
+            .override(100, 100)
+            //            .apply(roundedCornersOption)
+            .apply(RequestOptions().transforms(CenterCrop(), RoundedCorners(23)))            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .skipMemoryCache(true) // 메모리 캐시 비활성화
+            .into(holder.itemView.product_img)
     }
 
     /* (2) 리스너 인터페이스 */

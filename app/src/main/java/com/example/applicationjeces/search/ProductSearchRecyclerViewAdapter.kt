@@ -40,7 +40,7 @@ class ProductSearchRecyclerViewAdapter(var producFiretList: List<DocumentSnapsho
         val pChatCount = producFiretList[position].get("pChatCount")
         val pHearCount = producFiretList[position].get("pHeartCount")
         val bidPrice = producFiretList[position].get("productBidPrice")
-
+        val address = producFiretList[position].get("address")
 
         val timestampString = producFiretList[position].get("insertTime").toString()
         val pattern = """seconds=([\d]+)""".toRegex()
@@ -53,34 +53,30 @@ class ProductSearchRecyclerViewAdapter(var producFiretList: List<DocumentSnapsho
         val formattedPrice = addCommasToNumberString(currentItem2.toString())
         val formattedBidPrice = addCommasToNumberString(bidPrice.toString())
         holder.itemView.product_name.text = currentItem.toString()
-        holder.itemView.product_price.text = context.getString(R.string.product_price_format, formattedPrice)
+        holder.itemView.product_price.text = "판매가 : " + context.getString(R.string.product_price_format, formattedPrice)
         holder.itemView.upload_time.text = timeAgo
         holder.itemView.like_count.text = pHearCount.toString()
         holder.itemView.chat_count.text = pChatCount.toString()
-        holder.itemView.current_bid.text = context.getString(R.string.product_price_format, formattedBidPrice)
+        holder.itemView.current_bid.text = "입찰가 : " + context.getString(R.string.product_price_format, formattedBidPrice)
+        holder.itemView.location.text = address.toString()
 
-        /* 이미지가 있을 때와 없을 때 */
-        if(currentItem4.toString() == "0") {
-            currentItem3 = "basic_img.png"
-            FirebaseStorage.getInstance().reference.child("${currentItem3}").downloadUrl.addOnCompleteListener {
-                if(it.isSuccessful) {
-                    Glide.with(context)
-                        .load(it.result)
-                        .override(100, 100)
-                        .fitCenter()
-                        .into(holder.itemView.product_img)
-                }
-            }
+        val imageUrl = if (currentItem4.toString() == "0") {
+            "basic_img.png"
         } else {
-            /* 상품의 아이디가 들어가야 함 */
-            FirebaseStorage.getInstance().reference.child("${currentItemId}/${currentItem}/$currentItem3").downloadUrl.addOnCompleteListener {
-                if(it.isSuccessful) {
-                    Log.d("뭐냐?",currentItem3.toString())
-                    Glide.with(context)
-                        .load(it.result)
-                        .override(100, 100) //픽셀
-                        .fitCenter()
-                        .into(holder.itemView.product_img)
+            "${currentItemId}/${currentItem}/${currentItem3}"
+        }
+
+        val storageReference = FirebaseStorage.getInstance().reference.child(imageUrl)
+
+        // 이전에 다운로드한 URL을 캐시에서 찾아 사용하거나, 캐시에 없으면 새롭게 다운로드합니다.
+        if (cachedUrls.containsKey(imageUrl)) {
+            loadImageWithGlide(holder, cachedUrls[imageUrl]!!)
+        } else {
+            storageReference.downloadUrl.addOnCompleteListener {
+                if (it.isSuccessful) {
+                    val downloadUrl = it.result.toString()
+                    cachedUrls[imageUrl] = downloadUrl
+                    loadImageWithGlide(holder, downloadUrl)
                 }
             }
         }
@@ -93,6 +89,18 @@ class ProductSearchRecyclerViewAdapter(var producFiretList: List<DocumentSnapsho
         /* 이미지 초기화 */
         holder.itemView.product_img.setImageBitmap(null)
     }
+
+    // 이미지 로딩을 위한 별도의 함수
+    private fun loadImageWithGlide(holder: Holder, url: String) {
+        Glide.with(context)
+            .load(url)
+            .override(100, 100)
+            .fitCenter()
+            .into(holder.itemView.product_img)
+    }
+
+    // 클래스 내부에 URL 캐시를 위한 Map 추가
+    private val cachedUrls = mutableMapOf<String, String>()
 
     /* (2) 리스너 인터페이스 */
     interface OnItemClickListener {

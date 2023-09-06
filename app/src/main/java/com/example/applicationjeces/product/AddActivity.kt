@@ -22,7 +22,7 @@ class AddActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         /**
-         * ChatViewModel 연결
+         * productViewModel 연결
          */
         binding = DataBindingUtil.setContentView(this, R.layout.activity_add)
         binding.apply {
@@ -31,7 +31,7 @@ class AddActivity : AppCompatActivity() {
         }
 
         /**
-         * ChatViewModel 생성자
+         * productViewModel 생성자
          */
         productViewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application)).get(
             ProductViewModel::class.java)!!
@@ -69,12 +69,12 @@ class AddActivity : AppCompatActivity() {
         }
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        val intent = Intent(this, MainActivity::class.java)
-        intent.putExtra("SELECT_HOME", true)
-        startActivity(intent)
-        finish()
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
-    }
+//    override fun onBackPressed() {
+//        super.onBackPressed()
+//        val intent = Intent(this, MainActivity::class.java)
+//        intent.putExtra("SELECT_HOME", true)
+//        startActivity(intent)
+//        finish()
+//        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
+//    }
 }
