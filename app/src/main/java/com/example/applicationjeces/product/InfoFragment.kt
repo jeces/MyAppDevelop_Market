@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.applicationjeces.MainActivity
 import com.example.applicationjeces.R
 import com.example.applicationjeces.databinding.FragmentInfoBinding
@@ -226,20 +227,28 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
         var db = FirebaseStorage.getInstance()
         db.reference.child("${pId}/profil/${pId}_Profil_IMAGE_.png").downloadUrl.addOnCompleteListener {
             if(it.isSuccessful) {
-                Glide.with(this@InfoFragment)
-                    .load(it.result)
-                    .override(70, 70)
-                    .fitCenter()
-                    .circleCrop() // 또는 .transform(RoundedCorners(radius)) 를 사용하여 모서리의 반경을 설정
-                    .into(binding.sellerImage)
-            } else {
-                db.reference.child("basic_user.png").downloadUrl.addOnCompleteListener { its ->
+                if (isAdded) {
                     Glide.with(this@InfoFragment)
                         .load(it.result)
                         .override(70, 70)
                         .fitCenter()
-                        .circleCrop() // 또는 .transform(RoundedCorners(radius)) 를 사용하여 모서리의 반경을 설정
+                        .circleCrop()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .skipMemoryCache(true)
                         .into(binding.sellerImage)
+                }
+            } else {
+                db.reference.child("basic_user.png").downloadUrl.addOnCompleteListener { its ->
+                    if (isAdded) {
+                        Glide.with(this@InfoFragment)
+                            .load(it.result)
+                            .override(70, 70)
+                            .fitCenter()
+                            .circleCrop()
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .skipMemoryCache(true)
+                            .into(binding.sellerImage)
+                    }
                 }
             }
         }.addOnFailureListener {
@@ -258,5 +267,4 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
             "" // 또는 원하는 기본값을 반환합니다.
         }
     }
-
 }

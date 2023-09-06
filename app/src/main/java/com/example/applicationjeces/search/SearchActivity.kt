@@ -8,21 +8,18 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.applicationjeces.JecesViewModel
 import com.example.applicationjeces.product.ProductViewModel
 import com.example.applicationjeces.MainActivity
 import com.example.applicationjeces.R
-import com.example.applicationjeces.databinding.ActivityMain2Binding
 import com.example.applicationjeces.databinding.ActivitySearchBinding
-import com.google.firebase.firestore.Filter
-import com.google.firebase.firestore.FirebaseFirestore
+import com.example.applicationjeces.product.InfoActivity
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main2.*
+import java.util.HashMap
 
 class SearchActivity : AppCompatActivity() {
 
@@ -85,12 +82,59 @@ class SearchActivity : AppCompatActivity() {
             filterFragment.show(supportFragmentManager, filterFragment.tag)
         }
 
-        // 항목 클릭 리스너 설정
+        setupItemClickListener(adapter)
+    }
+
+    // 리스너 설정 함수
+    fun setupItemClickListener(adapter: ProductSearchRecyclerViewAdapter) {
         adapter.setItemClickListener(object : ProductSearchRecyclerViewAdapter.OnItemClickListener {
             override fun onClick(v: View, position: Int) {
-                // 아이템 클릭시 동작 정의 (현재 비어있음)
+                val product = adapter.producFiretList[position].data as HashMap<String, Any>
+                onProductClicked(product, position)
             }
         })
+    }
+
+    fun onProductClicked(product: HashMap<String, Any>, position: Int) {
+        val gson = Gson()
+        val tags = listOf(product["tags"]) as List<String>
+
+        productViewModel.setProductDetail(
+            product["ID"].toString(),
+            product["productName"].toString(),
+            product["productPrice"].toString().toInt(),
+            product["productDescription"].toString(),
+            product["productCount"].toString().toInt(),
+            product["pChatCount"].toString().toInt(),
+            product["pViewCount"].toString().toInt(),
+            product["pHeartCount"].toString().toInt(),
+            product["productBidPrice"].toString(),
+            product["insertTime"].toString(),
+            position,
+            tags,
+            product["category"].toString(),
+            product["state"].toString()
+        )
+
+        val tagsJson = gson.toJson(tags)
+        val intent = Intent(this, InfoActivity::class.java).apply {
+            putExtra("ID", product["ID"].toString())
+            putExtra("IDX", product["IDX"].toString())
+            putExtra("productName", product["productName"].toString())
+            putExtra("productPrice", product["productPrice"].toString())
+            putExtra("productDescription", product["productDescription"].toString())
+            putExtra("productCount", product["productCount"].toString())
+            putExtra("pChatCount", product["pChatCount"].toString())
+            putExtra("pViewCount", product["pViewCount"].toString())
+            putExtra("pHeartCount", product["pHeartCount"].toString())
+            putExtra("productBidPrice", product["productBidPrice"].toString())
+            putExtra("insertTime", product["insertTime"].toString())
+            putExtra("position", position)
+            putExtra("tags", tagsJson)
+        }
+
+        startActivity(intent)
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

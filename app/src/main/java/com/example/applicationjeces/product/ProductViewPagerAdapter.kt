@@ -74,32 +74,6 @@ class ProductViewPagerAdapter(private val context: Fragment, var myId: String, v
                 }
             }
         }
-//
-//        /* 이미지가 있을 때와 없을 때 */
-//        if(currentItem4.toString() == "0") {
-//            currentItem3 = "basic_img.png"
-//            FirebaseStorage.getInstance().reference.child("${currentItem3}").downloadUrl.addOnCompleteListener {
-//                if(it.isSuccessful && context.isAdded) {
-//                    Glide.with(context)
-//                        .load(it.result)
-//                        .override(100, 100)
-//                        .fitCenter()
-//                        .into(holder.itemView.product_img)
-//                }
-//            }
-//        } else {
-//            /* 상품의 아이디가 들어가야 함 */
-//            FirebaseStorage.getInstance().reference.child("${currentItemId}/${currentItem}/$currentItem3").downloadUrl.addOnCompleteListener {
-//                if(it.isSuccessful && context.isAdded) {
-//                    Log.d("뭐냐?",currentItem3.toString())
-//                    Glide.with(context)
-//                        .load(it.result)
-//                        .override(100, 100) //픽셀
-//                        .fitCenter()
-//                        .into(holder.itemView.product_img)
-//                }
-//            }
-//        }
 
         holder.itemView.setOnClickListener {
             /* 리스트 클릭시 Detail 화면 전환 */
@@ -116,7 +90,7 @@ class ProductViewPagerAdapter(private val context: Fragment, var myId: String, v
             .load(url)
             .placeholder(R.drawable.ic_baseline_add_24)
             .override(100, 100)
-            .apply(RequestOptions().transforms(CenterCrop(), RoundedCorners(23)))            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .apply(RequestOptions().transforms(CenterCrop(), RoundedCorners(16)))            .diskCacheStrategy(DiskCacheStrategy.ALL)
             .skipMemoryCache(true) // 메모리 캐시 비활성화
             .into(holder.itemView.product_img)
     }

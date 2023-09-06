@@ -9,7 +9,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.example.applicationjeces.R
+import com.example.applicationjeces.product.ProductViewPagerAdapter
 import com.example.applicationjeces.product.Response
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.storage.FirebaseStorage
@@ -87,16 +92,19 @@ class ProductSearchRecyclerViewAdapter(var producFiretList: List<DocumentSnapsho
         }
 
         /* 이미지 초기화 */
-        holder.itemView.product_img.setImageBitmap(null)
+        holder.itemView.product_img_search.setImageBitmap(null)
     }
 
     // 이미지 로딩을 위한 별도의 함수
     private fun loadImageWithGlide(holder: Holder, url: String) {
         Glide.with(context)
             .load(url)
+            .placeholder(R.drawable.ic_baseline_add_24)
             .override(100, 100)
-            .fitCenter()
-            .into(holder.itemView.product_img)
+            .apply(RequestOptions().transforms(CenterCrop(), RoundedCorners(16)))
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .skipMemoryCache(true) // 메모리 캐시 비활성화
+            .into(holder.itemView.product_img_search)
     }
 
     // 클래스 내부에 URL 캐시를 위한 Map 추가
