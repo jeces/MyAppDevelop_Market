@@ -112,12 +112,10 @@ class ProductViewPagerAdapter(private val context: Fragment, var myId: String, v
 
     // 라운드 처리된 이미지 로딩
     private fun loadRoundedImage(holder: Holder, url: String) {
-//        val roundedCornersOption = RequestOptions().transform(RoundedCornersTransformation(16, 0))
         Glide.with(context)
             .load(url)
             .placeholder(R.drawable.ic_baseline_add_24)
             .override(100, 100)
-            //            .apply(roundedCornersOption)
             .apply(RequestOptions().transforms(CenterCrop(), RoundedCorners(23)))            .diskCacheStrategy(DiskCacheStrategy.ALL)
             .skipMemoryCache(true) // 메모리 캐시 비활성화
             .into(holder.itemView.product_img)
