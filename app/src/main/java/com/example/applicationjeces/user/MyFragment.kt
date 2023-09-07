@@ -1,5 +1,6 @@
 package com.example.applicationjeces.user
 
+import ReviewAdapter
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
@@ -12,13 +13,17 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
+import com.example.applicationjeces.R
 import com.example.applicationjeces.databinding.FragmentMyinfoBinding
+import com.example.applicationjeces.product.InfoActivity
 import com.example.applicationjeces.product.ProductViewModel
 import com.example.applicationjeces.product.ProductViewPagerAdapter
 import com.example.applicationjeces.user.EditProfileActivity
 import com.google.firebase.storage.FirebaseStorage
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_info.view.*
 import kotlinx.android.synthetic.main.fragment_myinfo.*
+import java.util.HashMap
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -75,7 +80,6 @@ class MyFragment : Fragment() {
          * 나의 프로필 이미지 및 이름
          */
         var myId = productViewModel.thisUser
-        Log.d("adadadadad", "adadadadad")
         setMyImage(myId)
 
         /**
@@ -97,7 +101,8 @@ class MyFragment : Fragment() {
         /**
          * 나의 판매목록 상품
          */
-        val adapter = MyProductRecyclerViewAdapter(this@MyFragment, myId, emptyList(), "myProduct")
+//        val adapter = MyProductRecyclerViewAdapter(this@MyFragment, myId, emptyList(), "myProduct")
+        val adapter = ProductViewPagerAdapter(this@MyFragment, myId, emptyList())
         val recyclerView = binding.myProductSaleV
         recyclerView.adapter = adapter
         recyclerView.setHasFixedSize(true)
@@ -126,7 +131,6 @@ class MyFragment : Fragment() {
         productViewModel.mySetProduct()
         productViewModel.myProductLiveTodoData.observe(viewLifecycleOwner, Observer { product ->
             /* ViewModel에 Observe를 활용하여 productViewModel에 ReadAllData 라이브 데이터가 바뀌었을때 캐치하여, adapter에서 만들어준 setData함수를 통해 바뀐데이터를 UI에 업데이트 해줌 */
-            Log.d("aaaaddd", "aadada")
             adapter.setData(product)
         })
 
@@ -144,7 +148,8 @@ class MyFragment : Fragment() {
         /**
          * 나의 구매 목록
          */
-        val adapterPc = MyProductRecyclerViewAdapter(this@MyFragment, myId, emptyList(), "myProductPc")
+//        val adapterPc = MyProductRecyclerViewAdapter(this@MyFragment, myId, emptyList(), "myProductPc")
+        val adapterPc = ProductViewPagerAdapter(this@MyFragment, myId, emptyList())
         val recyclerViewPc = binding.myProductPc
         recyclerViewPc.adapter = adapterPc
         recyclerViewPc.setHasFixedSize(true)
@@ -171,7 +176,7 @@ class MyFragment : Fragment() {
         /**
          * 나의 관심 목록
          */
-        val adapterFv = MyProductRecyclerViewAdapter(this@MyFragment, myId, emptyList(), "myProductFv")
+        val adapterFv = ProductViewPagerAdapter(this@MyFragment, myId, emptyList())
         val recyclerViewFv = binding.myProductFv
         recyclerViewFv.adapter = adapterFv
         recyclerViewFv.setHasFixedSize(true)
@@ -205,6 +210,20 @@ class MyFragment : Fragment() {
             startActivity(intent)
         }
 
+        setupItemClickListener(adapter)
+        setupItemClickListener(adapterFv)
+        setupItemClickListener(adapterPc)
+
+        val reviews = listOf(
+            Review("John Doe", 4.5f, "Great seller!", "지금"),
+            Review("Jane Smith", 5.0f, "Very responsive and friendly.", "지금")
+            // ... 추가 리뷰
+        )
+
+        val reviewAdapter = ReviewAdapter(reviews)
+        val reviewRecyclerView = binding.reviewRecyclerView
+        reviewRecyclerView.adapter = reviewAdapter
+
         // Inflate the layout for this fragment
         return view
     }
@@ -227,6 +246,46 @@ class MyFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    // 리스너 설정 함수
+    fun setupItemClickListener(adapter: ProductViewPagerAdapter) {
+        adapter.setItemClickListener(object : ProductViewPagerAdapter.OnItemClickListener {
+            override fun onClick(v: View, position: Int) {
+                val product = adapter.producFiretList[position].data as HashMap<String, Any>
+                onProductClicked(product, position)
+            }
+        })
+    }
+
+    fun onProductClicked(product: HashMap<String, Any>, position: Int) {
+        val gson = Gson()
+        val tags = listOf(product["tags"]) as List<String>
+        productViewModel.setProductDetail(product["ID"].toString(), product["productName"].toString(), product["productPrice"].toString().toInt(),
+            product["productDescription"].toString(), product["productCount"].toString().toInt(), product["pChatCount"].toString().toInt(),
+            product["pViewCount"].toString().toInt(), product["pHeartCount"].toString().toInt(), product["productBidPrice"].toString(), product["insertTime"].toString(), position,
+            tags, product["category"].toString(), product["state"].toString()
+        )
+        val tagsJson = gson.toJson(tags)
+        val intent = Intent(getActivity(), InfoActivity::class.java)
+        intent.apply {
+            putExtra("ID", product["ID"].toString())
+            putExtra("IDX", product["IDX"].toString())
+            putExtra("productName", product["productName"].toString())
+            putExtra("productPrice", product["productPrice"].toString())
+            putExtra("productDescription", product["productDescription"].toString())
+            putExtra("productCount", product["productCount"].toString())
+            putExtra("pChatCount", product["pChatCount"].toString())
+            putExtra("pViewCount", product["pViewCount"].toString())
+            putExtra("pHeartCount", product["pHeartCount"].toString())
+            putExtra("productBidPrice", product["productBidPrice"].toString())
+            putExtra("insertTime", product["insertTime"].toString())
+            putExtra("position", position)
+            putExtra("tags", tagsJson)
+        }
+
+        startActivity(intent)
+        activity?.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
     }
 
     /**
