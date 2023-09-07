@@ -1,5 +1,6 @@
 package com.example.applicationjeces.user
 
+import ReviewAdapter
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.example.applicationjeces.databinding.ActivityYourBinding
 import com.example.applicationjeces.product.ProductViewModel
+import com.google.firebase.Timestamp
 import com.google.firebase.storage.FirebaseStorage
 
 /**
@@ -91,6 +93,39 @@ class YourActivity : AppCompatActivity()  {
             } else {
                 recyclerView.visibility = View.VISIBLE
             }
+        }
+
+        /**
+         * 리뷰
+         */
+        val reviewAdapter = ReviewAdapter(emptyList())
+        val reviewRecyclerView = binding.yourReviewRecyclerView
+        reviewRecyclerView.adapter = reviewAdapter
+
+        /**
+         * 리뷰목록 버튼
+         */
+        binding.yourReviewText.setOnClickListener {
+            if (reviewRecyclerView.visibility == View.VISIBLE) {
+                reviewRecyclerView.visibility = View.GONE
+            } else {
+                reviewRecyclerView.visibility = View.VISIBLE
+            }
+        }
+
+        /**
+         * review 옵져브
+         **/
+        productViewModel.fetchReviews(pidValue)
+        productViewModel.reviews.observe(this, Observer { reviews ->
+            /* ViewModel에 Observe를 활용하여 productViewModel에 ReadAllData 라이브 데이터가 바뀌었을때 캐치하여, adapter에서 만들어준 setData함수를 통해 바뀐데이터를 UI에 업데이트 해줌 */
+            reviewAdapter.setData(reviews)
+        })
+
+        val myid = productViewModel.thisUser
+        binding.submitReviewButton.setOnClickListener {
+            submitReview(pidValue, myid)
+            reviewRecyclerView.visibility = View.VISIBLE
         }
 
 //        /**
@@ -288,6 +323,19 @@ class YourActivity : AppCompatActivity()  {
 //        activity?.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
 //    }
 //
+
+    private fun submitReview(pId: String, myId: String) {
+        val to = pId   // 대상 유저의 ID나 이름을 설정하세요.
+        val from = myId // 현재 유저의 ID나 이름을 설정하세요.
+        val content = binding.reviewContentEditText.text.toString()
+        val rating = binding.ratingBar.rating
+        val product = "상품 ID or 이름"  // 해당 리뷰가 연결된 상품의 ID나 이름을 설정하세요.
+        val time = Timestamp.now().toDate().toString()  // 현재 시간을 문자열로 변환
+        val review = Review(to, from, content, rating, product, time)
+
+        productViewModel.addReview(review)
+
+    }
     /**
      * 나의 프로필 이미지
      */

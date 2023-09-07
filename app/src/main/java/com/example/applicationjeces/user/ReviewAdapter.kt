@@ -1,3 +1,5 @@
+import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -5,9 +7,11 @@ import android.widget.RatingBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applicationjeces.R
+import com.example.applicationjeces.product.Response
 import com.example.applicationjeces.user.Review
+import com.google.firebase.firestore.DocumentSnapshot
 
-class ReviewAdapter(private var reviews: List<Review>) : RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder>() {
+class ReviewAdapter(private var reviews: List<DocumentSnapshot>) : RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder>() {
 
     class ReviewViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val userName: TextView = view.findViewById(R.id.review_user_name)
@@ -22,10 +26,18 @@ class ReviewAdapter(private var reviews: List<Review>) : RecyclerView.Adapter<Re
 
     override fun onBindViewHolder(holder: ReviewViewHolder, position: Int) {
         val review = reviews[position]
-        holder.userName.text = review.to
-        holder.ratingBar.rating = review.rating
-        holder.reviewContent.text = review.content
+        holder.userName.text = review.get("from").toString()
+        holder.ratingBar.rating = review.get("rating").toString().toFloat()
+        holder.reviewContent.text = review.get("content").toString()
     }
 
     override fun getItemCount() = reviews.size
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun setData(review: List<DocumentSnapshot>) {
+        reviews = review
+        Log.d("dkfflwksk", reviews.toString())
+        /* 변경 알림 */
+        notifyDataSetChanged()
+    }
 }

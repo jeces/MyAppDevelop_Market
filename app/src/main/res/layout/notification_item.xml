@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+    android:orientation="horizontal">
+
+    <!-- 예시로 이미지와 텍스트를 가진 알림 아이템을 만들었습니다. 원하는대로 수정하세요 -->
+    <ImageView
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:src="@drawable/baseline_notifications_24"
+        android:layout_marginEnd="8dp"/>
+
+    <TextView
+        android:id="@+id/notificationtext"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textSize="10dp"
+        android:text="Sample Notification"/>
+</LinearLayout>

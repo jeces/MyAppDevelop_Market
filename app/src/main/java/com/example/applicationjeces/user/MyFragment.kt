@@ -215,13 +215,7 @@ class MyFragment : Fragment() {
             }
         }
 
-        val reviews = listOf(
-            Review("John Doe", "", "Great seller!", 0.1f, "d", ""),
-            Review("Jane Smith", "", "Very responsive and friendly.", 0.1f, "", "")
-            // ... 추가 리뷰
-        )
-
-        val reviewAdapter = ReviewAdapter(reviews)
+        val reviewAdapter = ReviewAdapter(emptyList())
         val reviewRecyclerView = binding.reviewRecyclerView
         reviewRecyclerView.adapter = reviewAdapter
 

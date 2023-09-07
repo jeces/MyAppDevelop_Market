@@ -8,13 +8,11 @@ import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.PopupMenu
+import android.widget.PopupWindow
 import android.widget.ScrollView
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -333,6 +331,39 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
         setupItemClickListener(adapterView)
         setupItemClickListener(adapterSevenHeart)
         setupItemClickListener(adapterSevenView)
+
+        /**
+         * 알림버튼 클릭 시
+         */
+        binding.notificationButton.setOnClickListener {
+            Log.d("adad111", "notification")
+            val popupView = layoutInflater.inflate(R.layout.notification_popup, null)
+            val notificationRecyclerView = popupView.findViewById<RecyclerView>(R.id.notificationRecyclerView)
+
+            val notifications = listOf("새로운 상품이 등록되었습니다.",
+                "주문한 상품이 발송되었습니다.",
+                "문의하신 상품에 대한 답변이 도착했습니다.",
+                "친구가 새로운 상품을 찜하였습니다.",
+                "할인 행사가 시작되었습니다! 지금 확인하세요.",
+                "리뷰에 대한 답글이 도착했습니다.",
+                "구매하신 상품의 교환 신청이 완료되었습니다.",
+                "상품 리뷰를 작성해주세요.",
+                "누군가의 상품에 새로운 댓글이 있습니다.",
+                "내 상품에 새로운 문의가 등록되었습니다.")  // 여기에 알림 데이터를 제공하셔야 합니다.
+            val notificationAdapter = NotificationAdapter(notifications)  // 알림용 어댑터는 별도로 정의하셔야 합니다.
+
+            notificationRecyclerView.adapter = notificationAdapter
+            notificationRecyclerView.layoutManager = LinearLayoutManager(context)
+
+            // PopupWindow 초기화
+            val popupWindow = PopupWindow(
+                popupView,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT
+            )
+            popupWindow.isFocusable = true  // 외부를 탭할 때 Popup을 닫기 위해
+            popupWindow.showAsDropDown(notificationButton)  // 알림 버튼 바로 아래에 표시
+        }
 
         // Inflate the layout for this fragment
         return view

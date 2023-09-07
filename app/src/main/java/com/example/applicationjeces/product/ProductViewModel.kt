@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.example.applicationjeces.chat.ChatroomData
 import com.example.applicationjeces.search.FilterCriteria
+import com.example.applicationjeces.user.Review
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import kotlinx.coroutines.Deferred
@@ -21,6 +22,9 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     var myProductFvLiveTodoData: MutableLiveData<List<DocumentSnapshot>> = MutableLiveData()
     var liveTodoChatroomDataCount: MutableLiveData<Int> = MutableLiveData(0)
     var productArrayList: MutableList<Product> = mutableListOf()
+
+    private val _reviews = MutableLiveData<List<DocumentSnapshot>>()
+    val reviews: LiveData<List<DocumentSnapshot>> get() = _reviews
 
     private val _recentProducts = MutableLiveData<List<DocumentSnapshot>>()
     val recentProducts: LiveData<List<DocumentSnapshot>> get() = _recentProducts
@@ -139,7 +143,7 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-    fun mySetProductFv() {
+    fun mySetProductFv( ) {
         viewModelScope.launch {
             try {
                 myProductFvLiveTodoData.value = repository.mySetProductFv()
@@ -482,6 +486,27 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
             } catch (e: Exception) {
                 // Handle exception, e.g., show an error message to the user
             }
+        }
+    }
+
+    fun addReview(review: Review) {
+        viewModelScope.launch {
+            try {
+                repository.addReviews(review)
+            } catch (e: Exception) {
+                // Handle exception, e.g., show an error message to the user
+            }
+        }
+    }
+
+    fun fetchReviews(pId: String) {
+        viewModelScope.launch {
+            try {
+                _reviews.value = repository.getReviewsForProduct(pId)
+            } catch (e: Exception) {
+
+            }
+
         }
     }
 }

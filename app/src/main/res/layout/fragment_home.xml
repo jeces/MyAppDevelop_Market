@@ -49,6 +49,17 @@
                     app:selectedDotColor="@android:color/darker_gray"
                     app:progressMode="false"/>
 
+                <ImageButton
+                    android:id="@+id/notificationButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginEnd="70dp"
+                    android:layout_marginTop="25dp"
+                    android:background="?android:selectableItemBackground"
+                    android:src="@drawable/baseline_notifications_active_24"
+                    android:contentDescription="Notification" />
+
                 <!-- 상단바 이미지 버튼 -->
                 <ImageButton
                     android:id="@+id/toolbarImageButton"

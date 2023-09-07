@@ -3,6 +3,7 @@ package com.example.applicationjeces.product
 import android.util.Log
 import com.example.applicationjeces.chat.ChatroomData
 import com.example.applicationjeces.search.FilterCriteria
+import com.example.applicationjeces.user.Review
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.Timestamp
@@ -499,5 +500,22 @@ class ProductRepository {
         awaitClose {
             listenerRegistration.remove()
         }
+    }
+
+    suspend fun addReviews(review: Review) {
+        try {
+            val dbRef = getCollection("Review")
+            dbRef.add(review).await()
+        } catch (e: Exception) {
+
+        }
+    }
+
+    suspend fun getReviewsForProduct(pId: String): List<DocumentSnapshot>? {
+        return getCollection("Review")
+            .whereEqualTo("to", pId)
+            .get()
+            .await()
+            .documents
     }
 }
