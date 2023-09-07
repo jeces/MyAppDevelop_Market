@@ -31,9 +31,13 @@ class ReviewAdapter(private var reviews: List<DocumentSnapshot>) : RecyclerView.
 
     override fun onBindViewHolder(holder: ReviewViewHolder, position: Int) {
         val review = reviews[position]
-        firestore!!.collection("UserInfo").document(review.get("from").toString())
-            .get()
-            .addOnSuccessListener { document ->
+        firestore?.collection("UserInfo")
+            ?.whereEqualTo("id", review.get("from").toString())
+            ?.get()
+            ?.addOnSuccessListener { querySnapshot ->
+                // 여기에서 우리는 첫 번째 문서만 사용하겠습니다.
+                // (실제로는 여러 문서가 반환될 수 있으므로 원하는 방식으로 처리해야 합니다.)
+                val document = querySnapshot.documents.firstOrNull()
                 if (document != null) {
                     holder.userName.text = document.getString("name")
                 }
