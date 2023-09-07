@@ -204,15 +204,16 @@ class MyFragment : Fragment() {
             }
         }
 
-
-        binding.editProfile.setOnClickListener {
-            val intent = Intent(activity, EditProfileActivity::class.java)
-            startActivity(intent)
+        /**
+         * 버튼 클릭
+         */
+        binding.ReviewText.setOnClickListener {
+            if (reviewRecyclerView.visibility == View.VISIBLE) {
+                recyclerViewFv.visibility = View.GONE
+            } else {
+                recyclerViewFv.visibility = View.VISIBLE
+            }
         }
-
-        setupItemClickListener(adapter)
-        setupItemClickListener(adapterFv)
-        setupItemClickListener(adapterPc)
 
         val reviews = listOf(
             Review("John Doe", 4.5f, "Great seller!", "지금"),
@@ -223,6 +224,19 @@ class MyFragment : Fragment() {
         val reviewAdapter = ReviewAdapter(reviews)
         val reviewRecyclerView = binding.reviewRecyclerView
         reviewRecyclerView.adapter = reviewAdapter
+
+        binding.editProfile.setOnClickListener {
+            val intent = Intent(activity, EditProfileActivity::class.java)
+            startActivity(intent)
+        }
+
+        setupItemClickListener(adapter)
+        setupItemClickListener(adapterFv)
+        setupItemClickListener(adapterPc)
+
+
+
+
 
         // Inflate the layout for this fragment
         return view
