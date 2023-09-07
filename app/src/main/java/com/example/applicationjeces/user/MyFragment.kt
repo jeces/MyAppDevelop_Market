@@ -234,10 +234,6 @@ class MyFragment : Fragment() {
         setupItemClickListener(adapterFv)
         setupItemClickListener(adapterPc)
 
-
-
-
-
         // Inflate the layout for this fragment
         return view
     }
