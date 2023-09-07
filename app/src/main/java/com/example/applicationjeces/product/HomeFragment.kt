@@ -14,6 +14,7 @@ import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.PopupWindow
 import android.widget.ScrollView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -355,21 +356,27 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
             notificationRecyclerView.adapter = notificationAdapter
             notificationRecyclerView.layoutManager = LinearLayoutManager(context)
 
-            // PopupWindow 초기화
+            val itemHeight = dpToPx(requireContext(), 20f) /* 아이템의 높이 (예: 50dp를 픽셀로 변환한 값) */;
+            val popupHeight = itemHeight * 10;
+
             val popupWindow = PopupWindow(
                 popupView,
                 WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.WRAP_CONTENT
+                popupHeight
             )
+
             popupWindow.isFocusable = true  // 외부를 탭할 때 Popup을 닫기 위해
             popupWindow.showAsDropDown(notificationButton)  // 알림 버튼 바로 아래에 표시
+            popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.popup_background))
         }
 
         // Inflate the layout for this fragment
         return view
     }
 
-
+    fun dpToPx(context: Context, dp: Float): Int {
+        return (dp * context.resources.displayMetrics.density).toInt()
+    }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         Log.d("jecesAddFragment", "onViewStateRestored")

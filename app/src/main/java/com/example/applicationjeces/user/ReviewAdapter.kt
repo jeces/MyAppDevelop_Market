@@ -5,13 +5,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RatingBar
 import android.widget.TextView
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applicationjeces.R
+import com.example.applicationjeces.product.ProductViewModel
 import com.example.applicationjeces.product.Response
 import com.example.applicationjeces.user.Review
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
 
 class ReviewAdapter(private var reviews: List<DocumentSnapshot>) : RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder>() {
+
+    private val firestore: FirebaseFirestore? = null
 
     class ReviewViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val userName: TextView = view.findViewById(R.id.review_user_name)
@@ -26,7 +31,13 @@ class ReviewAdapter(private var reviews: List<DocumentSnapshot>) : RecyclerView.
 
     override fun onBindViewHolder(holder: ReviewViewHolder, position: Int) {
         val review = reviews[position]
-        holder.userName.text = review.get("from").toString()
+        firestore!!.collection("UserInfo").document(review.get("from").toString())
+            .get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    holder.userName.text = document.getString("name")
+                }
+            }
         holder.ratingBar.rating = review.get("rating").toString().toFloat()
         holder.reviewContent.text = review.get("content").toString()
     }

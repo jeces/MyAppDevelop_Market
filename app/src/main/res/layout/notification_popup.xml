@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="100dp"
-    android:layout_height="200dp">  <!-- 원하는 높이값으로 설정하세요. -->
+    android:layout_height="200dp"
+    android:background="@drawable/popup_background">  <!-- 원하는 높이값으로 설정하세요. -->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/notificationRecyclerView"
@@ -12,5 +13,4 @@
         android:overScrollMode="never"
         android:scrollbars="none"
         tools:listitem="@layout/notification_item"/>
-
-</FrameLayout>
+</LinearLayout>

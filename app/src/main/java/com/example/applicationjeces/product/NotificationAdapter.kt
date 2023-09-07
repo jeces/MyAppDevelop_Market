@@ -26,6 +26,6 @@ class NotificationAdapter(private val notifications: List<String>) : RecyclerVie
     }
 
     override fun getItemCount(): Int {
-        return notifications.size
+        return return if (notifications.size > 10) 10 else notifications.size
     }
 }

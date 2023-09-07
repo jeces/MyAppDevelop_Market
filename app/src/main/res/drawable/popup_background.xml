@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#FFFFFF"/> <!-- 팝업창의 배경 색 -->
+    <corners android:radius="10dp"/> <!-- 팝업창의 모서리를 둥글게 만듭니다. 원하는 둥글기 값을 설정하세요 -->
+    <stroke android:width="2dp" android:color="#000000"/> <!-- 팝업창 테두리의 굵기와 색상 -->
+</shape>
