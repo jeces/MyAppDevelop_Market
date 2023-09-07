@@ -209,9 +209,9 @@ class MyFragment : Fragment() {
          */
         binding.ReviewText.setOnClickListener {
             if (reviewRecyclerView.visibility == View.VISIBLE) {
-                recyclerViewFv.visibility = View.GONE
+                reviewRecyclerView.visibility = View.GONE
             } else {
-                recyclerViewFv.visibility = View.VISIBLE
+                reviewRecyclerView.visibility = View.VISIBLE
             }
         }
 
