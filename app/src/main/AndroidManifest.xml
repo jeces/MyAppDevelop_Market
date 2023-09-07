@@ -52,6 +52,16 @@
         </activity>
 
         <activity
+            android:name=".user.YourActivity"
+            android:exported="false"
+            android:parentActivityName=".product.InfoActivity"
+            android:theme="@style/Theme.ApplicationJeces.NoActionBar.FullScreen">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
+        <activity
             android:name=".user.LoginActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize"

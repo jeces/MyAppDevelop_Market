@@ -47,8 +47,14 @@ class ProductRepository {
         return getCollection("Product").get().await().documents
     }
 
-    suspend fun mySetProduct(): List<DocumentSnapshot> {
-        return getFirestore().collection("Product").whereEqualTo("ID", thisUser).get().await().documents
+    suspend fun mySetProduct(id: String): List<DocumentSnapshot> {
+        val query = if (id.isBlank()) {
+            getFirestore().collection("Product").whereEqualTo("ID", thisUser)
+        } else {
+            getFirestore().collection("Product").whereEqualTo("ID", id)
+        }
+
+        return query.get().await().documents
     }
 
     suspend fun mySetProductFv(): List<DocumentSnapshot> {
@@ -444,9 +450,14 @@ class ProductRepository {
     /**
      * 나의 닉네임
      */
-    suspend fun fetchUserName(): String? {
+    suspend fun fetchUserName(id: String): String? {
         return try {
-            val userQuery = getCollection("UserInfo").whereEqualTo("id", thisUser).get().await()
+            val query = if (id.isBlank()) {
+                getCollection("UserInfo").whereEqualTo("id", thisUser)
+            } else {
+                getCollection("UserInfo").whereEqualTo("id", id)
+            }
+            val userQuery = query.get().await()
             val firstDocument = userQuery.documents.firstOrNull() ?: return null
             firstDocument.getString("name")
         } catch (e: Exception) {

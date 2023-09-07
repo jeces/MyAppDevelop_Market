@@ -22,9 +22,9 @@ class ReviewAdapter(private var reviews: List<Review>) : RecyclerView.Adapter<Re
 
     override fun onBindViewHolder(holder: ReviewViewHolder, position: Int) {
         val review = reviews[position]
-        holder.userName.text = review.userName
+        holder.userName.text = review.to
         holder.ratingBar.rating = review.rating
-        holder.reviewContent.text = review.reviewContent
+        holder.reviewContent.text = review.content
     }
 
     override fun getItemCount() = reviews.size

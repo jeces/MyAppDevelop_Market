@@ -129,10 +129,10 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-    fun mySetProduct() {
+    fun mySetProduct(id: String) {
         viewModelScope.launch {
             try {
-                myProductLiveTodoData.value = repository.mySetProduct()
+                myProductLiveTodoData.value = repository.mySetProduct(id)
             } catch (e: Exception) {
                 // Handle the exception
             }
@@ -447,10 +447,10 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     /**
      * 닉네임 가져오기
      */
-    fun fetchUserName() {
+    fun fetchUserName(id: String) {
         viewModelScope.launch {
             try {
-                _nickName.value = repository.fetchUserName()
+                _nickName.value = repository.fetchUserName(id)
             } catch (e: Exception) {
                 Log.e("ProductViewModel", "Error fetching user name", e)
             }

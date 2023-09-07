@@ -93,7 +93,7 @@ class MyFragment : Fragment() {
         /**
          * 프로필 이름 옵저버
          */
-        productViewModel.fetchUserName()
+        productViewModel.fetchUserName("")
         productViewModel.nickName.observe(viewLifecycleOwner, Observer { nick->
             binding.profileName.text = nick
         })
@@ -128,7 +128,7 @@ class MyFragment : Fragment() {
         /**
          * 옵져브
          **/
-        productViewModel.mySetProduct()
+        productViewModel.mySetProduct("")
         productViewModel.myProductLiveTodoData.observe(viewLifecycleOwner, Observer { product ->
             /* ViewModel에 Observe를 활용하여 productViewModel에 ReadAllData 라이브 데이터가 바뀌었을때 캐치하여, adapter에서 만들어준 setData함수를 통해 바뀐데이터를 UI에 업데이트 해줌 */
             adapter.setData(product)
@@ -216,8 +216,8 @@ class MyFragment : Fragment() {
         }
 
         val reviews = listOf(
-            Review("John Doe", 4.5f, "Great seller!", "지금"),
-            Review("Jane Smith", 5.0f, "Very responsive and friendly.", "지금")
+            Review("John Doe", "", "Great seller!", 0.1f, "d", ""),
+            Review("Jane Smith", "", "Very responsive and friendly.", 0.1f, "", "")
             // ... 추가 리뷰
         )
 

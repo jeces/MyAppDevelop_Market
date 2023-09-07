@@ -18,6 +18,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.applicationjeces.MainActivity
 import com.example.applicationjeces.R
 import com.example.applicationjeces.databinding.FragmentInfoBinding
+import com.example.applicationjeces.user.YourActivity
 import com.google.common.reflect.TypeToken
 import com.google.firebase.storage.FirebaseStorage
 import com.google.gson.Gson
@@ -193,7 +194,8 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
          * 상대방 프로필 확인
          */
         binding.sellerImage.setOnClickListener {
-            val intent = Intent(requireActivity(), MainActivity::class.java)
+            val intent = Intent(requireActivity(), YourActivity::class.java)
+            intent.putExtra("pid_key", pId) // pid_value는 실제로 보내고 싶은 값을 사용합니다.
             startActivity(intent)
             requireActivity().finish() // 현재 Activity를 종료하고 싶다면 추가
             requireActivity().overridePendingTransition(R.anim.slide_out_right, R.anim.slide_in_left)
