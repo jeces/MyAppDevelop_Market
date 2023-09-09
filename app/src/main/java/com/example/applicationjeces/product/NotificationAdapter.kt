@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applicationjeces.R
 
-class NotificationAdapter(private val notifications: List<String>) : RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder>() {
+class NotificationAdapter(private var notifications: List<Notification>) : RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder>() {
 
     inner class NotificationViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val notificationText: TextView = view.findViewById(R.id.notificationtext)
@@ -21,11 +21,16 @@ class NotificationAdapter(private val notifications: List<String>) : RecyclerVie
 
     override fun onBindViewHolder(holder: NotificationViewHolder, position: Int) {
         val notification = notifications[position]
-        holder.notificationText.text = notification
-        Log.d("adad111", notification)
+        holder.notificationText.text = notification.message
+        Log.d("adad111", notification.message)
     }
 
     override fun getItemCount(): Int {
         return return if (notifications.size > 10) 10 else notifications.size
+    }
+
+    fun setNotifications(newNotifications: List<Notification>) {
+        this.notifications = newNotifications
+        notifyDataSetChanged()
     }
 }

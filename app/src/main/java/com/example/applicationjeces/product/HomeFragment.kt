@@ -336,25 +336,16 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
         /**
          * 알림버튼 클릭 시
          */
+        // 아래의 "yourUserId"는 실제 사용자 ID로 교체해야 합니다.
+        productViewModel.notificationsProduct(myId, requireContext())
         binding.notificationButton.setOnClickListener {
             Log.d("adad111", "notification")
             val popupView = layoutInflater.inflate(R.layout.notification_popup, null)
             val notificationRecyclerView = popupView.findViewById<RecyclerView>(R.id.notificationRecyclerView)
-
-            val notifications = listOf("새로운 상품이 등록되었습니다.",
-                "주문한 상품이 발송되었습니다.",
-                "문의하신 상품에 대한 답변이 도착했습니다.",
-                "친구가 새로운 상품을 찜하였습니다.",
-                "할인 행사가 시작되었습니다! 지금 확인하세요.",
-                "리뷰에 대한 답글이 도착했습니다.",
-                "구매하신 상품의 교환 신청이 완료되었습니다.",
-                "상품 리뷰를 작성해주세요.",
-                "누군가의 상품에 새로운 댓글이 있습니다.",
-                "내 상품에 새로운 문의가 등록되었습니다.")  // 여기에 알림 데이터를 제공하셔야 합니다.
-            val notificationAdapter = NotificationAdapter(notifications)  // 알림용 어댑터는 별도로 정의하셔야 합니다.
-
-            notificationRecyclerView.adapter = notificationAdapter
             notificationRecyclerView.layoutManager = LinearLayoutManager(context)
+
+            val notificationAdapter = NotificationAdapter(emptyList())  // 초기 알림 목록은 비어 있습니다.
+            notificationRecyclerView.adapter = notificationAdapter
 
             val itemHeight = dpToPx(requireContext(), 20f) /* 아이템의 높이 (예: 50dp를 픽셀로 변환한 값) */;
             val popupHeight = itemHeight * 10;
@@ -368,7 +359,14 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
             popupWindow.isFocusable = true  // 외부를 탭할 때 Popup을 닫기 위해
             popupWindow.showAsDropDown(notificationButton)  // 알림 버튼 바로 아래에 표시
             popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.popup_background))
+
+            // LiveData를 사용하여 알림 데이터를 관찰
+            NotificationDatabase.getDatabase(requireContext()).notificationDao().getAllNotifications().observe(viewLifecycleOwner) { notifications ->
+                // 데이터베이스에서 가져온 알림으로 어댑터 업데이트
+                notificationAdapter.setNotifications(notifications)
+            }
         }
+
 
         // Inflate the layout for this fragment
         return view

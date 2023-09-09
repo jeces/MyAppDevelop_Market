@@ -1,6 +1,7 @@
 package com.example.applicationjeces.product
 
 import android.app.Application
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.applicationjeces.chat.ChatroomData
@@ -8,13 +9,17 @@ import com.example.applicationjeces.search.FilterCriteria
 import com.example.applicationjeces.user.Review
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ProductViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: ProductRepository = ProductRepository()
+
+    val previousFavorites = mutableListOf<String>()
+    val previousProductPrices = mutableMapOf<String, Double>()
 
     // LiveDatas
     var liveTodoData: MutableLiveData<List<DocumentSnapshot>> = MutableLiveData(emptyList())
@@ -507,6 +512,75 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
 
             }
 
+        }
+    }
+
+    /**
+     * 찜 알림, 찜 상품 가격변동 알림
+     */
+    fun notificationsProduct(myId: String, context: Context) {
+        // 사용자의 UserInfo로부터 찜 목록 가져오기
+        val db = FirebaseFirestore.getInstance()
+        val userInfoRef = db.collection("UserInfo").whereEqualTo("id", myId)
+        val productsRef = db.collection("product")
+        val notificationDatabase = NotificationDatabase.getDatabase(context) // context는 현재 활동 또는 프래그먼트의 컨텍스트입니다.
+        val notificationDao = notificationDatabase.notificationDao()
+
+        userInfoRef.addSnapshotListener { userInfoSnapshot, error ->
+            if (error != null) {
+                // 오류 처리
+                return@addSnapshotListener
+            }
+
+            val currentFavorites = userInfoSnapshot?.documents?.firstOrNull()?.get("favorit") as? List<String> ?: emptyList()
+
+            // 새로 찜한 상품이 있는 경우
+            for (productId in currentFavorites) {
+                if (!previousFavorites.contains(productId)) {
+                    val newFavoriteNotification = Notification(
+                        id = 0,  // AutoGenerate로 자동 할당됨
+                        title = "새로운 찜!",
+                        message = "새로운 상품을 찜했습니다.",
+                        timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+                    )
+
+                    // Room DB에 알림 저장
+                    CoroutineScope(Dispatchers.IO).launch {
+                        notificationDao.addNotification(newFavoriteNotification)
+                    }
+                }
+            }
+            previousFavorites.clear()
+            previousFavorites.addAll(currentFavorites)
+
+            // 찜한 상품의 가격 변동 감지
+            for (productId in currentFavorites) {
+                productsRef.document(productId).addSnapshotListener { productSnapshot, productError ->
+                    if (productError != null) {
+                        // 오류 처리
+                        return@addSnapshotListener
+                    }
+
+                    val currentProductPrice = productSnapshot?.getDouble("productprice") ?: return@addSnapshotListener
+
+                    if (previousProductPrices[productId] != null && currentProductPrice < previousProductPrices[productId]!!) {
+                        val priceDropNotification = Notification(
+                            id = 0,  // AutoGenerate로 자동 할당됨
+                            title = "가격 하락!",
+                            message = "${productSnapshot.getString("productName")} 상품의 가격이 떨어졌습니다!",
+                            timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+                        )
+
+                        // Room DB에 알림 저장
+                        CoroutineScope(Dispatchers.IO).launch {
+                            notificationDao.addNotification(priceDropNotification)
+                        }
+                    }
+
+                    // 상품의 현재 가격을 기록
+                    previousProductPrices[productId] = currentProductPrice
+                }
+            }
         }
     }
 }
