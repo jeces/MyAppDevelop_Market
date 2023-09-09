@@ -569,7 +569,6 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
             // 새로 찜한 상품이 있는 경우
             for (productId in currentFavorites) {
                 if (!previousFavorites.contains(productId)) {
-                    Log.d("adadadad121", "${productId.toString()}/${previousFavorites}/${currentFavorites.toString()}")
                     val newFavoriteNotification = Notification(
                         id = 0,  // AutoGenerate로 자동 할당됨
                         title = "새로운 찜!",
