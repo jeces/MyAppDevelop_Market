@@ -347,12 +347,18 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
         productViewModel.notificationsProduct(myId, requireContext())
         val notificationDatabase = NotificationDatabase.getDatabase(requireContext())
         notificationDao = notificationDatabase.notificationDao()
-        notificationDao.getAllNotifications().observe(viewLifecycleOwner, Observer { notifications ->
-            // 가장 최근의 알림을 가져와서 알림 표시 (옵셔널: 여기서는 가장 최근의 알림만 표시합니다.)
-            notifications.firstOrNull()?.let { notification ->
-                sendNotification(notification.title, notification.message)
-            }
+//        notificationDao.getAllNotifications().observe(viewLifecycleOwner, Observer { notifications ->
+//            // 가장 최근의 알림을 가져와서 알림 표시 (옵셔널: 여기서는 가장 최근의 알림만 표시합니다.)
+//            notifications.firstOrNull()?.let { notification ->
+//                sendNotification(notification.title, notification.message)
+//            }
+//        })
+
+        productViewModel.newNotification.observe(viewLifecycleOwner, Observer { notification ->
+            sendNotification(notification.title, notification.message)
         })
+
+
         binding.notificationButton.setOnClickListener {
             Log.d("adad111", "notification")
             val popupView = layoutInflater.inflate(R.layout.notification_popup, null)

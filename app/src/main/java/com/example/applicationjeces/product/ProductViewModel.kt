@@ -21,6 +21,8 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     val previousFavorites = mutableListOf<String>()
     val previousProductPrices = mutableMapOf<String, Double>()
 
+    val newNotification: MutableLiveData<Notification> = MutableLiveData()
+
     // LiveDatas
     var liveTodoData: MutableLiveData<List<DocumentSnapshot>> = MutableLiveData(emptyList())
     var myProductLiveTodoData: MutableLiveData<List<DocumentSnapshot>> = MutableLiveData()
@@ -547,6 +549,7 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
                     // Room DB에 알림 저장
                     CoroutineScope(Dispatchers.IO).launch {
                         notificationDao.addNotification(newFavoriteNotification)
+                        newNotification.postValue(newFavoriteNotification) // LiveData에 새로운 알림
                     }
                 }
             }
@@ -574,6 +577,7 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
                         // Room DB에 알림 저장
                         CoroutineScope(Dispatchers.IO).launch {
                             notificationDao.addNotification(priceDropNotification)
+                            newNotification.postValue(priceDropNotification) // LiveData에 새로운 알림
                         }
                     }
 
