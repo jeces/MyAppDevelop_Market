@@ -540,7 +540,7 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
                     val newFavoriteNotification = Notification(
                         id = 0,  // AutoGenerate로 자동 할당됨
                         title = "새로운 찜!",
-                        message = "새로운 상품을 찜했습니다.",
+                        message = "${productId} 상품을 찜한 사람이 있습니다.",
                         timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
                     )
 

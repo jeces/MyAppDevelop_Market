@@ -1,8 +1,12 @@
 package com.example.applicationjeces.product
 
 import SettingCustomBottomSheetDialogFragment
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
+import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -14,7 +18,9 @@ import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.PopupWindow
 import android.widget.ScrollView
+import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -52,6 +58,7 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
     private var param2: String? = null
 
     private lateinit var productViewModel: ProductViewModel
+    private lateinit var notificationDao: NotificationDao
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
@@ -338,6 +345,14 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
          */
         // 아래의 "yourUserId"는 실제 사용자 ID로 교체해야 합니다.
         productViewModel.notificationsProduct(myId, requireContext())
+        val notificationDatabase = NotificationDatabase.getDatabase(requireContext())
+        notificationDao = notificationDatabase.notificationDao()
+        notificationDao.getAllNotifications().observe(viewLifecycleOwner, Observer { notifications ->
+            // 가장 최근의 알림을 가져와서 알림 표시 (옵셔널: 여기서는 가장 최근의 알림만 표시합니다.)
+            notifications.firstOrNull()?.let { notification ->
+                sendNotification(notification.title, notification.message)
+            }
+        })
         binding.notificationButton.setOnClickListener {
             Log.d("adad111", "notification")
             val popupView = layoutInflater.inflate(R.layout.notification_popup, null)
@@ -371,6 +386,32 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
         // Inflate the layout for this fragment
         return view
     }
+
+    /* 알림 */
+    private fun sendNotification(title: String, message: String) {
+        val builder = NotificationCompat.Builder(requireActivity(), "MY_channel")
+            .setSmallIcon(R.drawable.baseline_notifications_24)
+            .setContentTitle(title)
+            .setContentText(message)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel_id = "MY_channel"
+            val channel_name = "채널이름"
+            val descriptionText = "설명글"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(channel_id, channel_name, importance).apply {
+                description = descriptionText
+            }
+
+            val notificationManager: NotificationManager = requireActivity().getSystemService(
+                NOTIFICATION_SERVICE
+            ) as NotificationManager
+
+            notificationManager.createNotificationChannel(channel)
+            notificationManager.notify(System.currentTimeMillis().toInt(), builder.build())
+        }
+    }
+
 
     fun dpToPx(context: Context, dp: Float): Int {
         return (dp * context.resources.displayMetrics.density).toInt()
