@@ -198,7 +198,7 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
             intent.putExtra("pid_key", pId) // pid_value는 실제로 보내고 싶은 값을 사용합니다.
             startActivity(intent)
             requireActivity().finish() // 현재 Activity를 종료하고 싶다면 추가
-            requireActivity().overridePendingTransition(R.anim.slide_out_right, R.anim.slide_in_left)
+            requireActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
 
         return view

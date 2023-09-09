@@ -18,8 +18,13 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
 
     private val repository: ProductRepository = ProductRepository()
 
+    // 초기 데이터 로드 플래그
+    private var isDataInitialized = false
+
     val previousFavorites = mutableListOf<String>()
     val previousProductPrices = mutableMapOf<String, Double>()
+
+    var isFirstRun = true  // ViewModel의 전역 변수로 추가
 
     val newNotification: MutableLiveData<Notification> = MutableLiveData()
 
@@ -83,6 +88,7 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         Log.d("thisuser", thisUser)
         fetchAllProducts()
         fetchAdverCountsAndImages()
+//        initializeAndObserveNotifications(thisUser)
     }
 
     private fun fetchAllProducts() {
@@ -536,9 +542,34 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
 
             val currentFavorites = userInfoSnapshot?.documents?.firstOrNull()?.get("favorit") as? List<String> ?: emptyList()
 
+            if(!isDataInitialized) {
+                // 룸데이터 저장
+                for (productId in currentFavorites) {
+                    if (!previousFavorites.contains(productId)) {
+                        val newFavoriteNotification = Notification(
+                            id = 0,  // AutoGenerate로 자동 할당됨
+                            title = "새로운 찜!",
+                            message = "${productId} 상품을 찜한 사람이 있습니다.",
+                            timestamp = SimpleDateFormat(
+                                "yyyy-MM-dd HH:mm:ss",
+                                Locale.getDefault()
+                            ).format(Date())
+                        )
+
+                        // Room DB에 알림 저장
+                        CoroutineScope(Dispatchers.IO).launch {
+                            notificationDao.addNotification(newFavoriteNotification)
+                        }
+                    }
+                }
+                previousFavorites.addAll(currentFavorites)
+                isDataInitialized = true
+            }
+
             // 새로 찜한 상품이 있는 경우
             for (productId in currentFavorites) {
                 if (!previousFavorites.contains(productId)) {
+                    Log.d("adadadad121", "${productId.toString()}/${previousFavorites}/${currentFavorites.toString()}")
                     val newFavoriteNotification = Notification(
                         id = 0,  // AutoGenerate로 자동 할당됨
                         title = "새로운 찜!",
