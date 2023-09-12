@@ -55,7 +55,7 @@ class LoginFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        pageMove(FirebaseAuth.getInstance().currentUser)
+//        pageMove(FirebaseAuth.getInstance().currentUser)
     }
 
     fun login() {

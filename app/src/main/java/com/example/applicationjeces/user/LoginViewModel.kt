@@ -22,20 +22,26 @@ class LoginViewModel() : ViewModel() {
     fun createUser(email: String, password: String, name: String) {
         repository.createUser(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
+                Log.d("13131313", "1")
                 repository.sendEmailVerification()?.addOnCompleteListener { emailTask ->
                     if (emailTask.isSuccessful) {
+                        Log.d("13131313", "2")
                         repository.addUserToFirestore(email, name)
                             .addOnSuccessListener { _signUpStatus.value = true }
                             .addOnFailureListener { _signUpStatus.value = false }
                     } else {
+                        Log.d("13131313", "3")
                         _signUpStatus.value = false
                     }
                 }
             } else {
+                Log.d("13131313", "4")
                 _signUpStatus.value = false
+                Log.e("Firebase Auth Error", task.exception.toString()) // Firebase에서 반환한 예외 메시지를 출력
             }
         }
     }
+
 
     /* PageNum에 따라 currentPages 변경 */
     fun setCurrentPage(item: MenuItem): Boolean {

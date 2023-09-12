@@ -1,5 +1,6 @@
 package com.example.applicationjeces.user
 
+import android.util.Log
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
@@ -11,7 +12,7 @@ class LoginRepository {
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
     fun createUser(email: String, password: String): Task<AuthResult> {
-        return auth.createUserWithEmailAndPassword(email, password)
+        return auth.createUserWithEmailAndPassword(email.trim(), password.trim())
     }
 
     fun sendEmailVerification(): Task<Void>? {
