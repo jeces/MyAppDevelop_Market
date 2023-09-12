@@ -95,6 +95,7 @@ class JoinFragment : Fragment() {
             val name = nameEditText.text.toString().trim()
 
             viewModel.createUser(email, password, name)
+            viewModel.changePageNum(PageDataLogin.LOGIN)
         }
     }
 
@@ -114,6 +115,7 @@ class JoinFragment : Fragment() {
         val transaction = requireFragmentManager().beginTransaction()
         transaction.replace(R.id.fragment_join, LoginFragment())
         transaction.commit()
+
     }
 
     companion object {
