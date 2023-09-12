@@ -1,5 +1,6 @@
 package com.example.applicationjeces.user
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -8,10 +9,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.example.applicationjeces.MainActivity
+import com.example.applicationjeces.R
 import com.example.applicationjeces.databinding.FragmentJoinBinding
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_join.*
 
 
@@ -30,6 +33,7 @@ class JoinFragment : Fragment() {
 
     private var _binding: FragmentJoinBinding? = null
     private val binding get() = _binding!!
+    private lateinit var viewModel: LoginViewModel
 
     /* firebase Auth */
     private var authStateListener: FirebaseAuth.AuthStateListener? = null
@@ -52,79 +56,64 @@ class JoinFragment : Fragment() {
     ): View? {
         _binding = FragmentJoinBinding.inflate(inflater, container, false)
 
-        /* 로그인 세센을 체크하는 부분 */
-        authStateListener = FirebaseAuth.AuthStateListener { firebaseAuth ->
-            Log.e("로그인", "로그인")
-            val user = firebaseAuth.currentUser
-            if(user != null) {
-                val it = Intent(context, MainActivity::class.java)
-                startActivity(it)
-            }
-        }
-//
-//        authEmail()
-        join()
-//
-//        binding.numberLayout.setEndIconOnClickListener {
-//            Toast.makeText(requireContext(), "Clicked", Toast.LENGTH_SHORT).show()
-//        }
-//
-//        binding.textInputEditText.doOnTextChanged {text, start, before, count ->
-//            if(text!!.length > 10) {
-//                binding.textInputLayout.error = "No More!"
-//            } else if(text.length < 10) {
-//                binding.textInputLayout.error = null
+        viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
+
+//        /* 로그인 세센을 체크하는 부분 */
+//        authStateListener = FirebaseAuth.AuthStateListener { firebaseAuth ->
+//            Log.e("로그인", "로그인")
+//            val user = firebaseAuth.currentUser
+//            if(user != null) {
+//                val it = Intent(context, MainActivity::class.java)
+//                startActivity(it)
 //            }
 //        }
+
+        join()
+
+        viewModel.signUpStatus.observe(viewLifecycleOwner, Observer { isSuccess ->
+            if (isSuccess) {
+                showEmailVerificationDialog()
+            } else {
+                Toast.makeText(context, "가입 실패", Toast.LENGTH_LONG).show()
+            }
+        })
+
+
+
         return binding.root
     }
 
     override fun onStart() {
         super.onStart()
 
-
     }
-
-//    fun authEmail() {
-//        binding.authBtn.setOnClickListener {
-//            target = true
-//        }
-//    }
-//
 
     fun join() {
         binding.joinBtn.setOnClickListener {
-            FirebaseAuth.getInstance().createUserWithEmailAndPassword(textInputEditText.text.toString().trim(), passwordEditText.text.toString().trim())
-                .addOnCompleteListener { task ->
-                    if(task.isSuccessful) {
-                        Log.d("가입성공", textInputEditText.text.toString().trim())
-                        /* 메일 인증 넣기 */
-                        FirebaseAuth.getInstance().currentUser
-                            ?.sendEmailVerification()
-                            ?.addOnCompleteListener { emailTast ->
-                                if(emailTast.isSuccessful) {
-                                    val users = hashMapOf(
-                                        "id" to textInputEditText.text.toString(),
-                                        "name" to "임시이름"
-                                    )
-                                    FirebaseFirestore.getInstance()!!.collection("UserInfo").add(users)
-                                        .addOnSuccessListener {
-                                            Toast.makeText(context, "회원가입 성공", Toast.LENGTH_LONG).show()
-                                        }
-                                        .addOnFailureListener {
-                                            Toast.makeText(context, "회원가입 실패", Toast.LENGTH_LONG).show()
-                                        }
-                                } else {
-                                    Toast.makeText(context, task.exception.toString(), Toast.LENGTH_LONG).show()
-                                }
-                            }
-                    } else {
-                        Log.d("가입실패", textInputEditText.text.toString().trim())
-                        Toast.makeText(context, task.exception.toString(), Toast.LENGTH_LONG).show()
+            val email = textInputEditText.text.toString().trim()
+            val password = passwordEditText.text.toString().trim()
+            val name = nameEditText.text.toString().trim()
 
-                    }
-                }
+            viewModel.createUser(email, password, name)
         }
+    }
+
+    private fun showEmailVerificationDialog() {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("이메일 인증")
+        builder.setMessage("메일 인증을 완료하시고 로그인해주세요.")
+        builder.setPositiveButton("확인") { _, _ ->
+            // 이곳에 확인 버튼을 눌렀을 때 실행될 코드를 넣을 수 있습니다. (예: Fragment 종료 등)
+            navigateToLoginFragment()
+        }
+        builder.setCancelable(false)  // 백 버튼 등으로 취소 불가능하게 설정
+        builder.show()
+    }
+
+    private fun navigateToLoginFragment() {
+        val transaction = requireFragmentManager().beginTransaction()
+        transaction.replace(R.id.fragment_join, LoginFragment())
+        transaction.commit()
     }
 
     companion object {

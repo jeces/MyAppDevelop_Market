@@ -4,12 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/fragment_join"
     tools:context=".user.JoinFragment">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="16dp">
+        android:padding="16dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -25,21 +26,23 @@
                 app:layout_constraintStart_toStartOf="parent"
                 android:paddingHorizontal="16dp"
                 android:layout_marginVertical="32dp"
-                android:layout_marginHorizontal="32dp"/>
+                android:layout_marginHorizontal="10dp"/>
 
             <TextView
                 android:id="@+id/loginTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Join Us Mark"
-                android:textSize="20dp"
+                android:textSize="25dp"
                 android:textStyle="bold"
                 android:layout_marginTop="50dp"
                 app:layout_constraintTop_toBottomOf="@id/joinImage"
                 app:layout_constraintStart_toEndOf="@id/joinImage"
                 app:layout_constraintTop_toTopOf="@id/joinImage"
+                app:layout_constraintEnd_toEndOf="parent"
+
                 android:layout_marginStart="16dp"
-                android:layout_marginHorizontal="32dp"/>
+                android:layout_marginHorizontal="100dp"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -49,20 +52,20 @@
                 android:inputType="textEmailAddress"
                 android:hint="E-mail"
                 app:helperTextTextColor="@color/red"
-                app:helperText="Required*"
+                app:helperText=""
                 app:counterEnabled="true"
-                app:counterMaxLength="30"
+                app:counterMaxLength="25"
                 app:endIconMode="clear_text"
                 app:startIconDrawable="@drawable/ic_baseline_email_24"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/joinImage"
                 android:layout_marginVertical="32dp"
-                android:layout_marginHorizontal="32dp">
+                android:layout_marginHorizontal="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/textInputEditText"
-                    android:maxLength="30"
+                    android:maxLength="25"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
             </com.google.android.material.textfield.TextInputLayout>
@@ -73,20 +76,20 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:hint="Password"
-                app:helperText="Required*"
+                app:helperText=""
                 app:helperTextTextColor="@color/red"
                 app:counterEnabled="true"
-                app:counterMaxLength="30"
+                app:counterMaxLength="15"
                 app:endIconMode="password_toggle"
                 app:startIconDrawable="@drawable/ic_baseline_lock_24"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textInputLayout"
-                android:layout_marginHorizontal="32dp">
+                android:layout_marginHorizontal="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/passwordEditText"
-                    android:maxLength="30"
+                    android:maxLength="15"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
             </com.google.android.material.textfield.TextInputLayout>
@@ -97,20 +100,20 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:hint="Re-Password"
-                app:helperText="Required*"
+                app:helperText=""
                 app:helperTextTextColor="@color/red"
                 app:counterEnabled="true"
-                app:counterMaxLength="30"
+                app:counterMaxLength="15"
                 app:endIconMode="password_toggle"
                 app:startIconDrawable="@drawable/ic_baseline_lock_24"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/passwordLayout"
-                android:layout_marginHorizontal="32dp">
+                android:layout_marginHorizontal="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/password2EditText"
-                    android:maxLength="30"
+                    android:maxLength="15"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
             </com.google.android.material.textfield.TextInputLayout>
@@ -123,7 +126,7 @@
                 android:hint="Number"
                 app:errorEnabled="true"
                 app:errorIconDrawable="@drawable/ic_baseline_error_24"
-                app:helperText="Required*"
+                app:helperText=""
                 app:helperTextTextColor="@color/red"
                 app:counterEnabled="true"
                 app:counterMaxLength="10"
@@ -135,11 +138,12 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/password2Layout"
-                android:layout_marginHorizontal="32dp">
+                android:layout_marginHorizontal="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/numberEditText"
                     android:maxLength="10"
+                    android:inputType="number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
             </com.google.android.material.textfield.TextInputLayout>
@@ -151,7 +155,7 @@
                 android:layout_height="wrap_content"
                 android:hint="Name"
                 app:helperTextTextColor="@color/red"
-                app:helperText="Required*"
+                app:helperText=""
                 app:counterEnabled="true"
                 app:counterMaxLength="10"
                 app:endIconMode="clear_text"
@@ -159,7 +163,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/numberLayout"
-                android:layout_marginHorizontal="32dp">
+                android:layout_marginHorizontal="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/nameEditText"
@@ -168,47 +172,29 @@
                     android:layout_height="wrap_content"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/authBtn"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="Auth"
-                android:background="@drawable/join_bt"
-                app:icon="@drawable/ic_baseline_email_24"
-                app:backgroundTintMode="screen"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/guideline"
-                app:layout_constraintTop_toBottomOf="@id/nameLayout"
-                app:layout_constraintHorizontal_chainStyle="spread_inside"
-                android:layout_marginVertical="16dp"
-                android:layout_marginStart="32dp"
-                android:layout_marginEnd="8dp" />
-
+            <!-- 버튼 스타일 수정 -->
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.5" /> <!-- 50% 위치에 Guideline 생성 -->
+                app:layout_constraintGuide_percent="0.5" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/joinBtn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Join"
-                android:background="@drawable/join_bt"
+                android:textColor="@android:color/white"
+                android:backgroundTint="@color/dark_gray"
+                android:layout_marginEnd="10dp"
                 app:icon="@drawable/ic_baseline_person_add_24"
-                app:backgroundTintMode="screen"
                 app:layout_constraintStart_toEndOf="@id/guideline"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/nameLayout"
-                app:layout_constraintHorizontal_chainStyle="spread_inside"
-                android:layout_marginVertical="16dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="32dp" />
+                android:layout_marginStart="8dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
-
 </FrameLayout>

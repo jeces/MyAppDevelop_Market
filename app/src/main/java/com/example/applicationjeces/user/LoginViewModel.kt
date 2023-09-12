@@ -14,6 +14,29 @@ class LoginViewModel() : ViewModel() {
     val currentPages: LiveData<PageDataLogin>
         get() = currentPage
 
+    private val repository = LoginRepository()
+
+    private val _signUpStatus = MutableLiveData<Boolean>()
+    val signUpStatus: LiveData<Boolean> get() = _signUpStatus
+
+    fun createUser(email: String, password: String, name: String) {
+        repository.createUser(email, password).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                repository.sendEmailVerification()?.addOnCompleteListener { emailTask ->
+                    if (emailTask.isSuccessful) {
+                        repository.addUserToFirestore(email, name)
+                            .addOnSuccessListener { _signUpStatus.value = true }
+                            .addOnFailureListener { _signUpStatus.value = false }
+                    } else {
+                        _signUpStatus.value = false
+                    }
+                }
+            } else {
+                _signUpStatus.value = false
+            }
+        }
+    }
+
     /* PageNum에 따라 currentPages 변경 */
     fun setCurrentPage(item: MenuItem): Boolean {
         Log.d("체크6", "셋")
