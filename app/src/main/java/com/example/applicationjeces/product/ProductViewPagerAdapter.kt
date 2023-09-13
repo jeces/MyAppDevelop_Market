@@ -27,7 +27,6 @@ import java.util.*
 
 class ProductViewPagerAdapter(private val context: Fragment, var myId: String, var producFiretList: List<DocumentSnapshot>): RecyclerView.Adapter<ProductViewPagerAdapter.Holder>() {
 
-
     private val cachedUrls = mutableMapOf<String, String>()
 
     /* ViewHolder에게 item을 보여줄 View로 쓰일 item_data_list.xml를 넘기면서 ViewHolder 생성. 아이템 레이아웃과 결합 */
@@ -50,8 +49,8 @@ class ProductViewPagerAdapter(private val context: Fragment, var myId: String, v
 
         /* HomeFragment */
         holder.itemView.product_name.text = "${currentItem.toString()}"
-        holder.itemView.product_price.text = "판매가 : ${context.requireContext().getString(R.string.bid_price_format, formattedPrice)}"
-        holder.itemView.current_bid_price.text = "입찰가 : ${context.requireContext().getString(R.string.bid_price_format, formattedBidPrice)}"
+        holder.itemView.product_price.text = "판매가 : ${formattedPrice}"
+        holder.itemView.current_bid_price.text = "입찰가 : ${formattedBidPrice}"
 
         val imageUrl = if (currentItem4.toString() == "0") {
             "basic_img.png"
@@ -91,9 +90,11 @@ class ProductViewPagerAdapter(private val context: Fragment, var myId: String, v
             .placeholder(R.drawable.ic_baseline_add_24)
             .override(100, 100)
             .apply(RequestOptions().transforms(CenterCrop(), RoundedCorners(16)))            .diskCacheStrategy(DiskCacheStrategy.ALL)
-            .skipMemoryCache(true) // 메모리 캐시 비활성화
+//            .skipMemoryCache(true) // 메모리 캐시 비활성화
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
             .into(holder.itemView.product_img)
     }
+
 
     /* (2) 리스너 인터페이스 */
     interface OnItemClickListener {
@@ -112,17 +113,17 @@ class ProductViewPagerAdapter(private val context: Fragment, var myId: String, v
         return producFiretList.size
     }
 
-    fun getTimeAgo(time: Long): String {
-        val now = System.currentTimeMillis()
-        val diff = now - time
-
-        return when {
-            diff < 60 * 1000 -> "방금 전"
-            diff < 60 * 1000 * 60 -> "${diff / (60 * 1000)}분 전"
-            diff < 60 * 1000 * 60 * 24 -> "${diff / (60 * 1000 * 60)}시간 전"
-            else -> "어제"
-        }
-    }
+//    fun getTimeAgo(time: Long): String {
+//        val now = System.currentTimeMillis()
+//        val diff = now - time
+//
+//        return when {
+//            diff < 60 * 1000 -> "방금 전"
+//            diff < 60 * 1000 * 60 -> "${diff / (60 * 1000)}분 전"
+//            diff < 60 * 1000 * 60 * 24 -> "${diff / (60 * 1000 * 60)}시간 전"
+//            else -> "어제"
+//        }
+//    }
 
     /* 홈 전체 데이터 */
     @SuppressLint("NotifyDataSetChanged")
@@ -154,7 +155,18 @@ class ProductViewPagerAdapter(private val context: Fragment, var myId: String, v
         }
     }
 
-
+    /**
+     * 만원 찍기
+     */
+    fun formatToTenThousandWon(numberString: String): String {
+        val number = numberString.replace(",", "").toDoubleOrNull()
+        return if (number != null) {
+            val divided = number / 10000
+            String.format("%.1f만원", divided)
+        } else {
+            "" // 또는 원하는 기본값을 반환합니다.
+        }
+    }
 
     /* inner class로 viewHolder 정의. 레이아웃 내 view 연결 */
     inner class Holder(ItemView: View): RecyclerView.ViewHolder(ItemView) {
