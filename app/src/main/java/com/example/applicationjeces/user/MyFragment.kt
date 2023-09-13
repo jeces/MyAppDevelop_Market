@@ -306,9 +306,9 @@ class MyFragment : Fragment() {
                     .circleCrop() // 또는 .transform(RoundedCorners(radius)) 를 사용하여 모서리의 반경을 설정
                     .into(binding.profileImage)
             } else {
-                db.reference.child("basic_user.png").downloadUrl.addOnCompleteListener { its ->
+                db.reference.child("common/basic_user.png").downloadUrl.addOnCompleteListener { its ->
                     Glide.with(this@MyFragment)
-                        .load(it.result)
+                        .load(its.result)
                         .override(70, 70)
                         .fitCenter()
                         .circleCrop() // 또는 .transform(RoundedCorners(radius)) 를 사용하여 모서리의 반경을 설정
