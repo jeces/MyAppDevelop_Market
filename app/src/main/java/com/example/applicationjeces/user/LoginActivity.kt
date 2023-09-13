@@ -69,11 +69,11 @@ class LoginActivity : AppCompatActivity() {
 
     private fun getFragment(pageData : PageDataLogin) : Fragment {
         if(pageData.title == "login") {
-            return LoginFragment.newInstance(pageData.title, pageData.tag)
+            return LoginFragment.newInstance()
         } else if(pageData.title == "join") {
             return JoinFragment.newInstance()
         } else {
-            return LoginFragment.newInstance(pageData.title, pageData.tag)
+            return LoginFragment.newInstance()
         }
     }
 }

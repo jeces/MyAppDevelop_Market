@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.applicationjeces.MainActivity
@@ -34,14 +33,24 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
-
         viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
 
+        checkStoredCredentialsAndLogin()
+        setupInputValidators()
+        observeViewModel()
+        login()
+
+        return binding.root
+    }
+
+    private fun checkStoredCredentialsAndLogin() {
         val (savedEmail, savedPassword) = SharedPreferencesHelper.getCredentials(requireContext())
         if (savedEmail != null && savedPassword != null) {
             viewModel.loginUser(savedEmail, savedPassword)
         }
+    }
 
+    private fun setupInputValidators() {
         binding.loginTextInputEditText.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus && !isValidEmail(binding.loginTextInputEditText.text.toString().trim())) {
                 binding.loginTextInputEditText.error = "이메일 형식을 확인해주세요."
@@ -49,71 +58,42 @@ class LoginFragment : Fragment() {
                 binding.loginTextInputEditText.error = null
             }
         }
+    }
 
-        // 체크박스 상태 저장
-        binding.rememberMeCheckBox.setOnCheckedChangeListener { _, isChecked ->
-            val editor = context?.getSharedPreferences("PREFS", Context.MODE_PRIVATE)?.edit()
-            editor?.putBoolean("rememberMe", isChecked)
-            editor?.apply()
-        }
-
-        binding.autoLoginCheckBox.setOnCheckedChangeListener { _, isChecked ->
-            val editor = context?.getSharedPreferences("PREFS", Context.MODE_PRIVATE)?.edit()
-            editor?.putBoolean("autoLogin", isChecked)
-            editor?.apply()
-        }
-
-        // 체크박스 상태 불러오기
-        val prefs = context?.getSharedPreferences("PREFS", Context.MODE_PRIVATE)
-        binding.rememberMeCheckBox.isChecked = prefs?.getBoolean("rememberMe", false) ?: false
-        binding.autoLoginCheckBox.isChecked = prefs?.getBoolean("autoLogin", false) ?: false
-
-
-        login()
-
-        // ViewModel에서 결과 관찰
+    private fun observeViewModel() {
         viewModel.loginResult.observe(viewLifecycleOwner, Observer { result ->
             result.fold(
                 onSuccess = { user ->
-                    val email = binding.loginTextInputEditText.text.toString().trim()
-                    val password = binding.loginPasswordEditText.text.toString().trim()
-                    if (user?.isEmailVerified == true) {
-                        // 아이디와 비밀번호를 SharedPreferences에 저장
-                        SharedPreferencesHelper.saveCredentials(email, password, requireContext())
-                        pageMove(user)
-                    } else {
-                        showAlert("인증 오류", "이메일 인증을 완료해주세요.")
-                    }
+                    handleSuccessfulLogin(user)
                 },
                 onFailure = { exception ->
-                    when (exception?.message) {
-                        "There is no user record corresponding to this identifier. The user may have been deleted." -> showAlert("로그인 오류", "회원 정보가 존재하지 않습니다.")
-                        "The password is invalid or the user does not have a password." -> showAlert("로그인 오류", "비밀번호가 다릅니다.")
-                        else -> showAlert("로그인 오류", "알 수 없는 오류가 발생했습니다. 다시 시도해주세요.")
-                    }
+                    handleLoginError(exception)
                 }
             )
         })
-
-        return binding.root
     }
 
-    override fun onStart() {
-        super.onStart()
-//        pageMove(FirebaseAuth.getInstance().currentUser)
+    private fun handleSuccessfulLogin(user: FirebaseUser?) {
+        if (user?.isEmailVerified == true) {
+            SharedPreferencesHelper.saveCredentials(
+                binding.loginTextInputEditText.text.toString().trim(),
+                binding.loginPasswordEditText.text.toString().trim(),
+                requireContext()
+            )
+            pageMove(user)
+        } else {
+            showAlert("인증 오류", "이메일 인증을 완료해주세요.")
+        }
     }
 
-    fun login() {
-        binding.loginBtn.setOnClickListener {
-            val email = binding.loginTextInputEditText.text.toString().trim()
-            val password = binding.loginPasswordEditText.text.toString().trim()
-
-            if (!isValidEmail(email)) {
-                showAlert("오류", "이메일 형식을 확인해주세요.")
-                return@setOnClickListener
-            }
-
-            viewModel.loginUser(email, password)
+    private fun handleLoginError(exception: Throwable) {
+        when (exception?.message) {
+            "There is no user record corresponding to this identifier. The user may have been deleted." ->
+                showAlert("로그인 오류", "회원 정보가 존재하지 않습니다.")
+            "The password is invalid or the user does not have a password." ->
+                showAlert("로그인 오류", "비밀번호가 다릅니다.")
+            else ->
+                showAlert("로그인 오류", "알 수 없는 오류가 발생했습니다. 다시 시도해주세요.")
         }
     }
 
@@ -127,35 +107,43 @@ class LoginFragment : Fragment() {
         builder.setTitle(title)
             .setMessage(message)
             .setPositiveButton("확인", null)
-        val dialog = builder.show()
+            .show()
+            .applyStyling()
+    }
 
-        // 스타일 설정은 여기에서도 할 수 있습니다.
-        // 제목의 텍스트 스타일을 변경
-        dialog.findViewById<TextView>(android.R.id.title)?.apply {
+    private fun AlertDialog.applyStyling() {
+        findViewById<TextView>(android.R.id.title)?.apply {
             setTextColor(Color.BLUE)
             textSize = 15f
         }
-        // 메시지의 텍스트 스타일을 변경
-        dialog.findViewById<TextView>(android.R.id.message)?.apply {
+        findViewById<TextView>(android.R.id.message)?.apply {
             setTextColor(Color.RED)
             textSize = 13f
         }
-        // 버튼의 텍스트 스타일을 변경
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.apply {
+        getButton(AlertDialog.BUTTON_POSITIVE)?.apply {
             setTextColor(Color.GRAY)
             textSize = 11f
         }
-
-        dialog.window?.setBackgroundDrawableResource(R.drawable.rounded_bg)
+        window?.setBackgroundDrawableResource(R.drawable.rounded_bg)
     }
 
     fun pageMove(user: FirebaseUser?) {
-        if(user != null) {
+        user?.let {
             val it = Intent(context, MainActivity::class.java)
             startActivity(it)
-
-            /* 애니메이션 적용 */
             activity?.overridePendingTransition(R.anim.slide_in_top, R.anim.slide_out_bottom)
+        }
+    }
+
+    fun login() {
+        binding.loginBtn.setOnClickListener {
+            val email = binding.loginTextInputEditText.text.toString().trim()
+            if (!isValidEmail(email)) {
+                showAlert("오류", "이메일 형식을 확인해주세요.")
+            } else {
+                val password = binding.loginPasswordEditText.text.toString().trim()
+                viewModel.loginUser(email, password)
+            }
         }
     }
 
@@ -184,4 +172,5 @@ class LoginFragment : Fragment() {
         @JvmStatic
         fun newInstance() = LoginFragment()
     }
+
 }
