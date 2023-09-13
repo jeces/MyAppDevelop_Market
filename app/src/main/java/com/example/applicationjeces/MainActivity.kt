@@ -111,10 +111,10 @@ class MainActivity : AppCompatActivity() {
     /* 실행시 Fragment값 GET 함수 */
     /* 처음은 띄워주기 위해 사용됨. 후에 Hide로 숨겨져서 사용 안함. 한번쓰고 버림 */
     private fun getFragment(pageData: PageData): Fragment = when (pageData.title) {
-        "home", "add", "search" -> HomeFragment.newInstance(pageData.title, pageData.tag)
+        "home", "add", "search" -> HomeFragment.newInstance()
         "chatroom", "message" -> ChatroomFragment.newInstance(pageData.title, pageData.tag)
         "my" -> MyFragment.newInstance(pageData.title, pageData.tag)
-        else -> HomeFragment.newInstance(pageData.title, pageData.tag)
+        else -> HomeFragment.newInstance()
     }
 
     private fun logLifeCycleEvent(event: String) {

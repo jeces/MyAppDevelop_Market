@@ -279,7 +279,6 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
             }
         })
 
-
         // 각 어댑터에 클릭 리스너 설정
         setupItemClickListener(adapterTen)
         setupItemClickListener(adapterHt)
