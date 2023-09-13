@@ -73,7 +73,6 @@
                     android:layout_height="wrap_content"
                     android:hint="E-mail"
                     app:helperTextTextColor="@color/red"
-                    app:helperText="Required*"
                     app:counterEnabled="true"
                     app:counterMaxLength="25"
                     app:endIconMode="clear_text"
@@ -97,7 +96,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:hint="Password"
-                    app:helperText="Required*"
                     app:helperTextTextColor="@color/red"
                     app:counterEnabled="true"
                     app:counterMaxLength="15"
@@ -111,9 +109,37 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/loginPasswordEditText"
                         android:maxLength="15"
+                        android:inputType="textPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                 </com.google.android.material.textfield.TextInputLayout>
+
+
+
+                <!-- 아이디 저장 체크박스 -->
+                <CheckBox
+                    android:id="@+id/rememberMeCheckBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="아이디 저장"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toStartOf="@id/autoLoginCheckBox"
+                    app:layout_constraintTop_toBottomOf="@id/loginPasswordLayout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="8dp"/>
+
+                <!-- 자동 로그인 체크박스 -->
+                <CheckBox
+                    android:id="@+id/autoLoginCheckBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="자동 로그인"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toEndOf="@id/rememberMeCheckBox"
+                    app:layout_constraintTop_toBottomOf="@id/loginPasswordLayout"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="32dp"/>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/loginBtn"
@@ -126,9 +152,9 @@
                     app:backgroundTintMode="screen"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/loginPasswordLayout"
+                    app:layout_constraintTop_toBottomOf="@id/autoLoginCheckBox"
                     android:layout_marginHorizontal="32dp"
-                    android:layout_marginTop="8dp"/> <!-- 수정된 부분 -->
+                    android:layout_marginTop="20dp"/> <!-- 수정된 부분 -->
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/loginBtnNaver"

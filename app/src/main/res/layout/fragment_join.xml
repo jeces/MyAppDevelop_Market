@@ -76,7 +76,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:hint="Password"
-
                 app:helperText=""
                 app:helperTextTextColor="@color/red"
                 app:counterEnabled="true"

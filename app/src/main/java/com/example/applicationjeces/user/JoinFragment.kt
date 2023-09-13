@@ -116,13 +116,15 @@ class JoinFragment : Fragment() {
 
     private fun setJoinButtonClickListener() {
         binding.joinBtn.setOnClickListener {
+            val email = binding.textInputEditText.text.toString().trim()
+            val password = binding.passwordEditText.text.toString().trim()
+            val name = binding.nameEditText.text.toString().trim()
             if (isWarningShown()) {
-                Log.d("조인1", "1")
                 showWarningCheckDialog()
                 return@setOnClickListener
             }
-            Log.d("조인2", isWarningShown().toString())
-            // 추가적인 검증 및 작업이 필요한 경우 여기에 코드를 추가하십시오.
+            viewModel.createUser(email, password, name)
+            // 추가적인 검증 및 작업이 필요한 경우 여기에 코드를 추가
         }
     }
 
@@ -136,12 +138,41 @@ class JoinFragment : Fragment() {
     }
 
     private fun isWarningShown(): Boolean {
-        Log.d("조인3", binding.textInputLayout.error.toString())
-        return binding.textInputLayout.error != null ||
-                binding.passwordLayout.error != null ||
-                binding.password2Layout.error != null ||
-                binding.numberLayout.error != null ||
-                binding.nameLayout.error != null
+        if (binding.textInputEditText.text.toString().trim().isEmpty()) {
+            binding.textInputLayout.error = "이메일을 입력해주세요."
+            return true
+        } else if (binding.textInputLayout.error != null) {
+            return true
+        }
+
+        if (binding.passwordEditText.text.toString().trim().isEmpty()) {
+            binding.passwordLayout.error = "비밀번호를 입력해주세요."
+            return true
+        } else if (binding.passwordLayout.error != null) {
+            return true
+        }
+
+        if (binding.password2EditText.text.toString().trim().isEmpty()) {
+            binding.password2Layout.error = "비밀번호 확인을 입력해주세요."
+            return true
+        } else if (binding.password2Layout.error != null) {
+            return true
+        }
+
+        if (binding.numberEditText.text.toString().trim().isEmpty()) {
+            binding.numberLayout.error = "전화번호를 입력해주세요."
+            return true
+        } else if (binding.numberLayout.error != null) {
+            return true
+        }
+
+        if (binding.nameEditText.text.toString().trim().isEmpty()) {
+            binding.nameLayout.error = "이름을 입력해주세요."
+            return true
+        } else if (binding.nameLayout.error != null) {
+            return true
+        }
+        return false
     }
 
     private fun showWarningCheckDialog() {
@@ -154,17 +185,17 @@ class JoinFragment : Fragment() {
         // 제목의 텍스트 스타일을 변경
         dialog.findViewById<TextView>(android.R.id.title)?.apply {
             setTextColor(Color.BLUE)
-            textSize = 20f
+            textSize = 15f
         }
         // 메시지의 텍스트 스타일을 변경
         dialog.findViewById<TextView>(android.R.id.message)?.apply {
             setTextColor(Color.RED)
-            textSize = 18f
+            textSize = 13f
         }
         // 버튼의 텍스트 스타일을 변경
         dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.apply {
-            setTextColor(Color.GREEN)
-            textSize = 16f
+            setTextColor(Color.GRAY)
+            textSize = 11f
         }
 
         dialog.window?.setBackgroundDrawableResource(R.drawable.rounded_bg)
@@ -175,22 +206,21 @@ class JoinFragment : Fragment() {
         builder.setTitle("이메일 인증")
             .setMessage("메일 인증을 완료하시고 로그인해주세요.")
             .setPositiveButton("확인") { _, _ -> navigateToLoginFragment() }
-            .show()
         val dialog = builder.show()
         // 제목의 텍스트 스타일을 변경
         dialog.findViewById<TextView>(android.R.id.title)?.apply {
             setTextColor(Color.BLUE)
-            textSize = 20f
+            textSize = 15f
         }
         // 메시지의 텍스트 스타일을 변경
         dialog.findViewById<TextView>(android.R.id.message)?.apply {
             setTextColor(Color.RED)
-            textSize = 18f
+            textSize = 13f
         }
         // 버튼의 텍스트 스타일을 변경
         dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.apply {
-            setTextColor(Color.GREEN)
-            textSize = 16f
+            setTextColor(Color.GRAY)
+            textSize = 11f
         }
         dialog.window?.setBackgroundDrawableResource(R.drawable.rounded_bg)
         builder.setCancelable(false)  // 백 버튼 등으로 취소 불가능하게 설정
