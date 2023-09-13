@@ -26,6 +26,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.applicationjeces.R
 import com.example.applicationjeces.databinding.FragmentHomeBinding
 import com.example.applicationjeces.user.LoginFragment
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.gson.Gson
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -168,123 +169,75 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
             bottomSheetFragment.show(parentFragmentManager, bottomSheetFragment.tag)
         }
 
+        setupRecyclerView(
+            binding.productRecentTen,
+            productViewModel.recentProducts,
+            productViewModel::fetchRecentProducts,
+            repository
+        )
 
-        /**
-         * 최근 10개 등록 상품
-         */
-        // Call this after initializing your viewModel
-        productViewModel.fetchRecentProducts()
-        val adapterTen = ProductViewPagerAdapter(this@HomeFragment, repository)
-        val recyclerViewTen = binding.productRecentTen
-        recyclerViewTen.adapter = adapterTen
-        recyclerViewTen.setHasFixedSize(true)
-        // 어댑터에 조건을 추가해서 넣어서 해보기
-        recyclerViewTen.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-        productViewModel.recentProducts.observe(viewLifecycleOwner, Observer { products ->
-            // Here you can update your RecyclerView Adapter
-            adapterTen.setData(products)
-        })
+        setupRecyclerView(
+            binding.productHeart,
+            productViewModel.productsSortedByHeartCount,
+            productViewModel::fetchProductsSortedByHeartCount,
+            repository
+        )
 
-        /**
-         * 가장 많은 하트 상품
-         */
-        productViewModel.fetchProductsSortedByHeartCount()
-        val adapterHt = ProductViewPagerAdapter(this@HomeFragment, repository)
-        val recyclerViewHt = binding.productHeart
-        recyclerViewHt.adapter = adapterHt
-        recyclerViewHt.setHasFixedSize(true)
-        // 어댑터에 조건을 추가해서 넣어서 해보기
-        recyclerViewHt.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-        productViewModel.productsSortedByHeartCount.observe(viewLifecycleOwner, Observer { products ->
-            Log.d("13131313134", products.toString())
-            adapterHt.setData(products)
-        })
+        setupRecyclerView(
+            binding.productViewCount,
+            productViewModel.productsSortedByViewCount,
+            productViewModel::fetchProductsSortedByViewCount,
+            repository
+        )
 
-        /**
-         * 가장 많은 View 상품
-         */
-        productViewModel.fetchProductsSortedByViewCount()
-        val adapterView = ProductViewPagerAdapter(this@HomeFragment, repository)
-        val recyclerViewView = binding.productViewCount
-        recyclerViewView.adapter = adapterView
-        recyclerViewView.setHasFixedSize(true)
-        // Change from LinearLayoutManager to GridLayoutManager
-//        recyclerViewView.layoutManager = GridLayoutManager(requireContext(), 5)
-        recyclerViewView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-        productViewModel.productsSortedByViewCount.observe(viewLifecycleOwner, Observer { products ->
-            adapterView.setData(products)
-        })
+        setupRecyclerView(
+            binding.productRecentHeart,
+            productViewModel.productRecentByHeartCount,
+            productViewModel::fetRecentProductHeartCount,
+            repository
+        )
 
-        /**
-         * 일주일 내에 가장 많은 Heart 상품
-         */
-        productViewModel.fetRecentProductHeartCount()
-        val adapterSevenHeart = ProductViewPagerAdapter(this@HomeFragment, repository)
-        val recyclerViewSevenHeart = binding.productRecentHeart
-        recyclerViewSevenHeart.adapter = adapterSevenHeart
-        recyclerViewSevenHeart.setHasFixedSize(true)
-        // Change from LinearLayoutManager to GridLayoutManager
-//        recyclerViewSevenHeart.layoutManager = GridLayoutManager(requireContext(), 5)
-        recyclerViewSevenHeart.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-        productViewModel.productRecentByHeartCount.observe(viewLifecycleOwner, Observer { products ->
-            adapterSevenHeart.setData(products)
-        })
+        setupRecyclerView(
+            binding.productRecentView,
+            productViewModel.productRecentByViewCount,
+            productViewModel::fetRecentProductViewCount,
+            repository
+        )
 
-        /**
-         * 일주일 내에 가장 많은 View 상품
-         */
-        productViewModel.fetRecentProductViewCount()
-        val adapterSevenView = ProductViewPagerAdapter(this@HomeFragment, repository)
-        val recyclerViewSevenView = binding.productRecentView
-        recyclerViewSevenView.adapter = adapterSevenView
-        recyclerViewSevenView.setHasFixedSize(true)
-        // Change from LinearLayoutManager to GridLayoutManager
-//        recyclerViewSevenView.layoutManager = GridLayoutManager(requireContext(), 5)
-        recyclerViewSevenView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-        productViewModel.productRecentByViewCount.observe(viewLifecycleOwner, Observer { products ->
-            adapterSevenView.setData(products)
-        })
 
-        /**
-         * 이건 뷰페이저로 만들꺼임
-         * 뷰모델 연결, 뷰모델을 불러옴
-         * 이건 전체 상품
-         * 따라서 나눠야 함
-         * 1. adapter를 나누고 표현되어야 함
-         **/
-
-        recyclerViewTen.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                Log.d("데이터 로드1", "ㅁㅁㄴㅇ")
-
-                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-
-                val visibleItemCount = layoutManager.childCount
-                val totalItemCount = layoutManager.itemCount
-                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
-
-                if (dy > 0 && (firstVisibleItemPosition + visibleItemCount >= totalItemCount - 3)) {
-                    // 로딩 인디케이터 표시 (옵션)
-                    //        showLoadingIndicator()
-
-                    // 다음 페이지의 데이터 로드
-                    // 수정 후:
-                    productViewModel.liveTodoData.observe(viewLifecycleOwner, Observer { newItems ->
-                        // 변경된 데이터만 추가
-                        val currentSize = adapterTen.itemCount
-                        adapterTen.submitList(newItems)
-                    })
-                }
-            }
-        })
-
-        // 각 어댑터에 클릭 리스너 설정
-        setupItemClickListener(adapterTen)
-        setupItemClickListener(adapterHt)
-        setupItemClickListener(adapterView)
-        setupItemClickListener(adapterSevenHeart)
-        setupItemClickListener(adapterSevenView)
+//        /**
+//         * 이건 뷰페이저로 만들꺼임
+//         * 뷰모델 연결, 뷰모델을 불러옴
+//         * 이건 전체 상품
+//         * 따라서 나눠야 함
+//         * 1. adapter를 나누고 표현되어야 함
+//         **/
+//
+//        recyclerViewTen.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+//                super.onScrolled(recyclerView, dx, dy)
+//                Log.d("데이터 로드1", "ㅁㅁㄴㅇ")
+//
+//                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+//
+//                val visibleItemCount = layoutManager.childCount
+//                val totalItemCount = layoutManager.itemCount
+//                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+//
+//                if (dy > 0 && (firstVisibleItemPosition + visibleItemCount >= totalItemCount - 3)) {
+//                    // 로딩 인디케이터 표시 (옵션)
+//                    //        showLoadingIndicator()
+//
+//                    // 다음 페이지의 데이터 로드
+//                    // 수정 후:
+//                    productViewModel.liveTodoData.observe(viewLifecycleOwner, Observer { newItems ->
+//                        // 변경된 데이터만 추가
+//                        val currentSize = adapterTen.itemCount
+//                        adapterTen.submitList(newItems)
+//                    })
+//                }
+//            }
+//        })
 
         /**
          * 알림버튼 클릭 시
@@ -326,10 +279,31 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
             }
         }
 
-
         // Inflate the layout for this fragment
         return view
     }
+
+    private fun setupRecyclerView(
+        recyclerView: RecyclerView,
+        liveData: LiveData<List<DocumentSnapshot>>,
+        viewModelFunction: () -> Unit,
+        repository: ProductRepository
+    ) {
+        // Call viewModel function
+        viewModelFunction()
+
+        val adapter = ProductViewPagerAdapter(this@HomeFragment, repository)
+        recyclerView.adapter = adapter
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+        liveData.observe(viewLifecycleOwner, Observer { products ->
+            adapter.setData(products)
+        })
+
+        // 각 어댑터에 클릭 리스너 설정
+        setupItemClickListener(adapter)
+    }
+
 
     // 공통으로 사용할 항목 클릭 메서드
     fun onProductClicked(product: HashMap<String, Any>, position: Int) {
