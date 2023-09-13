@@ -16,8 +16,6 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainLoginBinding
     private val loginViewModel by viewModels<LoginViewModel>()
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -73,7 +71,7 @@ class LoginActivity : AppCompatActivity() {
         if(pageData.title == "login") {
             return LoginFragment.newInstance(pageData.title, pageData.tag)
         } else if(pageData.title == "join") {
-            return JoinFragment.newInstance(pageData.title, pageData.tag)
+            return JoinFragment.newInstance()
         } else {
             return LoginFragment.newInstance(pageData.title, pageData.tag)
         }

@@ -1,130 +1,211 @@
 package com.example.applicationjeces.user
 
 import android.app.AlertDialog
-import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.applicationjeces.MainActivity
 import com.example.applicationjeces.R
 import com.example.applicationjeces.databinding.FragmentJoinBinding
-import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.fragment_join.*
 
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [JoinFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-/* 회원가입 */
 class JoinFragment : Fragment() {
 
     private var _binding: FragmentJoinBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: LoginViewModel
 
-    private var loginActivity: LoginActivity? = null
-
-    /* firebase Auth */
-    private var authStateListener: FirebaseAuth.AuthStateListener? = null
-
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentJoinBinding.inflate(inflater, container, false)
-
-        viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
-
-        join()
-
-        viewModel.signUpStatus.observe(viewLifecycleOwner, Observer { isSuccess ->
-            if (isSuccess) {
-                showEmailVerificationDialog()
-            } else {
-                Toast.makeText(context, "가입 실패", Toast.LENGTH_LONG).show()
-            }
-        })
-
-
+        viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
+        setupInputValidation()
+        setJoinButtonClickListener()
+        observeSignUpStatus()
 
         return binding.root
     }
 
-    override fun onStart() {
-        super.onStart()
+    private fun setupInputValidation() {
+        binding.textInputEditText.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus && !isValidEmail(binding.textInputEditText.text.toString().trim())) {
+                binding.textInputLayout.error = "이메일 형식을 확인해주세요."
+            } else {
+                binding.textInputLayout.error = null
+            }
+        }
 
+        binding.passwordEditText.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus && !isValidPassword(binding.passwordEditText.text.toString().trim())) {
+                binding.passwordLayout.error = "비밀번호는 특수문자, 숫자, 영문을 포함해야 합니다."
+            } else {
+                binding.passwordLayout.error = null
+            }
+        }
+
+        binding.password2EditText.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus && binding.passwordEditText.text.toString() != binding.password2EditText.text.toString()) {
+                binding.password2Layout.error = "비밀번호가 일치하지 않습니다."
+            } else {
+                binding.password2Layout.error = null
+            }
+        }
+
+        // NumberEditText formatting has been kept as is due to complexity
+        binding.numberEditText.addTextChangedListener(object : TextWatcher {
+            private var previousString = ""
+            override fun afterTextChanged(s: Editable?) {
+                binding.numberEditText.removeTextChangedListener(this)  // TextWatcher 제거
+                val str = s.toString().replace("-", "")
+                val formattedStr = when {
+                    str.length <= 3 -> str
+                    str.length <= 7 -> "${str.substring(0, 3)}-${str.substring(3)}"
+                    else -> "${str.substring(0, 3)}-${str.substring(3, 7)}-${str.substring(7)}"
+                }
+                if (formattedStr != previousString) {
+                    binding.numberEditText.setText(formattedStr)
+                    binding.numberEditText.setSelection(formattedStr.length)
+                }
+                previousString = formattedStr
+                binding.numberEditText.addTextChangedListener(this)  // TextWatcher 다시 추가
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // Do nothing
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // Do nothing
+            }
+        })
+
+        binding.numberEditText.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus && !isValidPhoneNumber(binding.numberEditText.text.toString().trim())) {
+                binding.numberLayout.error = "전화번호 형식을 확인해주세요."
+            } else {
+                binding.numberLayout.error = null
+            }
+        }
     }
 
-    fun join() {
+    private fun isValidEmail(email: String): Boolean {
+        val emailRegex = Regex(pattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")
+        return emailRegex.matches(email)
+    }
+
+    private fun isValidPassword(password: String): Boolean {
+        val hasSpecialChar = Regex(pattern = """[!@#$%^&*()\-=+\\|\[\]{};:'",.<>?/]+""").containsMatchIn(password)
+        val hasDigit = password.any { it.isDigit() }
+        val hasLetter = password.any { it.isLetter() }
+        return hasSpecialChar && hasDigit && hasLetter
+    }
+
+    private fun isValidPhoneNumber(phoneNumber: String): Boolean {
+        val regex = """^01[016789]-\d{3,4}-\d{4}$""".toRegex()
+        return regex.matches(phoneNumber)
+    }
+
+    private fun setJoinButtonClickListener() {
         binding.joinBtn.setOnClickListener {
-            val email = textInputEditText.text.toString().trim()
-            val password = passwordEditText.text.toString().trim()
-            val name = nameEditText.text.toString().trim()
-
-            viewModel.createUser(email, password, name)
-
+            if (isWarningShown()) {
+                Log.d("조인1", "1")
+                showWarningCheckDialog()
+                return@setOnClickListener
+            }
+            Log.d("조인2", isWarningShown().toString())
+            // 추가적인 검증 및 작업이 필요한 경우 여기에 코드를 추가하십시오.
         }
+    }
+
+    private fun observeSignUpStatus() {
+        viewModel.signUpStatus.observe(viewLifecycleOwner, Observer { isSuccess ->
+            if (isSuccess) {
+                showEmailVerificationDialog()
+            }
+            // 실패 처리에 대한 코드도 여기에 추가하십시오.
+        })
+    }
+
+    private fun isWarningShown(): Boolean {
+        Log.d("조인3", binding.textInputLayout.error.toString())
+        return binding.textInputLayout.error != null ||
+                binding.passwordLayout.error != null ||
+                binding.password2Layout.error != null ||
+                binding.numberLayout.error != null ||
+                binding.nameLayout.error != null
+    }
+
+    private fun showWarningCheckDialog() {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("확인 요청")
+            .setMessage("모든 경고 메시지를 확인하고 다시 시도해주세요.")
+            .setPositiveButton("확인", null)
+        val dialog = builder.show()
+        // 스타일 설정은 여기에서도 할 수 있습니다.
+        // 제목의 텍스트 스타일을 변경
+        dialog.findViewById<TextView>(android.R.id.title)?.apply {
+            setTextColor(Color.BLUE)
+            textSize = 20f
+        }
+        // 메시지의 텍스트 스타일을 변경
+        dialog.findViewById<TextView>(android.R.id.message)?.apply {
+            setTextColor(Color.RED)
+            textSize = 18f
+        }
+        // 버튼의 텍스트 스타일을 변경
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.apply {
+            setTextColor(Color.GREEN)
+            textSize = 16f
+        }
+
+        dialog.window?.setBackgroundDrawableResource(R.drawable.rounded_bg)
     }
 
     private fun showEmailVerificationDialog() {
         val builder = AlertDialog.Builder(context)
         builder.setTitle("이메일 인증")
-        builder.setMessage("메일 인증을 완료하시고 로그인해주세요.")
-        builder.setPositiveButton("확인") { _, _ ->
-            // 이곳에 확인 버튼을 눌렀을 때 실행될 코드를 넣을 수 있습니다. (예: Fragment 종료 등)
-            navigateToLoginFragment()
+            .setMessage("메일 인증을 완료하시고 로그인해주세요.")
+            .setPositiveButton("확인") { _, _ -> navigateToLoginFragment() }
+            .show()
+        val dialog = builder.show()
+        // 제목의 텍스트 스타일을 변경
+        dialog.findViewById<TextView>(android.R.id.title)?.apply {
+            setTextColor(Color.BLUE)
+            textSize = 20f
         }
+        // 메시지의 텍스트 스타일을 변경
+        dialog.findViewById<TextView>(android.R.id.message)?.apply {
+            setTextColor(Color.RED)
+            textSize = 18f
+        }
+        // 버튼의 텍스트 스타일을 변경
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.apply {
+            setTextColor(Color.GREEN)
+            textSize = 16f
+        }
+        dialog.window?.setBackgroundDrawableResource(R.drawable.rounded_bg)
         builder.setCancelable(false)  // 백 버튼 등으로 취소 불가능하게 설정
-        builder.show()
     }
 
     private fun navigateToLoginFragment() {
-
+        binding.textInputEditText.text?.clear()
+        binding.passwordEditText.text?.clear()
+        binding.password2EditText.text?.clear()
+        binding.numberEditText.text?.clear()
         (activity as? LoginActivity)?.changeFragment(PageDataLogin.LOGIN)
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment JoinFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            JoinFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+        fun newInstance() = JoinFragment()
     }
 }
