@@ -45,7 +45,7 @@ class LoginFragment : Fragment() {
 
     private fun checkStoredCredentialsAndLogin() {
         val (savedEmail, savedPassword) = SharedPreferencesHelper.getCredentials(requireContext())
-        if (savedEmail != null && savedPassword != null) {
+        if (!savedEmail.isNullOrEmpty() && !savedPassword.isNullOrEmpty()) {
             viewModel.loginUser(savedEmail, savedPassword)
         }
     }
