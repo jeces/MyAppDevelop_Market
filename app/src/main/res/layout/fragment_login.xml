@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".user.LoginFragment">
@@ -74,7 +75,7 @@
                     app:helperTextTextColor="@color/red"
                     app:helperText="Required*"
                     app:counterEnabled="true"
-                    app:counterMaxLength="30"
+                    app:counterMaxLength="25"
                     app:endIconMode="clear_text"
                     app:startIconDrawable="@drawable/ic_baseline_email_24"
                     app:layout_constraintStart_toStartOf="parent"
@@ -85,7 +86,7 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/loginTextInputEditText"
-                        android:maxLength="30"
+                        android:maxLength="25"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                 </com.google.android.material.textfield.TextInputLayout>
@@ -99,7 +100,7 @@
                     app:helperText="Required*"
                     app:helperTextTextColor="@color/red"
                     app:counterEnabled="true"
-                    app:counterMaxLength="30"
+                    app:counterMaxLength="15"
                     app:endIconMode="password_toggle"
                     app:startIconDrawable="@drawable/ic_baseline_lock_24"
                     app:layout_constraintStart_toStartOf="parent"
@@ -109,7 +110,7 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/loginPasswordEditText"
-                        android:maxLength="30"
+                        android:maxLength="15"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                 </com.google.android.material.textfield.TextInputLayout>

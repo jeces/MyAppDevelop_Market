@@ -16,6 +16,8 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainLoginBinding
     private val loginViewModel by viewModels<LoginViewModel>()
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -37,7 +39,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun changeFragment(pageData : PageDataLogin) {
+    fun changeFragment(pageData : PageDataLogin) {
         var targetFragment = supportFragmentManager.findFragmentByTag(pageData.tag)
         supportFragmentManager.commit {
             if(targetFragment == null) {
@@ -58,6 +60,12 @@ class LoginActivity : AppCompatActivity() {
                         hide(it)
                     }
                 }
+        }
+        // BottomNavigationView의 선택 항목 변경
+        when (pageData) {
+            PageDataLogin.LOGIN -> binding.loginbottomNavigationView.selectedItemId = R.id.sign_in
+            PageDataLogin.JOIN -> binding.loginbottomNavigationView.selectedItemId = R.id.sign_up
+            // ... (기타 다른 탭에 대한 로직 추가)
         }
     }
 

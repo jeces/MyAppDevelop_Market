@@ -35,6 +35,8 @@ class JoinFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var viewModel: LoginViewModel
 
+    private var loginActivity: LoginActivity? = null
+
     /* firebase Auth */
     private var authStateListener: FirebaseAuth.AuthStateListener? = null
 
@@ -57,16 +59,6 @@ class JoinFragment : Fragment() {
         _binding = FragmentJoinBinding.inflate(inflater, container, false)
 
         viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
-
-//        /* 로그인 세센을 체크하는 부분 */
-//        authStateListener = FirebaseAuth.AuthStateListener { firebaseAuth ->
-//            Log.e("로그인", "로그인")
-//            val user = firebaseAuth.currentUser
-//            if(user != null) {
-//                val it = Intent(context, MainActivity::class.java)
-//                startActivity(it)
-//            }
-//        }
 
         join()
 
@@ -95,7 +87,7 @@ class JoinFragment : Fragment() {
             val name = nameEditText.text.toString().trim()
 
             viewModel.createUser(email, password, name)
-            viewModel.changePageNum(PageDataLogin.LOGIN)
+
         }
     }
 
@@ -112,10 +104,8 @@ class JoinFragment : Fragment() {
     }
 
     private fun navigateToLoginFragment() {
-        val transaction = requireFragmentManager().beginTransaction()
-        transaction.replace(R.id.fragment_join, LoginFragment())
-        transaction.commit()
 
+        (activity as? LoginActivity)?.changeFragment(PageDataLogin.LOGIN)
     }
 
     companion object {
