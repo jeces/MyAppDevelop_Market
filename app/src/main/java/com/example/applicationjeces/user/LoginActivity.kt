@@ -37,28 +37,28 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    fun changeFragment(pageData : PageDataLogin) {
-        var targetFragment = supportFragmentManager.findFragmentByTag(pageData.tag)
-        supportFragmentManager.commit {
-            if(targetFragment == null) {
-                targetFragment = getFragment(pageData)
-                add(R.id.frame_layout, targetFragment!!, pageData.tag)
-            }
-            // 애니메이션 추가
-            setCustomAnimations(R.anim.slide_in_right, // 새로운 Fragment가 들어올 때 애니메이션
-                R.anim.slide_out_left, // 이전 Fragment가 나갈 때 애니메이션
-                R.anim.slide_in_left, // 백스택에서 다시 복귀하는 이전 Fragment의 애니메이션
-                R.anim.slide_out_right) // 백스택에서 복귀하는 새로운 Fragment가 나갈 때 애니메이션
-
-            show(targetFragment!!)
-            PageDataLogin.values()
-                .filterNot { it == pageData }
-                .forEach { type ->
-                    supportFragmentManager.findFragmentByTag(type.tag)?.let {
-                        hide(it)
-                    }
+    fun changeFragment(pageData: PageDataLogin) {
+        val targetFragment = supportFragmentManager.findFragmentByTag(pageData.tag)
+            ?: getFragment(pageData).also {
+                supportFragmentManager.commit {
+                    add(R.id.frame_layout, it, pageData.tag)
                 }
+            }
+
+        supportFragmentManager.commit {
+            // 애니메이션 추가
+            setCustomAnimations(
+                R.anim.slide_in_right,
+                R.anim.slide_out_left,
+                R.anim.slide_in_left,
+                R.anim.slide_out_right
+            )
+            show(targetFragment)
+            PageDataLogin.values().filterNot { it == pageData }.forEach { type ->
+                supportFragmentManager.findFragmentByTag(type.tag)?.let { hide(it) }
+            }
         }
+
         // BottomNavigationView의 선택 항목 변경
         when (pageData) {
             PageDataLogin.LOGIN -> binding.loginbottomNavigationView.selectedItemId = R.id.sign_in
@@ -67,13 +67,11 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun getFragment(pageData : PageDataLogin) : Fragment {
-        if(pageData.title == "login") {
-            return LoginFragment.newInstance()
-        } else if(pageData.title == "join") {
-            return JoinFragment.newInstance()
-        } else {
-            return LoginFragment.newInstance()
+    private fun getFragment(pageData: PageDataLogin): Fragment {
+        return when (pageData.title) {
+            "login" -> LoginFragment.newInstance()
+            "join" -> JoinFragment.newInstance()
+            else -> LoginFragment.newInstance()
         }
     }
 }

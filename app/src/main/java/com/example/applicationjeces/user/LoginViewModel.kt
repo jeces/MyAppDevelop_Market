@@ -47,7 +47,6 @@ class LoginViewModel() : ViewModel() {
         }
     }
 
-
     /* PageNum에 따라 currentPages 변경 */
     fun setCurrentPage(item: MenuItem): Boolean {
         val menuItemId = item.itemId
