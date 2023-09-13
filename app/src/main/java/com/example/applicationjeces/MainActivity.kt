@@ -28,7 +28,7 @@ import java.security.MessageDigest
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val jecesViewModel by viewModels<DataViewModel>()
+    private val productViewModel by viewModels<DataViewModel>()
     private var target: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.apply {
-            viewModel = jecesViewModel
+            viewModel = productViewModel
             lifecycleOwner = this@MainActivity
         }
 
@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1)
 
         // LiveData의 value의 변경을 감지하고 호출 PageNum이 변경되면 호출
-        jecesViewModel.currentPages.observe(this) {
+        productViewModel.currentPages.observe(this) {
             changeFragment(it)
         }
 
@@ -89,64 +89,60 @@ class MainActivity : AppCompatActivity() {
     private fun changeFragment(pageData: PageData) {
         var targetFragment = supportFragmentManager.findFragmentByTag(pageData.tag)
 
+        if (pageData.title == "add" || pageData.title == "search") {
+            target = pageData.title
+            startActivity(Intent(this@MainActivity, if(target == "search") SearchActivity::class.java else AddActivity::class.java))
+            target = ""
+            return
+        }
+
         supportFragmentManager.commit {
             if (targetFragment == null) {
                 targetFragment = getFragment(pageData)
-                if (target == "search" || target == "add") {
-                    startActivity(Intent(this@MainActivity, if(target == "search") SearchActivity::class.java else AddActivity::class.java))
-                    // 추가된 부분: `target` 값을 초기화
-                    target = ""
-                    return@commit
-                }
                 add(R.id.frame_layout, targetFragment!!, pageData.tag)
             }
             show(targetFragment!!)
-
-            PageData.values()
-                .filterNot { it == pageData }
-                .forEach { type ->
-                    supportFragmentManager.findFragmentByTag(type.tag)?.let {
-                        hide(it)
-                    }
-                }
+            PageData.values().filterNot { it == pageData }.forEach {
+                supportFragmentManager.findFragmentByTag(it.tag)?.let { hide(it) }
+            }
         }
     }
     // startActivity(Intent(this@MainActivity, MainActivity2::class.java))
     /* 실행시 Fragment값 GET 함수 */
     /* 처음은 띄워주기 위해 사용됨. 후에 Hide로 숨겨져서 사용 안함. 한번쓰고 버림 */
     private fun getFragment(pageData: PageData): Fragment = when (pageData.title) {
-        "home" -> HomeFragment.newInstance(pageData.title, pageData.tag)
-        "add", "search" -> {
-            target = pageData.title
-            HomeFragment.newInstance(pageData.title, pageData.tag)
-        }
+        "home", "add", "search" -> HomeFragment.newInstance(pageData.title, pageData.tag)
         "chatroom", "message" -> ChatroomFragment.newInstance(pageData.title, pageData.tag)
         "my" -> MyFragment.newInstance(pageData.title, pageData.tag)
         else -> HomeFragment.newInstance(pageData.title, pageData.tag)
     }
 
+    private fun logLifeCycleEvent(event: String) {
+        Log.d("MainActivity", event)
+    }
+
     override fun onStart() {
         super.onStart()
-        Log.d("jecesMainActivity1", "onStart" )
+        logLifeCycleEvent("onStart")
     }
 
     override fun onResume() {
         super.onResume()
-        Log.d("jecesMainActivity1", "onResume" )
+        logLifeCycleEvent("onResume")
     }
 
     override fun onPause() {
         super.onPause()
-        Log.d("jecesMainActivity1", "onPause" )
+        logLifeCycleEvent("onPause")
     }
 
     override fun onStop() {
         super.onStop()
-        Log.d("jecesMainActivity1", "onStop" )
+        logLifeCycleEvent("onStop")
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d("jecesMainActivity1", "onDestroy" )
+        logLifeCycleEvent("onDestroy")
     }
 }
