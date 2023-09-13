@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide
 import com.example.applicationjeces.R
 import com.example.applicationjeces.databinding.FragmentMyinfoBinding
 import com.example.applicationjeces.product.InfoActivity
+import com.example.applicationjeces.product.ProductRepository
 import com.example.applicationjeces.product.ProductViewModel
 import com.example.applicationjeces.product.ProductViewPagerAdapter
 import com.example.applicationjeces.user.EditProfileActivity
@@ -45,6 +46,7 @@ class MyFragment : Fragment() {
     private var param2: String? = null
 
     private lateinit var productViewModel: ProductViewModel
+    val repository = ProductRepository()
     private var _binding: FragmentMyinfoBinding? = null
     private val binding get() = _binding!!
 
@@ -102,7 +104,7 @@ class MyFragment : Fragment() {
          * 나의 판매목록 상품
          */
 //        val adapter = MyProductRecyclerViewAdapter(this@MyFragment, myId, emptyList(), "myProduct")
-        val adapter = ProductViewPagerAdapter(this@MyFragment, myId, emptyList())
+        val adapter = ProductViewPagerAdapter(this@MyFragment, repository)
         val recyclerView = binding.myProductSaleV
         recyclerView.adapter = adapter
         recyclerView.setHasFixedSize(true)
@@ -149,7 +151,7 @@ class MyFragment : Fragment() {
          * 나의 구매 목록
          */
 //        val adapterPc = MyProductRecyclerViewAdapter(this@MyFragment, myId, emptyList(), "myProductPc")
-        val adapterPc = ProductViewPagerAdapter(this@MyFragment, myId, emptyList())
+        val adapterPc = ProductViewPagerAdapter(this@MyFragment, repository)
         val recyclerViewPc = binding.myProductPc
         recyclerViewPc.adapter = adapterPc
         recyclerViewPc.setHasFixedSize(true)
@@ -176,7 +178,7 @@ class MyFragment : Fragment() {
         /**
          * 나의 관심 목록
          */
-        val adapterFv = ProductViewPagerAdapter(this@MyFragment, myId, emptyList())
+        val adapterFv = ProductViewPagerAdapter(this@MyFragment, repository)
         val recyclerViewFv = binding.myProductFv
         recyclerViewFv.adapter = adapterFv
         recyclerViewFv.setHasFixedSize(true)
@@ -256,7 +258,8 @@ class MyFragment : Fragment() {
     fun setupItemClickListener(adapter: ProductViewPagerAdapter) {
         adapter.setItemClickListener(object : ProductViewPagerAdapter.OnItemClickListener {
             override fun onClick(v: View, position: Int) {
-                val product = adapter.producFiretList[position].data as HashMap<String, Any>
+                val documentSnapshot = adapter.getDocumentSnapshotAt(position)
+                val product = documentSnapshot.data as HashMap<String, Any>
                 onProductClicked(product, position)
             }
         })

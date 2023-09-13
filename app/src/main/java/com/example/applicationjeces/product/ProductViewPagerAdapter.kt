@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -25,7 +27,10 @@ import kotlinx.android.synthetic.main.product_item_list_search.view.*
 import java.text.NumberFormat
 import java.util.*
 
-class ProductViewPagerAdapter(private val context: Fragment, var myId: String, var producFiretList: List<DocumentSnapshot>): RecyclerView.Adapter<ProductViewPagerAdapter.Holder>() {
+class ProductViewPagerAdapter(
+    private val context: Fragment,
+    private val productRepository: ProductRepository
+) : ListAdapter<DocumentSnapshot, ProductViewPagerAdapter.Holder>(ProductDiffCallback()) {
 
     private val cachedUrls = mutableMapOf<String, String>()
 
@@ -37,41 +42,41 @@ class ProductViewPagerAdapter(private val context: Fragment, var myId: String, v
     /* Holder의 bind 메소드를 호출한다. 내용 입력 */
     /* getItemCount() 리턴값이 0일 경우 호출 안함 */
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        val currentItemId = producFiretList[position].get("ID")
-        val currentItem = producFiretList[position].get("productName")
-        val currentItem2 = producFiretList[position].get("productPrice")
-        var currentItem3 = producFiretList[position].get("productImgUrl")
-        val currentItem4 = producFiretList[position].get("productCount")
-        val bidPrice = producFiretList[position].get("productBidPrice")
+        val currentItemId = getItem(position).get("ID")
+        val productName = getItem(position).get("productName")
+        val productPrice = getItem(position).get("productPrice")
+        var productImgUrl = getItem(position).get("productImgUrl")
+        val productCount = getItem(position).get("productCount")
+        val bidPrice = getItem(position).get("productBidPrice")
 
-        val formattedPrice = addCommasToNumberString(currentItem2.toString())
-        val formattedBidPrice = addCommasToNumberString(bidPrice.toString())
+        val formattedPrice = formatToTenThousandWon(productPrice.toString())
+        val formattedBidPrice = formatToTenThousandWon(bidPrice.toString())
 
         /* HomeFragment */
-        holder.itemView.product_name.text = "${currentItem.toString()}"
+        holder.itemView.product_name.text = "${productName.toString()}"
         holder.itemView.product_price.text = "판매가 : ${formattedPrice}"
         holder.itemView.current_bid_price.text = "입찰가 : ${formattedBidPrice}"
 
-        val imageUrl = if (currentItem4.toString() == "0") {
+        val imageUrl = if (productCount.toString() == "0") {
             "basic_img.png"
         } else {
-            "${currentItemId}/${currentItem}/${currentItem3}"
+            "${currentItemId}/${productName}/${productImgUrl}"
 
         }
-        Log.d("131312", "${currentItemId}/${currentItem}/${currentItem3}")
-        val storageReference = FirebaseStorage.getInstance().reference.child(imageUrl)
+        Log.d("131312", "${currentItemId}/${productName}/${productImgUrl}")
 
         // 이미지 URL 캐싱
         if (cachedUrls.containsKey(imageUrl)) {
             loadRoundedImage(holder, cachedUrls[imageUrl]!!)
         } else {
-            storageReference.downloadUrl.addOnCompleteListener {
-                if (it.isSuccessful && context.isAdded) {
-                    val downloadUrl = it.result.toString()
-                    cachedUrls[imageUrl] = downloadUrl
-                    loadRoundedImage(holder, downloadUrl)
+            productRepository.getImageUrl(currentItemId.toString(), productName.toString(), productImgUrl.toString(), productCount.toString())
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful && context.isAdded) {
+                        val downloadUrl = task.result.toString()
+                        cachedUrls[imageUrl] = downloadUrl
+                        loadRoundedImage(holder, downloadUrl)
+                    }
                 }
-            }
         }
 
         holder.itemView.setOnClickListener {
@@ -90,11 +95,9 @@ class ProductViewPagerAdapter(private val context: Fragment, var myId: String, v
             .placeholder(R.drawable.ic_baseline_add_24)
             .override(100, 100)
             .apply(RequestOptions().transforms(CenterCrop(), RoundedCorners(16)))            .diskCacheStrategy(DiskCacheStrategy.ALL)
-//            .skipMemoryCache(true) // 메모리 캐시 비활성화
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .into(holder.itemView.product_img)
     }
-
 
     /* (2) 리스너 인터페이스 */
     interface OnItemClickListener {
@@ -107,40 +110,12 @@ class ProductViewPagerAdapter(private val context: Fragment, var myId: String, v
     /* (4) setItemClickListener로 설정한 함수 실행 */
     private lateinit var itemClickListener : OnItemClickListener
 
-    /* 리스트 아이템 개수 */
-    override fun getItemCount(): Int {
-        /* productList 사이즈를 리턴합니다. */
-        return producFiretList.size
-    }
-
-//    fun getTimeAgo(time: Long): String {
-//        val now = System.currentTimeMillis()
-//        val diff = now - time
-//
-//        return when {
-//            diff < 60 * 1000 -> "방금 전"
-//            diff < 60 * 1000 * 60 -> "${diff / (60 * 1000)}분 전"
-//            diff < 60 * 1000 * 60 * 24 -> "${diff / (60 * 1000 * 60)}시간 전"
-//            else -> "어제"
-//        }
-//    }
-
-    /* 홈 전체 데이터 */
     @SuppressLint("NotifyDataSetChanged")
     fun setData(product: List<DocumentSnapshot>) {
-        producFiretList = product
-        Log.d("dkfflwksk", producFiretList.toString())
-        /* 변경 알림 */
-        notifyDataSetChanged()
+        submitList(product)
     }
-
-    /**
-     * 페이징
-     */
-    fun addData(newItems: List<DocumentSnapshot>) {
-        val startSize = producFiretList.size
-        (producFiretList as MutableList).addAll(newItems)
-        notifyItemRangeInserted(startSize, newItems.size)
+    fun getDocumentSnapshotAt(position: Int): DocumentSnapshot {
+        return getItem(position)
     }
 
     /**
@@ -171,5 +146,17 @@ class ProductViewPagerAdapter(private val context: Fragment, var myId: String, v
     /* inner class로 viewHolder 정의. 레이아웃 내 view 연결 */
     inner class Holder(ItemView: View): RecyclerView.ViewHolder(ItemView) {
 
+    }
+}
+
+class ProductDiffCallback : DiffUtil.ItemCallback<DocumentSnapshot>() {
+    override fun areItemsTheSame(oldItem: DocumentSnapshot, newItem: DocumentSnapshot): Boolean {
+        // ID 필드를 기반으로 아이템이 동일한지 확인
+        return oldItem["ID"] == newItem["ID"]
+    }
+
+    override fun areContentsTheSame(oldItem: DocumentSnapshot, newItem: DocumentSnapshot): Boolean {
+        // 내용이 동일한지 확인
+        return oldItem == newItem
     }
 }

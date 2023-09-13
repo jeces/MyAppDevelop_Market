@@ -1,5 +1,6 @@
 package com.example.applicationjeces.product
 
+import android.net.Uri
 import android.util.Log
 import com.example.applicationjeces.chat.ChatroomData
 import com.example.applicationjeces.search.FilterCriteria
@@ -31,6 +32,15 @@ class ProductRepository {
         return jecesfirestore ?: FirebaseFirestore.getInstance().also {
             jecesfirestore = it
         }
+    }
+
+    fun getImageUrl(itemId: String, productName: String, productImgUrl: String, productCount: String): Task<Uri> {
+        val imageUrl = if (productCount == "0") {
+            "basic_img.png"
+        } else {
+            "$itemId/$productName/$productImgUrl"
+        }
+        return FirebaseStorage.getInstance().reference.child(imageUrl).downloadUrl
     }
 
     // 중복 컬렉션

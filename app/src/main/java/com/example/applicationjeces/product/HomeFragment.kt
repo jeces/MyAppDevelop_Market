@@ -17,6 +17,7 @@ import android.widget.ImageButton
 import android.widget.PopupWindow
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,31 +25,39 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.applicationjeces.R
 import com.example.applicationjeces.databinding.FragmentHomeBinding
+import com.example.applicationjeces.user.LoginFragment
 import com.google.gson.Gson
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator
 import kotlinx.android.synthetic.main.fragment_home.*
 import java.util.*
 import kotlin.collections.ArrayList
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
 /**
  * A simple [Fragment] subclass.
  * Use the [HomeFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
 class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
     private lateinit var productViewModel: ProductViewModel
     private lateinit var notificationDao: NotificationDao
+    private val repository = ProductRepository()
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+
+    private val slideRunnable = object : Runnable {
+        override fun run() {
+            val viewPager2 = binding.viewPagerHomeProduce
+            if (adverPageCount != 0) {
+                val nextItem = (viewPager2.currentItem + 1) % adverPageCount
+                viewPager2.setCurrentItem(nextItem, true)
+                handler.postDelayed(this, delayMillis)
+            }
+        }
+    }
+
+    private val handler = Handler(Looper.getMainLooper())
+    private val delayMillis = 3000L
+
 
     /* adver 이미지 리스트 */
     var adverImagelist = ArrayList<String>()
@@ -61,53 +70,17 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
         super.onAttach(context)
     }
 
-    // 공통으로 사용할 항목 클릭 메서드
-    fun onProductClicked(product: HashMap<String, Any>, position: Int) {
-        val gson = Gson()
-        val tags = listOf(product["tags"]) as List<String>
-        productViewModel.setProductDetail(product["ID"].toString(), product["productName"].toString(), product["productPrice"].toString().toInt(),
-            product["productDescription"].toString(), product["productCount"].toString().toInt(), product["pChatCount"].toString().toInt(),
-            product["pViewCount"].toString().toInt(), product["pHeartCount"].toString().toInt(), product["productBidPrice"].toString(), product["insertTime"].toString(), position,
-            tags, product["category"].toString(), product["state"].toString()
-        )
-        val tagsJson = gson.toJson(tags)
-        val intent = Intent(getActivity(), InfoActivity::class.java)
-        intent.apply {
-            putExtra("ID", product["ID"].toString())
-            putExtra("IDX", product["IDX"].toString())
-            putExtra("productName", product["productName"].toString())
-            putExtra("productPrice", product["productPrice"].toString())
-            putExtra("productDescription", product["productDescription"].toString())
-            putExtra("productCount", product["productCount"].toString())
-            putExtra("pChatCount", product["pChatCount"].toString())
-            putExtra("pViewCount", product["pViewCount"].toString())
-            putExtra("pHeartCount", product["pHeartCount"].toString())
-            putExtra("productBidPrice", product["productBidPrice"].toString())
-            putExtra("insertTime", product["insertTime"].toString())
-            putExtra("position", position)
-            putExtra("tags", tagsJson)
-        }
 
-        startActivity(intent)
-        activity?.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
-    }
 
     // 리스너 설정 함수
     fun setupItemClickListener(adapter: ProductViewPagerAdapter) {
         adapter.setItemClickListener(object : ProductViewPagerAdapter.OnItemClickListener {
             override fun onClick(v: View, position: Int) {
-                val product = adapter.producFiretList[position].data as HashMap<String, Any>
+                val documentSnapshot = adapter.getDocumentSnapshotAt(position)
+                val product = documentSnapshot.data as HashMap<String, Any>
                 onProductClicked(product, position)
             }
         })
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
@@ -201,7 +174,7 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
          */
         // Call this after initializing your viewModel
         productViewModel.fetchRecentProducts()
-        val adapterTen = ProductViewPagerAdapter(this@HomeFragment, myId, emptyList())
+        val adapterTen = ProductViewPagerAdapter(this@HomeFragment, repository)
         val recyclerViewTen = binding.productRecentTen
         recyclerViewTen.adapter = adapterTen
         recyclerViewTen.setHasFixedSize(true)
@@ -216,7 +189,7 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
          * 가장 많은 하트 상품
          */
         productViewModel.fetchProductsSortedByHeartCount()
-        val adapterHt = ProductViewPagerAdapter(this@HomeFragment, myId, emptyList())
+        val adapterHt = ProductViewPagerAdapter(this@HomeFragment, repository)
         val recyclerViewHt = binding.productHeart
         recyclerViewHt.adapter = adapterHt
         recyclerViewHt.setHasFixedSize(true)
@@ -231,7 +204,7 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
          * 가장 많은 View 상품
          */
         productViewModel.fetchProductsSortedByViewCount()
-        val adapterView = ProductViewPagerAdapter(this@HomeFragment, myId, emptyList())
+        val adapterView = ProductViewPagerAdapter(this@HomeFragment, repository)
         val recyclerViewView = binding.productViewCount
         recyclerViewView.adapter = adapterView
         recyclerViewView.setHasFixedSize(true)
@@ -246,7 +219,7 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
          * 일주일 내에 가장 많은 Heart 상품
          */
         productViewModel.fetRecentProductHeartCount()
-        val adapterSevenHeart = ProductViewPagerAdapter(this@HomeFragment, myId, emptyList())
+        val adapterSevenHeart = ProductViewPagerAdapter(this@HomeFragment, repository)
         val recyclerViewSevenHeart = binding.productRecentHeart
         recyclerViewSevenHeart.adapter = adapterSevenHeart
         recyclerViewSevenHeart.setHasFixedSize(true)
@@ -261,7 +234,7 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
          * 일주일 내에 가장 많은 View 상품
          */
         productViewModel.fetRecentProductViewCount()
-        val adapterSevenView = ProductViewPagerAdapter(this@HomeFragment, myId, emptyList())
+        val adapterSevenView = ProductViewPagerAdapter(this@HomeFragment, repository)
         val recyclerViewSevenView = binding.productRecentView
         recyclerViewSevenView.adapter = adapterSevenView
         recyclerViewSevenView.setHasFixedSize(true)
@@ -279,14 +252,6 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
          * 따라서 나눠야 함
          * 1. adapter를 나누고 표현되어야 함
          **/
-//        productViewModel.liveTodoData.observe(viewLifecycleOwner, Observer { product ->
-//            /* ViewModel에 Observe를 활용하여 productViewModel에 ReadAllData 라이브 데이터가 바뀌었을때 캐치하여, adapter에서 만들어준 setData함수를 통해 바뀐데이터를 UI에 업데이트 해줌 */
-//            adapterHt.setData(product)
-//            adapterView.setData(product)
-//            adapterSevenHeart.setData(product)
-//            adapterSevenView.setData(product)
-//            Log.d("111313", "1313")
-//        })
 
         recyclerViewTen.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -298,23 +263,17 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
                 val visibleItemCount = layoutManager.childCount
                 val totalItemCount = layoutManager.itemCount
                 val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
-                Log.d("데이터 로드1", visibleItemCount.toString())
-                Log.d("데이터 로드1", totalItemCount.toString())
-                Log.d("데이터 로드1", firstVisibleItemPosition.toString())
-                Log.d("데이터 로드1", dy.toString())
 
                 if (dy > 0 && (firstVisibleItemPosition + visibleItemCount >= totalItemCount - 3)) {
                     // 로딩 인디케이터 표시 (옵션)
                     //        showLoadingIndicator()
 
                     // 다음 페이지의 데이터 로드
+                    // 수정 후:
                     productViewModel.liveTodoData.observe(viewLifecycleOwner, Observer { newItems ->
-                        // 데이터를 현재의 어댑터에 추가
-                        adapterTen.addData(newItems)
-                        adapterTen.notifyDataSetChanged()
-
-                        // 로딩 인디케이터 숨기기 (옵션)
-                        //            hideLoadingIndicator()
+                        // 변경된 데이터만 추가
+                        val currentSize = adapterTen.itemCount
+                        adapterTen.submitList(newItems)
                     })
                 }
             }
@@ -373,6 +332,45 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
         return view
     }
 
+    // 공통으로 사용할 항목 클릭 메서드
+    fun onProductClicked(product: HashMap<String, Any>, position: Int) {
+        val gson = Gson()
+        val tags = listOf(product["tags"]) as List<String>
+        productViewModel.setProductDetail(
+            product["ID"].toString(),
+            product["productName"].toString(),
+            product["productPrice"].toString().toInt(),
+            product["productDescription"].toString(),
+            product["productCount"].toString().toInt(),
+            product["pChatCount"].toString().toInt(),
+            product["pViewCount"].toString().toInt(),
+            product["pHeartCount"].toString().toInt(),
+            product["productBidPrice"].toString(),
+            product["insertTime"].toString(), position,
+            tags, product["category"].toString(),
+            product["state"].toString()
+        )
+        val tagsJson = gson.toJson(tags)
+        val intent = Intent(getActivity(), InfoActivity::class.java)
+        intent.apply {
+            putExtra("ID", product["ID"].toString())
+            putExtra("IDX", product["IDX"].toString())
+            putExtra("productName", product["productName"].toString())
+            putExtra("productPrice", product["productPrice"].toString())
+            putExtra("productDescription", product["productDescription"].toString())
+            putExtra("productCount", product["productCount"].toString())
+            putExtra("pChatCount", product["pChatCount"].toString())
+            putExtra("pViewCount", product["pViewCount"].toString())
+            putExtra("pHeartCount", product["pHeartCount"].toString())
+            putExtra("productBidPrice", product["productBidPrice"].toString())
+            putExtra("insertTime", product["insertTime"].toString())
+            putExtra("position", position)
+            putExtra("tags", tagsJson)
+        }
+        startActivity(intent)
+        activity?.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+    }
+
     /* 알림 */
     private fun sendNotification(title: String, message: String) {
         val builder = NotificationCompat.Builder(requireActivity(), "MY_channel")
@@ -403,69 +401,14 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
         return (dp * context.resources.displayMetrics.density).toInt()
     }
 
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        Log.d("jecesAddFragment", "onViewStateRestored")
-        super.onViewStateRestored(savedInstanceState)
-    }
-
-    override fun onStart() {
-        Log.d("jecesAddFragment", "onStart")
-        super.onStart()
-    }
-
-    override fun onResume() {
-        Log.d("jecesAddFragment", "onResume")
-        super.onResume()
-    }
-
-    override fun onPause() {
-        Log.d("jecesAddFragment", "onPause")
-        super.onPause()
-    }
-
-    override fun onStop() {
-        Log.d("jecesAddFragment", "onStop")
-        super.onStop()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        Log.d("jecesAddFragment", "onSaveInstanceState")
-        super.onSaveInstanceState(outState)
-    }
-
     override fun onDestroyView() {
-        Log.d("jecesAddFragment", "onDestroyView")
         super.onDestroyView()
-    }
-
-    override fun onDestroy() {
-        Log.d("jecesAddFragment", "onDestroy")
-        super.onDestroy()
-    }
-
-    override fun onDetach() {
-        Log.d("jecesAddFragment", "onDetach")
-        super.onDetach()
+        _binding = null // 메모리 누수를 방지하기 위한 뷰 바인딩 해제
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment HomeFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            HomeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+        fun newInstance() = HomeFragment()
     }
 
     override fun onClick(images: ArrayList<String>, position: Int) {
