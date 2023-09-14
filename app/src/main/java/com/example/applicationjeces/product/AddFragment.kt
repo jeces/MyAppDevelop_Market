@@ -315,7 +315,7 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener, Lo
             val deferredList = mutableListOf<Deferred<Boolean>>()
 
             imagelist.forEachIndexed { index, uri ->
-                val deferred = async(Dispatchers.IO) { uploadImage(index, productName, myId, uri) }
+                val deferred = async(Dispatchers.IO) { productViewModel.uploadImage(index, productName, myId, uri) }
                 deferredList.add(deferred)
             }
 
@@ -326,20 +326,6 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener, Lo
             } else {
                 // Handle failure
                 Toast.makeText(requireContext(), "Failed to upload some images.", Toast.LENGTH_LONG).show()
-            }
-        }
-    }
-
-    private suspend fun uploadImage(index: Int, productName: String, myId: String, uri: Uri): Boolean {
-        return withContext(Dispatchers.IO) {
-            val imgFileName = "${myId}_${index}_IMAGE_.png"
-            val storageRef = firebaseStorage?.reference?.child("$myId/$productName/")?.child(imgFileName)
-            try {
-                storageRef?.putFile(uri)?.await()
-                true
-            } catch (e: Exception) {
-                Log.e("ImageUploadError", "Failed to upload $imgFileName. Error: ${e.message}")
-                false
             }
         }
     }

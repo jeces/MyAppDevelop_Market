@@ -2,6 +2,7 @@ package com.example.applicationjeces.product
 
 import android.app.Application
 import android.content.Context
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.applicationjeces.chat.ChatroomData
@@ -11,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.*
+import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -103,6 +105,12 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
             }
         }
     }
+
+    suspend fun uploadImage(index: Int, productName: String, myId: String, uri: Uri): Boolean {
+        return repository.uploadImage(index, productName, myId, uri)
+    }
+
+
 
     fun checkProductName(myId: String, productName: String) = viewModelScope.launch {
         productNameExists.value = repository.checkProductNameExists(myId, productName)

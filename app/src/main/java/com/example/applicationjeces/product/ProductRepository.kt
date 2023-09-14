@@ -25,7 +25,8 @@ class ProductRepository {
 
     private var jecesfirestore: FirebaseFirestore? = null
     val thisUser: String by lazy { FirebaseAuth.getInstance().currentUser?.email ?: "" }
-    private val storageRef = FirebaseStorage.getInstance().reference.child("adverhome/")
+    private val storageDB = FirebaseStorage.getInstance().reference
+    private val storageRef = storageDB.child("adverhome/")
 
     // 데이터베이스 접근
     private fun getFirestore(): FirebaseFirestore {
@@ -35,11 +36,25 @@ class ProductRepository {
     }
 
     /**
+     * 이미지 업로드
+     */
+    suspend fun uploadImage(index: Int, productName: String, myId: String, uri: Uri): Boolean {
+        val imgFileName = "${myId}_${index}_IMAGE_.png"
+        val storageRef = storageDB.child("${myId}/${productName}/").child(imgFileName)
+        return try {
+            storageRef.putFile(uri).await()
+            true
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    /**
      * 상품이름 중복검사
      */
     suspend fun checkProductNameExists(myId: String, productName: String): Boolean {
         Log.d("asdasdasd", "${myId}/${productName}")
-        val querySnapshot = FirebaseFirestore.getInstance().collection("Product")
+        val querySnapshot = getFirestore().collection("Product")
             .whereEqualTo("ID", myId)
             .whereEqualTo("productName", productName)
             .get().await()
@@ -53,9 +68,9 @@ class ProductRepository {
         val imageUrl = if (productCount == "0") {
             "basic_img.png"
         } else {
-            "$itemId/$productName/$productImgUrl"
+            "${itemId}/${productName}/${productImgUrl}"
         }
-        return FirebaseStorage.getInstance().reference.child(imageUrl).downloadUrl
+        return storageDB.child(imageUrl).downloadUrl
     }
 
     // 중복 컬렉션
