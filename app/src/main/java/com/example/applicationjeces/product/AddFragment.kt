@@ -68,8 +68,6 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener, Lo
     private val coroutineScope = CoroutineScope(Dispatchers.Main + job)
 
     private val pickImageFromAlbum = 0
-    private var firebaseStorage: FirebaseStorage? = null
-    private var uriPhoto: Uri? = null
     private var imgFileName: String = ""
     private var imgCount = 0
     private var targetImg = false
@@ -121,8 +119,6 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener, Lo
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-
         /**
          * view 바인딩
          */
@@ -133,8 +129,6 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener, Lo
         * 뷰모델 초기화 생성자
         **/
         productViewModel = ViewModelProvider(this)[ProductViewModel::class.java]
-
-        firebaseStorage = FirebaseStorage.getInstance()
         productViewModel.whereMyUser("add")
 
         setupRecyclerView()
@@ -147,9 +141,7 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener, Lo
                     productViewModel.checkProductName(productViewModel.thisUser, name)
                 }
             }
-
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
 
@@ -169,14 +161,11 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener, Lo
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
                 // Do nothing here
             }
-
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 // Do nothing here
             }
-
             override fun afterTextChanged(s: Editable) {
                 binding.productPrice.removeTextChangedListener(this)  // prevent infinite loop
-
                 val str = s.toString().replace(",", "")
                 if (str.isNotEmpty()) {
                     val formattedNumber = NumberFormat.getNumberInstance(Locale.US).format(str.toLong())
@@ -191,7 +180,6 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener, Lo
             val bottomSheet = LocationBottomSheetFragment()
             bottomSheet.show(childFragmentManager, bottomSheet.tag)
         }
-
 
         // Spinner 클릭 인터셉터에 BottomSheet 표시 리스너를 연결
         binding.categoryClickInterceptor.setOnClickListener {
@@ -217,8 +205,6 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener, Lo
                 false
             }
         }
-
-
         return view
     }
 
@@ -281,7 +267,7 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener, Lo
             binding.productName.error = "중복된 이름을 확인해 주세요"
             return
         }
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+        if (isLocationPermissionGranted()) {
             funImageUpload()
         } else {
             insertProduct()
@@ -383,20 +369,16 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener, Lo
     /**
      * 권환 확인
      */
-    private fun isLocationPermissionGranted(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
-    }
+    // 권한 확인
+    private fun isLocationPermissionGranted() =
+        ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
 
     /**
      * 위치 권한 체크 요청
      */
+    // 위치 권한 체크 요청
     private fun requestLocationPermission() {
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-            != PackageManager.PERMISSION_GRANTED
-        ) {
+        if (!isLocationPermissionGranted()) {
             requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
         } else {
             // 권한이 이미 승인됨.
@@ -455,37 +437,18 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener, Lo
      * 현재 위치 얻기
      */
     private fun getCurrentLocation() {
-        val locationManager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
-        if (ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            // 권한이 부여된 경우
-            fetchLocation(locationManager)
-        } else {
-            // 권한이 부여되지 않은 경우 권한 요청
-            requestPermissions(
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                LOCATION_PERMISSION_REQUEST_CODE
-            )
-        }
+        val locationManager = activity?.getSystemService(Context.LOCATION_SERVICE) as? LocationManager
+        locationManager?.let { fetchLocation(it) }
     }
 
     /**
-     * 권한부여
+     * 권한부여 후 위치 얻기
      */
     private fun fetchLocation(locationManager: LocationManager) {
-        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        if (isLocationPermissionGranted() && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             try {
                 val lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-                lastLocation?.let {
-                    val latitude = it.latitude
-                    val longitude = it.longitude
-                    // Firebase 또는 기타 데이터베이스에 저장
-                    saveLocationToDatabase(latitude, longitude)
-                }
+                lastLocation?.let { saveLocationToDatabase(it.latitude, it.longitude) }
             } catch (e: SecurityException) {
                 Log.e("AddFragment", "Failed to get the last known location", e)
             }
@@ -507,6 +470,16 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener, Lo
         db.collection("products").document("your_product_id").set(productLocation)
             .addOnSuccessListener { Log.d("Location", "Location successfully written!") }
             .addOnFailureListener { e -> Log.w("Location", "Error writing location", e) }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        job.cancel()
     }
 
     companion object {
