@@ -174,70 +174,41 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
             binding.productRecentTenViewPager,
             productViewModel.recentProducts,
             productViewModel::fetchRecentProducts,
-            repository
+            repository,
+            binding.dotsIndicatorRecentTen
         )
 
         setupViewPager(
             binding.productHeartViewPager,
             productViewModel.productsSortedByHeartCount,
             productViewModel::fetchProductsSortedByHeartCount,
-            repository
+            repository,
+            binding.dotsIndicatorHeart
         )
 
         setupViewPager(
             binding.productViewCountViewPager,
             productViewModel.productsSortedByViewCount,
             productViewModel::fetchProductsSortedByViewCount,
-            repository
+            repository,
+            binding.dotsIndicatorViewCount
         )
 
         setupViewPager(
             binding.productRecentHeartViewPager,
             productViewModel.productRecentByHeartCount,
             productViewModel::fetRecentProductHeartCount,
-            repository
+            repository,
+            binding.dotsIndicatorRecentHeart
         )
 
         setupViewPager(
             binding.productRecentViewtViewPager,
             productViewModel.productRecentByViewCount,
             productViewModel::fetRecentProductViewCount,
-            repository
+            repository,
+            binding.dotsIndicatorRecentView
         )
-
-//        /**
-//         * 이건 뷰페이저로 만들꺼임
-//         * 뷰모델 연결, 뷰모델을 불러옴
-//         * 이건 전체 상품
-//         * 따라서 나눠야 함
-//         * 1. adapter를 나누고 표현되어야 함
-//         **/
-//
-//        recyclerViewTen.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-//                super.onScrolled(recyclerView, dx, dy)
-//                Log.d("데이터 로드1", "ㅁㅁㄴㅇ")
-//
-//                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-//
-//                val visibleItemCount = layoutManager.childCount
-//                val totalItemCount = layoutManager.itemCount
-//                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
-//
-//                if (dy > 0 && (firstVisibleItemPosition + visibleItemCount >= totalItemCount - 3)) {
-//                    // 로딩 인디케이터 표시 (옵션)
-//                    //        showLoadingIndicator()
-//
-//                    // 다음 페이지의 데이터 로드
-//                    // 수정 후:
-//                    productViewModel.liveTodoData.observe(viewLifecycleOwner, Observer { newItems ->
-//                        // 변경된 데이터만 추가
-//                        val currentSize = adapterTen.itemCount
-//                        adapterTen.submitList(newItems)
-//                    })
-//                }
-//            }
-//        })
 
         /**
          * 알림버튼 클릭 시
@@ -283,85 +254,21 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
         return view
     }
 
-//    private fun setupRecyclerView(
-//        recyclerView: RecyclerView,
-//        liveData: LiveData<List<DocumentSnapshot>>,
-//        viewModelFunction: () -> Unit,
-//        repository: ProductRepository
-//    ) {
-//        // Call viewModel function
-//        viewModelFunction()
-//
-//        val adapter = ProductViewPagerAdapter(this@HomeFragment, repository)
-//        recyclerView.adapter = adapter
-//        recyclerView.setHasFixedSize(true)
-//
-//        // Set layout manager to GridLayoutManager with 3 columns
-////        recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-//        recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
-//
-//        liveData.observe(viewLifecycleOwner, Observer { products ->
-//            // Assuming that your adapter has a setData function to set new data
-//            adapter.setData(products)
-//        })
-//
-//        // 각 어댑터에 클릭 리스너 설정
-//        setupItemClickListener(adapter)
-//    }
-//
-////    private fun setupViewPagerWithRecyclerView(
-////        viewPager: ViewPager2,
-////        liveData: LiveData<List<DocumentSnapshot>>,
-////        viewModelFunction: () -> Unit,
-////        repository: ProductRepository
-////    ) {
-////        // Call viewModel function
-////        viewModelFunction()
-////
-////        viewPager.adapter = object : RecyclerView.Adapter<ViewHolder>() {
-////            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-////                val inflater = LayoutInflater.from(parent.context)
-////                val view = inflater.inflate(R.layout.page_recycler_view, parent, false)
-////                return ViewHolder(view)
-////            }
-////
-////            override fun getItemCount(): Int {
-////                val totalProducts = liveData.value?.size ?: 0
-////                return (totalProducts + 8) / 9  // For 3x3 grid
-////            }
-////
-////            override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-////                val recyclerView = holder.itemView.findViewById<RecyclerView>(R.id.pageRecyclerView)
-////                recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
-////                val adapter = ProductViewPagerAdapter(this@HomeFragment, repository)
-////                recyclerView.adapter = adapter
-////
-////                val start = position * 9
-////                val end = min(start + 9, liveData.value?.size ?: 0)
-////                val sublist = liveData.value?.subList(start, end)
-////
-////                adapter.setData(sublist ?: emptyList())
-////            }
-////        }
-////
-////        liveData.observe(viewLifecycleOwner, Observer { products ->
-////            viewPager.adapter?.notifyDataSetChanged()
-////        })
-////    }
-
-    // ... 기타 코드 ...
-
     private fun setupViewPager(
         viewPager: ViewPager2,
         liveData: LiveData<List<DocumentSnapshot>>,
         viewModelFunction: () -> Unit,
-        repository: ProductRepository
+        repository: ProductRepository,
+        dotsIndicator: DotsIndicator
     ) {
         // Call viewModel function
         viewModelFunction()
 
         // Set up the ViewPager with a RecyclerView inside
         setupViewPagerWithRecyclerView(viewPager, liveData, repository)
+
+        // Attach the DotsIndicator to the ViewPager2
+        dotsIndicator.setViewPager2(viewPager)
     }
 
     class MyViewHolder(view: View) : RecyclerView.ViewHolder(view)
@@ -488,6 +395,4 @@ class HomeFragment : Fragment(), AdverRecyclerViewAdapter.OnImageClickListener {
     override fun onClick(images: ArrayList<String>, position: Int) {
         Log.d("클릭클릭", "클릭")
     }
-
-
 }
