@@ -71,7 +71,7 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
             emptyList<List<String>>()
         }
 
-        setYourImage(pId)
+
 
         val tagsText = tags.flatten().joinToString(" ") { "#$it" }
         binding.tagsTextView.text = tagsText
@@ -79,7 +79,9 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
         val pIdx: String = arguments?.getString("IDX").toString()
         productViewModel.whereMyUser("productInfo")
 
-        binding.productName.text = pName
+
+
+        setYourImage(pId)
 
         /**
          * 상대방 닉네임 가져오기
@@ -100,6 +102,7 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
         })
 
         val formattedPrice = addCommasToNumberString(productPrice.toString())
+        binding.productName.text = pName
         binding.productCellPrice.text = getString(R.string.product_price_format, formattedPrice)
         binding.productDetailDescription.text = productDescription
         binding.productChatText.text = pChatCount
