@@ -106,11 +106,17 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
+    fun fetchAndSetYourImage(pId: String, callback: (String?) -> Unit) {
+        viewModelScope.launch {
+            val imageUrl = repository.fetchSellerImage(pId)
+            Log.d("asda123123", imageUrl.toString())
+            callback(imageUrl)
+        }
+    }
+
     suspend fun uploadImage(index: Int, productName: String, myId: String, uri: Uri): Boolean {
         return repository.uploadImage(index, productName, myId, uri)
     }
-
-
 
     fun checkProductName(myId: String, productName: String) = viewModelScope.launch {
         productNameExists.value = repository.checkProductNameExists(myId, productName)

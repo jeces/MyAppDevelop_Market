@@ -46,7 +46,6 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
          */
         _binding = FragmentInfoBinding.inflate(inflater, container, false)
         val view = binding.root
-
         /**
          * 뷰모델 초기화 생성자
          **/
@@ -72,11 +71,10 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
             emptyList<List<String>>()
         }
 
+        setYourImage(pId)
+
         val tagsText = tags.flatten().joinToString(" ") { "#$it" }
         binding.tagsTextView.text = tagsText
-
-//        val productBidPrices = arguments?.getString("productBidPrice")
-//        val position = arguments?.getString("position", -1)
         val myId: String = productViewModel.thisUser.toString()
         val pIdx: String = arguments?.getString("IDX").toString()
         productViewModel.whereMyUser("productInfo")
@@ -88,7 +86,6 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
          */
         productViewModel.fetchProductNickName(pId)
         productViewModel.productNickName.observe(viewLifecycleOwner, Observer { productNick ->
-//            binding.productBidPrice.text = "₩ " + addCommasToNumberString(productBidPrices.toString()) + "원"
             binding.sellerName.text = productNick
         })
 
@@ -98,23 +95,18 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
          */
         productViewModel.startListeningForBidUpdates(pId, pName)
         productViewModel.bidPrice.observe(viewLifecycleOwner, Observer { productBidPrices ->
-//            binding.productBidPrice.text = "₩ " + addCommasToNumberString(productBidPrices.toString()) + "원"
             val formattedBidPrice = addCommasToNumberString(productBidPrices.toString())
             binding.productBidPrice.text = getString(R.string.bid_price_format, formattedBidPrice)
         })
 
         val formattedPrice = addCommasToNumberString(productPrice.toString())
         binding.productCellPrice.text = getString(R.string.product_price_format, formattedPrice)
-//        binding.productCellPrice.text = "₩ " + addCommasToNumberString(productPrice.toString()) + "원"
         binding.productDetailDescription.text = productDescription
         binding.productChatText.text = pChatCount
         binding.productViewText.text = pViewCount
         binding.productCheckText.text = pHeartCount
 
-        /**
-         * 판매자 프로필 이미지
-         */
-        setYourImage(pId)
+
 
         /**
          * 맨 위 상품 이미지
@@ -208,12 +200,6 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
      * 항목 풀 스크린
      **/
 
-
-//
-//    override fun onBackPressed() {
-//        super.onBackPressed()
-//        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
-//    }
     companion object {
         // InfoFragment 인스턴스 생성 및 데이터 전달을 위한 newInstance 메서드
         fun newInstance(pId: String, pName: String, /* 다른 매개변수들 */): InfoFragment {
@@ -238,37 +224,18 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
      * 판매자 프로필 이미지
      */
     fun setYourImage(pId: String) {
-        var db = FirebaseStorage.getInstance()
-        db.reference.child("${pId}/profil/${pId}_Profil_IMAGE_.png").downloadUrl.addOnCompleteListener {
-            if(it.isSuccessful) {
-                if (isAdded) {
-                    Glide.with(this@InfoFragment)
-                        .load(it.result)
-                        .override(60, 60)
-                        .fitCenter()
-                        .circleCrop()
-                        .apply(RequestOptions().transforms(CenterCrop(), RoundedCorners(40)))
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .skipMemoryCache(true)
-                        .into(binding.sellerImage)
-                }
-            } else {
-                db.reference.child("basic_user.png").downloadUrl.addOnCompleteListener { its ->
-                    if (isAdded) {
-                        Glide.with(this@InfoFragment)
-                            .load(its.result)
-                            .override(60, 60)
-                            .fitCenter()
-                            .circleCrop()
-                            .apply(RequestOptions().transforms(CenterCrop(), RoundedCorners(40)))
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .skipMemoryCache(true)
-                            .into(binding.sellerImage)
-                    }
-                }
+        productViewModel.fetchAndSetYourImage(pId) { imageUrl ->
+            if (isAdded) {
+                Glide.with(this@InfoFragment)
+                    .load(imageUrl)
+                    .override(60, 60)
+                    .fitCenter()
+                    .circleCrop()
+                    .apply(RequestOptions().transforms(CenterCrop(), RoundedCorners(40)))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .skipMemoryCache(true)
+                    .into(binding.sellerImage)
             }
-        }.addOnFailureListener {
-
         }
     }
 

@@ -50,6 +50,22 @@ class ProductRepository {
     }
 
     /**
+     * 판매자 이미지
+     */
+    suspend fun fetchSellerImage(pId: String): String? {
+        return try {
+            storageDB.child("${pId}/profil/${pId}_Profil_IMAGE_.png").downloadUrl.await().toString()
+        } catch (e: Exception) {
+            try {
+                storageDB.child("basic_user.png").downloadUrl.await().toString()
+            } catch (innerException: Exception) {
+                null
+            }
+        }
+    }
+
+
+    /**
      * 상품이름 중복검사
      */
     suspend fun checkProductNameExists(myId: String, productName: String): Boolean {
