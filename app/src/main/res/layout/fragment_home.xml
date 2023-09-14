@@ -96,18 +96,30 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/section_divider_1" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/productRecentTen"
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/productRecentTenViewPager"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="500dp"
                 android:layout_marginTop="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/homeRecentTen"
-                tools:listitem="@layout/product_item_list"
-                android:orientation="horizontal"
-                app:spanCount="5"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                app:layout_constraintTop_toBottomOf="@+id/homeRecentTen" />
+
+            <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+                android:id="@+id/dotsIndicatorRecentTen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                app:dotsColor="@android:color/black"
+                app:dotsCornerRadius="8dp"
+                app:dotsSize="7dp"
+                app:dotsSpacing="4dp"
+                app:dotsWidthFactor="2.5"
+                app:selectedDotColor="@android:color/darker_gray"
+                app:progressMode="false"
+                app:layout_constraintTop_toBottomOf="@+id/productRecentTenViewPager"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <TextView
                 android:id="@+id/homeHeart"
@@ -120,20 +132,32 @@
                 android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/productRecentTen" />
+                app:layout_constraintTop_toBottomOf="@+id/dotsIndicatorRecentTen" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/productHeart"
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/productHeartViewPager"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="500dp"
                 android:layout_marginTop="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/homeHeart"
-                tools:listitem="@layout/product_item_list"
-                android:orientation="horizontal"
-                app:spanCount="5"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                app:layout_constraintTop_toBottomOf="@+id/homeHeart" />
+
+            <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+                android:id="@+id/dotsIndicatorHeart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                app:dotsColor="@android:color/black"
+                app:dotsCornerRadius="8dp"
+                app:dotsSize="7dp"
+                app:dotsSpacing="4dp"
+                app:dotsWidthFactor="2.5"
+                app:selectedDotColor="@android:color/darker_gray"
+                app:progressMode="false"
+                app:layout_constraintTop_toBottomOf="@+id/productHeartViewPager"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <TextView
                 android:id="@+id/homeView"
@@ -146,20 +170,32 @@
                 android:textStyle="bold"
                 android:fontFamily="@font/font_font"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/productHeart" />
+                app:layout_constraintTop_toBottomOf="@+id/dotsIndicatorHeart" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/productViewCount"
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/productViewCountViewPager"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="500dp"
                 android:layout_marginTop="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/homeView"
-                tools:listitem="@layout/product_item_list"
-                android:orientation="horizontal"
-                app:spanCount="5"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                app:layout_constraintTop_toBottomOf="@+id/homeView" />
+
+            <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+                android:id="@+id/dotsIndicatorViewCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                app:dotsColor="@android:color/black"
+                app:dotsCornerRadius="8dp"
+                app:dotsSize="7dp"
+                app:dotsSpacing="4dp"
+                app:dotsWidthFactor="2.5"
+                app:selectedDotColor="@android:color/darker_gray"
+                app:progressMode="false"
+                app:layout_constraintTop_toBottomOf="@+id/productViewCountViewPager"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <TextView
                 android:id="@+id/homeRecentHeart"
@@ -172,20 +208,32 @@
                 android:textStyle="bold"
                 android:fontFamily="@font/font_font"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/productViewCount" />
+                app:layout_constraintTop_toBottomOf="@+id/dotsIndicatorViewCount" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/productRecentHeart"
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/productRecentHeartViewPager"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="500dp"
                 android:layout_marginTop="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/homeRecentHeart"
-                tools:listitem="@layout/product_item_list"
-                android:orientation="horizontal"
-                app:spanCount="5"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                app:layout_constraintTop_toBottomOf="@+id/homeRecentHeart" />
+
+            <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+                android:id="@+id/dotsIndicatorRecentHeart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                app:dotsColor="@android:color/black"
+                app:dotsCornerRadius="8dp"
+                app:dotsSize="7dp"
+                app:dotsSpacing="4dp"
+                app:dotsWidthFactor="2.5"
+                app:selectedDotColor="@android:color/darker_gray"
+                app:progressMode="false"
+                app:layout_constraintTop_toBottomOf="@+id/productRecentHeartViewPager"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <TextView
                 android:id="@+id/homeRecentView"
@@ -198,20 +246,33 @@
                 android:textStyle="bold"
                 android:fontFamily="@font/font_font"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/productRecentHeart" />
+                app:layout_constraintTop_toBottomOf="@+id/dotsIndicatorRecentHeart" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/productRecentView"
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/productRecentViewtViewPager"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="500dp"
                 android:layout_marginTop="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/homeRecentView"
-                tools:listitem="@layout/product_item_list"
-                android:orientation="horizontal"
-                app:spanCount="5"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                app:layout_constraintTop_toBottomOf="@+id/homeRecentView" />
+
+
+            <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+                android:id="@+id/dotsIndicatorRecentView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                app:dotsColor="@android:color/black"
+                app:dotsCornerRadius="8dp"
+                app:dotsSize="7dp"
+                app:dotsSpacing="4dp"
+                app:dotsWidthFactor="2.5"
+                app:selectedDotColor="@android:color/darker_gray"
+                app:progressMode="false"
+                app:layout_constraintTop_toBottomOf="@+id/productRecentViewtViewPager"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <!-- 구분선 2 -->
             <View
@@ -219,7 +280,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#DDDDDD"
-                app:layout_constraintTop_toBottomOf="@+id/productRecentView" />
+                app:layout_constraintTop_toBottomOf="@+id/dotsIndicatorRecentView" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>
