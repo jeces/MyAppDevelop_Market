@@ -49,19 +49,26 @@ class AddActivity : AppCompatActivity() {
 
         bottomNavigation.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
-                /**
-                 * 업로드 버튼
-                 */
-                R.id.imageupload -> {
-                    addFragment?.openImagePicker()  // 여기서 함수 호출
+                R.id.addBak -> {
+                    /**
+                     * 뒤로가기버튼 누를시
+                     **/
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    finish() // 현재 Activity를 종료하고 싶다면 추가
+                    overridePendingTransition(R.anim.slide_out_right, R.anim.slide_in_left)
                     true
                 }
                 /**
                  * 등록
                  */
                 R.id.registration -> {
-                    addFragment?.registerProduct()
+                    // 필수 항목의 유효성 검사
+                    if (addFragment?.validateFields() == true) {
+                        addFragment?.registerProduct()
+                    }
                     true
+
                 }
 
                 else -> false
@@ -69,12 +76,4 @@ class AddActivity : AppCompatActivity() {
         }
     }
 
-//    override fun onBackPressed() {
-//        super.onBackPressed()
-//        val intent = Intent(this, MainActivity::class.java)
-//        intent.putExtra("SELECT_HOME", true)
-//        startActivity(intent)
-//        finish()
-//        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
-//    }
 }

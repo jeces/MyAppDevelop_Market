@@ -9,6 +9,7 @@
             name="productViewModel"
             type="com.example.applicationjeces.product.ProductViewModel" />
     </data>
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -25,39 +26,40 @@
                 android:padding="16dp">
 
                 <!-- Image Section -->
+                <ImageButton
+                    android:id="@+id/add_photo_button"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="16dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:contentDescription="@string/navcolor"
+                    android:src="@drawable/ic_baseline_add_photo_alternate_24"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
                 <TextView
                     android:id="@+id/tv_registered_photo"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="Registered Photo"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:textColor="#333333"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <ImageButton
-                    android:id="@+id/add_photo_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:contentDescription="@string/navcolor"
-                    android:src="@drawable/ic_baseline_add_photo_alternate_24"
-                    app:layout_constraintTop_toTopOf="@+id/tv_registered_photo"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_registered_photo"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    app:layout_constraintTop_toTopOf="@+id/add_photo_button"
+                    app:layout_constraintBottom_toBottomOf="@+id/add_photo_button"
+                    app:layout_constraintStart_toEndOf="@+id/add_photo_button"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginStart="8dp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/img_profile"
                     android:layout_width="0dp"
                     android:layout_height="200dp"
                     android:layout_marginTop="16dp"
-                    android:layout_marginBottom="16dp"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     android:orientation="horizontal"
                     tools:listitem="@layout/img_item_list"
-                    app:layout_constraintTop_toBottomOf="@id/tv_registered_photo"
+                    app:layout_constraintTop_toBottomOf="@+id/add_photo_button"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
 

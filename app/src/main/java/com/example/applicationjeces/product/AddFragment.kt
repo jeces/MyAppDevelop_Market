@@ -6,6 +6,7 @@ import LocationBottomSheetFragment
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -66,7 +67,6 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener, Lo
     private val job = Job()
     private val coroutineScope = CoroutineScope(Dispatchers.Main + job)
 
-    private lateinit var viewProfile: View
     private val pickImageFromAlbum = 0
     private var firebaseStorage: FirebaseStorage? = null
     private var uriPhoto: Uri? = null
@@ -138,6 +138,29 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener, Lo
         productViewModel.whereMyUser("add")
 
         setupRecyclerView()
+
+        binding.productName.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                val name = s.toString().trim()
+                Log.d("adsadasd", name.toString())
+                if (name.isNotEmpty()) {
+                    productViewModel.checkProductName(productViewModel.thisUser, name)
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+
+        // LiveData Observer
+        productViewModel.productNameExists.observe(viewLifecycleOwner) { exists ->
+            if (exists) {
+                binding.productName.error = "중복된 제품 이름입니다!"
+            } else {
+                binding.productName.error = null
+            }
+        }
 
         /**
          * 단위 입력(,)
@@ -253,6 +276,11 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener, Lo
     }
 
     fun registerProduct() {
+        if (binding.productName.error != null) {
+            binding.productName.requestFocus()
+            binding.productName.error = "중복된 이름을 확인해 주세요"
+            return
+        }
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             funImageUpload()
         } else {
@@ -326,19 +354,31 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener, Lo
 
         if (productName.isNotEmpty() && productPrice.isNotEmpty()) {
             imgFileName = if (targetImg) "basic_img.png" else "${myId}_0_IMAGE_.png"
-            val product = Product(myId, productName, productPrice.toInt(), productDescription, imgCount, imgFileName, 0, 0, 0, "0", "0", tags, category, "판매중") // tags 추가
+            val product =
+                Product(myId,
+                productName,
+                productPrice.toInt(),
+                productDescription,
+                    imgCount, imgFileName, 0, 0, 0, "0", "0", tags, category, "판매중") // tags 추가
             if(addressSet == "") {
                 addressSet = "지역없음"
             }
             productViewModel.addProducts(product, addressSet) // 이 함수 내에서 Firestore에 저장되는 코드가 있어야 합니다.
 
-            Toast.makeText(requireContext(), "Successfully added!", Toast.LENGTH_LONG).show()
+            AlertDialog.Builder(requireContext())
+                .setTitle("알림")
+                .setMessage("성공적으로 등록되었습니다!")
+                .setPositiveButton("확인") { dialog, _ ->
+                    dialog.dismiss()
 
-            val mainActivityIntent = Intent(activity, MainActivity::class.java).apply {
-                putExtra("SELECT_HOME", true)
-            }
-            startActivity(mainActivityIntent)
-            activity?.finish()
+                    val mainActivityIntent = Intent(activity, MainActivity::class.java).apply {
+                        putExtra("SELECT_HOME", true)
+                    }
+                    startActivity(mainActivityIntent)
+                    activity?.finish()
+                    activity?.overridePendingTransition(R.anim.slide_out_right, R.anim.slide_in_left)
+                }
+                .show()
         } else {
             Toast.makeText(requireContext(), "Please fill out all fields.", Toast.LENGTH_LONG).show()
         }
@@ -376,6 +416,39 @@ class AddFragment : Fragment(), CategoryBottomSheetFragment.CategoryListener, Lo
             // 권한이 이미 승인됨.
             getCurrentLocation()
         }
+    }
+
+    /**
+     * 유효성 검사
+     */
+    fun validateFields(): Boolean {
+        if (binding.productName.text.isNullOrEmpty()) {
+            showValidationDialog("Product Name is required")
+            binding.productName.requestFocus()
+            return false
+        }
+
+        if (binding.productPrice.text.isNullOrEmpty()) {
+            showValidationDialog("Product Price is required")
+            binding.productPrice.requestFocus()
+            return false
+        }
+
+        if (binding.productDescription.text.isNullOrEmpty()) {
+            showValidationDialog("Product Description is required")
+            binding.productDescription.requestFocus()
+            return false
+        }
+
+        return true
+    }
+
+    private fun showValidationDialog(message: String) {
+        AlertDialog.Builder(requireContext())
+            .setTitle("필수 항목을 채워주세요")
+            .setMessage(message)
+            .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+            .show()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

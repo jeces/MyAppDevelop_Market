@@ -256,7 +256,7 @@ class InfoFragment : Fragment(), ProductImageInfoRecyclerViewAdapter.OnImageClic
                 db.reference.child("basic_user.png").downloadUrl.addOnCompleteListener { its ->
                     if (isAdded) {
                         Glide.with(this@InfoFragment)
-                            .load(it.result)
+                            .load(its.result)
                             .override(60, 60)
                             .fitCenter()
                             .circleCrop()

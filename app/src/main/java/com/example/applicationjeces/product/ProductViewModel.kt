@@ -24,6 +24,8 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     val previousFavorites = mutableListOf<String>()
     val previousProductPrices = mutableMapOf<String, Double>()
 
+    val productNameExists = MutableLiveData<Boolean>()
+
     var isFirstRun = true  // ViewModel의 전역 변수로 추가
 
     val newNotification: MutableLiveData<Notification> = MutableLiveData()
@@ -100,6 +102,10 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
                 // Handle the exception
             }
         }
+    }
+
+    fun checkProductName(myId: String, productName: String) = viewModelScope.launch {
+        productNameExists.value = repository.checkProductNameExists(myId, productName)
     }
 
     fun fetchNextPage(): LiveData<List<DocumentSnapshot>> {

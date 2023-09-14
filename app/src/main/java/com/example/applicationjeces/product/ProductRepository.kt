@@ -34,6 +34,21 @@ class ProductRepository {
         }
     }
 
+    /**
+     * 상품이름 중복검사
+     */
+    suspend fun checkProductNameExists(myId: String, productName: String): Boolean {
+        Log.d("asdasdasd", "${myId}/${productName}")
+        val querySnapshot = FirebaseFirestore.getInstance().collection("Product")
+            .whereEqualTo("ID", myId)
+            .whereEqualTo("productName", productName)
+            .get().await()
+
+        return !querySnapshot.isEmpty
+    }
+
+
+
     fun getImageUrl(itemId: String, productName: String, productImgUrl: String, productCount: String): Task<Uri> {
         val imageUrl = if (productCount == "0") {
             "basic_img.png"
