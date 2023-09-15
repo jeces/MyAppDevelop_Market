@@ -259,7 +259,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="#DDDDDD"
-                    app:layout_constraintTop_toBottomOf="@+id/dotsIndicatorPc"/>
+                    app:layout_constraintTop_toBottomOf="@+id/ProductPc"/>
 
                 <TextView
                     android:id="@+id/ProductFv"
