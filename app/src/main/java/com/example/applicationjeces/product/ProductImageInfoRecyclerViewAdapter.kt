@@ -55,7 +55,7 @@ class ProductImageInfoRecyclerViewAdapter(
 
         holder.itemView.setOnClickListener {
             /* 리스트 클릭시 FullscreenImageFragment로 전환 */
-            onImageClickListener.onClick(productImageList, position, myId, pName)
+            onImageClickListener.onClick(productImageList, position, productId, pName)
         }
     }
 

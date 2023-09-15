@@ -35,7 +35,7 @@ class FullscreenImageFragment : Fragment() {
 
     private lateinit var images: ArrayList<String>
     private var position: Int = 0
-    private var myId: String = ""
+    private var productId: String = ""
     private var pName: String = ""
 
     companion object {
@@ -44,13 +44,13 @@ class FullscreenImageFragment : Fragment() {
         private const val MY_ID = "myId"
         private const val P_NAME ="pName"
 
-        fun newInstance(images: ArrayList<String>, position: Int, myId: String, pName: String): FullscreenImageFragment {
+        fun newInstance(images: ArrayList<String>, position: Int, productId: String, pName: String): FullscreenImageFragment {
             val fragment = FullscreenImageFragment()
 
             val args = Bundle().apply {
                 putStringArrayList(IMAGES_KEY, images)
                 putInt(POSITION_KEY, position)
-                putString(MY_ID, myId)
+                putString(MY_ID, productId)
                 putString(P_NAME, pName)
             }
             fragment.arguments = args
@@ -64,7 +64,7 @@ class FullscreenImageFragment : Fragment() {
         arguments?.let {
             images = it.getStringArrayList(IMAGES_KEY) ?: arrayListOf()
             position = it.getInt(POSITION_KEY)
-            myId = it.getString(MY_ID) ?: ""
+            productId = it.getString(MY_ID) ?: ""
             pName = it.getString(P_NAME) ?: ""
         }
     }
@@ -80,7 +80,7 @@ class FullscreenImageFragment : Fragment() {
          * viewpager2 adapter 장착
          */
         val viewPager = view.findViewById<ViewPager2>(R.id.viewPager)
-        val adapter = FullscreenImageAdapter(images, myId, pName)
+        val adapter = FullscreenImageAdapter(images, productId, pName)
         viewPager.adapter = adapter
         viewPager.currentItem = position
 
