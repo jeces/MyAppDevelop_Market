@@ -106,26 +106,6 @@ class MyFragment : Fragment() {
         })
 
         /**
-         * 나의 판매목록 상품
-         */
-//        val adapter = MyProductRecyclerViewAdapter(this@MyFragment, myId, emptyList(), "myProduct")
-        val adapter = ProductViewPagerAdapter(this@MyFragment, repository)
-        val recyclerView = binding.myProductSaleV
-        recyclerView.adapter = adapter
-        recyclerView.setHasFixedSize(true)
-        // Change from LinearLayoutManager to GridLayoutManager
-        recyclerView.layoutManager = GridLayoutManager(requireContext(), numberOfColumns)
-
-
-//        setupViewPager(
-//            binding.productRecentTenViewPager,
-//            productViewModel.recentProducts,
-//            productViewModel::fetchRecentProducts,
-//            repository,
-//            binding.dotsIndicatorRecentTen
-//        )
-
-        /**
          * 나의 판매 개수
          */
         productViewModel.fetMyProductCellCount()
@@ -142,22 +122,44 @@ class MyFragment : Fragment() {
         })
 
         /**
-         * 옵져브
-         **/
-        productViewModel.mySetProduct("")
-        productViewModel.myProductLiveTodoData.observe(viewLifecycleOwner, Observer { product ->
-            /* ViewModel에 Observe를 활용하여 productViewModel에 ReadAllData 라이브 데이터가 바뀌었을때 캐치하여, adapter에서 만들어준 setData함수를 통해 바뀐데이터를 UI에 업데이트 해줌 */
-            adapter.setData(product)
-        })
+         * 나의 판매목록 상품
+         */
+////        val adapter = MyProductRecyclerViewAdapter(this@MyFragment, myId, emptyList(), "myProduct")
+//        val adapter = ProductViewPagerAdapter(this@MyFragment, repository)
+//        val recyclerView = binding.myProductSaleV
+//        recyclerView.adapter = adapter
+//        recyclerView.setHasFixedSize(true)
+//        // Change from LinearLayoutManager to GridLayoutManager
+//        recyclerView.layoutManager = GridLayoutManager(requireContext(), numberOfColumns)
+
+
+        setupViewPager(
+            binding.productMyViewPager,
+            productViewModel.myProductLiveTodoData,
+            { productViewModel.mySetProduct("") },
+            repository,
+            binding.dotsIndicatorProductMy
+        )
+
+//        /**
+//         * 옵져브
+//         **/
+//        productViewModel.mySetProduct("")
+//        productViewModel.myProductLiveTodoData.observe(viewLifecycleOwner, Observer { product ->
+//            /* ViewModel에 Observe를 활용하여 productViewModel에 ReadAllData 라이브 데이터가 바뀌었을때 캐치하여, adapter에서 만들어준 setData함수를 통해 바뀐데이터를 UI에 업데이트 해줌 */
+//            adapter.setData(product)
+//        })
 
         /**
          * 나의 판매목록 버튼
          */
         binding.myProductSale.setOnClickListener {
-            if (recyclerView.visibility == View.VISIBLE) {
-                recyclerView.visibility = View.GONE
+            if ((productMyViewPager.visibility == View.VISIBLE) && (productMyViewPager.visibility == View.VISIBLE)) {
+                productMyViewPager.visibility = View.GONE
+                dotsIndicatorProductMy.visibility = View.GONE
             } else {
-                recyclerView.visibility = View.VISIBLE
+                productMyViewPager.visibility = View.VISIBLE
+                dotsIndicatorProductMy.visibility = View.VISIBLE
             }
         }
 
@@ -184,8 +186,10 @@ class MyFragment : Fragment() {
         binding.ProductPc.setOnClickListener {
             if (recyclerViewPc.visibility == View.VISIBLE) {
                 recyclerViewPc.visibility = View.GONE
+
             } else {
                 recyclerViewPc.visibility = View.VISIBLE
+
             }
         }
 
@@ -202,12 +206,12 @@ class MyFragment : Fragment() {
         /**
          * 옵져브
          **/
-        productViewModel.mySetProductFv()
-        productViewModel.myProductFvLiveTodoData.observe(viewLifecycleOwner, Observer { product ->
-            /* ViewModel에 Observe를 활용하여 productViewModel에 ReadAllData 라이브 데이터가 바뀌었을때 캐치하여, adapter에서 만들어준 setData함수를 통해 바뀐데이터를 UI에 업데이트 해줌 */
-            Log.d("aaaaddd", "aadada")
-            adapterFv.setData(product)
-        })
+//        productViewModel.mySetProductFv()
+//        productViewModel.myProductFvLiveTodoData.observe(viewLifecycleOwner, Observer { product ->
+//            /* ViewModel에 Observe를 활용하여 productViewModel에 ReadAllData 라이브 데이터가 바뀌었을때 캐치하여, adapter에서 만들어준 setData함수를 통해 바뀐데이터를 UI에 업데이트 해줌 */
+//            Log.d("aaaaddd", "aadada")
+//            adapterFv.setData(product)
+//        })
 
         /**
          * 나의 관심목록 버튼
@@ -215,8 +219,10 @@ class MyFragment : Fragment() {
         binding.ProductFv.setOnClickListener {
             if (recyclerViewFv.visibility == View.VISIBLE) {
                 recyclerViewFv.visibility = View.GONE
+
             } else {
                 recyclerViewFv.visibility = View.VISIBLE
+
             }
         }
 
@@ -240,7 +246,7 @@ class MyFragment : Fragment() {
             startActivity(intent)
         }
 
-        setupItemClickListener(adapter)
+//        setupItemClickListener(adapter)
         setupItemClickListener(adapterFv)
         setupItemClickListener(adapterPc)
 
