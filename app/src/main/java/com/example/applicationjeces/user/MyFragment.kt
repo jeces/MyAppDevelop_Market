@@ -9,9 +9,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.applicationjeces.R
 import com.example.applicationjeces.databinding.FragmentMyinfoBinding
@@ -20,8 +23,10 @@ import com.example.applicationjeces.product.ProductRepository
 import com.example.applicationjeces.product.ProductViewModel
 import com.example.applicationjeces.product.ProductViewPagerAdapter
 import com.example.applicationjeces.user.EditProfileActivity
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.storage.FirebaseStorage
 import com.google.gson.Gson
+import com.tbuonomo.viewpagerdotsindicator.DotsIndicator
 import kotlinx.android.synthetic.main.fragment_info.view.*
 import kotlinx.android.synthetic.main.fragment_myinfo.*
 import java.util.HashMap
@@ -110,6 +115,15 @@ class MyFragment : Fragment() {
         recyclerView.setHasFixedSize(true)
         // Change from LinearLayoutManager to GridLayoutManager
         recyclerView.layoutManager = GridLayoutManager(requireContext(), numberOfColumns)
+
+
+//        setupViewPager(
+//            binding.productRecentTenViewPager,
+//            productViewModel.recentProducts,
+//            productViewModel::fetchRecentProducts,
+//            repository,
+//            binding.dotsIndicatorRecentTen
+//        )
 
         /**
          * 나의 판매 개수
@@ -233,6 +247,67 @@ class MyFragment : Fragment() {
         // Inflate the layout for this fragment
         return view
     }
+
+
+    private fun setupViewPager(
+        viewPager: ViewPager2,
+        liveData: LiveData<List<DocumentSnapshot>>,
+        viewModelFunction: () -> Unit,
+        repository: ProductRepository,
+        dotsIndicator: DotsIndicator
+    ) {
+        // Call viewModel function
+        viewModelFunction()
+
+        // Set up the ViewPager with a RecyclerView inside
+        setupViewPagerWithRecyclerView(viewPager, liveData, repository)
+
+        // Attach the DotsIndicator to the ViewPager2
+        dotsIndicator.setViewPager2(viewPager)
+    }
+
+    class MyViewHolder(view: View) : RecyclerView.ViewHolder(view)
+
+    private fun setupViewPagerWithRecyclerView(
+        viewPager: ViewPager2,
+        liveData: LiveData<List<DocumentSnapshot>>,
+        repository: ProductRepository
+    ) {
+        val pagerAdapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+                val inflater = LayoutInflater.from(parent.context)
+                val view = inflater.inflate(R.layout.page_recycler_view, parent, false)
+                return MyViewHolder(view)
+            }
+
+            override fun getItemCount(): Int {
+                val totalProducts = liveData.value?.size ?: 0
+                return (totalProducts + 8) / 9  // For 3x3 grid
+            }
+
+            override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+                val recyclerView = holder.itemView.findViewById<RecyclerView>(R.id.pageRecyclerView)
+                recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
+                val adapter = ProductViewPagerAdapter(this@MyFragment, repository)
+                recyclerView.adapter = adapter
+
+                val start = position * 9
+                val end = Math.min(start + 9, liveData.value?.size ?: 0)
+                val sublist = liveData.value?.subList(start, end)
+
+                adapter.setData(sublist ?: emptyList())
+                setupItemClickListener(adapter) // Set item click listener
+            }
+        }
+
+        viewPager.adapter = pagerAdapter
+
+        liveData.observe(viewLifecycleOwner, Observer { products ->
+            pagerAdapter.notifyDataSetChanged()
+        })
+    }
+
+
 
     companion object {
         /**
