@@ -149,7 +149,7 @@
             </LinearLayout>
 
             <!-- User Menu Section -->
-            <LinearLayout
+            <FrameLayout
                 android:id="@+id/user_menu_section"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -162,193 +162,144 @@
                 app:layout_constraintEnd_toEndOf="parent">
 
                 <!-- RecyclerView는 스스로 스크롤이 가능하므로 ScrollView가 필요 없습니다. -->
-                <LinearLayout
+                <TextView
+                    android:id="@+id/myProductSale"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:background="?android:selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="10dp"
+                    android:text="나의 판매 목록" />
 
-                    <TextView
-                        android:id="@+id/myProductSale"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="?android:selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:padding="10dp"
-                        android:text="나의 판매 목록" />
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/productMyViewPager"
+                    android:layout_width="0dp"
+                    android:layout_height="510dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/myProductSale" />
 
-                    <androidx.viewpager2.widget.ViewPager2
-                        android:id="@+id/productMyViewPager"
-                        android:layout_width="0dp"
-                        android:layout_height="510dp"
-                        android:layout_marginTop="8dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/myProductSale" />
-
-                    <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
-                        android:id="@+id/dotsIndicatorProductMy"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|center_horizontal"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="16dp"
-                        app:dotsColor="@android:color/black"
-                        app:dotsCornerRadius="8dp"
-                        app:dotsSize="7dp"
-                        app:dotsSpacing="4dp"
-                        app:dotsWidthFactor="2.5"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/productMyViewPager"
-                        app:progressMode="false"
-                        app:selectedDotColor="@android:color/darker_gray" />
-
-                    <!--                    &lt;!&ndash; 여기에 판매 목록 세부 내용 추가 &ndash;&gt;-->
-                    <!--                    <androidx.recyclerview.widget.RecyclerView-->
-                    <!--                        android:id="@+id/myProductSaleV"-->
-                    <!--                        android:layout_width="wrap_content"-->
-                    <!--                        android:layout_height="wrap_content"-->
-                    <!--                        android:layout_marginHorizontal="10dp"-->
-                    <!--                        android:orientation="horizontal"-->
-                    <!--                        android:visibility="gone"-->
-                    <!--                        android:layout_marginTop="20dp"-->
-                    <!--                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"-->
-                    <!--                        app:spanCount="3"-->
-                    <!--                        tools:listitem="@layout/product_item_list" />-->
-
-                </LinearLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/salesRecyclerView"
-                    android:layout_width="match_parent"
+                <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+                    android:id="@+id/dotsIndicatorProductMy"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    android:background="#ffffff"
-                    android:elevation="3dp"/>
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="16dp"
+                    app:dotsColor="@android:color/black"
+                    app:dotsCornerRadius="8dp"
+                    app:dotsSize="7dp"
+                    app:dotsSpacing="4dp"
+                    app:dotsWidthFactor="2.5"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/productMyViewPager"
+                    app:progressMode="false"
+                    app:selectedDotColor="@android:color/darker_gray" />
+
+                <!--                    &lt;!&ndash; 여기에 판매 목록 세부 내용 추가 &ndash;&gt;-->
+                <!--                    <androidx.recyclerview.widget.RecyclerView-->
+                <!--                        android:id="@+id/myProductSaleV"-->
+                <!--                        android:layout_width="wrap_content"-->
+                <!--                        android:layout_height="wrap_content"-->
+                <!--                        android:layout_marginHorizontal="10dp"-->
+                <!--                        android:orientation="horizontal"-->
+                <!--                        android:visibility="gone"-->
+                <!--                        android:layout_marginTop="20dp"-->
+                <!--                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"-->
+                <!--                        app:spanCount="3"-->
+                <!--                        tools:listitem="@layout/product_item_list" />-->
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="#DDDDDD" />
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/ProductPc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:text="나의 구매 목록"
+                    android:padding="10dp"
+                    android:background="?android:selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true" />
 
-                    <TextView
-                        android:id="@+id/ProductPc"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="나의 구매 목록"
-                        android:padding="10dp"
-                        android:background="?android:selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true" />
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/productPcViewPager"
+                    android:layout_width="0dp"
+                    android:layout_height="510dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ProductPc" />
 
-                    <androidx.viewpager2.widget.ViewPager2
-                        android:id="@+id/productPcViewPager"
-                        android:layout_width="0dp"
-                        android:layout_height="510dp"
-                        android:layout_marginTop="8dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/ProductPc" />
-
-                    <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
-                        android:id="@+id/dotsIndicatorPc"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|center_horizontal"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="16dp"
-                        app:dotsColor="@android:color/black"
-                        app:dotsCornerRadius="8dp"
-                        app:dotsSize="7dp"
-                        app:dotsSpacing="4dp"
-                        app:dotsWidthFactor="2.5"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/productPcViewPager"
-                        app:progressMode="false"
-                        app:selectedDotColor="@android:color/darker_gray" />
-
-                    <!--                    &lt;!&ndash; 여기에 판매 목록 세부 내용 추가 &ndash;&gt;-->
-                    <!--                    <androidx.recyclerview.widget.RecyclerView-->
-                    <!--                        android:id="@+id/myProductPc"-->
-                    <!--                        android:layout_width="wrap_content"-->
-                    <!--                        android:layout_height="wrap_content"-->
-                    <!--                        android:layout_marginHorizontal="10dp"-->
-                    <!--                        android:orientation="horizontal"-->
-                    <!--                        android:visibility="gone"-->
-                    <!--                        android:layout_marginTop="20dp"-->
-                    <!--                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"-->
-                    <!--                        app:spanCount="3"-->
-                    <!--                        tools:listitem="@layout/product_item_list" />-->
-                </LinearLayout>
+                <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+                    android:id="@+id/dotsIndicatorPc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="16dp"
+                    app:dotsColor="@android:color/black"
+                    app:dotsCornerRadius="8dp"
+                    app:dotsSize="7dp"
+                    app:dotsSpacing="4dp"
+                    app:dotsWidthFactor="2.5"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/productPcViewPager"
+                    app:progressMode="false"
+                    app:selectedDotColor="@android:color/darker_gray" />
 
                 <View
+                    android:id="@+id/ProductView1"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#DDDDDD" />
+                    android:background="#DDDDDD"
+                    app:layout_constraintTop_toBottomOf="@+id/dotsIndicatorPc"/>
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/ProductFv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:text="관심 상품 목록"
+                    android:padding="10dp"
+                    android:background="?android:selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:layout_constraintTop_toBottomOf="@+id/ProductView1"/>
 
-                    <TextView
-                        android:id="@+id/ProductFv"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="관심 상품 목록"
-                        android:padding="10dp"
-                        android:background="?android:selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true" />
+                <!-- 여기에 관심 상품 목록 세부 내용 추가 -->
 
-                    <!-- 여기에 관심 상품 목록 세부 내용 추가 -->
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/productFvViewPager"
+                    android:layout_width="0dp"
+                    android:layout_height="510dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ProductFv" />
 
-                    <androidx.viewpager2.widget.ViewPager2
-                        android:id="@+id/productFvViewPager"
-                        android:layout_width="0dp"
-                        android:layout_height="510dp"
-                        android:layout_marginTop="8dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/ProductFv" />
-
-                    <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
-                        android:id="@+id/dotsIndicatorFv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|center_horizontal"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="16dp"
-                        app:dotsColor="@android:color/black"
-                        app:dotsCornerRadius="8dp"
-                        app:dotsSize="7dp"
-                        app:dotsSpacing="4dp"
-                        app:dotsWidthFactor="2.5"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/productFvViewPager"
-                        app:progressMode="false"
-                        app:selectedDotColor="@android:color/darker_gray" />
-                    <!-- 여기에 판매 목록 세부 내용 추가 -->
-                    <!--                    <androidx.recyclerview.widget.RecyclerView-->
-                    <!--                        android:id="@+id/myProductFv"-->
-                    <!--                        android:layout_width="wrap_content"-->
-                    <!--                        android:layout_height="wrap_content"-->
-                    <!--                        android:layout_marginHorizontal="10dp"-->
-                    <!--                        android:orientation="horizontal"-->
-                    <!--                        android:visibility="gone"-->
-                    <!--                        android:layout_marginTop="20dp"-->
-                    <!--                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"-->
-                    <!--                        app:spanCount="3"-->
-                    <!--                        tools:listitem="@layout/product_item_list" />-->
-                </LinearLayout>
+                <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+                    android:id="@+id/dotsIndicatorFv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="16dp"
+                    app:dotsColor="@android:color/black"
+                    app:dotsCornerRadius="8dp"
+                    app:dotsSize="7dp"
+                    app:dotsSpacing="4dp"
+                    app:dotsWidthFactor="2.5"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/productFvViewPager"
+                    app:progressMode="false"
+                    app:selectedDotColor="@android:color/darker_gray" />
 
                 <View
                     android:layout_width="match_parent"
@@ -378,7 +329,7 @@
                         android:layout_marginTop="20dp"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
                 </LinearLayout>
-            </LinearLayout>
+            </FrameLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

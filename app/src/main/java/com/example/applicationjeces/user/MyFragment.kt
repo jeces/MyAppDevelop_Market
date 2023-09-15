@@ -337,6 +337,7 @@ class MyFragment : Fragment() {
         viewPager.adapter = pagerAdapter
 
         liveData.observe(viewLifecycleOwner, Observer { products ->
+            Log.d("들어는 왔냐", "ㅁㅁㅁㅁㅁㅁ")
             pagerAdapter.notifyDataSetChanged()
         })
     }
