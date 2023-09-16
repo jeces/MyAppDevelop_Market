@@ -12,9 +12,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.Flow
 
 class ProductViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -25,6 +27,9 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
 
     val previousFavorites = mutableListOf<String>()
     val previousProductPrices = mutableMapOf<String, Double>()
+
+    private val _unreadChatCount = MutableLiveData<Int>()
+    val unreadChatCount: LiveData<Int> get() = _unreadChatCount
 
     val productNameExists = MutableLiveData<Boolean>()
 
@@ -93,6 +98,15 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         fetchAllProducts()
         fetchAdverCountsAndImages()
 //        initializeAndObserveNotifications(thisUser)
+    }
+
+
+    fun fetchUnreadMessagesCount(userId: String) {
+        viewModelScope.launch {
+            repository.getUnreadMessagesCount(userId).collect { count ->
+                _unreadChatCount.value = count
+            }
+        }
     }
 
     private fun fetchAllProducts() {

@@ -44,17 +44,6 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
     /* 유저의 현재 위치 */
     var whereUser: String? = null
 
-
-
-
-
-
-
-
-
-
-
-
     /**
      * LiveData Chat yourId
      */
@@ -145,9 +134,9 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
                                 var n1 = document.getString("n1").toString().split("/")
                                 val update: MutableMap<String, Any> = HashMap()
                                 if(n0[0] == thisUser.toString()) {
-                                    update["n1"] = "${n1[0]}/${n1[1].toInt().plus(1)}"
-                                } else {
                                     update["n0"] = "${n0[0]}/${n0[1].toInt().plus(1)}"
+                                } else {
+                                    update["n1"] = "${n1[0]}/${n1[1].toInt().plus(1)}"
                                 }
                                 dbRef.document(document.id).set(update, SetOptions.merge())
                             }

@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.graphics.PorterDuff
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Base64
@@ -11,9 +12,13 @@ import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import com.example.applicationjeces.chat.ChatViewModel
 import com.example.applicationjeces.chat.ChatroomFragment
 import com.example.applicationjeces.databinding.ActivityMainBinding
 import com.example.applicationjeces.page.DataViewModel
@@ -22,6 +27,7 @@ import com.example.applicationjeces.product.AddActivity
 import com.example.applicationjeces.user.MyFragment
 import com.example.applicationjeces.product.AddFragment
 import com.example.applicationjeces.product.HomeFragment
+import com.example.applicationjeces.product.ProductViewModel
 import com.example.applicationjeces.search.SearchActivity
 import java.security.MessageDigest
 
@@ -29,6 +35,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private val productViewModel by viewModels<DataViewModel>()
+    private val productsViewModel by viewModels<ProductViewModel>()
     private var target: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,6 +65,24 @@ class MainActivity : AppCompatActivity() {
         intent.getBooleanExtra("SELECT_HOME", false).let {
             if (it) selectHome()
         }
+
+        /**
+         * 내가 안읽은 채팅이 있다면 바꿔주기
+         */
+        productsViewModel.unreadChatCount.observe(this) { count ->
+            val menuItem = binding.bottomNavigationView.menu.findItem(R.id.chatroom)
+            if (count > 0) {
+                val unreadIcon = ContextCompat.getDrawable(this, R.drawable.baseline_mark_unread_chat_alt_24)?.mutate()
+                menuItem.icon = unreadIcon
+            } else {
+                // 필요한 경우 다른 아이콘으로 되돌리기 (색상 필터를 제거합니다.)
+                val defaultIcon = ContextCompat.getDrawable(this, R.drawable.ic_baseline_chat_bubble_24)?.mutate()
+                menuItem.icon = defaultIcon
+            }
+        }
+
+        // 사용자 ID와 필드 키 (예: "n0" 또는 "n1")로 데이터 가져오기
+        productsViewModel.fetchUnreadMessagesCount(productsViewModel.thisUser)
     }
 
     // 앱 해시 키 얻는 코드

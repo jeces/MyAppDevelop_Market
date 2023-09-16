@@ -12,7 +12,7 @@
         android:icon="@drawable/ic_baseline_manage_search_24"/>
     <item android:title="Chatting"
         android:id="@+id/chatroom"
-        android:icon="@drawable/ic_baseline_chat_24"/>
+        android:icon="@drawable/ic_baseline_chat_bubble_24"/>
     <item android:title="My"
         android:id="@+id/my"
         android:icon="@drawable/ic_baseline_supervised_user_circle_24"/>

@@ -1,7 +1,8 @@
 # MyAppDevelop_Market
 
-# Firebase use - Server
+# Firebase use
   USER, PRODUCT, CHAT etc
+
 # Kotlin - Client
   CHAT, PRODUCT, HOME, INFO
 

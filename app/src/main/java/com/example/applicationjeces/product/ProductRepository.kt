@@ -36,6 +36,38 @@ class ProductRepository {
     }
 
     /**
+     * 채팅 수 카운트(아이콘 바꾸기)
+     */
+    fun getUnreadMessagesCount(userId: String): Flow<Int> = callbackFlow {
+        val listener = getFirestore().collection("Chatroom")
+            .addSnapshotListener { snapshots, e ->
+                if (e != null) {
+                    close(e) // 에러 발생 시 Flow 종료
+                    return@addSnapshotListener
+                }
+
+                val hasUnreadMessages = snapshots?.documents?.any {
+                    val n0Value = it.getString("n0") ?: ""
+                    val n1Value = it.getString("n1") ?: ""
+
+                    val n0Number = n0Value.split("/").lastOrNull()?.toIntOrNull() ?: 0
+                    val n1Number = n1Value.split("/").lastOrNull()?.toIntOrNull() ?: 0
+                    Log.d("111111111", "${n0Value}/${userId}")
+                    Log.d("1111111112", "${n1Value}/${n0Value.startsWith(userId)}")
+                    Log.d("1111111113", "${n0Number}/${n1Number}")
+                    (n0Value.startsWith(userId) && n0Number > 0) || (n1Value.startsWith(userId) && n1Number > 0)
+                } ?: false
+
+                val count = if (hasUnreadMessages) 1 else 0
+
+                Log.d("111111111", "${count}")
+                trySend(count) // Flow에 count 전달
+            }
+
+        awaitClose { listener.remove() } // Flow 종료 시 listener 제거
+    }
+
+    /**
      * 이미지 업로드
      */
     suspend fun uploadImage(index: Int, productName: String, myId: String, uri: Uri): Boolean {
