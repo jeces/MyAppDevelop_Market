@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.example.applicationjeces.databinding.SetBottomSheetLayoutBinding
 import com.example.applicationjeces.product.ProductViewModel
+import com.example.applicationjeces.user.EditProfileActivity
 import com.example.applicationjeces.user.LoginActivity
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.auth.FirebaseAuth
@@ -34,6 +35,11 @@ class SettingCustomBottomSheetDialogFragment : BottomSheetDialogFragment() {
         // 항목 클릭 리스너 설정
         binding.editProfile.setOnClickListener {
             // 프로필 수정 액션
+            /**
+             * 프로필 수정
+             */
+            val intent = Intent(activity, EditProfileActivity::class.java)
+            startActivity(intent)
             dismiss()
         }
 

@@ -184,6 +184,7 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         viewModelScope.launch {
             try {
                 myProductLiveTodoData.value = repository.mySetProduct(id)
+                Log.d("adadadada1", myProductLiveTodoData.value.toString())
             } catch (e: Exception) {
                 // Handle the exception
             }

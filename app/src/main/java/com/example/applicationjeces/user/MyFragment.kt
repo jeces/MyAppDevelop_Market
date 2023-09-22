@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -124,56 +125,37 @@ class MyFragment : Fragment() {
         /**
          * 나의 판매목록 상품
          */
-////        val adapter = MyProductRecyclerViewAdapter(this@MyFragment, myId, emptyList(), "myProduct")
-//        val adapter = ProductViewPagerAdapter(this@MyFragment, repository)
-//        val recyclerView = binding.myProductSaleV
-//        recyclerView.adapter = adapter
-//        recyclerView.setHasFixedSize(true)
-//        // Change from LinearLayoutManager to GridLayoutManager
-//        recyclerView.layoutManager = GridLayoutManager(requireContext(), numberOfColumns)
-
 
         setupViewPager(
             binding.productMyViewPager,
             productViewModel.myProductLiveTodoData,
-            { productViewModel.mySetProduct("") },
+            { productViewModel.mySetProduct(myId) },
             repository,
             binding.dotsIndicatorProductMy
         )
-
-//        /**
-//         * 옵져브
-//         **/
-//        productViewModel.mySetProduct("")
-//        productViewModel.myProductLiveTodoData.observe(viewLifecycleOwner, Observer { product ->
-//            /* ViewModel에 Observe를 활용하여 productViewModel에 ReadAllData 라이브 데이터가 바뀌었을때 캐치하여, adapter에서 만들어준 setData함수를 통해 바뀐데이터를 UI에 업데이트 해줌 */
-//            adapter.setData(product)
-//        })
 
         /**
          * 나의 판매목록 버튼
          */
         binding.myProductSale.setOnClickListener {
-            if ((productMyViewPager.visibility == View.VISIBLE) && (productMyViewPager.visibility == View.VISIBLE)) {
-                productMyViewPager.visibility = View.GONE
-                dotsIndicatorProductMy.visibility = View.GONE
-            } else {
+            if (productMyViewPager.visibility == View.GONE) {
                 productMyViewPager.visibility = View.VISIBLE
                 dotsIndicatorProductMy.visibility = View.VISIBLE
+                val layoutParams = binding.ProductPc.layoutParams as ConstraintLayout.LayoutParams
+                layoutParams.topToBottom = R.id.dotsIndicatorProductMy
+                binding.ProductPc.layoutParams = layoutParams
+            } else {
+                productMyViewPager.visibility = View.GONE
+                dotsIndicatorProductMy.visibility = View.GONE
+                val layoutParams = binding.ProductPc.layoutParams as ConstraintLayout.LayoutParams
+                layoutParams.topToBottom = R.id.View1
+                binding.ProductPc.layoutParams = layoutParams
             }
         }
 
         /**
          * 나의 구매 목록
          */
-////        val adapterPc = MyProductRecyclerViewAdapter(this@MyFragment, myId, emptyList(), "myProductPc")
-//        val adapterPc = ProductViewPagerAdapter(this@MyFragment, repository)
-//        val recyclerViewPc = binding.myProductPc
-//        recyclerViewPc.adapter = adapterPc
-//        recyclerViewPc.setHasFixedSize(true)
-//        // Change from LinearLayoutManager to GridLayoutManager
-//        recyclerViewPc.layoutManager = GridLayoutManager(requireContext(), numberOfColumns)
-
         setupViewPager(
             binding.productPcViewPager,
             productViewModel.myProductLiveTodoData,
@@ -182,35 +164,28 @@ class MyFragment : Fragment() {
             binding.dotsIndicatorProductMy
         )
 
-        binding.editProfile.setOnClickListener {
-            val intent = Intent(activity, EditProfileActivity::class.java)
-            startActivity(intent)
-        }
-
         /**
          * 나의 구매목록 버튼
          */
-//        binding.ProductPc.setOnClickListener {
-//            if (recyclerViewPc.visibility == View.VISIBLE) {
-//                recyclerViewPc.visibility = View.GONE
-//
-//            } else {
-//                recyclerViewPc.visibility = View.VISIBLE
-//
-//            }
-//        }
+        binding.ProductPc.setOnClickListener {
+            if ((productPcViewPager.visibility == View.GONE)) {
+                productPcViewPager.visibility = View.VISIBLE
+                dotsIndicatorPc.visibility = View.VISIBLE
+                val layoutParams = binding.ProductFv.layoutParams as ConstraintLayout.LayoutParams
+                layoutParams.topToBottom = R.id.dotsIndicatorPc
+                binding.ProductFv.layoutParams = layoutParams
+            } else {
+                productPcViewPager.visibility = View.GONE
+                dotsIndicatorPc.visibility = View.GONE
+                val layoutParams = binding.ProductFv.layoutParams as ConstraintLayout.LayoutParams
+                layoutParams.topToBottom = R.id.View2
+                binding.ProductFv.layoutParams = layoutParams
+            }
+        }
 
         /**
          * 나의 관심 목록
          */
-//        val adapterFv = ProductViewPagerAdapter(this@MyFragment, repository)
-//        val recyclerViewFv = binding.myProductFv
-//        recyclerViewFv.adapter = adapterFv
-//        recyclerViewFv.setHasFixedSize(true)
-//        // Change from LinearLayoutManager to GridLayoutManager
-//        recyclerViewFv.layoutManager = GridLayoutManager(requireContext(), numberOfColumns)
-
-
         setupViewPager(
             binding.productFvViewPager,
             productViewModel.myProductFvLiveTodoData,
@@ -219,38 +194,22 @@ class MyFragment : Fragment() {
             binding.dotsIndicatorProductMy
         )
 
-
-
-        /**
-         * 옵져브
-         **/
-//        productViewModel.mySetProductFv()
-//        productViewModel.myProductFvLiveTodoData.observe(viewLifecycleOwner, Observer { product ->
-//            /* ViewModel에 Observe를 활용하여 productViewModel에 ReadAllData 라이브 데이터가 바뀌었을때 캐치하여, adapter에서 만들어준 setData함수를 통해 바뀐데이터를 UI에 업데이트 해줌 */
-//            Log.d("aaaaddd", "aadada")
-//            adapterFv.setData(product)
-//        })
-
         /**
          * 나의 관심목록 버튼
          */
-//        binding.ProductFv.setOnClickListener {
-//            if (recyclerViewFv.visibility == View.VISIBLE) {
-//                recyclerViewFv.visibility = View.GONE
-//
-//            } else {
-//                recyclerViewFv.visibility = View.VISIBLE
-//
-//            }
-//        }
-
         binding.ProductFv.setOnClickListener {
-            if ((productFvViewPager.visibility == View.VISIBLE) && (productFvViewPager.visibility == View.VISIBLE)) {
-                productFvViewPager.visibility = View.GONE
-                dotsIndicatorFv.visibility = View.GONE
-            } else {
+            if ((productFvViewPager.visibility == View.GONE)) {
                 productFvViewPager.visibility = View.VISIBLE
                 dotsIndicatorFv.visibility = View.VISIBLE
+                val layoutParams = binding.ReviewText.layoutParams as ConstraintLayout.LayoutParams
+                layoutParams.topToBottom = R.id.dotsIndicatorFv
+                binding.ReviewText.layoutParams = layoutParams
+            } else {
+                productFvViewPager.visibility = View.GONE
+                dotsIndicatorFv.visibility = View.GONE
+                val layoutParams = binding.ReviewText.layoutParams as ConstraintLayout.LayoutParams
+                layoutParams.topToBottom = R.id.View3
+                binding.ReviewText.layoutParams = layoutParams
             }
         }
 
@@ -268,15 +227,6 @@ class MyFragment : Fragment() {
         val reviewAdapter = ReviewAdapter(emptyList())
         val reviewRecyclerView = binding.reviewRecyclerView
         reviewRecyclerView.adapter = reviewAdapter
-
-        binding.editProfile.setOnClickListener {
-            val intent = Intent(activity, EditProfileActivity::class.java)
-            startActivity(intent)
-        }
-
-//        setupItemClickListener(adapter)
-//        setupItemClickListener(adapterFv)
-//        setupItemClickListener(adapterPc)
 
         // Inflate the layout for this fragment
         return view
