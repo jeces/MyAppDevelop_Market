@@ -1,6 +1,7 @@
 package com.example.applicationjeces.product
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.provider.Settings.Global.getString
 import android.util.Log
 import android.view.LayoutInflater
@@ -28,7 +29,7 @@ import java.text.NumberFormat
 import java.util.*
 
 class ProductViewPagerAdapter(
-    private val context: Fragment,
+    private val context: Context,
     private val productRepository: ProductRepository
 ) : ListAdapter<DocumentSnapshot, ProductViewPagerAdapter.Holder>(ProductDiffCallback()) {
 
@@ -71,7 +72,9 @@ class ProductViewPagerAdapter(
         } else {
             productRepository.getImageUrl(currentItemId.toString(), productName.toString(), productImgUrl.toString(), productCount.toString())
                 .addOnCompleteListener { task ->
-                    if (task.isSuccessful && context.isAdded) {
+                    // 조건부로 Fragment의 isAdded 메서드를 확인
+                    val isFragmentAdded = (context is Fragment && context.isAdded)
+                    if (task.isSuccessful && isFragmentAdded) {
                         val downloadUrl = task.result.toString()
                         cachedUrls[imageUrl] = downloadUrl
                         loadRoundedImage(holder, downloadUrl)

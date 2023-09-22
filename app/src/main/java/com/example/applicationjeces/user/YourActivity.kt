@@ -3,21 +3,30 @@ package com.example.applicationjeces.user
 import ReviewAdapter
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.applicationjeces.R
 import com.example.applicationjeces.databinding.ActivityYourBinding
 import com.example.applicationjeces.product.InfoActivity
+import com.example.applicationjeces.product.ProductRepository
 import com.example.applicationjeces.product.ProductViewModel
 import com.example.applicationjeces.product.ProductViewPagerAdapter
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.storage.FirebaseStorage
 import com.google.gson.Gson
+import com.tbuonomo.viewpagerdotsindicator.DotsIndicator
 
 /**
  * A simple [Fragment] subclass.
@@ -151,6 +160,75 @@ class YourActivity : AppCompatActivity()  {
         adapter.setItemClickListener(object : YourInfoAdapter.OnItemClickListener {
             override fun onClick(v: View, position: Int) {
                 val product = adapter.producFiretList[position].data as HashMap<String, Any>
+                onProductClicked(product, position)
+            }
+        })
+    }
+
+    private fun setupViewPager(
+        viewPager: ViewPager2,
+        liveData: LiveData<List<DocumentSnapshot>>,
+        viewModelFunction: () -> Unit,
+        repository: ProductRepository,
+        dotsIndicator: DotsIndicator
+    ) {
+        // Call viewModel function
+        viewModelFunction()
+
+        // Set up the ViewPager with a RecyclerView inside
+        setupViewPagerWithRecyclerView(viewPager, liveData, repository)
+
+        // Attach the DotsIndicator to the ViewPager2
+        dotsIndicator.setViewPager2(viewPager)
+    }
+
+    class MyViewHolder(view: View) : RecyclerView.ViewHolder(view)
+
+    private fun setupViewPagerWithRecyclerView(
+        viewPager: ViewPager2,
+        liveData: LiveData<List<DocumentSnapshot>>,
+        repository: ProductRepository
+    ) {
+        val pagerAdapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+                val inflater = LayoutInflater.from(parent.context)
+                val view = inflater.inflate(R.layout.page_recycler_view, parent, false)
+                return MyViewHolder(view)
+            }
+
+            override fun getItemCount(): Int {
+                val totalProducts = liveData.value?.size ?: 0
+                return (totalProducts + 8) / 9  // For 3x3 grid
+            }
+
+            override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+                val recyclerView = holder.itemView.findViewById<RecyclerView>(R.id.pageRecyclerView)
+                recyclerView.layoutManager = GridLayoutManager(this@YourActivity, 3)
+                val adapter = ProductViewPagerAdapter(this@YourActivity, repository)
+                recyclerView.adapter = adapter
+
+                val start = position * 9
+                val end = Math.min(start + 9, liveData.value?.size ?: 0)
+                val sublist = liveData.value?.subList(start, end)
+
+                adapter.setData(sublist ?: emptyList())
+                setupItemClickListener(adapter) // Set item click listener
+            }
+        }
+
+        viewPager.adapter = pagerAdapter
+
+        liveData.observe(this, Observer { products ->
+            pagerAdapter.notifyDataSetChanged()
+        })
+    }
+
+
+    fun setupItemClickListener(adapter: ProductViewPagerAdapter) {
+        adapter.setItemClickListener(object : ProductViewPagerAdapter.OnItemClickListener {
+            override fun onClick(v: View, position: Int) {
+                val documentSnapshot = adapter.getDocumentSnapshotAt(position)
+                val product = documentSnapshot.data as java.util.HashMap<String, Any>
                 onProductClicked(product, position)
             }
         })
